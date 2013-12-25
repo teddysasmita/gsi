@@ -570,7 +570,7 @@ class DefaultController extends Controller
                $detail['serialnum']='Belum Diterima';
 
                $details[]=$detail; 
-           }
+           	}
         }
         Yii::app()->session['Detailstockentries']=$details;
       }
@@ -630,4 +630,16 @@ class DefaultController extends Controller
       	));
       
       }
+      
+      public function actionPrintsummary($id)
+      {
+      	$this->trackActivity('v');
+      	Yii::import("application.vendors.tcpdf.*");
+      	require_once('tcpdf/tcpdf.php');
+      	$this->render('printsummary',array(
+      			'model'=>$this->loadModel($id),
+      	));
+      	
+      }
+      
 }
