@@ -12,6 +12,16 @@
 	'id'=>'detailstockentries-form',
 	'enableAjaxValidation'=>true,
    ));
+
+$supplierScript=<<<EOS
+      $('#isAccepted').click(function() {
+   		if ($('#isAccepted').prop('checked')) {
+   			$('#Detailstockentries_serialnum').val('Belum Diterima');
+   		}
+      });
+EOS;
+   Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);
+   
  ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
@@ -36,7 +46,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'serialnum'); ?>
-		<?php echo $form->textField($model,'serialnum'); ?>
+		<?php echo $form->textField($model,'serialnum', array('readonly'=>'false')); ?>
 		<?php echo $form->error($model,'serialnum'); ?>
 	</div>
 	

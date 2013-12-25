@@ -28,8 +28,8 @@ class DefaultController extends Controller
 	 */
 	public function actionView($id)
 	{
-            $this->trackActivity('v');
-            $this->render('view',array(
+		$this->trackActivity('v');
+		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
 	}
@@ -620,5 +620,14 @@ class DefaultController extends Controller
            throw new CHttpException(404,'Gudang belum terdaftar.'); 
          else
             return $respond; 
+      }
+      
+      public function actionSummary($id)
+      {
+      	$this->trackActivity('v');
+      	$this->render('summary',array(
+      			'model'=>$this->loadModel($id),
+      	));
+      
       }
 }

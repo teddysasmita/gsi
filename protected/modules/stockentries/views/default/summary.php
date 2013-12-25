@@ -5,11 +5,12 @@
 $this->breadcrumbs=array(
    'Proses'=>array('/site/proses'),
    'Daftar'=>array('index'),
-   'Lihat Data',
+   'Lihat Data'=>array('view', 'id'=>$model->id),
+	'Ringkasan'		
 );
 
 $this->menu=array(
-	array('label'=>'Tambah Data', 'url'=>array('create')),
+	/*array('label'=>'Tambah Data', 'url'=>array('create')),
 	array('label'=>'Ubah Data', 'url'=>array('update', 'id'=>$model->id)),
 	array('label'=>'Hapus Data', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Pencarian Data', 'url'=>array('admin')),
@@ -17,6 +18,7 @@ $this->menu=array(
 	array('label'=>'Data Detil yang dihapus', 
          'url'=>array('/purchasesorder/detailstockentries/deleted', 'id'=>$model->id)),
 	array('label'=>'Ringkasan', 'url'=>array('summary', 'id'=>$model->id)),
+	*/
 );
 ?>
 
@@ -49,12 +51,15 @@ $this->menu=array(
 )); ?>
 
 <?php 
-   $count=Yii::app()->db->createCommand("select count(*) from detailstockentries where id='$model->id'")
-      ->queryScalar();
-   $sql="select * from detailstockentries where id='$model->id'";
+   $count=count(Yii::app()->db
+     ->createCommand("select iditem, count(iditem) from detailstockentries ".
+			"where id='$model->id' group by iditem")
+		->queryAll());
+   $sql="select iditem, count(iditem) as totalqty from detailstockentries ".
+   		"where id='$model->id' group by iditem";
 
    $dataProvider=new CSqlDataProvider($sql,array(
-          'totalItemCount'=>$count,
+          'totalItemCount'=>$count,'keyField'=>'iditem',
           ));
    $this->widget('zii.widgets.grid.CGridView', array(
          'dataProvider'=>$dataProvider,
@@ -65,22 +70,10 @@ $this->menu=array(
                'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
             ),
             array(
-              'header'=>'Serial Number',
-              'name'=>'serialnum ',
-              'value'=>"\$data['serialnum']"
+              'header'=>'Total',
+              'name'=>'totalqty',
+              'value'=>"\$data['totalqty']"
             ),
-            array(
-                  'class'=>'CButtonColumn',
-                  'buttons'=> array(
-                      'delete'=>array(
-                       'visible'=>'false'
-                      ),
-                     'update'=>array(
-                        'visible'=>'false'
-                     )
-                  ),
-                  'viewButtonUrl'=>"Action::decodeViewDetailStockEntryUrl(\$data)",
-              )
-         ),
-   ));
+   		)
+	));
  ?>
