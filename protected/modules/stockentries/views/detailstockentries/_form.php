@@ -46,7 +46,7 @@ EOS;
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'serialnum'); ?>
-		<?php echo $form->textField($model,'serialnum', array('readonly'=>'false')); ?>
+		<?php echo $form->textField($model,'serialnum'); ?>
 		<?php echo $form->error($model,'serialnum'); ?>
 	</div>
 	

@@ -42,6 +42,9 @@ class idmaker extends CComponent
               break;
       }
       $newid=$curdate->format('y').$hexmonth.$curdate->format('dHis');
+      $rand=mt_rand(1,999);
+      $newid=$newid.str_pad($rand, 3, '0',STR_PAD_LEFT);
+      
       $iterator=Yii::app()->db->createCommand()->select()->from('iditerator')->queryRow();
       if($iterator['id']===$newid) {
           $iterator['iterator']=$iterator['iterator']+1;
@@ -51,7 +54,7 @@ class idmaker extends CComponent
       }
       Yii::app()->db->createCommand()->truncateTable('iditerator');
       Yii::app()->db->createCommand()->insert('iditerator', $iterator);
-      $newid=$newid.str_pad($iterator['iterator'], 6,'0',STR_PAD_LEFT);
+      $newid=$newid.str_pad($iterator['iterator'], 3,'0',STR_PAD_LEFT);
       
       return $newid;
    }

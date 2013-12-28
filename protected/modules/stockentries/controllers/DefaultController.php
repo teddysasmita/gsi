@@ -144,7 +144,7 @@ class DefaultController extends Controller
              $this->performAjaxValidation($model);
 
              if(isset($_POST)) {
-                 if(isset($_POST['yt0'])) {
+                 if(isset($_POST['yt1'])) {
                      $model->attributes=$_POST['Stockentries'];
                      $this->beforePost($model);
                      $this->tracker->modify('stockentries', $id);
@@ -152,7 +152,7 @@ class DefaultController extends Controller
                      if($respond) {
                        $this->afterPost($model);
                      } else {
-                       throw new CHttpException(404,'There is an error in master posting');
+                     	throw new CHttpException(404,'There is an error in master posting ');
                      }
 
                      if(isset(Yii::app()->session['Detailstockentries'])) {
@@ -635,7 +635,7 @@ class DefaultController extends Controller
       {
       	$this->trackActivity('v');
       	Yii::import("application.vendors.tcpdf.*");
-      	require_once('tcpdf/tcpdf.php');
+      	require_once('tcpdf.php');
       	$this->render('printsummary',array(
       			'model'=>$this->loadModel($id),
       	));

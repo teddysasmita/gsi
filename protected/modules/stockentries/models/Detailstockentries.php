@@ -59,7 +59,7 @@ class Detailstockentries extends CActiveRecord
 			'iddetail' => 'Iddetail',
 			'id' => 'ID',
 			'iditem' => 'Nama Barang',
-			'serialnum' => 'Serialnum',
+			'serialnum' => 'Nomor Serial',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
 		);

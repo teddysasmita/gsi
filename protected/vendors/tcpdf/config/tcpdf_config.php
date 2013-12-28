@@ -144,12 +144,12 @@ if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
 	/**
 	 * image logo
 	 */
-	define ('PDF_HEADER_LOGO', 'tcpdf_logo.jpg');
+	define ('PDF_HEADER_LOGO', '');
 
 	/**
 	 * header logo image width [mm]
 	 */
-	define ('PDF_HEADER_LOGO_WIDTH', 30);
+	define ('PDF_HEADER_LOGO_WIDTH', 10);
 
 	/**
 	 *  document unit of measure [pt=point, mm=millimeter, cm=centimeter, in=inch]
@@ -169,7 +169,7 @@ if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
 	/**
 	 * top margin
 	 */
-	define ('PDF_MARGIN_TOP', 27);
+	define ('PDF_MARGIN_TOP', 20);
 
 	/**
 	 * bottom margin

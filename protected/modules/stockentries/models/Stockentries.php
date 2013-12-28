@@ -10,6 +10,9 @@
  * @property string $idsupplier
  * @property string $idpurchaseorder
  * @property string $idwarehouse
+ * @property string $vehicleinfo
+ * @property string $pic
+ * @property string $remark
  * @property string $userlog
  * @property string $datetimelog
  */
@@ -31,13 +34,15 @@ class Stockentries extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, regnum, idatetime, idsupplier, idpurchaseorder, idwarehouse, userlog, datetimelog', 'required'),
+			array('id, regnum, idatetime, idsupplier, idpurchaseorder, idwarehouse, vehicleinfo, pic, userlog, datetimelog', 'required'),
 			array('id, idsupplier, idpurchaseorder, idwarehouse, userlog', 'length', 'max'=>21),
 			array('regnum', 'length', 'max'=>12),
 			array('idatetime, datetimelog', 'length', 'max'=>19),
+			array('vehicleinfo, pic', 'length', 'max'=>100),
+			array('remark', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, regnum, idatetime, idsupplier, idpurchaseorder, idwarehouse, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('id, regnum, idatetime, idsupplier, idpurchaseorder, idwarehouse, vehicleinfo, pic, remark, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -64,6 +69,9 @@ class Stockentries extends CActiveRecord
 			'idsupplier' => 'Pemasok',
 			'idpurchaseorder' => 'Nomor PO',
 			'idwarehouse' => 'Gudang',
+			'vehicleinfo' => 'Info Kendaraan',
+			'pic' => 'Contact Person',
+			'remark' => 'Catatan',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
 		);
@@ -93,6 +101,9 @@ class Stockentries extends CActiveRecord
 		$criteria->compare('idsupplier',$this->idsupplier,true);
 		$criteria->compare('idpurchaseorder',$this->idpurchaseorder,true);
 		$criteria->compare('idwarehouse',$this->idwarehouse,true);
+		$criteria->compare('vehicleinfo',$this->vehicleinfo,true);
+		$criteria->compare('pic',$this->pic,true);
+		$criteria->compare('remark',$this->remark,true);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);
 

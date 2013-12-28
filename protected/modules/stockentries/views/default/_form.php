@@ -137,13 +137,39 @@ EOS;
 		<?php echo $form->error($model,'idpurchaseorder'); ?>
 	</div>
       
-      <div class="row">
+	<div class="row">
 		<?php echo $form->labelEx($model,'idwarehouse'); ?>
          <?php 
             echo CHtml::label(lookup::WarehouseNameFromWarehouseID($model->idwarehouse),'false', 
               array('class'=>'money')); 
          ?>
 	</div>
+	
+	<div class="row">
+		<?php echo $form->labelEx($model,'vehicleinfo'); ?>
+        <?php 
+           echo $form->textField($model, 'vehicleinfo'); 
+        ?>
+        <?php echo $form->error($model,'vehicleinfo');?> 
+	</div>
+	
+	<div class="row">
+		<?php echo $form->labelEx($model,'pic'); ?>
+        <?php 
+           echo $form->textField($model, 'pic'); 
+        ?>
+        <?php echo $form->error($model,'pic');?> 
+	</div>
+	
+	<div class="row">
+		<?php echo $form->labelEx($model,'remark'); ?>
+        <?php 
+           echo $form->textArea($model, 'remark', array('COLS'=>40, 'ROWS'=>5)); 
+        ?>
+        <?php echo $form->error($model,'remark');?> 
+	</div>
+	
+	
       
 <?php 
     if (isset(Yii::app()->session['Detailstockentries'])) {
