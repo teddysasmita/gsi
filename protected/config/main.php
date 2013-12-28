@@ -39,6 +39,7 @@ return array(
             'warehouse',
             'purchasesmemo',
             'salesperson',
+            'purchasesreceipt',
         ),
 
         

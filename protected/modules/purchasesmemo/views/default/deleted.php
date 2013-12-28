@@ -25,7 +25,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 <?php
     
     $data=Yii::app()->tracker->createCommand()->
-       select('a.*')->from('stockentries a')->join('userjournal b', 'b.id=a.idtrack')
+       select('a.*')->from('purchasesmemos a')->join('userjournal b', 'b.id=a.idtrack')
        ->where('b.action=:action', array(':action'=>'d'))->queryAll();
     $ap=new CArrayDataProvider($data);
 ?>
@@ -33,7 +33,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 
 <?php
  $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'stockentries-grid',
+	'id'=>'purchasesmemos-grid',
 	'dataProvider'=>$ap,
 	'columns'=>array(
 		'id',

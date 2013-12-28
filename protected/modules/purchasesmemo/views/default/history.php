@@ -18,12 +18,12 @@ $this->menu=array(
 <h1>Memo Pembelian</h1>
 
 <?php    $data=Yii::app()->tracker->createCommand()->
-       select()->from('stockentries')->where('id=:id',array(':id'=>$model->id))->queryAll();
+       select()->from('purchasesmemos')->where('id=:id',array(':id'=>$model->id))->queryAll();
     $ap=new CArrayDataProvider($data);
  ?> 
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'stockentries-grid',
+	'id'=>'purchasesmemos-grid',
 	'dataProvider'=>$ap,
 	'columns'=>array(
 		'id',

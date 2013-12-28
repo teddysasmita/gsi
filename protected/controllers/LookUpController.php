@@ -44,7 +44,7 @@ class LookUpController extends Controller {
    {
       $idsupplier=urldecode($idsupplier);
       $data=Yii::app()->db->createCommand()->select('id, regnum')->from('purchasesorders')
-         ->where("status <> '2' and idsupplier = :idsupplier", array('idsupplier'=>$idsupplier))
+         ->where("status <> '2' and idsupplier = :idsupplier", array(':idsupplier'=>$idsupplier))
          ->queryAll();
       echo json_encode($data);
    }
@@ -53,8 +53,23 @@ class LookUpController extends Controller {
    {
       $idsupplier=urldecode($idsupplier);
       $data=Yii::app()->db->createCommand()->select('id, regnum')->from('purchasesorders')
-         ->where("paystatus <> '2' and idsupplier = :idsupplier", array('idsupplier'=>$idsupplier))
+         ->where("paystatus <> '2' and idsupplier = :idsupplier", array(':idsupplier'=>$idsupplier))
          ->queryAll();
       echo json_encode($data);
    }        
+   
+   public function actionGetUndoneDO($idsupplier)
+   {
+	   	$idsupplier=urldecode($idsupplier);
+	   	/*echo Yii::app()->db->createCommand()->select('a.donum, b.id')->from('stockentries a')
+	   	->leftJoin('purchasesreceipts b','b.donum = a.donum' )
+	   	->where("a.idsupplier = :idsupplier and b.id = NULL", array(':idsupplier'=>$idsupplier))->text;
+	   	*/			
+	   	$data=Yii::app()->db->createCommand()->select('a.donum, b.id')->from('stockentries a')
+	   	->leftJoin('purchasesreceipts b','b.donum = a.donum' )
+	   	->where("a.idsupplier = :idsupplier and b.id is NULL", array(':idsupplier'=>$idsupplier))
+	   	->queryAll();
+	   	
+	   	echo json_encode($data);
+   }
 }

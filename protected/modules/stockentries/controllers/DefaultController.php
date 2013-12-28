@@ -61,7 +61,7 @@ class DefaultController extends Controller
                $this->performAjaxValidation($model);
 
                 if (isset($_POST)){
-                   if(isset($_POST['yt0'])) {
+                   if(isset($_POST['yt1'])) {
                       //The user pressed the button;
                       $model->attributes=$_POST['Stockentries'];
                       

@@ -146,19 +146,11 @@ EOS;
 	</div>
 	
 	<div class="row">
-		<?php echo $form->labelEx($model,'vehicleinfo'); ?>
+		<?php echo $form->labelEx($model,'donum'); ?>
         <?php 
-           echo $form->textField($model, 'vehicleinfo'); 
+           echo $form->textField($model, 'donum'); 
         ?>
-        <?php echo $form->error($model,'vehicleinfo');?> 
-	</div>
-	
-	<div class="row">
-		<?php echo $form->labelEx($model,'pic'); ?>
-        <?php 
-           echo $form->textField($model, 'pic'); 
-        ?>
-        <?php echo $form->error($model,'pic');?> 
+        <?php echo $form->error($model,'donum');?> 
 	</div>
 	
 	<div class="row">

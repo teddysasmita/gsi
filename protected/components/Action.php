@@ -170,6 +170,24 @@ class Action extends CComponent {
       return Yii::app()->createUrl('/stockentries/detailstockentries/view', array('iddetail'=>$data['iddetail']));
    }
    
+   public static function decodeDeleteDetailPurchasesReceiptUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('/purchasesreceipt/detailpurchasesreceipts/delete', array('iddetail'=>$data['iddetail']));
+   }
+    
+   public static function decodeUpdateDetailPurchasesReceiptUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('/purchasesreceipt/detailpurchasesreceipts/update', array('iddetail'=>$data['iddetail']))  ;
+   }
+    
+   public static function decodeViewDetailPurchasesReceiptUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('/purchasesreceipt/detailpurchasesreceipts/view', array('iddetail'=>$data['iddetail']));
+   }
+   
    public static function decodeDeleteDetailStockDeliveryUrl($data)
    {
       //return print_r($data);
