@@ -24,6 +24,9 @@
          echo $form->hiddenField($model,'userlog');
          echo $form->hiddenField($model,'datetimelog');
          echo $form->hiddenField($model,'iditem');
+         echo $form->hiddenField($model, 'prevprice');
+         echo $form->hiddenField($model, 'prevcost1');
+         echo $form->hiddenField($model, 'prevcost2');
         ?>
 
 	<div class="row">
@@ -34,7 +37,7 @@
       
    <div class="row">
 		<?php echo $form->labelEx($model,'qty'); ?>
-		<?php echo CHtml::label($model->qty, false); ?>
+		<?php echo $form->textField($model, 'qty'); ?>
 		<?php echo $form->error($model,'qty'); ?>
 	</div>
       
@@ -48,6 +51,12 @@
 		<?php echo $form->labelEx($model,'price'); ?>
 		<?php echo $form->textField($model,'price'); ?>
 		<?php echo $form->error($model,'price'); ?>
+	</div>
+	
+	<div class="row">
+		<?php echo $form->labelEx($model,'discount'); ?>
+		<?php echo $form->textField($model,'discount'); ?>
+		<?php echo $form->error($model,'discount'); ?>
 	</div>
    
    <div class="row">

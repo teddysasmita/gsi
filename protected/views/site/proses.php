@@ -12,7 +12,6 @@ $this->pageTitle=Yii::app()->name;
 
 <h2>Bagian Pembelian</h2>
 <h3><?php echo CHtml::link('Pesanan ke Pemasok', Yii::app()->createUrl('purchasesorder'))?></h3>
-<h3><?php echo CHtml::link('Tagihan dari Pemasok', Yii::app()->createUrl('purchasesinvoices/index'))?></h3>
 <h3><?php echo CHtml::link('Penerimaan Barang dari Pemasok', Yii::app()->createUrl('purchasesreceipt'))?></h3>
 <h3><?php echo CHtml::link('Pembayaran ke Pemasok', Yii::app()->createUrl('purchasespayment'))?></h3>
 <h3><?php echo CHtml::link('Memo Pembelian', Yii::app()->createUrl('purchasesmemo'))?></h3>
@@ -25,3 +24,6 @@ $this->pageTitle=Yii::app()->name;
 
 <h2>Bagian Gudang</h2>
 <h3><?php echo CHtml::link('Terima Kiriman dari Pemasok', Yii::app()->createUrl('stockentries'))?></h3>
+
+<h2>Bagian Keuangan</h2>
+<h3><?php echo CHtml::link('Pembayaran', Yii::app()->createUrl('financepayment'))?></h3>

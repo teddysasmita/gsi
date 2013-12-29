@@ -89,21 +89,21 @@ EOS;
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'idatetime'); ?>
-            <?php
-               $this->widget('zii.widgets.jui.CJuiDatePicker',array(
-                  'name'=>'Purchasesmemos[idatetime]',
+        <?php
+			$this->widget('zii.widgets.jui.CJuiDatePicker',array(
+				'name'=>'Purchasesmemos[idatetime]',
                      // additional javascript options for the date picker plugin
-                  'options'=>array(
-                     'showAnim'=>'fold',
-                     'dateFormat'=>'yy/mm/dd',
-                     'defaultdate'=>$model->idatetime
-                  ),
-                  'htmlOptions'=>array(
-                     'style'=>'height:20px;',
-                  ),
-                  'value'=>$model->idatetime,
+				'options'=>array(
+					'showAnim'=>'fold',
+					'dateFormat'=>'yy/mm/dd',
+					'defaultdate'=>$model->idatetime
+                 ),
+                 'htmlOptions'=>array(
+                    'style'=>'height:20px;',
+                 ),
+                 'value'=>$model->idatetime,
                ));
-            ?>
+		?>
 		<?php echo $form->error($model,'idatetime'); ?>
 	</div>
 

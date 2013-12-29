@@ -32,6 +32,10 @@ $this->menu=array(
 	        'value'=>lookup::SupplierNameFromSupplierID($model->idsupplier)
       	),
 		array(
+			'label'=>'Status',
+			'value'=>lookup::paymentStatus($model->status)
+		),
+		array(
             'label'=>'Userlog',
             'value'=>lookup::UserNameFromUserID($model->userlog),
         ),

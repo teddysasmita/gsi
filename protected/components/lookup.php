@@ -60,6 +60,18 @@ class lookup extends CComponent {
       }
    }
    
+   public static function paymentStatus($status)
+   {
+   	switch ($status) {
+	   	case '0':
+	   		return 'Belum Diproses';
+	   	case '1':
+	   		return 'Terbayar dgn Tunai';
+	   	case '2':
+	   		return 'Terbayar dgn Cek/Giro';
+   	}
+   }
+   
    public static function ItemNameFromItemID($id)
    {
       $sql="select name from items where id='$id'";

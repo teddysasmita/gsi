@@ -61,7 +61,7 @@ class DefaultController extends Controller
                $this->performAjaxValidation($model);
 
                 if (isset($_POST)){
-                   if(isset($_POST['yt0'])) {
+                   if(isset($_POST['yt1'])) {
                       //The user pressed the button;
                       $model->attributes=$_POST['Purchasesmemos'];
                       
@@ -95,6 +95,8 @@ class DefaultController extends Controller
                          $model->attributes=$_POST['Purchasesmemos'];
                          Yii::app()->session['Purchasesmemos']=$_POST['Purchasesmemos'];
                          $this->loadPO($model->idpurchaseorder, $model->id);
+                         $details=Yii::app()->session['Detailpurchasesmemos'];
+                         $this->afterInsertDetail($model, $details);
                       }
                    }
                 }
@@ -485,6 +487,8 @@ class DefaultController extends Controller
          $model->regnum=$idmaker->getRegNum($this->formid);
          $model->userlog=Yii::app()->user->id;
          $model->datetimelog=$idmaker->getDateTime();
+         $model->total=0;
+         $model->discount=0;
      }
 
      protected function afterPost(& $model)
@@ -599,6 +603,7 @@ class DefaultController extends Controller
             $detail['qty']=$row['qty'];
             $detail['prevprice']=$row['price'];
             $detail['price']=$row['price'];
+            $detail['discount']=$row['discount'];
             $detail['prevcost1']=$row['cost1'];
             $detail['cost1']=$row['cost1'];
             $detail['prevcost2']=$row['cost2'];

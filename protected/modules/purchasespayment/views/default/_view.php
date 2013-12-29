@@ -16,6 +16,10 @@
 	<b><?php echo CHtml::encode($data->getAttributeLabel('idsupplier')); ?>:</b>
 	<?php echo CHtml::encode(lookup::SupplierNameFromSupplierID($data->idsupplier)); ?>
 	<br />
+    
+    <b><?php echo CHtml::encode($data->getAttributeLabel('status')); ?>:</b>
+	<?php echo CHtml::encode(lookup::paymentStatus($data->status)); ?>
+	<br />
       
       <b><?php echo CHtml::encode($data->getAttributeLabel('userlog')); ?>:</b>
 	<?php echo CHtml::encode(lookup::UserNameFromUserID($data->userlog)); ?>

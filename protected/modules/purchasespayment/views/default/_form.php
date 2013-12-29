@@ -119,6 +119,12 @@ EOS;
          ?>
          <?php echo $form->error($model,'remark'); ?>
 	</div>
+	
+	 <div class="row">
+		<?php echo $form->labelEx($model,'status'); ?>
+ 		<?php echo CHtml::label(lookup::paymentStatus($model->status), false);?>
+         <?php echo $form->error($model,'status'); ?>
+	</div>
       
 <?php 
     if (isset(Yii::app()->session['Detailpurchasespayments'])) {

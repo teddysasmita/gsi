@@ -40,7 +40,8 @@ return array(
             'purchasesmemo',
             'salesperson',
             'purchasesreceipt',
-            'purchasespayment'
+            'purchasespayment',
+            'financepayment',
         ),
 
         

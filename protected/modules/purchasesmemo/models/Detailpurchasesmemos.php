@@ -10,6 +10,7 @@
  * @property double $qty
  * @property double $prevprice
  * @property double $price
+ * @property double $discount
  * @property double $prevcost1
  * @property double $cost1
  * @property double $prevcost2
@@ -35,13 +36,13 @@ class Detailpurchasesmemos extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('iddetail, id, iditem, qty, prevprice, price, userlog, datetimelog', 'required'),
-			array('qty, prevprice, price, prevcost1, cost1, prevcost2, cost2', 'numerical'),
+			array('iddetail, id, iditem, qty, prevprice, price, discount, cost1, cost2, userlog, datetimelog', 'required'),
+			array('qty, prevprice, price, discount, prevcost1, cost1, prevcost2, cost2', 'numerical'),
 			array('iddetail, id, iditem, userlog', 'length', 'max'=>21),
 			array('datetimelog', 'length', 'max'=>19),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('iddetail, id, iditem, qty, prevprice, price, prevcost1, cost1, prevcost2, cost2, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('iddetail, id, iditem, qty, prevprice, price, discount, prevcost1, cost1, prevcost2, cost2, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,6 +69,7 @@ class Detailpurchasesmemos extends CActiveRecord
 			'qty' => 'Qty',
 			'prevprice' => 'Harga Sblm @',
 			'price' => 'Harga @',
+			'discount'=> 'Diskon',
 			'prevcost1' => 'Biaya Sblm 1 @',
 			'cost1' => 'Biaya 1 @',
 			'prevcost2' => 'Biaya Sblm 2 @',
@@ -101,6 +103,7 @@ class Detailpurchasesmemos extends CActiveRecord
 		$criteria->compare('qty',$this->qty);
 		$criteria->compare('prevprice',$this->prevprice);
 		$criteria->compare('price',$this->price);
+		$criteria->compate('discount', $this->discount);
 		$criteria->compare('prevcost1',$this->prevcost1);
 		$criteria->compare('cost1',$this->cost1);
 		$criteria->compare('prevcost2',$this->prevcost2);
