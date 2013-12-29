@@ -61,10 +61,9 @@ class DefaultController extends Controller
                $this->performAjaxValidation($model);
 
                 if (isset($_POST)){
-                   if(isset($_POST['yt0'])) {
+                	if(isset($_POST['yt1'])) {
                       //The user pressed the button;
                       $model->attributes=$_POST['Purchasespayments'];
-                      
                       
                       $this->beforePost($model);
                       $respond=$model->save();
@@ -91,10 +90,10 @@ class DefaultController extends Controller
                          Yii::app()->session['Purchasespayments']=$_POST['Purchasespayments'];
                          $this->redirect(array('detailpurchasespayments/create',
                             'id'=>$model->id));
-                      } else if ($_POST['command']=='setPO') {
+                      } else if ($_POST['command']=='setSupplier') {
                          $model->attributes=$_POST['Purchasespayments'];
                          Yii::app()->session['Purchasespayments']=$_POST['Purchasespayments'];
-                         $this->loadPO($model->idpurchaseorder, $model->id);
+                         $this->loadSupplier($model->idsupplier, $model->id);
                       }
                    }
                 }
@@ -485,6 +484,7 @@ class DefaultController extends Controller
          $model->regnum=$idmaker->getRegNum($this->formid);
          $model->userlog=Yii::app()->user->id;
          $model->datetimelog=$idmaker->getDateTime();
+         $model->status='0';
      }
 
      protected function afterPost(& $model)
@@ -540,48 +540,60 @@ class DefaultController extends Controller
          $this->tracker->logActivity($this->formid, $action);
      }
      
-      private function loadPO($idpo, $id)
+      private function loadSupplier($idsupplier, $id)
       {
         $details=array();
 
-        $dataMemo=Yii::app()->db->createCommand()
+        $dataPO=Yii::app()->db->createCommand()
            ->select()
-           ->from('purchasespayments')
-           ->where('idpurchaseorder=:idpo', array('idpo'=>$idpo))
-           ->order(array('id desc'))
+           ->from('purchasesorders')
+           ->where('idsupplier=:idsupplier and paystatus<>:paystatus and status=:status', 
+           		array(':idsupplier'=>$idsupplier, ':paystatus'=>'2', ':status'=>'2'))
            ->queryAll();
-        if(count($dataMemo)) {
-           $lastMemoID=$dataMemo[0]['id'];
-           $dataPO=Yii::app()->db->createCommand()
-              ->select()
-              ->from('detailpurchasespayments')
-              ->where('id = :id', array(':id'=>$lastMemoID))
-              ->queryAll();
-        } else {
-           $dataPO=Yii::app()->db->createCommand()
-              ->select()
-              ->from('detailpurchasesorders')
-              ->where('id = :id', array(':id'=>$idpo))
-              ->queryAll();
-        }
         Yii::app()->session->remove('Detailpurchasespayments');
-         foreach($dataPO as $row) {
-            $detail['iddetail']=idmaker::getCurrentID2();
-            $detail['id']=$id;
-            $detail['iditem']=$row['iditem'];
-            $detail['userlog']=Yii::app()->user->id;
-            $detail['datetimelog']=idmaker::getDateTime();
-            $detail['qty']=$row['qty'];
-            $detail['prevprice']=$row['price'];
-            $detail['price']=$row['price'];
-            $detail['prevcost1']=$row['cost1'];
-            $detail['cost1']=$row['cost1'];
-            $detail['prevcost2']=$row['cost2'];
-            $detail['cost2']=$row['cost2'];
-            $details[]=$detail; 
+        foreach($dataPO as $rowPO) {
+        	//finding any memo of purchases
+        	$total=$rowPO['total'];
+        	$disc=$rowPO['discount'];
+        	$dataMemo=Yii::app()->db->createCommand()
+	           ->select()
+	           ->from('purchasesmemos')
+	           ->where('idpurchaseorder=:idpo', 
+	           		array(':idpo'=>$rowPO['id']))
+	           ->order('idatetime desc')
+	           ->queryRow();
+        	if($dataMemo){
+        		$total=$dataMemo['total'];
+        		$disc=$dataMemo['discount'];
+        	}
+        	//----------------------------
+        	//finding payments
+        	$dataPaid=Yii::app()->db->createCommand()
+	        	->select('sum(b.amount) as totalpaid, b.idpurchaseorder')
+	        	->from('purchasespayments a')
+	        	->join('detailpurchasespayments b', 'b.id = a.id')
+	        	->where('b.idpurchaseorder=:idpo',
+	        			array(':idpo'=>$rowPO['id']))
+	        	->group('b.idpurchaseorder')
+	        	->queryRow();
+        	if($dataPaid){
+        		$paid=$dataPaid['totalpaid'];
+        	} else {
+        		$paid=0;
+        	}
+        	//----------------------------
+        	
+        	$detail['iddetail']=idmaker::getCurrentID2();
+        	$detail['id']=$id;
+        	$detail['userlog']=Yii::app()->user->id;
+        	$detail['datetimelog']=idmaker::getDateTime();
+        	$detail['idpurchaseorder']=$rowPO['id'];
+        	$detail['total']=$total;
+        	$detail['discount']=$disc;
+        	$detail['paid']=$paid;
+        	$detail['amount']=0;
+        	$details[]=$detail;
         }
         Yii::app()->session['Detailpurchasespayments']=$details;
       }
-     
-      
 }

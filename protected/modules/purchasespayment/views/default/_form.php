@@ -7,46 +7,29 @@
 <div class="form">
 
 <?php
-   $suppliers=Yii::app()->db->createCommand()
-      ->select('id, firstname, lastname')
-      ->from('suppliers')
-      ->order('firstname, lastname')
-      ->queryAll();
-   foreach($suppliers as $row) {
-      $supplierids[]=$row['id'];
-      $suppliernames[]=$row['firstname'].' '.$row['lastname'];
-   }
-   $supplierids=CJSON::encode($supplierids);
-   $suppliernames=CJSON::encode($suppliernames);
-   $supplierScript=<<<EOS
+	$suppliers=Yii::app()->db->createCommand()
+		->select('id, firstname, lastname')
+		->from('suppliers')
+		->order('firstname, lastname')
+		->queryAll();
+	foreach($suppliers as $row) {
+		$supplierids[]=$row['id'];
+		$suppliernames[]=$row['firstname'].' '.$row['lastname'];
+	}
+	$supplierids=CJSON::encode($supplierids);
+	$suppliernames=CJSON::encode($suppliernames);
+	$supplierScript=<<<EOS
       var supplierids=$supplierids;
       var suppliernames=$suppliernames;
-      
-      $('#searchUnsettledPO').click(function() {
+      $('#Purchasespayments_suppliername').change(function() {
          var activename=$('#Purchasespayments_suppliername').val();
          $('#Purchasespayments_idsupplier').val(
             supplierids[suppliernames.indexOf(activename)]);
-         $.getJSON('index.php?r=LookUp/getUnsettledPO',{ idsupplier: $('#Purchasespayments_idsupplier').val() },
-            function(data) {
-               $('#Purchasespayments_idpurchaseorder').html('');
-               var ct=0;
-               $('#Purchasespayments_idpurchaseorder').append(
-                  "<option value=''>Harap Pilih</option>"
-               );
-               while(ct < data.length) {
-                  if (data[ct].id !== '') {
-                     $('#Purchasespayments_idpurchaseorder').append(
-                        '<option value='+data[ct].id+'>'+unescape(data[ct].regnum)+'</option>'
-                     );
-                  };
-                  ct++;
-               };
-            });
       });
-      
-      $('#Purchasespayments_idpurchaseorder').change(
+   	
+      $('#searchUnsettledPO').click(
          function(event) {
-            $('#command').val('setPO');
+            $('#command').val('setSupplier');
             mainform=$('#purchasespayments-form');
             mainform.submit();
             event.preventDefault();
@@ -79,6 +62,7 @@ EOS;
         echo $form->hiddenField($model, 'idsupplier');
         echo $form->hiddenField($model, 'userlog');
         echo $form->hiddenField($model, 'datetimelog');
+        echo $form->hiddenField($model, 'status');
       ?>
         
 	<div class="row">
@@ -123,21 +107,10 @@ EOS;
              'source'=>$suppliername,
            'value'=>lookup::SupplierNameFromSupplierID($model->idsupplier)
          ));
-         echo CHtml::Button('Cari PO', array( 'id'=>'searchUnsettledPO'));   
+         echo CHtml::submitButton('Cari PO', array( 'id'=>'searchUnsettledPO'));   
       ?>
 		<?php echo $form->error($model,'idsupplier'); ?>
 	</div>
-
-   <div class="row">
-		<?php echo $form->labelEx($model,'idpurchaseorder'); ?>
-		<?php    
-         echo $form->dropDownList($model,'idpurchaseorder',
-            array($model->idpurchaseorder=>lookup::PurchasesOrderNumFromID($model->idpurchaseorder)), 
-            array('empty'=>'Harap Pilih')
-         );
-      ?>
-		<?php echo $form->error($model,'idpurchaseorder'); ?>
-      </div>
    
    <div class="row">
 		<?php echo $form->labelEx($model,'remark'); ?>
@@ -152,9 +125,9 @@ EOS;
        $rawdata=Yii::app()->session['Detailpurchasespayments'];
        $count=count($rawdata);
     } else {
-       $count=Yii::app()->db->createCommand("select count(*) from detailpurchasespayments where id='$model->idpurchaseorder'")
+       $count=Yii::app()->db->createCommand("select count(*) from detailpurchasespayments where id='$model->id'")
             ->queryScalar();
-       $sql="select * from detailpurchasespayments where id='$model->idpurchaseorder'";
+       $sql="select * from detailpurchasespayments where id='$model->id'";
        $rawdata=Yii::app()->db->createCommand($sql)->queryAll ();
     }
     $dataProvider=new CArrayDataProvider($rawdata, array(
@@ -163,46 +136,31 @@ EOS;
     $this->widget('zii.widgets.grid.CGridView', array(
             'dataProvider'=>$dataProvider,
             'columns'=>array(
-               array(
-                   'header'=>'Item Name',
-                   'name'=>'iditem',
-                   'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
-               ),
-               array(
-                  'header'=>'Qty',
-                  'type'=>'number',
-                  'name'=>'qty',
-               ),
-               array(
-                  'header'=>'Harga Akhir',
-                  'type'=>'number',
-                  'name'=>'prevprice',
-               ), 
-               array(
-                  'header'=>'Harga Baru',
-                  'type'=>'number',
-                  'name'=>'price',
-               ), 
-               array(
-                  'header'=>'Biaya 1 Akhir',
-                  'type'=>'number',
-                  'name'=>'prevcost1',
-               ), 
-               array(
-                  'header'=>'Biaya 1 Baru',
-                  'type'=>'number',
-                  'name'=>'cost1',
-               ), 
-               /*array(
-                  'header'=>'Biaya 1 Akhir',
-                  'type'=>'number',
-                  'name'=>'prevcost2',
-               ), 
-               array(
-                  'header'=>'Biaya 1 Awal',
-                  'type'=>'number',
-                  'name'=>'cost2',
-               ),*/ 
+               	array(
+					'header'=>'Nomor PO',
+					'name'=>'idpurchaseorder',
+					'value'=>"lookup::PurchasesOrderNumFromID(\$data['idpurchaseorder'])"
+				),
+				array(
+					'header'=>'Total',
+					'type'=>'number',
+					'name'=>'total',
+				),
+				array(
+					'header'=>'Diskon',
+					'type'=>'number',
+					'name'=>'discount',
+				),
+				array(
+					'header'=>'Terbayar',
+					'type'=>'number',
+					'name'=>'paid',	
+				),
+				array(
+					'header'=>'Dibayar',
+					'type'=>'number',
+					'name'=>'amount',
+				),
                array(
                   'class'=>'CButtonColumn',
                   'buttons'=> array(
@@ -213,7 +171,7 @@ EOS;
                         'visible'=>'false'
                      )
                   ),
-                  'updateButtonUrl'=>"Action::decodeUpdateDetailPurchaseMemoUrl(\$data)",
+                  'updateButtonUrl'=>"Action::decodeUpdateDetailPurchasesPaymentUrl(\$data)",
                )
           ),
     ));

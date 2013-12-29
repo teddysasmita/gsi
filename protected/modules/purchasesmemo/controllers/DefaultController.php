@@ -519,17 +519,42 @@ class DefaultController extends Controller
 
      protected function afterInsertDetail(& $model, $details)
      {
-
+     	$total=0;
+     	$totaldisc=0;
+     	foreach ($details as $row) {
+     		$total=$total+(($row['price']+$row['cost1']+$row['cost2'])*$row['qty']);
+     		$totaldisc=$totaldisc+$row['discount']*$row['qty'];
+     	}
+     	$model->attributes=Yii::app()->session['Purchasesmemos'];
+     	$model->total=$total;
+     	$model->discount=$totaldisc;
      }
 
 
      protected function afterUpdateDetail(& $model, $details)
      {
-
+     	$total=0;
+     	$totaldisc=0;
+     	foreach ($details as $row) {
+     		$total=$total+(($row['price']+$row['cost1']+$row['cost2'])*$row['qty']);
+     		$totaldisc=$totaldisc+$row['discount']*$row['qty'];
+     	}
+     	$model->attributes=Yii::app()->session['Purchasesmemos'];
+     	$model->total=$total;
+     	$model->discount=$totaldisc;
      }
 
      protected function afterDeleteDetail(& $model, $details)
      {
+     	$total=0;
+     	$totaldisc=0;
+     	foreach ($details as $row) {
+     		$total=$total+(($row['price']+$row['cost1']+$row['cost2'])*$row['qty']);
+     		$totaldisc=$totaldisc+$row['discount']*$row['qty'];
+     	}
+     	$model->attributes=Yii::app()->session['Purchasesmemos'];
+     	$model->total=$total;
+     	$model->discount=$totaldisc;
      }
 
 

@@ -220,6 +220,25 @@ EOS;
     
 ?>
 
+ 	<div class="row">
+      <?php echo $form->labelEx($model,'total'); ?>
+      <?php 
+         echo CHtml::label(number_format($model->total),'false', 
+            array('class'=>'money')); 
+         echo $form->hiddenfield($model, 'total');
+      ?>
+      <?php echo $form->error($model,'total'); ?>
+   </div>
+
+   <div class="row">
+      <?php echo $form->labelEx($model,'discount'); ?>
+      <?php echo CHtml::label(number_format($model->discount),'false', 
+         array('class'=>'money')); 
+         echo $form->hiddenfield($model, 'discount');
+      ?>
+      <?php echo $form->error($model,'discount'); ?>
+   </div>
+
    <div class="row buttons">
       <?php echo CHtml::submitButton(ucfirst($command)); ?>
    </div>

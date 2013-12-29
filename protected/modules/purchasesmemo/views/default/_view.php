@@ -20,6 +20,14 @@
    <b><?php echo CHtml::encode($data->getAttributeLabel('idpurchaseorder')); ?>:</b>
 	<?php echo CHtml::encode(lookup::PurchasesOrderNumFromID($data->idpurchaseorder)); ?>
 	<br />
+	
+	<b><?php echo CHtml::encode($data->getAttributeLabel('total')); ?>:</b>
+	<?php echo CHtml::encode(number_format($data->total)); ?>
+	<br />
+
+	<b><?php echo CHtml::encode($data->getAttributeLabel('discount')); ?>:</b>
+	<?php echo CHtml::encode(number_format($data->discount)); ?>
+	<br />
 
       <b><?php echo CHtml::encode($data->getAttributeLabel('userlog')); ?>:</b>
 	<?php echo CHtml::encode(lookup::UserNameFromUserID($data->userlog)); ?>

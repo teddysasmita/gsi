@@ -28,17 +28,13 @@ $this->menu=array(
 		'regnum',
 		'idatetime',
 		array(
-        'label'=>'Nama Pemasok',
-        'value'=>lookup::SupplierNameFromSupplierID($model->idsupplier)
-      ),
-      array(
-         'label'=>'Nomor PO',
-         'value'=>lookup::PurchasesOrderNumFromID($model->idpurchaseorder),
-      ),
+	        'label'=>'Nama Pemasok',
+	        'value'=>lookup::SupplierNameFromSupplierID($model->idsupplier)
+      	),
 		array(
-               'label'=>'Userlog',
-               'value'=>lookup::UserNameFromUserID($model->userlog),
-            ),
+            'label'=>'Userlog',
+            'value'=>lookup::UserNameFromUserID($model->userlog),
+        ),
 		'datetimelog',
 	),
 )); ?>
@@ -55,46 +51,31 @@ $this->menu=array(
    'dataProvider'=>$dataProvider,
    'columns'=>array(
       array(
-             'header'=>'Item Name',
-             'name'=>'iditem',
-             'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
+             'header'=>'Nomor PO',
+             'name'=>'idpurchaseorder',
+             'value'=>"lookup::PurchasesOrderNumFromID(\$data['idpurchaseorder'])"
          ),
       array(
-         'header'=>'Qty',
+         'header'=>'Total',
          'type'=>'number',
-         'name'=>'qty',
+         'name'=>'total',
       ),
       array(
-         'header'=>'Harga Awal',
+         'header'=>'Diskon',
          'type'=>'number',
-         'name'=>'prevprice',
+         'name'=>'discount',
       ), 
       array(
-         'header'=>'Harga Baru',
+         'header'=>'Terbayar',
          'type'=>'number',
-         'name'=>'price',
+         'name'=>'paid',
       ), 
       array(
-         'header'=>'Biaya 1 Awal',
+         'header'=>'Dibayar',
          'type'=>'number',
-         'name'=>'prevcost1',
+         'name'=>'amount',
       ), 
-      array(
-         'header'=>'Biaya 1 Baru',
-         'type'=>'number',
-         'name'=>'cost1',
-      ), 
-      array(
-         'header'=>'Biaya 2 Awal',
-         'type'=>'number',
-         'name'=>'prevcost2',
-      ), 
-      array(
-         'header'=>'Biaya 2 Baru',
-         'type'=>'number',
-         'name'=>'cost2',
-      ), 
-      array(
+      /*array(
          'class'=>'CButtonColumn',
          'buttons'=> array(
             'delete'=>array(
@@ -105,6 +86,6 @@ $this->menu=array(
             )
          ),
          'viewButtonUrl'=>"Action::decodeViewDetailPurchaseMemoUrl(\$data)",
-      )      
+      )*/      
    )));
  ?>

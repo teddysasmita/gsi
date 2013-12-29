@@ -9,6 +9,8 @@
  * @property string $idatetime
  * @property string $idsupplier
  * @property string $idpurchaseorder
+ * @property double $total
+ * @property double $discount
  * @property string $remark
  * @property string $userlog
  * @property string $datetimelog
@@ -31,13 +33,15 @@ class Purchasesmemos extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, regnum, idatetime, idsupplier, idpurchaseorder, userlog, datetimelog', 'required'),
+			array('id, regnum, idatetime, idsupplier, idpurchaseorder, total, discount, userlog, datetimelog', 'required'),
+			array('total, discount', 'numerical'),
 			array('id, idsupplier, idpurchaseorder, userlog', 'length', 'max'=>21),
 			array('regnum', 'length', 'max'=>12),
 			array('idatetime, datetimelog', 'length', 'max'=>19),
+			array('remark', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, regnum, idatetime, idsupplier, idpurchaseorder, remark, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('id, regnum, idatetime, idsupplier, idpurchaseorder, total, discount, remark, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,8 +65,10 @@ class Purchasesmemos extends CActiveRecord
 			'id' => 'ID',
 			'regnum' => 'Nomor Urut',
 			'idatetime' => 'Tanggal',
-			'idsupplier' => 'Nama Pemasok',
-			'idpurchaseorder' => 'No PO',
+			'idsupplier' => 'Pemasok',
+			'idpurchaseorder' => 'Nomor PO',
+			'total' => 'Total',
+			'discount' => 'Diskon',
 			'remark' => 'Catatan',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
@@ -92,6 +98,8 @@ class Purchasesmemos extends CActiveRecord
 		$criteria->compare('idatetime',$this->idatetime,true);
 		$criteria->compare('idsupplier',$this->idsupplier,true);
 		$criteria->compare('idpurchaseorder',$this->idpurchaseorder,true);
+		$criteria->compare('total',$this->total);
+		$criteria->compare('discount',$this->discount);
 		$criteria->compare('remark',$this->remark,true);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);
