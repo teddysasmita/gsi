@@ -201,6 +201,7 @@ class DefaultController extends Controller
                $this->tracker->init();
                $this->tracker->delete('detailpurchasespayments', array('iddetail'=>$dm->iddetail));
                $dm->delete();
+               $this->setStatusPO($dm);
             }
 
             $model->delete();
@@ -416,6 +417,16 @@ class DefaultController extends Controller
              $respond=$detailmodel->insert();
              if (!$respond) {
                 break;
+             } else {
+             	$purchasetotal=$detailmodel->total-$detailmodel->discount;
+             	$left=$detailmodel->total-($detailmodel->discount+$detailmodel->paid+
+             		$detailmodel->amount);
+             	if ($purchasetotal == $left)
+             		Action::setPaymentStatusPO($detailmodel->idpurchaseorder, '0');
+             	else if ($left>0)
+             		Action::setPaymentStatusPO($detailmodel->idpurchaseorder, '1');
+             	else if ($left==0)
+             		Action::setPaymentStatusPO($detailmodel->idpurchaseorder, '2');
              }
          }
          return $respond;
@@ -443,6 +454,16 @@ class DefaultController extends Controller
              $respond=$detailmodel->save();
              if (!$respond) {
                break;
+             } else {
+             	$purchasetotal=$detailmodel->total-$detailmodel->discount;
+             	$left=$detailmodel->total-($detailmodel->discount+$detailmodel->paid+
+             		$detailmodel->amount);
+             	if ($purchasetotal == $left)
+             		Action::setPaymentStatusPO($detailmodel->idpurchaseorder, '0');
+             	else if ($left>0)
+             		Action::setPaymentStatusPO($detailmodel->idpurchaseorder, '1');
+             	else if ($left==0)
+             		Action::setPaymentStatusPO($detailmodel->idpurchaseorder, '2');
              }
           }
           return $respond;
@@ -460,6 +481,8 @@ class DefaultController extends Controller
                  $respond=$detailmodel->delete();
                  if (!$respond) {
                    break;
+                 } else {
+					$this->setStatusPO($detailmodel);
                  }
              }
          }
@@ -596,4 +619,38 @@ class DefaultController extends Controller
         }
         Yii::app()->session['Detailpurchasespayments']=$details;
       }
+      
+ 	private function setStatusPO($detailmodel) 
+ 	{	
+ 		$dataPO=Yii::app()->db->createCommand()
+ 		->select()->from('purchasesorders')
+ 		->where('id=:id', array(':id'=>$detailmodel->idpurchaseorder))
+ 		->queryRow();
+ 		$dataMemo=Yii::app()->db->createCommand()
+ 		->select()->from('purchasesmemos')
+ 		->where('id=:id', array(':id'=>$detailmodel->idpurchaseorder))
+ 		->order('id DESC')->queryRow();
+ 		
+ 		if ($dataMemo)
+ 			$total=$dataMemo['total']-$dataMemo['discount'];
+ 		else
+ 			$total=$dataPO['total']-$dataMemo['discount'];
+ 		$dataPaid=Yii::app()->db->createCommand()
+ 		->select('sum(b.amount) as totalpaid, b.idpurchaseorder')
+ 		->from('purchasespayments a')
+ 		->join('detailpurchasespayments b', 'b.id = a.id')
+ 		->where('b.idpurchaseorder=:idpo',
+ 				array(':idpo'=>$detailmodel->idpurchaseorder))
+ 				->group('b.idpurchaseorder')
+ 				->queryRow();
+ 		if($dataPaid){
+ 			$paid=$dataPaid['totalpaid'];
+ 		} else {
+ 			$paid=0;
+ 		}
+ 		if ($paid==0)
+ 			Action::setPaymentStatusPO($detailmodel->idpurchaseorder, '0');
+ 		else if ($paid<$total)
+ 			Action::setPaymentStatusPO($detailmodel->idpurchaseorder, '1');
+ 	}
 }

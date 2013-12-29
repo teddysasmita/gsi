@@ -308,6 +308,13 @@ class Action extends CComponent {
          ->update('purchasesorders', array('status'=>$status), 'id=:id', array(':id'=>$idpo));
    }
    
+   public static function setPaymentStatusPO($idpo, $status)
+   {
+   	Yii::app()->db->createCommand()
+   	->update('purchasesorders', array('paystatus'=>$status), 'id=:id', array(':id'=>$idpo));
+   }
+    
+   
    public static function decodeRestoreHistoryWarehouseUrl($data)
    {
       //return print_r($data);
