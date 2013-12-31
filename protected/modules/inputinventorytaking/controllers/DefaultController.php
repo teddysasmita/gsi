@@ -7,7 +7,7 @@ class DefaultController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $formid='AC1';
+	public $formid='AC8';
 	public $tracker;
 	public $state;
 
@@ -50,16 +50,16 @@ class DefaultController extends Controller
                 $this->state='c';
                 $this->trackActivity('c'); 
                 
-                $model=new Salesorders;
+                $model=new Inputinventorytakings;
                 $this->afterInsert($model);
                  
                 Yii::app()->session['master']='create';
                 //as the operator enter for the first time, we load the default value to the session
-                if (!isset(Yii::app()->session['Salesorders'])) {
-                   Yii::app()->session['Salesorders']=$model->attributes;
+                if (!isset(Yii::app()->session['Inputinventorytakings'])) {
+                   Yii::app()->session['Inputinventorytakings']=$model->attributes;
                 } else {
                 // use the session to fill the model
-                    $model->attributes=Yii::app()->session['Salesorders'];
+                    $model->attributes=Yii::app()->session['Inputinventorytakings'];
                 }
 
                 // Uncomment the following line if AJAX validation is needed
@@ -69,10 +69,10 @@ class DefaultController extends Controller
                    if(isset($_POST['yt0']))
                    {
                       //The user pressed the button;
-                      $model->attributes=$_POST['Salesorders'];
+                      $model->attributes=$_POST['Inputinventorytakings'];
                       
-                      if(isset(Yii::app()->session['Detailsalesorders']))
-                        $details=Yii::app()->session['Detailsalesorders'];
+                      if(isset(Yii::app()->session['Detailinputinventorytakings']))
+                        $details=Yii::app()->session['Detailinputinventorytakings'];
 
                       $this->beforePost($model);
                       $respond=$model->save();
@@ -86,17 +86,17 @@ class DefaultController extends Controller
                           $respond=$respond&&$this->saveNewDetails($details);
                       }    
                       if($respond) {
-                         Yii::app()->session->remove('Salesorders');
-                         Yii::app()->session->remove('Detailsalesorders');
+                         Yii::app()->session->remove('Inputinventorytakings');
+                         Yii::app()->session->remove('Detailinputinventorytakings');
                          $this->redirect(array('view','id'=>$model->id));
                       }
 
                    } else if (isset($_POST['command'])){
                       // save the current master data before going to the detail page
                       if($_POST['command']=='adddetail') {
-                         $model->attributes=$_POST['Salesorders'];
-                         Yii::app()->session['Salesorders']=$_POST['Salesorders'];
-                         $this->redirect(array('detailsalesorders/create','id'=>$model->id));
+                         $model->attributes=$_POST['Inputinventorytakings'];
+                         Yii::app()->session['Inputinventorytakings']=$_POST['Inputinventorytakings'];
+                         $this->redirect(array('detailinputinventorytakings/create','id'=>$model->id));
                       }
                    }
                 }
@@ -126,23 +126,23 @@ class DefaultController extends Controller
                 
                 Yii::app()->session['master']='update';
                 
-                if(!isset(Yii::app()->session['Salesorders']))
-                   Yii::app()->session['Salesorders']=$model->attributes;
+                if(!isset(Yii::app()->session['Inputinventorytakings']))
+                   Yii::app()->session['Inputinventorytakings']=$model->attributes;
                 else
-                   $model->attributes=Yii::app()->session['Salesorders'];
+                   $model->attributes=Yii::app()->session['Inputinventorytakings'];
                 
-                if(!isset(Yii::app()->session['Detailsalesorders'])) 
-                    Yii::app()->session['Detailsalesorders']=$this->loadDetails($id);
+                if(!isset(Yii::app()->session['Detailinputinventorytakings'])) 
+                    Yii::app()->session['Detailinputinventorytakings']=$this->loadDetails($id);
                     
                 // Uncomment the following line if AJAX validation is needed
                 $this->performAjaxValidation($model);
 
                 if(isset($_POST)) {
                     if(isset($_POST['yt0'])) {
-                        $model->attributes=$_POST['Salesorders'];
+                        $model->attributes=$_POST['Inputinventorytakings'];
                         
                         $this->beforePost($model);
-                        $this->tracker->modify('salesorders', $id);
+                        $this->tracker->modify('inputinventorytakings', $id);
                         $respond=$model->save();
                         if($respond) {
                           $this->afterPost($model);
@@ -150,8 +150,8 @@ class DefaultController extends Controller
                           throw new CHttpException(404,'There is an error in master posting');
                         }
                         
-                        if(isset(Yii::app()->session['Detailsalesorders']))
-                            $details=Yii::app()->session['Detailsalesorders'];
+                        if(isset(Yii::app()->session['Detailinputinventorytakings']))
+                            $details=Yii::app()->session['Detailinputinventorytakings'];
                         if(isset($details)) {
                             $respond=$respond&&$this->saveDetails($details);
                             if($respond) {
@@ -161,8 +161,8 @@ class DefaultController extends Controller
                             }
                         };
                         
-                        if(isset(Yii::app()->session['Deletedetailsalesorders']))
-                            $deletedetails=Yii::app()->session['Deletedetailsalesorders'];
+                        if(isset(Yii::app()->session['Deletedetailinputinventorytakings']))
+                            $deletedetails=Yii::app()->session['Deletedetailinputinventorytakings'];
                         if(isset($deletedetails)) {
                             $respond=$respond&&$this->deleteDetails($deletedetails);
                             if($respond) {
@@ -173,9 +173,9 @@ class DefaultController extends Controller
                         };
                                                 
                         if($respond) {
-                            Yii::app()->session->remove('Salesorders');
-                            Yii::app()->session->remove('Detailsalesorders');
-                            Yii::app()->session->remove('Deletedetailsalesorders');
+                            Yii::app()->session->remove('Inputinventorytakings');
+                            Yii::app()->session->remove('Detailinputinventorytakings');
+                            Yii::app()->session->remove('Deletedetailinputinventorytakings');
                             $this->redirect(array('view','id'=>$model->id));
                         }
                     }
@@ -200,12 +200,12 @@ class DefaultController extends Controller
                 $this->trackActivity('d');
                 $model=$this->loadModel($id);
                 $this->beforeDelete($model);
-                $this->tracker->delete('salesorders', $id);
+                $this->tracker->delete('inputinventorytakings', $id);
                 
-                $detailmodels=Detailsalesorders::model()->findAll('id=:id',array(':id'=>$id));
+                $detailmodels=Detailinputinventorytakings::model()->findAll('id=:id',array(':id'=>$id));
                 foreach($detailmodels as $dm) {
                    $this->tracker->init();
-                    $this->tracker->delete('detailsalesorders', array('iddetail'=>$dm->iddetail));
+                    $this->tracker->delete('detailinputinventorytakings', array('iddetail'=>$dm->iddetail));
                     $dm->delete();
                 }
                 $model->delete();
@@ -227,12 +227,12 @@ class DefaultController extends Controller
          if(Yii::app()->authManager->checkAccess($this->formid.'-List', 
             Yii::app()->user->id)) {
             $this->trackActivity('l');
-            Yii::app()->session->remove('Salesorders');
-            Yii::app()->session->remove('Detailsalesorders');
-            Yii::app()->session->remove('Detailsalesorders2');
-            Yii::app()->session->remove('DeleteDetailsalesorders');
+            Yii::app()->session->remove('Inputinventorytakings');
+            Yii::app()->session->remove('Detailinputinventorytakings');
+            Yii::app()->session->remove('Detailinputinventorytakings2');
+            Yii::app()->session->remove('DeleteDetailinputinventorytakings');
 
-            $dataProvider=new CActiveDataProvider('Salesorders',
+            $dataProvider=new CActiveDataProvider('Inputinventorytakings',
                array(
                   'criteria'=>array(
                      'order'=>'id desc'
@@ -256,10 +256,10 @@ class DefaultController extends Controller
                 Yii::app()->user->id)) {
                 $this->trackActivity('s');
                 
-        	$model=new Salesorders('search');
+        	$model=new Inputinventorytakings('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Salesorders']))
-			$model->attributes=$_GET['Salesorders'];
+		if(isset($_GET['Inputinventorytakings']))
+			$model->attributes=$_GET['Inputinventorytakings'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -299,12 +299,12 @@ class DefaultController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Salesorders the loaded model
+	 * @return Inputinventorytakings the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Salesorders::model()->findByPk($id);
+		$model=Inputinventorytakings::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -312,11 +312,11 @@ class DefaultController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Salesorders $model the model to be validated
+	 * @param Inputinventorytakings $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='salesorders-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='inputinventorytakings-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
@@ -329,10 +329,10 @@ class DefaultController extends Controller
          //this action continues the process from the detail page
             if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
                     Yii::app()->user->id))  {
-                $model=new Salesorders;
-                $model->attributes=Yii::app()->session['Salesorders'];
+                $model=new Inputinventorytakings;
+                $model->attributes=Yii::app()->session['Inputinventorytakings'];
 
-                $details=Yii::app()->session['Detailsalesorders'];
+                $details=Yii::app()->session['Detailinputinventorytakings'];
                 $this->afterInsertDetail($model, $details);
 
                 $this->render('create',array(
@@ -348,10 +348,10 @@ class DefaultController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                     Yii::app()->user->id))  {
             
-                $model=new Salesorders;
-                $model->attributes=Yii::app()->session['Salesorders'];
+                $model=new Inputinventorytakings;
+                $model->attributes=Yii::app()->session['Inputinventorytakings'];
 
-                $details=Yii::app()->session['Detailsalesorders'];
+                $details=Yii::app()->session['Detailinputinventorytakings'];
                 $this->afterUpdateDetail($model, $details);
 
                 $this->render('update',array(
@@ -368,10 +368,10 @@ class DefaultController extends Controller
                     Yii::app()->user->id))  {
             
                 
-                $model=new Salesorders;
-                $model->attributes=Yii::app()->session['Salesorders'];
+                $model=new Inputinventorytakings;
+                $model->attributes=Yii::app()->session['Inputinventorytakings'];
 
-                $details=Yii::app()->session['Detailsalesorders'];
+                $details=Yii::app()->session['Detailinputinventorytakings'];
                 $this->afterDeleteDetail($model, $details);
 
                 $this->render('update',array(
@@ -387,9 +387,9 @@ class DefaultController extends Controller
            if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
                 $this->trackActivity('n');
-                $this->tracker->restoreDeleted('salesorders', $idtrack);
-                $this->tracker->restoreDeleted('detailsalesorders', $idtrack);
-                $dataProvider=new CActiveDataProvider('Salesorders');
+                $this->tracker->restoreDeleted('inputinventorytakings', $idtrack);
+                $this->tracker->restoreDeleted('detailinputinventorytakings', $idtrack);
+                $dataProvider=new CActiveDataProvider('Inputinventorytakings');
                 $this->render('index',array(
                     'dataProvider'=>$dataProvider,
                 ));
@@ -403,9 +403,9 @@ class DefaultController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
                 $this->trackActivity('r');
-                $this->tracker->restore('salesorders', $idtrack);
+                $this->tracker->restore('inputinventorytakings', $idtrack);
                 
-                $dataProvider=new CActiveDataProvider('Salesorders');
+                $dataProvider=new CActiveDataProvider('Inputinventorytakings');
                 $this->render('index',array(
                     'dataProvider'=>$dataProvider,
                 ));
@@ -417,7 +417,7 @@ class DefaultController extends Controller
         protected function saveNewDetails(array $details)
         {                  
             foreach ($details as $row) {
-                $detailmodel=new Detailsalesorders;
+                $detailmodel=new Detailinputinventorytakings;
                 $detailmodel->attributes=$row;
                 $respond=$detailmodel->insert();
                 if (!$respond) {
@@ -432,13 +432,13 @@ class DefaultController extends Controller
             $idmaker=new idmaker();
             
             foreach ($details as $row) {
-                $detailmodel=Detailsalesorders::model()->findByPk($row['iddetail']);
+                $detailmodel=Detailinputinventorytakings::model()->findByPk($row['iddetail']);
                 if($detailmodel==NULL) {
-                    $detailmodel=new Detailsalesorders;
+                    $detailmodel=new Detailinputinventorytakings;
                 } else {
                     if(count(array_diff($detailmodel->attributes,$row))) {
                         $this->tracker->init();
-                        $this->tracker->modify('detailsalesorders', array('iddetail'=>$detailmodel->iddetail));
+                        $this->tracker->modify('detailinputinventorytakings', array('iddetail'=>$detailmodel->iddetail));
                     }    
                 }
                 $detailmodel->attributes=$row;
@@ -456,11 +456,11 @@ class DefaultController extends Controller
         {
             $respond=true;
             foreach ($details as $row) {
-                $detailmodel=Detailsalesorders::model()->findByPk($row['iddetail']);
+                $detailmodel=Detailinputinventorytakings::model()->findByPk($row['iddetail']);
                 if($detailmodel) {
                     $this->tracker->init();
                     $this->trackActivity('d', $this->detailformid);
-                    $this->tracker->delete('detailsalesorders', $detailmodel->id);
+                    $this->tracker->delete('detailinputinventorytakings', $detailmodel->id);
                     $respond=$detailmodel->delete();
                     if (!$respond) {
                       break;
@@ -473,7 +473,7 @@ class DefaultController extends Controller
 
         protected function loadDetails($id)
         {
-            $sql="select * from detailsalesorders where id='$id'";
+            $sql="select * from detailinputinventorytakings where id='$id'";
             $details=Yii::app()->db->createCommand($sql)->queryAll();
 
             return $details;
@@ -485,47 +485,21 @@ class DefaultController extends Controller
             $model->id=$idmaker->getCurrentID2();
             $model->idatetime=$idmaker->getDateTime();
             $model->regnum=$idmaker->getRegNum($this->formid);
-            $lookup=new lookup();
-            $model->status=$lookup->reverseOrderStatus('Belum Diproses');
         }
 
         protected function afterInsertDetail(& $model, $details)
         {
-         $total=0;
-         $totaldisc=0;
-         foreach ($details as $row) {
-            $total=$total+$row['price']*$row['qty'];
-            $totaldisc=$totaldisc+$row['discount']*$row['qty'];
-         }
-         $model->attributes=Yii::app()->session['Salesorders'];
-         $model->total=$total;
-         $model->discount=$totaldisc;
+         
         }
 
         protected function afterUpdateDetail(& $model, $details)
         {
-         $total=0;
-         $totaldisc=0;
-         foreach ($details as $row) {
-            $total=$total+$row['price']*$row['qty'];
-            $totaldisc=$totaldisc+$row['discount']*$row['qty'];
-         }
-         $model->attributes=Yii::app()->session['Salesorders'];
-         $model->total=$total;
-         $model->discount=$totaldisc;      
+               
         }
         
         protected function afterDeleteDetail(& $model, $details)
         {
-         $total=0;
-         $totaldisc=0;
-         foreach ($details as $row) {
-            $total=$total+$row['price']*$row['qty'];
-            $totaldisc=$totaldisc+$row['discount']*$row['qty'];
-         }
-         $model->attributes=Yii::app()->session['Salesorders'];
-         $model->total=$total;
-         $model->discount=$totaldisc;      
+               
         }
       
         protected function afterPost(& $model)

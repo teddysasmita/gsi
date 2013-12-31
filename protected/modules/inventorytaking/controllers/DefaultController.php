@@ -7,7 +7,7 @@ class DefaultController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $formid='AB5';
+	public $formid='AB6';
 	public $tracker;
 	public $state;
 
@@ -35,8 +35,8 @@ class DefaultController extends Controller
 				'model'=>$this->loadModel($id),
 			));
 		} else {
-        	throw new CHttpException(404,'You have no authorization for this operation.');
-        };
+			throw new CHttpException(404,'You have no authorization for this operation.');
+        }
 	}
 
 	/**
@@ -45,19 +45,20 @@ class DefaultController extends Controller
 	 */
 	public function actionCreate()
 	{
-         if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
               Yii::app()->user->id))  {   
             $this->state='c';
             $this->trackActivity('c');    
 
-            $model=new Salespersons;
+            $model=new Inventorytakings;
             $this->afterInsert($model);
 
             // Uncomment the following line if AJAX validation is needed
             $this->performAjaxValidation($model);
 
-            if(isset($_POST['Salespersons'])) {
-               $model->attributes=$_POST['Salespersons'];
+            if(isset($_POST['Inventorytakings']))
+            {
+               $model->attributes=$_POST['Inventorytakings'];
                $this->beforePost($model);
                if($model->save()) {
                   $this->afterPost($model);
@@ -65,7 +66,7 @@ class DefaultController extends Controller
                }    
             }
 
-            $this->render('create',array('model'=>$model) );
+            $this->render('create',array('model'=>$model));
          } else {
             throw new CHttpException(404,'You have no authorization for this operation.');
          }
@@ -79,29 +80,32 @@ class DefaultController extends Controller
 	public function actionUpdate($id)
 	{
          if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
-            Yii::app()->user->id))  {
+           Yii::app()->user->id))  {
 
-            $this->state='u';
-            $this->trackActivity('u');
+         $this->state='u';
+         $this->trackActivity('u');
 
-            $model=$this->loadModel($id);
-            $this->afterEdit($model);
+         $model=$this->loadModel($id);
+         $this->afterEdit($model);
 
-            // Uncomment the following line if AJAX validation is needed
-            $this->performAjaxValidation($model);
+         // Uncomment the following line if AJAX validation is needed
+         $this->performAjaxValidation($model);
 
-            if(isset($_POST['Salespersons'])) {
-               $model->attributes=$_POST['Salespersons'];
+         if(isset($_POST['Inventorytakings']))
+         {
+            $model->attributes=$_POST['Inventorytakings'];
 
-               $this->beforePost($model);   
-               $this->tracker->modify('salespersons', $id);
-               if($model->save()) {
-                  $this->afterPost($model);
-                  $this->redirect(array('view','id'=>$model->id));
-               }        
-            }
+            $this->beforePost($model);   
+            $this->tracker->modify('inventorytakings', $id);
+            if($model->save()) {
+               $this->afterPost($model);
+               $this->redirect(array('view','id'=>$model->id));
+            }        
+         }
 
-            $this->render('update',array( 'model'=>$model ));
+         $this->render('update',array(
+               'model'=>$model,
+         ));
          } else {
             throw new CHttpException(404,'You have no authorization for this operation.');
          }
@@ -115,22 +119,21 @@ class DefaultController extends Controller
 	public function actionDelete($id)
 	{
          if(Yii::app()->authManager->checkAccess($this->formid.'-Delete', 
-            Yii::app()->user->id))  {
+                 Yii::app()->user->id))  {
 
-            $this->trackActivity('d');
             $model=$this->loadModel($id);
+            $this->trackActivity('d');
             $this->beforeDelete($model);
-            
-            $this->tracker->delete('salespersons', $id);
+            $this->tracker->delete('inventorytakings', $id);
 
             $model->delete();
             $this->afterDelete();
 
-            // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
             if(!isset($_GET['ajax']))
-               $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+               $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
          } else {
-            throw new CHttpException(404,'You have no authorization for this operation.');
+             throw new CHttpException(404,'You have no authorization for this operation.');
          }
       }
 
@@ -140,12 +143,12 @@ class DefaultController extends Controller
 	public function actionIndex()
 	{
          if(Yii::app()->authManager->checkAccess($this->formid.'-List', 
-            Yii::app()->user->id)) {
+             Yii::app()->user->id)) {
             $this->trackActivity('l');
 
-            $dataProvider=new CActiveDataProvider('Salespersons');
+            $dataProvider=new CActiveDataProvider('Inventorytakings');
             $this->render('index',array(
-                'dataProvider'=>$dataProvider,
+               'dataProvider'=>$dataProvider,
             ));
          } else {
             throw new CHttpException(404,'You have no authorization for this operation.');
@@ -158,17 +161,19 @@ class DefaultController extends Controller
 	public function actionAdmin()
 	{
          if(Yii::app()->authManager->checkAccess($this->formid.'-List', 
-            Yii::app()->user->id)) {
+             Yii::app()->user->id)) {
             $this->trackActivity('s');
 
-            $model=new Salespersons('search');
+            $model=new Inventorytakings('search');
             $model->unsetAttributes();  // clear any default values
-            if(isset($_GET['Salespersons']))
-               $model->attributes=$_GET['Salespersons'];
+            if(isset($_GET['Inventorytakings']))
+               $model->attributes=$_GET['Inventorytakings'];
 
-            $this->render('admin',array('model'=>$model));
+            $this->render('admin',array(
+                  'model'=>$model,
+            ));
          } else {
-            throw new CHttpException(404,'You have no authorization for this operation.');
+             throw new CHttpException(404,'You have no authorization for this operation.');
          }
 	}
 
@@ -176,114 +181,124 @@ class DefaultController extends Controller
       {
          if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
             Yii::app()->user->id)) {
-             $model=$this->loadModel($id);
-             $this->render('history', array(
-                'model'=>$model
-             ));
-         } else {
-             throw new CHttpException(404,'You have no authorization for this operation.');
-         }   
-      }
-        
-      public function actionDeleted()
-      {
-         if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
-            Yii::app()->user->id)) {
-             $this->render('deleted', array());
+            $model=$this->loadModel($id);
+            $this->render('history', array(
+             'model'=>$model,
+
+            ));
          } else {
             throw new CHttpException(404,'You have no authorization for this operation.');
          }   
       }
         
-      public function actionRestore($idtrack)
-      {
-         if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
-            Yii::app()->user->id)) {
-            $this->trackActivity('r');
-            $this->tracker->restore('salespersons', $idtrack);
-
-            $dataProvider=new CActiveDataProvider('Salespersons');
-            $this->render('index',array('dataProvider'=>$dataProvider));
-         } else {
-            throw new CHttpException(404,'You have no authorization for this operation.');
-         }
-      }
+        public function actionDeleted()
+        {
+            if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
+               Yii::app()->user->id)) {
+                $this->render('deleted', array(
+         
+                    
+                ));
+            } else {
+                throw new CHttpException(404,'You have no authorization for this operation.');
+            }   
+        }
         
-      public function actionRestoreDeleted($idtrack)
-      {
-         if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
-            Yii::app()->user->id)) {
-            $this->trackActivity('n');
-            $this->tracker->restoreDeleted('salespersons', $idtrack);
+        public function actionRestore($idtrack)
+        {
+            if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
+               Yii::app()->user->id)) {
+                $this->trackActivity('r');
+                $this->tracker->restore('inventorytakings', $idtrack);
 
-            $dataProvider=new CActiveDataProvider('Salespersons');
-            $this->render('index',array('dataProvider'=>$dataProvider));
-         } else {
-            throw new CHttpException(404,'You have no authorization for this operation.');
-         }
-      }
+                $dataProvider=new CActiveDataProvider('Inventorytakings');
+                $this->render('index',array(
+                    'dataProvider'=>$dataProvider,
+                ));
+            } else {
+                throw new CHttpException(404,'You have no authorization for this operation.');
+            }
+        }
+        
+        public function actionRestoreDeleted($idtrack)
+        {
+            if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
+               Yii::app()->user->id)) {
+               $this->trackActivity('n');
+               $this->tracker->restoreDeleted('inventorytakings', $idtrack);
+
+               $dataProvider=new CActiveDataProvider('Inventorytakings');
+               $this->render('index',array(
+                 'dataProvider'=>$dataProvider,
+               ));
+            } else {
+               throw new CHttpException(404,'You have no authorization for this operation.');
+            }
+        }
         
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Salespersons the loaded model
+	 * @return Inventorytakings the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-         $model=Salespersons::model()->findByPk($id);
+         $model=Inventorytakings::model()->findByPk($id);
          if($model===null)
-               throw new CHttpException(404,'The requested page does not exist.');
+            throw new CHttpException(404,'The requested page does not exist.');
          return $model;
 	}
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Salespersons $model the model to be validated
+	 * @param Inventorytakings $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-         if(isset($_POST['ajax']) && $_POST['ajax']==='salespersons-form')
+         if(isset($_POST['ajax']) && $_POST['ajax']==='inventorytakings-form')
          {
-               echo CActiveForm::validate($model);
-               Yii::app()->end();
+            echo CActiveForm::validate($model);
+            Yii::app()->end();
          }
 	}
         
       protected function afterInsert(& $model)
       {
-         $model->id=idmaker::getcurrentID2();  
-         $model->userlog=Yii::app()->user->id;
-         $model->datetimelog=idmaker::getDateTime();
+         $idmaker=new idmaker();
+         $model->id=$idmaker->getcurrentID2();  
+         $model->idatetime=$idmaker->getDateTime();
       }
         
       protected function afterPost(& $model)
       {
-         
+
       }
-        
+
       protected function beforePost(& $model)
       {
+         $idmaker=new idmaker();
+
          $model->userlog=Yii::app()->user->id;
-         $model->datetimelog=idmaker::getDateTime();
+         $model->datetimelog=$idmaker->getDateTime();
       }
         
       protected function beforeDelete(& $model)
       {
 
       }
-        
-      protected function afterDelete(& $model)
+
+      protected function afterDelete()
       {
 
       }
-        
+
       protected function afterEdit(& $model)
       {
 
       }
-        
+
       protected function trackActivity($action)
       {
          $this->tracker=new Tracker();

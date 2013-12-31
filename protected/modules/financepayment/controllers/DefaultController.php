@@ -7,7 +7,7 @@ class DefaultController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
       public $layout='//layouts/column2';
-      public $formid='AB1';
+      public $formid='AC4';
       public $tracker;
       public $state;
 
@@ -28,10 +28,15 @@ class DefaultController extends Controller
 	 */
 	public function actionView($id)
 	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+				Yii::app()->user->id))  {
             $this->trackActivity('v');
             $this->render('view',array(
-			'model'=>$this->loadModel($id),
-		));
+				'model'=>$this->loadModel($id),
+			));
+		} else {
+        	throw new CHttpException(404,'You have no authorization for this operation.');
+        };
 	}
 
 	/**

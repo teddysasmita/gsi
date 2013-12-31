@@ -42,6 +42,8 @@ return array(
             'purchasesreceipt',
             'purchasespayment',
             'financepayment',
+            'inventorytaking',	
+            'inputinventorytaking',
         ),
 
         

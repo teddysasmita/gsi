@@ -15,3 +15,4 @@ $this->pageTitle=Yii::app()->name;
 <h3><?php echo CHtml::link('Pemasok', Yii::app()->createUrl('supplier'))?></h3>
 <h3><?php echo CHtml::link('Gudang', Yii::app()->createUrl('warehouse'))?></h3>
 <h3><?php echo CHtml::link('Tenaga Penjualan (Sales)', Yii::app()->createUrl('salesperson'))?></h3>
+<h3><?php echo CHtml::link('Stok Opname', Yii::app()->createUrl('inventorytaking'))?></h3>

@@ -7,9 +7,9 @@ class DetailsalesordersController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-        public $formid='AC1a';
-        public $tracker;
-        public $state;
+	public $formid='AC1a';
+	public $tracker;
+	public $state;
 
 	/**
 	 * @return array action filters
@@ -28,6 +28,8 @@ class DetailsalesordersController extends Controller
 	 */
 	public function actionView($iddetail)
 	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+				Yii::app()->user->id))  {
             $this->trackActivity('v');
             $model=$this->loadModel($iddetail);
             if(($model==NULL)&&isset(Yii::app()->session['Detailsalesorders'])) {
@@ -37,6 +39,9 @@ class DetailsalesordersController extends Controller
             $this->render('view',array(
                     'model'=>$model,
             ));
+		} else {
+        	throw new CHttpException(404,'You have no authorization for this operation.');
+        };
 	}
 
 	/**
