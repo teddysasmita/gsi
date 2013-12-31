@@ -326,6 +326,23 @@ class Action extends CComponent {
       //return print_r($data);
       return Yii::app()->createUrl('warehouse/default/restore', array('idtrack'=>$data['idtrack']));
    }
+   
+   public static function addFinancePayment($receipientname, $date, $duedate, $amount)
+   {
+		Yii::app()->db->createCommand()
+			->insert('financepayments', array(
+				'id'=>idmaker::getCurrentID2(),
+				'idatetime'=>$date,
+				'receipient'=>$receipientname,
+				'method'=>'0',
+				'duedate'=>$date,
+				'amount'=>$amount,
+				'remark'=>'Belum dilaksanakan. Mohon diisi dengan informasi yang diperlukan.',
+				'status'=>'0',
+				'userlog'=>Yii::app()->user->id,
+				'datetimelog'=>idmaker::getDateTime()
+			));	
+   }
 }
 
 ?>

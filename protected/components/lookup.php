@@ -68,6 +68,8 @@ class lookup extends CComponent {
 	   	case '1':
 	   		return 'Terbayar dgn Tunai';
 	   	case '2':
+	   		return 'Terbayar dgn Transfer';
+	   	case '3':
 	   		return 'Terbayar dgn Cek/Giro';
    	}
    }

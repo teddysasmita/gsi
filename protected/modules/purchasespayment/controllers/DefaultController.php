@@ -165,6 +165,7 @@ class DefaultController extends Controller
                      };
                     
                      if($respond) {
+                     	$this->afterPost($model);
                          Yii::app()->session->remove('Purchasespayments');
                          Yii::app()->session->remove('Detailpurchasespayments');
                          Yii::app()->session->remove('DeleteDetailpurchasespayments');
@@ -514,7 +515,9 @@ class DefaultController extends Controller
      {
          $idmaker=new idmaker();
          $idmaker->saveRegNum($this->formid, $model->regnum);
-         
+         Action::addFinancePayment(
+         	lookup::SupplierNameFromSupplierID($model->idsupplier), $model->idatetime, 
+         	$model->idatetime, $model->total);
      }
 
      protected function beforePost(& $model)
@@ -542,17 +545,18 @@ class DefaultController extends Controller
 
      protected function afterInsertDetail(& $model, $details)
      {
-
+		$this->sumDetail($model, $details);
      }
 
 
      protected function afterUpdateDetail(& $model, $details)
      {
-
+		$this->sumDetail($model, $details);
      }
 
      protected function afterDeleteDetail(& $model, $details)
      {
+     	$this->sumDetail($model, $details);
      }
 
 
@@ -652,5 +656,16 @@ class DefaultController extends Controller
  			Action::setPaymentStatusPO($detailmodel->idpurchaseorder, '0');
  		else if ($paid<$total)
  			Action::setPaymentStatusPO($detailmodel->idpurchaseorder, '1');
+ 	}
+ 	
+ 	private function sumDetail(& $model, $details)
+ 	{
+ 		$total=0;
+ 		$totaldisc=0;
+ 		foreach ($details as $row) {
+ 			$total=$total+$row['amount'];
+ 		}
+ 		$model->attributes=Yii::app()->session['Purchasespayments'];
+ 		$model->total=$total;
  	}
 }

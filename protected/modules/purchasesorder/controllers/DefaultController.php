@@ -674,15 +674,7 @@ class DefaultController extends Controller
         
         protected function afterInsertDetail(& $model, $details)
         {
-            $total=0;
-            $totaldisc=0;
-            foreach ($details as $row) {
-                $total=$total+(($row['price']+$row['cost1']+$row['cost2'])*$row['qty']);
-                $totaldisc=$totaldisc+$row['discount']*$row['qty'];
-            }
-            $model->attributes=Yii::app()->session['Purchasesorders'];
-            $model->total=$total;
-            $model->discount=$totaldisc;
+            $this->sumDetail($model, $details);
         }
         
         protected function afterInsertDetail2(& $model, $details)
@@ -692,15 +684,7 @@ class DefaultController extends Controller
 
         protected function afterUpdateDetail(& $model, $details)
         {
-         $total=0;
-         $totaldisc=0;
-         foreach ($details as $row) {
-            $total=$total+(($row['price']+$row['cost1']+$row['cost2'])*$row['qty']);
-            $totaldisc=$totaldisc+$row['discount']*$row['qty'];
-         }
-         $model->attributes=Yii::app()->session['Purchasesorders'];
-         $model->total=$total;
-         $model->discount=$totaldisc;      
+        	$this->sumDetail($model, $details);
         }
         
         protected function afterUpdateDetail2(& $model, $details)
@@ -709,15 +693,7 @@ class DefaultController extends Controller
         
         protected function afterDeleteDetail(& $model, $details)
         {
-         $total=0;
-         $totaldisc=0;
-         foreach ($details as $row) {
-            $total=$total+(($row['price']+$row['cost1']+$row['cost2'])*$row['qty']);
-            $totaldisc=$totaldisc+$row['discount']*$row['qty'];
-         }
-         $model->attributes=Yii::app()->session['Purchasesorders'];
-         $model->total=$total;
-         $model->discount=$totaldisc;      
+        	$this->sumDetail($model, $details);
         }
         
         protected function afterDeleteDetail2(& $model, $details)
@@ -729,5 +705,18 @@ class DefaultController extends Controller
             $this->tracker=new Tracker();
             $this->tracker->init();
             $this->tracker->logActivity($this->formid, $action);
+        }
+        
+        private function sumDetail(& $model, $details)
+        {
+        	$total=0;
+        	$totaldisc=0;
+        	foreach ($details as $row) {
+        		$total=$total+(($row['price']+$row['cost1']+$row['cost2'])*$row['qty']);
+        		$totaldisc=$totaldisc+$row['discount']*$row['qty'];
+        	}
+        	$model->attributes=Yii::app()->session['Purchasesorders'];
+        	$model->total=$total;
+        	$model->discount=$totaldisc;
         }
 }

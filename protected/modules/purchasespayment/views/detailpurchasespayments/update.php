@@ -13,7 +13,7 @@ else if ($master=='update')
    $this->breadcrumbs=array(
       'Proses'=>array('/site/proses'),
       'Daftar'=>array('default/index'),
-      'Lihat Data'=>array('view','id'=>$model->id),
+      'Lihat Data'=>array('default/view','id'=>$model->id),
       'Ubah Data'=>array('default/update','id'=>$model->id),
       'Ubah Detil');
 

@@ -32,6 +32,14 @@ $this->menu=array(
 	        'value'=>lookup::SupplierNameFromSupplierID($model->idsupplier)
       	),
 		array(
+		'label'=>'Total',
+		'value'=>number_format($model->total)
+		),
+		array(
+				'label'=>'Diskon',
+				'value'=>number_format($model->discount)
+		),
+		array(
 			'label'=>'Status',
 			'value'=>lookup::paymentStatus($model->status)
 		),
