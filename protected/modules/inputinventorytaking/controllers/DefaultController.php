@@ -83,7 +83,7 @@ class DefaultController extends Controller
                       }
                       
                       if (isset($details)) {
-                          $respond=$respond&&$this->saveNewDetails($details);
+                          $respond=$respond&&$this->saveNewDetails($model, $details);
                       }    
                       if($respond) {
                          Yii::app()->session->remove('Inputinventorytakings');
@@ -153,7 +153,7 @@ class DefaultController extends Controller
                         if(isset(Yii::app()->session['Detailinputinventorytakings']))
                             $details=Yii::app()->session['Detailinputinventorytakings'];
                         if(isset($details)) {
-                            $respond=$respond&&$this->saveDetails($details);
+                            $respond=$respond&&$this->saveDetails($model, $details);
                             if($respond) {
                             
                             } else {
@@ -164,7 +164,7 @@ class DefaultController extends Controller
                         if(isset(Yii::app()->session['Deletedetailinputinventorytakings']))
                             $deletedetails=Yii::app()->session['Deletedetailinputinventorytakings'];
                         if(isset($deletedetails)) {
-                            $respond=$respond&&$this->deleteDetails($deletedetails);
+                            $respond=$respond&&$this->deleteDetails($model, $deletedetails);
                             if($respond) {
                             
                             } else {
@@ -207,6 +207,7 @@ class DefaultController extends Controller
                    $this->tracker->init();
                     $this->tracker->delete('detailinputinventorytakings', array('iddetail'=>$dm->iddetail));
                     $dm->delete();
+                    $this->afterDeleteDetail($model, $dm);
                 }
                 $model->delete();
                 $this->afterDelete();
@@ -414,7 +415,7 @@ class DefaultController extends Controller
             }
         }
         
-        protected function saveNewDetails(array $details)
+        protected function saveNewDetails($model, array $details)
         {                  
             foreach ($details as $row) {
                 $detailmodel=new Detailinputinventorytakings;
@@ -422,12 +423,14 @@ class DefaultController extends Controller
                 $respond=$detailmodel->insert();
                 if (!$respond) {
                    break;
+                } else {
+                	$this->afterPostDetail($model, $detailmodel, 'insert');
                 }
             }
             return $respond;
         }
       
-        protected function saveDetails(array $details)
+        protected function saveDetails($model, array $details)
         {
             $idmaker=new idmaker();
             
@@ -447,12 +450,14 @@ class DefaultController extends Controller
                 $respond=$detailmodel->save();
                 if (!$respond) {
                   break;
+                } else {
+                	$this->afterPostDetail($model, $detailmodel, 'update');
                 }
              }
              return $respond;
         }
       
-        protected function deleteDetails(array $details)
+        protected function deleteDetails($model, array $details)
         {
             $respond=true;
             foreach ($details as $row) {
@@ -464,6 +469,8 @@ class DefaultController extends Controller
                     $respond=$detailmodel->delete();
                     if (!$respond) {
                       break;
+                    } else {
+                    	$this->afterDeleteDetail($model, $detailmodel);
                     }
                 }
             }
@@ -497,9 +504,10 @@ class DefaultController extends Controller
                
         }
         
-        protected function afterDeleteDetail(& $model, $details)
+        protected function afterDeleteDetail(& $model, $detail)
         {
-               
+        	$im=new InventoryManager();
+        	$im->deleteEntry($detail->iddetail);
         }
       
         protected function afterPost(& $model)
@@ -540,5 +548,16 @@ class DefaultController extends Controller
                 $this->tracker->logActivity($formid, $action);
             else
                 $this->tracker->logActivity($this->formid, $action);
+        }
+        
+        private function afterPostDetail(& $model, $detail, $mode)
+        {
+        	$im=new InventoryManager();
+        	if ($mode=='update')
+        		$im->updateEntry($detail->iddetail, $model->idatetime, 
+        				$detail->iditem, $detail->idwarehouse, $detail->qty);
+        	else if ($mode=='insert')
+        		$im->addEntry($this->formid, $detail->iddetail, $model->idatetime, $detail->iditem, 
+        			$detail->idwarehouse, $detail->qty);
         }
 }

@@ -314,4 +314,25 @@ class DefaultController extends Controller
             $this->tracker->init();
             $this->tracker->logActivity($this->formid, $action);
         }
+        
+       	public function actionPrintstockcard($id)
+       	{
+       		if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+				Yii::app()->user->id))  {
+	            $this->trackActivity('v');
+	            
+	            if (isset($_POST['yt0'])) {
+	            	
+	            	
+	            } else {
+	            	$warehouses=Yii::app()->db->createCommand()
+	            		->select('id, code')->from('warehouses')->queryAll();
+		            $this->render('printstockcard',array(
+						'warehouses'=>$warehouses, 'id'=>$id
+					));
+	            };
+       		} else {
+        		throw new CHttpException(404,'You have no authorization for this operation.');
+        	};
+       	}
 }
