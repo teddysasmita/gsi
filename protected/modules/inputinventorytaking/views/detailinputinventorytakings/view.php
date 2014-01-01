@@ -25,16 +25,13 @@ $this->menu=array(
 	'data'=>$model,
 	'attributes'=>array(
 		array(
-                   'label'=>'Jenis Barang',
-                   'name'=>'iditem',
-                   'value'=>lookup::ItemNameFromItemID($model['iditem']),
-                ),
+			'name'=>'iditem',
+			'value'=>lookup::ItemNameFromItemID($model['iditem']),
+		),
 		'qty',
-		'discount',
-                array(
-                   'label'=>'Harga',
-                   'name'=>'price',
-                   'type'=>'number'
-                ),
+		array(
+			'name'=>'idwarehouse',
+			'value'=>lookup::WarehouseNameFromWarehouseID($model['idwarehouse']),
+		),
 	),
 )); ?>

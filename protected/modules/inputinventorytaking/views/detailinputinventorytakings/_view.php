@@ -16,12 +16,8 @@
 	<?php echo CHtml::encode($data->qty); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('discount')); ?>:</b>
-	<?php echo CHtml::encode($data->discount); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('price')); ?>:</b>
-	<?php echo CHtml::encode($data->price); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('idwarehouse')); ?>:</b>
+	<?php echo CHtml::encode(lookup::WarehouseNameFromWarehouseID($data->idwarehouse)); ?>
 	<br />
 
 

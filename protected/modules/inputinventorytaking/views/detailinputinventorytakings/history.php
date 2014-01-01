@@ -10,8 +10,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Detailinputinventorytakings', 'url'=>array('index')),
-	array('label'=>'Create Detailinputinventorytakings', 'url'=>array('create')),
+	array('label'=>'Tambah Data', 'url'=>array('create')),
 );
 
 ?>
@@ -23,28 +22,32 @@ $this->menu=array(
        select()->from('detailinputinventorytakings')->where("iddetail='$model->iddetail'")->queryAll();
     $ap=new CArrayDataProvider($data);
     $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'detailinputinventorytakings-grid',
-	'dataProvider'=>$ap,
-	'columns'=>array(
-		array(
-                   'name'=>'Nama Barang',
-                   'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])",
-                ),
-		'qty',
-		'discount',
-		'price',
-		array(
-                    'class'=>'CButtonColumn',
-                    'buttons'=> array(
-                        'view'=>array(
-                            'visible'=>'false',
-                        ),
-                        'delete'=>array(
-                          'visible'=>'false',
-                        ),
-                    ),
-                   'updateButtonUrl'=>"Action::decodeRestoreHistoryDetailinputinventorytakingUrl(\$data)",
+		'id'=>'detailinputinventorytakings-grid',
+		'dataProvider'=>$ap,
+		'columns'=>array(
+			array(
+				'name'=>'iditem',
+				'header'=>'Nama Barang',
+				'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])",
+			),
+			'qty',
+			array(
+				'header'=>'Gudang',
+				'name'=>'idwarehouse',
+				'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])",
+			),
+			array(
+				'class'	=>'CButtonColumn',
+				'buttons'=> array(
+					'view'=>array(
+						'visible'=>'false',
+					),
+					'delete'=>array(
+						'visible'=>'false',
+					),
+				),
+				'updateButtonUrl'=>"Action::decodeRestoreHistoryDetailinputinventorytakingUrl(\$data)",
+			),
 		),
-	),
     )); 
 ?>

@@ -74,7 +74,7 @@ class Action extends CComponent {
    public static function decodeRestoreHistoryDetailInputInventoryTakingUrl($data)
    {
    	//return print_r($data);
-   	return Yii::app()->createUrl('inputinventorytaking/detailinputinventorytakings/restore', array('idtrack'=>$data['idtrack']));
+   	return Yii::app()->createUrl('inputinventorytaking/detailinputinventorytakings/restore', array('idtrack'=>$data['idtrack'], 'iddetail'=>$data['iddetail']));
    }
     
    public static function decodeRestoreDeletedDetailInputInventoryTakingUrl($data)

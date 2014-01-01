@@ -258,16 +258,20 @@ class DetailinputinventorytakingsController extends Controller
             } 
         }
         
-        public function actionRestore($idtrack)
+        public function actionRestore($idtrack, $iddetail)
         {
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
                 $this->trackActivity('r');
-                $this->tracker->restore('detailinputinventorytakings', $idtrack);
-                $dataProvider=new CActiveDataProvider('Detailinputinventorytakings');
-                $this->render('index',array(
-                    'dataProvider'=>$dataProvider,
-                ));
+                $this->tracker->restore('detailinputinventorytakings', $idtrack, 'iddetail');
+                $model=$this->loadModel($iddetail);
+                if(($model==NULL)&&isset(Yii::app()->session['Detailinputinventorytakings'])) {
+                	$model=new Detailinputinventorytakings;
+                	//$model->attributes=$this->loadSession($iddetail);
+            	}  
+            	$this->render('view',array(
+                    'model'=>$model,
+            	));
             } else {
                 throw new CHttpException(404,'You have no authorization for this operation.');
             }

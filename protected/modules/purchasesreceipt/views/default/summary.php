@@ -30,17 +30,10 @@ $this->menu=array(
 		//'id',
 		'regnum',
 		'idatetime',
-		array(
-         'label'=>'Nomor PO',
-         'value'=>lookup::PurchasesOrderNumFromID($model->idpurchaseorder),
-      ),
+		
       array(
          'label'=>'Nama Pemasok',
          'value'=>lookup::SupplierNameFromSupplierID($model->idsupplier)
-      ),
-      array(
-         'label'=>'Nama Gudang',
-         'value'=>lookup::WarehouseNameFromWarehouseID($model->idwarehouse)
       ),
 		array(
                'label'=>'Userlog',
@@ -64,11 +57,19 @@ $this->menu=array(
    $this->widget('zii.widgets.grid.CGridView', array(
          'dataProvider'=>$dataProvider,
          'columns'=>array(
+			/*array(
+				'header'=>'Nomor PO',
+				'value'=>"lookup::PurchasesOrderNumFromID(\$data['idpurchaseorder'])",
+			),*/
             array(
                'header'=>'Item Name',
                'name'=>'iditem',
                'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
             ),
+			/*array(
+				'header'=>'Nama Gudang',
+				'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
+			),*/
             array(
               'header'=>'Total',
               'name'=>'totalqty',

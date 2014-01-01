@@ -65,8 +65,14 @@ $this->menu=array(
                'name'=>'iditem',
                'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
             ),
-            'leftqty',
-			'qty',
+            array(
+               'header'=>'Sisa',
+               'name'=>'leftqty',
+            ),
+			array(
+               'header'=>'Qty',
+               'name'=>'qty',
+            ),
             array(
 				'header'=>'Gudang',
 				'name'=>'idwarehouse',

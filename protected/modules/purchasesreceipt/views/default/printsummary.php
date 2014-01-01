@@ -107,7 +107,7 @@ class MYPDF extends TCPDF {
 		$this->Cell(70, 7, 
 			lookup::SupplierNameFromSupplierID($this->masterData['idsupplier']), 
 				'LT', 0, 'L', true);
-		$this->SetFillColor(224, 235, 255);
+		/*$this->SetFillColor(224, 235, 255);
 		$this->Cell(30, 7, 'Nomor PO', 'LT', 0, 'C', true);
 		$this->SetFillColor(252, 186,243);
 		$this->Cell(50, 7, 
@@ -119,7 +119,7 @@ class MYPDF extends TCPDF {
 		$this->Cell(70, 7, 
 			lookup::WarehouseNameFromWarehouseID($this->masterData['idwarehouse']),'LRTB');	
 		$this->SetFillColor(224, 235, 255);
-		$this->Cell(30, 7, 'Kendaraan', 'LRBT', 0, 'C', true);
+		*/$this->Cell(30, 7, 'Kendaraan', 'LRBT', 0, 'C', true);
 		$this->Cell(50, 7, $this->masterData['vehicleinfo'],'LRTB');
 		$this->Ln();
 		$this->SetFillColor(224, 235, 255);

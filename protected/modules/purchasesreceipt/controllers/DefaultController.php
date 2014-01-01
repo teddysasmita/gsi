@@ -562,7 +562,8 @@ class DefaultController extends Controller
            ->select('count(*) as totalqty, b.iditem, a.idwarehouse, a.idpurchaseorder')
            ->from('detailstockentries b')
            ->join('stockentries a', 'a.id=b.id')
-           ->where('a.donum = :donum', array(':donum'=>$donum) )
+           ->where('a.donum = :donum and b.serialnum <> :serialnum', 
+           		array(':donum'=>$donum, 'serialnum'=>'Belum Diterima') )
            ->group('b.iditem, a.idwarehouse')
            ->queryAll();
         Yii::app()->session->remove('Detailpurchasesreceipts');
@@ -622,7 +623,7 @@ class DefaultController extends Controller
 	      	$this->render('printsummary',array(
 	      			'model'=>$this->loadModel($id),
 	      	));
-      	} else else {
+      	} else	 {
         	throw new CHttpException(404,'You have no authorization for this operation.');
         };
       }

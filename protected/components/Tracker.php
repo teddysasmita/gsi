@@ -82,7 +82,7 @@ class Tracker extends CComponent {
         return $data['idtrack'];
     }
    
-    public function restore($tablename, $idtrack) 
+    public function restore($tablename, $idtrack, $id='id') 
     {
         $data=Yii::app()->tracker->createCommand()->select()->from($tablename)
          ->where('idtrack=:idtrack',array(':idtrack'=>$idtrack))->queryRow();
@@ -90,10 +90,11 @@ class Tracker extends CComponent {
         unset($data['userlogtrack']);
         unset($data['datetimelogtrack']);
         unset($data['action']);
-        $datalog=Yii::app()->tracker->createCommand()->select()->from('userjournal')
+        /*$datalog=Yii::app()->tracker->createCommand()->select()->from('userjournal')
            ->where('id=:id', array(':id'=>$idtrack))->queryRow();
-        Yii::app()->db->createCommand()->update($tablename, $data, 'id=:id', 
-               array(':id'=>$data['id']));
+        */
+        Yii::app()->db->createCommand()->update($tablename, $data, "$id=:myid", 
+               array(':myid'=>$data[$id]));
     }
     
     public function restoreDeleted($tablename, $idtrack) 
