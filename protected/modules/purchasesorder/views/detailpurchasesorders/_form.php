@@ -84,7 +84,7 @@ EOS;
                $myd=<<<EOS
          
             <div><input type="text" name="itemname" id="dialog-item-name" size='50'/></div>
-            <div><select size='5' width='100' id='dialog-item-select'>   
+            <div><select size='8' width='100' id='dialog-item-select'>   
                 <option>Harap Pilih</option>
             </select>           
             </div>
