@@ -48,8 +48,11 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'id',
 		'operationlabel',
 		'remark',
-		'ipaddr',
-		'userlog',
+		array(
+			'name'=>'userlog',
+			'value'=>"lookup::UserNameFromUserID(\$data['userlog'])"
+		),
+		//	'userlog',
 		'datetimelog',
 		array(
 			'class'=>'CButtonColumn',

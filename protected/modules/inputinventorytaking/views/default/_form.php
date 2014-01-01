@@ -115,7 +115,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
                      'visible'=>'false'
                   )
               ),
-              'updateButtonUrl'=>"Action::decodeUpdateDetailSalesOrderUrl(\$data)",
+              'updateButtonUrl'=>"Action::decodeUpdateDetailInputInventoryTakingUrl(\$data)",
           )
       ),
 ));

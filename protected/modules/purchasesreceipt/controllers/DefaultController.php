@@ -614,13 +614,17 @@ class DefaultController extends Controller
       
       public function actionPrintsummary($id)
       {
-      	$this->trackActivity('v');
-      	Yii::import("application.vendors.tcpdf.*");
-      	require_once('tcpdf.php');
-      	$this->render('printsummary',array(
-      			'model'=>$this->loadModel($id),
-      	));
-      	
+      	if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+      			Yii::app()->user->id))  {     
+	      	$this->trackActivity('v');
+	      	Yii::import("application.vendors.tcpdf.*");
+	      	require_once('tcpdf.php');
+	      	$this->render('printsummary',array(
+	      			'model'=>$this->loadModel($id),
+	      	));
+      	} else else {
+        	throw new CHttpException(404,'You have no authorization for this operation.');
+        };
       }
       
 }

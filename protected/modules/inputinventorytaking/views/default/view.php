@@ -13,8 +13,8 @@ $this->menu=array(
 	array('label'=>'Ubah Data', 'url'=>array('update', 'id'=>$model->id)),
 	array('label'=>'Hapus Data', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Pencarian Data', 'url'=>array('admin')),
-        array('label'=>'Sejarah', 'url'=>array('history','id'=>$model->id)),
-        array('label'=>'Data Detil yang telah terhapus', 'url'=>array('detailinputinventorytakings/deleted','id'=>$model->id)),
+	array('label'=>'Sejarah', 'url'=>array('history','id'=>$model->id)),
+	array('label'=>'Data Detil yang telah terhapus', 'url'=>array('detailinputinventorytakings/deleted','id'=>$model->id)),
 );
 ?>
 
@@ -40,7 +40,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 	'dataProvider'=>$dataProvider,
 	'columns'=>array(
            array(
-               'header'=>'Item Name',
+               'header'=>'Nama Barang',
                'name'=>'iditem',
                'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
            ),
@@ -49,14 +49,9 @@ $this->widget('zii.widgets.grid.CGridView', array(
               'name'=>'qty',
           ),
           array(
-              'header'=>'Price',
-              'name'=>'price',
-              'type'=>'number',
-          ),
-          array(
-              'header'=>'Disc',
-              'name'=>'discount',
-              'type'=>'number'
+              'header'=>'Gudang',
+              'name'=>'idwarehouse',
+			'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
           ),
           array(
               'class'=>'CButtonColumn',
@@ -68,7 +63,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
                      'visible'=>'false'
                   )
               ),
-              'viewButtonUrl'=>"Action::decodeViewDetailSalesOrderUrl(\$data)",
+              'viewButtonUrl'=>"Action::decodeViewDetailInputInventoryTakingUrl(\$data)",
           )
       ),
 ));

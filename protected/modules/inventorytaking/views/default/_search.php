@@ -11,10 +11,6 @@
 	'method'=>'get',
 )); ?>
 
-	<div class="row">
-		<?php echo $form->label($model,'code'); ?>
-		<?php echo $form->textField($model,'code',array('size'=>50,'maxlength'=>50)); ?>
-	</div>
 	
 	<div class="row">
 		<?php echo $form->label($model,'operationlabel'); ?>

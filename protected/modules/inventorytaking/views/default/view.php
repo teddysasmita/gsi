@@ -13,22 +13,24 @@ $this->menu=array(
 	array('label'=>'Ubah Data', 'url'=>array('update', 'id'=>$model->id)),
 	array('label'=>'Hapus Data', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Pencarian Data', 'url'=>array('admin')),
-        array('label'=>'Sejarah', 'url'=>array('history', 'id'=>$model->id)),
+	array('label'=>'Sejarah', 'url'=>array('history', 'id'=>$model->id)),
+	array('label'=>'Data-data yang telah terhapus', 'url'=>array('deleted', 'id'=>$model->id)),
+	array('label'=>'Cetak', 'url'=>array('printsummary', 'id'=>$model->id)),
 );
 ?>
 
-<h1>Gudang</h1>
+<h1>Stok Opname</h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
 		//'id',
 		'operationlabel',
-		'remark',
 		array(
 			'name'=>'status',
 			'value'=>lookup::activeStatus($model->status)
 		),
+		'remark',	
 		array(
 			'label'=>'userlog',
 			'value'=>lookup::UserNameFromUserID($model->userlog),

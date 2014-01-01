@@ -34,6 +34,7 @@ class Action extends CComponent {
       return Yii::app()->createUrl('salesorder/detailsalesorders/view', array('iddetail'=>$data['iddetail']));
    }
    
+   
    public static function decodeRestoreHistoryDetailSalesOrderUrl($data)
    {
       //return print_r($data);
@@ -56,6 +57,42 @@ class Action extends CComponent {
    {
       //return print_r($data);
       return Yii::app()->createUrl('salesorder/default/restore', array('idtrack'=>$data['idtrack']));
+   }
+
+   public static function decodeUpdateDetailInputInventoryTakingUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('inputinventorytaking/detailinputinventorytakings/update', array('iddetail'=>$data['iddetail']))  ;
+   }
+   
+   public static function decodeViewDetailInputInventoryTakingUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('inputinventorytaking/detailinputinventorytakings/view', array('iddetail'=>$data['iddetail']));
+   }
+   
+   public static function decodeRestoreHistoryDetailInputInventoryTakingUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('inputinventorytaking/detailinputinventorytakings/restore', array('idtrack'=>$data['idtrack']));
+   }
+    
+   public static function decodeRestoreDeletedDetailInputInventoryTakingUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('inputinventorytaking/detailinputinventorytakings/restoreDeleted', array('idtrack'=>$data['idtrack']));
+   }
+   
+   public static function decodeRestoreDeletedInputInventoryTakingUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('inputinventorytaking/default/restoreDeleted', array('idtrack'=>$data['idtrack']));
+   }
+    
+   public static function decodeRestoreHistoryInputInventoryTakingUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('inputinventorytaking/default/restore', array('idtrack'=>$data['idtrack']));
    }
    
    public static function decodeDeleteDetailSalesInvoiceUrl($data)

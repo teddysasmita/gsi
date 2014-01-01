@@ -92,7 +92,7 @@ class Inventorytakings extends CActiveRecord
 		$criteria->compare('idatetime',$this->idatetime,true);
 		$criteria->compare('status',$this->status,true);
 		$criteria->compare('remark',$this->remark,true);
-		$criteria->compare('userlog',$this->userlog,true);
+		$criteria->compare('userlog',lookup::UserNameFromUserID($this->userlog),true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);
 
 		return new CActiveDataProvider($this, array(
