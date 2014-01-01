@@ -74,6 +74,15 @@ class lookup extends CComponent {
    	}
    }
    
+   public static function activeStatus($status)
+   {
+   		switch ($status) {
+   			case '0':
+   				return 'Tidak Aktif';
+   			case '1':
+   				return 'Aktif';
+   		}   
+   }
    public static function ItemNameFromItemID($id)
    {
       $sql="select name from items where id='$id'";

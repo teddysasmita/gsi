@@ -22,10 +22,13 @@ $this->menu=array(
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
-		'id',
+		//'id',
 		'operationlabel',
 		'remark',
-		'status',
+		array(
+			'name'=>'status',
+			'value'=>lookup::activeStatus($model->status)
+		),
 		array(
 			'label'=>'userlog',
 			'value'=>lookup::UserNameFromUserID($model->userlog),

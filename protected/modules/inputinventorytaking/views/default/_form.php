@@ -69,7 +69,7 @@
 					array(':status'=>'1'))->queryAll();
 			$data=CHtml::listdata($data,'id', 'operationlabel');
             echo $form->dropDownList($model, 'idinventorytaking', 
-				$data);
+				$data, array('empty'=>'Harap Pilih'));
          ?>
          <?php echo $form->error($model,'idinventorytaking'); ?>
 	</div>
@@ -90,23 +90,20 @@ $dataProvider=new CArrayDataProvider($rawdata, array(
 $this->widget('zii.widgets.grid.CGridView', array(
 	'dataProvider'=>$dataProvider,
 	'columns'=>array(
-           array(
-               'header'=>'Item Name',
-               'name'=>'iditem',
-               'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
-           ),
+		array(
+			'header'=>'Nama Barang',
+			'name'=>'iditem',
+			'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
+		),
           array(
-              'header'=>'Qty',
-              'name'=>'qty',
+			'name'=>'qty',
+			'header'=>'Qty',
+			'value'=>"number_format(\$data['qty'])"
           ),
           array(
-              'header'=>'Price',
-              'name'=>'price',
-             'type'=>'number'
-          ),
-          array(
-              'header'=>'Disc',
-              'name'=>'discount',
+			'name'=>'idwarehouse',
+			'header'=>'Gudang',
+			'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
           ),
           array(
               'class'=>'CButtonColumn',

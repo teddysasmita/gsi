@@ -15,7 +15,7 @@ class LookUpController extends Controller {
    //put your code here
    public function actionGetItem($name)
    {
-      $data=Yii::app()->db->createCommand()->selectDistinct('name')->from('items')
+      $data=Yii::app()->db->createCommand()->select('name')->from('items')
               ->where('name like :itemname', array(':itemname'=>'%'.$name.'%'))
               ->order('name')
               ->queryColumn();

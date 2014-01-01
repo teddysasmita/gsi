@@ -13,15 +13,22 @@
       });
       $('#dialog-item-name').change(
          function(){
-            $.get('index.php?r=LookUp/getItem',{ name: $('#dialog-item-name').val() },
+            $.getJSON('index.php?r=LookUp/getItem',{ name: $('#dialog-item-name').val() },
                function(data) {
-                  $('#dialog-item-select').html(data);
+                  $('#dialog-item-select').html('');
+                  var ct=0;
+                  while(ct < data.length) {
+                     $('#dialog-item-select').append(
+                        '<option value='+data[ct]+'>'+unescape(data[ct])+'</option>'
+                     );
+                     ct++;
+                  }
                })
          }
       );
       $('#dialog-item-select').click(
          function(){
-           $('#dialog-item-name').val($('#dialog-item-select').val());
+           $('#dialog-item-name').val(unescape($('#dialog-item-select').val()));
          }
       );
 EOS;
@@ -77,7 +84,7 @@ EOS;
                $myd=<<<EOS
          
             <div><input type="text" name="itemname" id="dialog-item-name" size='50'/></div>
-            <div><select size='5' width='100' id='dialog-item-select'>   
+            <div><select size='8' width='100' id='dialog-item-select'>   
                 <option>Harap Pilih</option>
             </select>           
             </div>
@@ -98,14 +105,14 @@ EOS;
 			$data=Yii::app()->db->createCommand()->select('id, code')
 				->from('warehouses')->queryAll();
 			$data=CHtml::listData($data, 'id', 'code');
-			echo $form->dropDownList($model, 'idwarehouse', $data); 
+			echo $form->dropDownList($model, 'idwarehouse', $data, array('empty'=>'Harap Pilih')); 
 		?>
 		<?php echo $form->error($model,'idwarehouse'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'qty'); ?>
-		<?php echo $form->textField($model,'qty'); ?>
+		<?php echo $form->textField($model,'qty', array('size'=>6	)); ?>
 		<?php echo $form->error($model,'qty'); ?>
 	</div>
 
