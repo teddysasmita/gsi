@@ -24,7 +24,7 @@
                $res=Yii::app()->authdb->createCommand('select name, type, description from AuthItem '.
                   'where type=2')->queryAll();
                $datas=CHtml::listData($res,'name', 'description');
-               echo $form->listBox($model,'itemname',$datas, array()); 
+               echo $form->listBox($model,'itemname',$datas, array('size'=>8)); 
             ?>
 		<?php echo $form->error($model,'itemname'); ?>
 	</div>

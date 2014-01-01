@@ -38,13 +38,15 @@ class MYPDF extends TCPDF {
 		
 		$this->warehouses=Yii::app()->db->createCommand()
 			->select('id, code')->from('warehouses')->queryAll();
-		$headernames = array('No', 'Tanggal', 'Nama Barang');
-		$headerwidths = array(10, 30, 80);
+		$headernames = array('No', 'Nama Barang');
+		$headerwidths = array(10, 100);
 		foreach($this->warehouses as $wh) {
 			$headernames[]=$wh['code'];
 			$headerwidths[]=10;
 			$warehouses[]=$wh['id'];
 		}
+		$headernames[]='Total';
+		$headerwidths[]=15;
 		for($i = 0; $i < count($headernames); ++$i) {
 			$this->Cell($headerwidths[$i], 7, $headernames[$i], 1, 0, 'C', 1);
 		}
@@ -67,15 +69,15 @@ class MYPDF extends TCPDF {
 							$qty=$qtys[$warehouses[$i]];
 						else
 							$qty=0;
-						$this->Cell($headerwidths[3+$i], 6, $qty, 'LR', 0, 'R', $fill);
+						$this->Cell($headerwidths[2+$i], 6, $qty, 'LR', 0, 'R', $fill);
 					}
+					$this->Cell($headerwidths[2+$i], 6, array_sum($qtys), 'LR', 0, 'R', $fill);
 					$this->Ln();
 					unset($qtys);
 					$qtys=array();
 				}
 				$this->Cell($headerwidths[0], 6, $counter, 'LR', 0, 'C', $fill);
-				$this->Cell($headerwidths[1], 6, 'ND', 'LR', 0, 'L', $fill);
-				$this->Cell($headerwidths[2], 6, lookup::ItemNameFromItemID($row['iditem']), 'LR', 0, 'L', $fill);
+				$this->Cell($headerwidths[1], 6, lookup::ItemNameFromItemID($row['iditem']), 'LR', 0, 'L', $fill);
 				
 				//$fill=!$fill;
 				$counter++;
@@ -89,8 +91,9 @@ class MYPDF extends TCPDF {
 				$qty=$qtys[$warehouses[$i]];
 			else
 				$qty=0;
-			$this->Cell($headerwidths[3+$i], 6, $qty, 'LR', 0, 'R', $fill);
+			$this->Cell($headerwidths[2+$i], 6, $qty, 'LR', 0, 'R', $fill);
 		}
+		$this->Cell($headerwidths[2+$i], 6, array_sum($qtys), 'LR', 0, 'R', $fill);
 		$this->Ln();	
 		$this->Cell(array_sum($headerwidths), 0, '', 'T');
 	}
@@ -112,13 +115,14 @@ class MYPDF extends TCPDF {
 		//die();
 		$this->Cell(30, 7, 'Label', 'LT', 0, 'C', true);
 		$this->Cell(70, 7, $this->masterData['operationlabel'], 'LRTB');
+		$this->Cell(30, 7, 'Tanggal', 'LRT', 0, 'C', true);
+		$this->Cell(50, 7, $this->masterData['idatetime'], 'LRT');
 		$this->Ln();
 		$this->SetFillColor(224, 235, 255);
 		$this->Cell(30, 7, 'Catatan', 'LRBT', 0, 'C', true);
-		$this->ln();
-		$this->Cell(180, 21, $this->masterData['remark'],'LRTB');
+		$this->Cell(150, 14, $this->masterData['remark'],'LRTB');
 		
-		$this->Ln(30);
+		$this->Ln(20);
 	} 
 	
 	
