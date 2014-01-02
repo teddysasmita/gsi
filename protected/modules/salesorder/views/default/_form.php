@@ -54,16 +54,11 @@ EOS;
          echo $form->hiddenField($model,'datetimelog');
          echo $form->hiddenField($model,'status');
          echo $form->hiddenField($model,'idcustomer');
+         echo $form->hiddenField($model,'regnum');
          
          echo CHtml::hiddenField('command');
       ?>
       
-      <div class="row">
-		<?php echo $form->labelEx($model,'regnum'); ?>
-            <?php echo $form->textField($model, 'regnum', array('size'=>12,'maxlength'=>12)) ?>
-            <?php echo $form->error($model,'regnum'); ?>
-      </div>
-         
 	<div class="row">
 		<?php echo $form->labelEx($model,'Tanggal'); ?>
 		<?php 

@@ -65,6 +65,12 @@ class Action extends CComponent {
    	return Yii::app()->createUrl('inputinventorytaking/detailinputinventorytakings/update', array('iddetail'=>$data['iddetail']))  ;
    }
    
+   public static function decodeUpdate2DetailInputInventoryTakingUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('inputinventorytaking/detailinputinventorytakings/update2', array('iddetail'=>$data['iddetail']))  ;
+   }
+   
    public static function decodeViewDetailInputInventoryTakingUrl($data)
    {
    	//return print_r($data);

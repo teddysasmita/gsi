@@ -568,13 +568,13 @@ class DefaultController extends Controller
         		$this->trackActivity('v');
         		
         		$detailData=Yii::app()->db->createCommand()
-        			->select('b.iddetail as id, a.idatetime, c.name, b.qty, b.idwarehouse')
+        			->select('b.iddetail, a.idatetime, c.name, b.qty, b.idwarehouse')
         			->from('inputinventorytakings a')
         			->join('detailinputinventorytakings b', 'b.id = a.id')
         			->join('items c', 'c.id = b.iditem')
         			->where('a.userlog = :p_userlog', 
         					array('p_userlog'=>Yii::app()->user->id))
-        			->order('a.idatetime, c.name')
+        			->order('c.name, a.idatetime')
         			->queryAll();
         	
         		$this->render('viewuser',array(

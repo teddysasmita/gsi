@@ -22,7 +22,9 @@ $this->menu=array(
 <h1>Input Stok Opname</h1>
 
 <?php 
-$dataProvider=new CArrayDataProvider($detaildata);
+$dataProvider=new CArrayDataProvider($detaildata, array(
+	'keyField'=>'iddetail'
+));
 $this->widget('zii.widgets.grid.CGridView', array(
 	'dataProvider'=>$dataProvider,
 	'columns'=>array(
@@ -44,18 +46,18 @@ $this->widget('zii.widgets.grid.CGridView', array(
 				'name'=>'qty',
 				'type'=>'number'
 			),
-          /*array(
+          array(
               'class'=>'CButtonColumn',
               'buttons'=> array(
                   'delete'=>array(
                       'visible'=>'false'
                   ),
-                  'update'=>array(
+                  'view'=>array(
                      'visible'=>'false'
                   )
               ),
-              'viewButtonUrl'=>"Action::decodeViewDetailInputInventoryTakingUrl(\$data)",
-          )*/
+              'updateButtonUrl'=>"Action::decodeUpdate2DetailInputInventoryTakingUrl(\$data)",
+          )
       ),
 ));
  ?>

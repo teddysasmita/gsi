@@ -78,14 +78,9 @@ EOS;
         echo $form->hiddenField($model, 'userlog');
         echo $form->hiddenField($model, 'datetimelog');
         echo $form->hiddenField($model, 'idwarehouse');
+        echo $form->hiddenField($model, 'regnum');
       ?>
         
-	<div class="row">
-		<?php echo $form->labelEx($model,'regnum'); ?>
-		<?php echo $form->textField($model,'regnum',array('size'=>12,'maxlength'=>12)); ?>
-		<?php echo $form->error($model,'regnum'); ?>
-	</div>
-
 	<div class="row">
 		<?php echo $form->labelEx($model,'idatetime'); ?>
             <?php

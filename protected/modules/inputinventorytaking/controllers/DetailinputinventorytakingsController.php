@@ -358,4 +358,39 @@ class DetailinputinventorytakingsController extends Controller
             $this->tracker->init();
             $this->tracker->logActivity($this->formid, $action);
         }
+        
+	public function actionUpdate2($iddetail)
+	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Update',
+				Yii::app()->user->id))  {
+		
+			$this->state='u';
+			$this->trackActivity('u');
+		
+			$master=Yii::app()->session['master'];
+		
+			$model=$this->loadModel($iddetail);
+			// Uncomment the following line if AJAX validation is needed
+			$this->performAjaxValidation($model);
+		
+			if(isset($_POST['Detailinputinventorytakings']))
+			{
+				$model->attributes=$_POST['Detailinputinventorytakings'];
+				//posting into session
+				if($model->validate()) {
+					$model->save();
+
+					$this->redirect(array('default/viewuser'));
+				}
+			}
+		
+			$this->render('update',array(
+					'model'=>$model,'master'=>$master
+			));
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		}
+		
+		
+	}
 }

@@ -509,6 +509,7 @@ class DefaultController extends Controller
 
          $model->userlog=Yii::app()->user->id;
          $model->datetimelog=$idmaker->getDateTime();
+         $model->regnum=$idmaker->getRegNum($this->formid);
      }
 
      protected function beforeDelete(& $model)
