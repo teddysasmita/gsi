@@ -10,7 +10,9 @@ $this->breadcrumbs=array(
 $this->menu=array(
 	array('label'=>'Tambah Data', 'url'=>array('create')),
 	array('label'=>'Pencarian Data', 'url'=>array('admin')),
-      array('label'=>'Data-data yang telah terhapus', 'url'=>array('deleted')),
+    array('label'=>'Data-data yang telah terhapus', 'url'=>array('deleted')),
+	array('label'=>'Lihat Aktifitas User', 'url'=>array('viewuser')),
+		
         
 );
 ?>

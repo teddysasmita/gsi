@@ -83,10 +83,17 @@ class lookup extends CComponent {
    				return 'Aktif';
    		}   
    }
+   
    public static function ItemNameFromItemID($id)
    {
       $sql="select name from items where id='$id'";
       return Yii::app()->db->createCommand($sql)->queryScalar();
+   }
+   
+   public static function InventoryTakingLabelFromID($id)
+   {
+   	$sql="select operationlabel from inventorytakings where id='$id'";
+   	return Yii::app()->db->createCommand($sql)->queryScalar();
    }
    
    public static function UserNameFromUserID($id)

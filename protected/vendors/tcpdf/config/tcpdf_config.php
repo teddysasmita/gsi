@@ -159,8 +159,7 @@ if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
 	/**
 	 * header margin
 	 */
-	define ('PDF_MARGIN_HEADER', 5);
-
+	define ('PDF_MARGIN_HEADER', 20);
 	/**
 	 * footer margin
 	 */

@@ -44,6 +44,7 @@ return array(
             'financepayment',
             'inventorytaking',	
             'inputinventorytaking',
+            'inventorycosting'
         ),
 
         

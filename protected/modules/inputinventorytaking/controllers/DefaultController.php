@@ -560,4 +560,30 @@ class DefaultController extends Controller
         		$im->addEntry($this->formid, $detail->iddetail, $model->idatetime, $detail->iditem, 
         			$detail->idwarehouse, $detail->qty);*/
         }
+        
+        public function actionViewuser()
+        {
+        	if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+        			Yii::app()->user->id))  {
+        		$this->trackActivity('v');
+        		
+        		$detailData=Yii::app()->db->createCommand()
+        			->select('b.iddetail as id, a.idatetime, c.name, b.qty, b.idwarehouse')
+        			->from('inputinventorytakings a')
+        			->join('detailinputinventorytakings b', 'b.id = a.id')
+        			->join('items c', 'c.id = b.iditem')
+        			->where('a.userlog = :p_userlog', 
+        					array('p_userlog'=>Yii::app()->user->id))
+        			->order('a.idatetime, c.name')
+        			->queryAll();
+        	
+        		$this->render('viewuser',array(
+        				'detaildata'=>$detailData,
+        		));
+        	} else {
+        		throw new CHttpException(404,'You have no authorization for this operation.');
+        	};
+        	
+        	
+        }
 }
