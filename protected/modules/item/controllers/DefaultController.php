@@ -322,12 +322,28 @@ class DefaultController extends Controller
 	            $this->trackActivity('v');
 	            
 	            if (isset($_POST['idwarehouse'])) {
-	          	
+	          		$sql1=<<<EOS
+	select a.idatetime, b.qty, 'Stok Opname' as message, c.operationlabel from inputinventorytakings a 
+	join detailinputinventorytakings b on b.id = a.id
+	join inventorytakings c on c.id = a.idinventorytaking
+	where b.iditem = :iditem and b.idwarehouse = :idwarehouse   		
+EOS;
+	            	$command=Yii::app()->db->createCommand($sql1);
+	          		$command->bindParam(':iditem', $_POST['id'], PDO::PARAM_STR);
+	          		$command->bindParam(':idwarehouse', $_POST['idwarehouse'], PDO::PARAM_STR);
+	            	$detailData=$command->queryAll();
+	            	Yii::import('application.vendors.tcpdf.*');
+	            	require_once ('tcpdf.php');
+	            	$this->render('print_stockcard', array(
+	            		'detailData'=>$detailData, 
+	            		'itemname'=>lookup::ItemNameFromItemID($_POST['id']),
+	            		'warehousecode'=>lookup::WarehouseNameFromWarehouseID($_POST['idwarehouse']) 			
+	            	));
 	            	
 	            } else {
 	            	$warehouses=Yii::app()->db->createCommand()
 	            		->select('id, code')->from('warehouses')->queryAll();
-		            $this->render('printstockcard',array(
+		            $this->render('stockcard',array(
 						'warehouses'=>$warehouses, 'id'=>$id
 					));
 	            };
