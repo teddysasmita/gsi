@@ -321,8 +321,8 @@ class DefaultController extends Controller
 				Yii::app()->user->id))  {
 	            $this->trackActivity('v');
 	            
-	            if (isset($_POST['yt0'])) {
-	            	
+	            if (isset($_POST['idwarehouse'])) {
+	          	
 	            	
 	            } else {
 	            	$warehouses=Yii::app()->db->createCommand()

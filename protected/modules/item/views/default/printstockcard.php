@@ -16,6 +16,11 @@ $this->menu=array(
 <h1>Item Penjualan</h1>
 
 <div class="form">
+
+
+
+
+
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'printstockcard-form',
 	// Please note: When you enable ajax validation, make sure the corresponding
@@ -36,6 +41,10 @@ $this->menu=array(
 			echo CHtml::dropDownList('idwarehouse', false, $data, 
 				array('empty'=>'Harap Pilih')); 
 		?>
+	</div>
+	
+	<div class="row buttons">
+		<?php echo CHtml::submitButton('Cetak'); ?>
 	</div>
 
 

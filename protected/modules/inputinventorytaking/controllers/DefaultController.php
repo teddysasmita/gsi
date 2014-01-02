@@ -552,12 +552,12 @@ class DefaultController extends Controller
         
         private function afterPostDetail(& $model, $detail, $mode)
         {
-        	$im=new InventoryManager();
+        	/*$im=new InventoryManager();
         	if ($mode=='update')
         		$im->updateEntry($detail->iddetail, $model->idatetime, 
         				$detail->iditem, $detail->idwarehouse, $detail->qty);
         	else if ($mode=='insert')
         		$im->addEntry($this->formid, $detail->iddetail, $model->idatetime, $detail->iditem, 
-        			$detail->idwarehouse, $detail->qty);
+        			$detail->idwarehouse, $detail->qty);*/
         }
 }
