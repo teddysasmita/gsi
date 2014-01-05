@@ -15,6 +15,7 @@ $this->pageTitle=Yii::app()->name;
 <h3><?php echo CHtml::link('Penerimaan Barang dari Pemasok', Yii::app()->createUrl('purchasesreceipt'))?></h3>
 <h3><?php echo CHtml::link('Pembayaran ke Pemasok', Yii::app()->createUrl('purchasespayment'))?></h3>
 <h3><?php echo CHtml::link('Memo Pembelian', Yii::app()->createUrl('purchasesmemo'))?></h3>
+<h3><?php echo CHtml::link('Retur Pembelian', Yii::app()->createUrl('purchasesretur'))?></h3>
 
 <h2>Bagian Penjualan</h2>
 <h3><?php echo CHtml::link('Pesanan Pembeli', Yii::app()->createUrl('salesorder'))?></h3>
