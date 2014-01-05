@@ -99,15 +99,15 @@ class MYPDF extends TCPDF {
 		//print_r($this->masterData);
 		//die();
 		$this->Cell(30, 7, 'Nama Barang', 'LT', 0, 'C', true);
-		$this->SetFillColor(0,0,139);
-		$this->SetTextColor(0,255,255);
-		$this->Cell(150, 7, $this->itemname, 'LRTB', 0, 'C', true);
+		$this->SetTextColor(16,94,139);
+		$this->SetFillColor(255,236,77);
+		$this->Cell(160, 7, $this->itemname, 'LRTB', 0, 'C', true);
 		$this->Ln();
 		$this->SetFillColor(224, 235, 255);
 		$this->SetTextColor(0);
 		$this->Cell(30, 7, 'Gudang', 'LRTB', 0, 'C', true);
-		$this->SetFillColor(0,0,139);
-		$this->SetTextColor(0,255,255);
+		$this->SetTextColor(16,94,139);
+		$this->SetFillColor(255,236,77);
 		$this->Cell(50, 7, $this->warehousecode, 'LRTB', 0, 'C', true);
 		/*
 		$this->Ln();
