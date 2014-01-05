@@ -90,9 +90,9 @@ class MYPDF extends TCPDF {
 		$this->SetDrawColor(0, 0, 0);
 		$this->SetLineWidth(0.3);
 		$this->SetFont('', 'B');
+		$this->SetFontSize(10);
+		$this->Cell(190, 10, 'Dicetak: '.UserIdentity::getUserName(), 0, 1, 'R');
 		$this->SetFontSize(20);
-		$this->SetTopMargin(10);
-		
 		$this->Cell(180, 20, 'Kartu Stok', 0, 1, 'C');
 	
 		$this->setFontSize(12);

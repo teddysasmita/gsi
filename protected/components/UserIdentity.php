@@ -59,6 +59,15 @@ class UserIdentity extends CUserIdentity
          return $command->execute() > 0;
       }
       
+      public static function getUserName()
+      {
+      	$name=Yii::app()->authdb->createCommand()
+      		->select('fullname')->from('users')
+      		->where('id=:p_id', array('p_id'=>Yii::app()->user->id))
+			->queryScalar();
+      	return $name;	
+      }
+      
       private function checkPassword($username, $userpass)
       {
          $connection=Yii::app()->authdb;
