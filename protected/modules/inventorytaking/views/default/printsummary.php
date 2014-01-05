@@ -93,7 +93,10 @@ class MYPDF extends TCPDF {
 				$qty=0;
 			$this->Cell($headerwidths[2+$i], 6, $qty, 'LR', 0, 'R', $fill);
 		}
-		$this->Cell($headerwidths[2+$i], 6, array_sum($qtys), 'LR', 0, 'R', $fill);
+		if (isset($qtys))
+			$this->Cell($headerwidths[2+$i], 6, array_sum($qtys), 'LR', 0, 'R', $fill);
+		else
+			$this->Cell($headerwidths[2+$i], 6, 0, 'LR', 0, 'R', $fill);
 		$this->Ln();	
 		$this->Cell(array_sum($headerwidths), 0, '', 'T');
 	}

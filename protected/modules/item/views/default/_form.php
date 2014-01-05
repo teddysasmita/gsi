@@ -14,7 +14,6 @@ $namescript=<<<OK
       return object + separator + brand + separator + model + separator + attribute;
    };
         
-        
      $('#Items_brand').change(function(event) {
          $('#Items_name').val(combine( ' ', $('#Items_brand').val(), $('#Items_objects').val(), $('#Items_model').val(), $('#Items_attribute').val() ));
      });
@@ -69,11 +68,11 @@ Yii::app()->clientScript->registerScript('myscript', $namescript, CClientScript:
 	<div class="row">
 		<?php echo $form->labelEx($model,'brand'); ?>
             <?php
-               $brands=Yii::app()->db->createCommand()->selectDistinct('brand')->from('items')->queryColumn();
+               //$brands=Yii::app()->db->createCommand()->selectDistinct('brand')->from('items')->queryColumn();
 
                $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
                   'name'=>'Items[brand]',
-                  'source'=>$brands,
+                  'sourceUrl'=> Yii::app()->createUrl('LookUp/getBrand'),
                   'htmlOptions'=>array(
                      'style'=>'height:20px;',
                   ),
@@ -87,11 +86,11 @@ Yii::app()->clientScript->registerScript('myscript', $namescript, CClientScript:
 	<div class="row">
 		<?php echo $form->labelEx($model,'objects'); ?>
             <?php
-               $objects=Yii::app()->db->createCommand()->selectDistinct('objects')->from('items')->queryColumn();
+               //$objects=Yii::app()->db->createCommand()->selectDistinct('objects')->from('items')->queryColumn();
 
                $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
                   'name'=>'Items[objects]',
-                  'source'=>$objects,
+                  'sourceUrl'=> Yii::app()->createUrl('LookUp/getObjects'),
                   'htmlOptions'=>array(
                      'style'=>'height:20px;',
                   ),
@@ -105,11 +104,11 @@ Yii::app()->clientScript->registerScript('myscript', $namescript, CClientScript:
 	<div class="row">
 		<?php echo $form->labelEx($model,'model'); ?>
             <?php
-               $models=Yii::app()->db->createCommand()->selectDistinct('model')->from('items')->queryColumn();
+               //$models=Yii::app()->db->createCommand()->selectDistinct('model')->from('items')->queryColumn();
 
                $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
                   'name'=>'Items[model]',
-                  'source'=>$models,
+                  'sourceUrl'=> Yii::app()->createUrl('LookUp/getModel'),
                   'htmlOptions'=>array(
                      'style'=>'height:20px;',
                   ),

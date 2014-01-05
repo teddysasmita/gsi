@@ -13,9 +13,58 @@
  */
 class LookUpController extends Controller {
    //put your code here
+   
+	public function actionGetModel($term)
+	{
+		$data=Yii::app()->db->createCommand()->selectDistinct('model')->from('items')
+			->where('model like :p_model', array(':p_model'=>'%'.$term.'%'))
+			->order('model')
+			->queryColumn();	
+		if(count($data)) { 
+			foreach($data as $key=>$value) {
+            	//$data[$key]=rawurlencode($value);
+				$data[$key]=$value;
+			}
+		} else
+			$data[0]='NA';
+		echo json_encode($data);
+	}	
+	
+	public function actionGetBrand($term)
+	{
+		$data=Yii::app()->db->createCommand()->selectDistinct('brand')->from('items')
+		->where('brand like :p_brand', array(':p_brand'=>'%'.$term.'%'))
+		->order('brand')
+		->queryColumn();
+		if(count($data)) {
+			foreach($data as $key=>$value) {
+				//$data[$key]=rawurlencode($value);
+				$data[$key]=$value;
+			}
+		} else
+			$data[0]='NA';
+		echo json_encode($data);
+	}
+	
+	public function actionGetObjects($term)
+	{
+		$data=Yii::app()->db->createCommand()->selectDistinct('objects')->from('items')
+		->where('objects like :p_objects', array(':p_objects'=>'%'.$term.'%'))
+		->order('objects')
+		->queryColumn();
+		if(count($data)) {
+			foreach($data as $key=>$value) {
+				//$data[$key]=rawurlencode($value);
+				$data[$key]=$value;
+			}
+		} else
+			$data[0]='NA';
+		echo json_encode($data);
+	}
+	
    public function actionGetItem($name)
    {
-      $data=Yii::app()->db->createCommand()->select('name')->from('items')
+      $data=Yii::app()->db->createCommand()->selectDistinct('name')->from('items')
               ->where('name like :itemname', array(':itemname'=>'%'.$name.'%'))
               ->order('name')
               ->queryColumn();
@@ -25,7 +74,7 @@ class LookUpController extends Controller {
             $data[$key]=rawurlencode($value);
          }
       } else {
-         $data='NA';
+         $data[0]='NA';
       }
       echo json_encode($data);
    }
