@@ -64,7 +64,7 @@ class MYPDF extends TCPDF {
 					$outqty=' ';
 				$this->Cell($headerwidths[3], 6, $outqty, 'LRB', 0, 'C', $fill);
 				$this->Cell($headerwidths[4], 6, $counter, 'LRB', 0, 'C', $fill);
-				$this->Cell($headerwidths[5], 6, ' ', 'LRB', 0, 'C', $fill);
+				$this->Cell($headerwidths[5], 6, lookup::UserNameFromUserID($row['userlog']), 'LRB', 0, 'C', $fill);
 				$this->ln();
 			} else {
 				$this->Cell($headerwidths[0], 6, ' ', 'LRB', 0, 'C', $fill);

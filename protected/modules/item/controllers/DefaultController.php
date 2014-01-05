@@ -81,36 +81,36 @@ class DefaultController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                     Yii::app()->user->id))  {
                 
-                $this->state='u';
-                $this->trackActivity('u');
+			$this->state='u';
+			$this->trackActivity('u');
                 
-                $model=$this->loadModel($id);
-                $this->afterEdit($model);
+			$model=$this->loadModel($id);
+			$this->afterEdit($model);
                 
 		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
+			$this->performAjaxValidation($model);
 
-		if(isset($_POST['Items']))
-		{
-                    $model->attributes=$_POST['Items'];
+			if(isset($_POST['Items']))
+			{
+				$model->attributes=$_POST['Items'];
                          
-                    $this->beforePost($model);   
-                    $this->tracker->modify('items', $id);
-			if($model->save()) {
-                            $this->afterPost($model);
-                            $this->redirect(array('view','id'=>$model->id));
-                        }        
-                }
+				$this->beforePost($model);   
+				$this->tracker->modify('items', $id);
+				if($model->save()) {
+					$this->afterPost($model);
+					$this->redirect(array('view','id'=>$model->id));
+				}        
+			}
 
-		$this->render('update',array(
-			'model'=>$model,
-		));
-             } else {
-                throw new CHttpException(404,'You have no authorization for this operation.');
-            }
+			$this->render('update',array(
+				'model'=>$model,
+			));
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		}
 	}
 
 	/**
@@ -324,10 +324,11 @@ class DefaultController extends Controller
 	            if (isset($_POST['idwarehouse'])) {
 	          		if (strlen($_POST['idwarehouse'])) {
 	            		$sql1=<<<EOS
-	select a.idatetime, b.qty, 'Stok Opname' as message, c.operationlabel from inputinventorytakings a 
+	select a.idatetime, sum(b.qty) as qty, 'Stok Opname' as message, c.operationlabel, b.userlog from inputinventorytakings a 
 	join detailinputinventorytakings b on b.id = a.id
 	join inventorytakings c on c.id = a.idinventorytaking
-	where b.iditem = :iditem and b.idwarehouse = :idwarehouse   		
+	where b.iditem = :iditem and b.idwarehouse = :idwarehouse
+	group by b.userlog   		
 EOS;
 	            		$command=Yii::app()->db->createCommand($sql1);
 	          			$command->bindParam(':iditem', $_POST['id'], PDO::PARAM_STR);
