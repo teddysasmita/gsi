@@ -23,7 +23,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>Detil Memo Pembelian</h1>
+<h1>Detil Retur Pembelian</h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,

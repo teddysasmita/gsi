@@ -19,7 +19,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>Memo Pembelian</h1>
+<h1>Retur Pembelian</h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
@@ -60,9 +60,9 @@ $this->menu=array(
              'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
          ),
       array(
-         'header'=>'Qty',
+         'header'=>'Diterima',
          'type'=>'number',
-         'name'=>'qty',
+         'name'=>'receivedqty',
       ),
       array(
          'header'=>'Harga Awal',
@@ -73,27 +73,22 @@ $this->menu=array(
          'header'=>'Harga Baru',
          'type'=>'number',
          'name'=>'price',
-      ), 
+      ),  
       array(
-         'header'=>'Biaya 1 Awal',
-         'type'=>'number',
-         'name'=>'prevcost1',
-      ), 
-      array(
-         'header'=>'Biaya 1 Baru',
+         'header'=>'Biaya 1',
          'type'=>'number',
          'name'=>'cost1',
-      ), 
+      ),  
       array(
-         'header'=>'Biaya 2 Awal',
-         'type'=>'number',
-         'name'=>'prevcost2',
-      ), 
-      array(
-         'header'=>'Biaya 2 Baru',
+         'header'=>'Biaya 2',
          'type'=>'number',
          'name'=>'cost2',
-      ), 
+      ),
+		array(
+			'header'=>'Dikembalikan',
+			'type'=>'number',
+			'name'=>'qty',
+		),	 
       array(
          'class'=>'CButtonColumn',
          'buttons'=> array(
@@ -104,7 +99,7 @@ $this->menu=array(
                'visible'=>'false'
             )
          ),
-         'viewButtonUrl'=>"Action::decodeViewDetailPurchaseMemoUrl(\$data)",
+         'viewButtonUrl'=>"Action::decodeViewDetailPurchaseReturUrl(\$data)",
       )      
    )));
  ?>

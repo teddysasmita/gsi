@@ -273,8 +273,8 @@ class DefaultController extends Controller
         
       protected function afterPost(& $model)
       {
-      	$im=new InventoryManager();
-		$im->setupDB($model->id);
+      	/*$im=new InventoryManager();
+		$im->setupDB($model->id);*/
       }
 
       protected function beforePost(& $model)
@@ -322,4 +322,55 @@ class DefaultController extends Controller
         };
       	
       }
+      
+      public function actionStockCard($id)
+      {
+      	if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+      			Yii::app()->user->id))  {
+      		$this->trackActivity('v');
+      		
+      		$detailData=Yii::app()->db->createCommand()
+      			->select('b.iditem, b.idwarehouse, sum(b.qty) as totalqty')
+      			->from('inputinventorytakings a')
+      			->join('detailinputinventorytakings b', 'b.id=a.id')
+      			->where('a.idinventorytaking=:p_idit', array(':p_idit'=>$id))
+      			->group('b.iditem, b.idwarehouse')
+      			->queryAll();
+      		$this->render('stockcard',array(
+      				'detailData'=>$detailData, 'model'=>$this->loadModel($id)
+      		));
+      	} else  {
+      		throw new CHttpException(404,'You have no authorization for this operation.');
+      	};
+      }
+      
+	public function actionPrintstockcard($iditem, $idwarehouse)
+	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+			Yii::app()->user->id))  {
+			$this->trackActivity('v');
+	            
+			$sql1=<<<EOS
+	select a.idatetime, sum(b.qty) as qty, 'Stok Opname' as message, c.operationlabel, b.userlog from inputinventorytakings a 
+	join detailinputinventorytakings b on b.id = a.id
+	join inventorytakings c on c.id = a.idinventorytaking
+	where b.iditem = :iditem and b.idwarehouse = :idwarehouse
+	group by b.userlog   		
+EOS;
+			$command=Yii::app()->db->createCommand($sql1);
+			$command->bindParam(':iditem', $iditem, PDO::PARAM_STR);
+			$command->bindParam(':idwarehouse', $idwarehouse, PDO::PARAM_STR);
+			$detailData=$command->queryAll();
+			Yii::import('application.vendors.tcpdf.*');
+			require_once ('tcpdf.php');
+			$this->render('print_stockcard', array(
+				'detailData'=>$detailData, 
+				'itemname'=>lookup::ItemNameFromItemID($iditem),
+				'warehousecode'=>lookup::WarehouseNameFromWarehouseID($idwarehouse) 			
+			));
+		} else {
+        	throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+	
 }

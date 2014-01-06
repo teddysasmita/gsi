@@ -19,7 +19,7 @@ $this->menu=array(
 
 ?>
 
-<h1>Detil Memo Pembelian</h1>
+<h1>Detil Retur Pembelian</h1>
 
 <?php    $data=Yii::app()->tracker->createCommand()->
        select()->from('detailpurchasesreturs')->where('id=:id',array(':id'=>$model->iddetail))->queryAll();

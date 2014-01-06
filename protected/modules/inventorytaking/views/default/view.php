@@ -5,7 +5,7 @@
 $this->breadcrumbs=array(
 	'Master Data'=>array('/site/masterdata'),
 	'Daftar'=>array('index'),
-      'Lihat Data'
+    'Kartu Stok'
 );
 
 $this->menu=array(
@@ -16,6 +16,7 @@ $this->menu=array(
 	array('label'=>'Sejarah', 'url'=>array('history', 'id'=>$model->id)),
 	array('label'=>'Data-data yang telah terhapus', 'url'=>array('deleted', 'id'=>$model->id)),
 	array('label'=>'Cetak', 'url'=>array('printsummary', 'id'=>$model->id)),
+	array('label'=>'Cetak Kartu Stok', 'url'=>array('stockCard', 'id'=>$model->id)),	
 );
 ?>
 

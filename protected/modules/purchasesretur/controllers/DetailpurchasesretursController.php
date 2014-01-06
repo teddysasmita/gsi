@@ -7,7 +7,7 @@ class DetailpurchasesretursController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $formid='AC6a';
+	public $formid='AC10a';
 	public $tracker;
 	public $state;
 

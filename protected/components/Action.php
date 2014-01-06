@@ -16,6 +16,13 @@ class Action extends CComponent {
    
    //put your code here
     
+	public static function decodePrintStockCardUrl($data)
+	{
+		//return print_r($data);
+		return Yii::app()->createUrl('inventorytaking/default/printstockcard', array('iditem'=>$data['iditem'], 
+					'idwarehouse'=>$data['idwarehouse']));
+	}
+	
     public static function decodeDeleteDetailSalesOrderUrl($data)
    {
       //return print_r($data);

@@ -18,6 +18,6 @@ else if ($master=='update')
 
 ?>
 
-<h1>Detil Memo Pembeliank</h1>
+<h1>Detil Retur Pembeliank</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model, 'mode'=>'Create')); ?>

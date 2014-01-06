@@ -47,7 +47,7 @@ class MYPDF extends TCPDF {
 		$fill = 0;
 		$counter=0;
 		$iditem='';
-		for($i=0;$i<35;$i++) {
+		for($i=0;$i<34;$i++) {
 			if ($i<count($this->detaildata)) {
 				$row=$this->detaildata[$i];
 				$counter=+$row['qty'];

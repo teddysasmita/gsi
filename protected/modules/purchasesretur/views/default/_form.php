@@ -164,9 +164,9 @@ EOS;
                    'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
                ),
                array(
-                  'header'=>'Qty',
+                  'header'=>'Diterima',
                   'type'=>'number',
-                  'name'=>'qty',
+                  'name'=>'receivedqty',
                ),
                array(
                   'header'=>'Harga Akhir',
@@ -179,26 +179,22 @@ EOS;
                   'name'=>'price',
                ), 
                array(
-                  'header'=>'Biaya 1 Akhir',
-                  'type'=>'number',
-                  'name'=>'prevcost1',
-               ), 
-               array(
-                  'header'=>'Biaya 1 Baru',
+                  'header'=>'Biaya 1',
                   'type'=>'number',
                   'name'=>'cost1',
-               ), 
-               /*array(
-                  'header'=>'Biaya 1 Akhir',
-                  'type'=>'number',
-                  'name'=>'prevcost2',
-               ), 
-               array(
-                  'header'=>'Biaya 1 Awal',
-                  'type'=>'number',
-                  'name'=>'cost2',
-               ),*/ 
-               array(
+               ),
+				array(
+					'header'=>'Biaya 2',
+					'type'=>'number',
+					'name'=>'cost2',
+				), 
+               	array(
+					'header'=>'Dikembalikan',
+					'type'=>'number',
+					'name'=>'qty',
+				),
+
+				array(
                   'class'=>'CButtonColumn',
                   'buttons'=> array(
                      'delete'=>array(

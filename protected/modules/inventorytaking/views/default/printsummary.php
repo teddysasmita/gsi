@@ -109,7 +109,6 @@ class MYPDF extends TCPDF {
 		$this->SetLineWidth(0.3);
 		$this->SetFont('', 'B');
 		$this->SetFontSize(20);
-		$this->SetTopMargin(10);
 		
 		$this->Cell(180, 20, 'Stok Opname', 0, 1, 'C');
 	

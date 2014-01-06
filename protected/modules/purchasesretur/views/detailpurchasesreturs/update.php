@@ -25,6 +25,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Detil Memo Pembelian</h1>
+<h1>Detil Retur Pembelian</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model, 'mode'=>'Update')); ?>
