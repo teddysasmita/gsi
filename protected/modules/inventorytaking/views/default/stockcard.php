@@ -1,0 +1,60 @@
+<?php
+/* @var $this InventorytakingsController */
+/* @var $model Inventorytakings */
+
+$this->breadcrumbs=array(
+	'Master Data'=>array('/site/masterdata'),
+	'Daftar'=>array('index'),
+      'Lihat Data'
+);
+
+$this->menu=array(
+	/*
+	array('label'=>'Tambah Data', 'url'=>array('create')),
+	array('label'=>'Ubah Data', 'url'=>array('update', 'id'=>$model->id)),
+	array('label'=>'Hapus Data', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	array('label'=>'Pencarian Data', 'url'=>array('admin')),
+	*/
+);
+?>
+
+<h1>Stok Opname</h1>
+
+<?php 
+
+	$dataProvider=new CArrayDataProvider($detailData, array(
+		'totalItemCount'=>count($detailData),
+		'keyField'=>'iditem'	
+	));
+	$this->widget('zii.widgets.grid.CGridView', array(
+		'dataProvider'=>$dataProvider,
+		'columns'=>array(
+               array(
+                   'header'=>'Nama Barang',
+                   'name'=>'iditem',
+                   'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
+               ),
+               array(
+                  'header'=>'Total 	Qty',
+                  'type'=>'number',
+                  'name'=>'totalqty',
+               ),
+               array(
+                  'header'=>'Gudang',
+                  'name'=>'idwarehouse',
+				'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
+               ), 
+               array(
+                  'class'=>'CButtonColumn',
+                  'buttons'=> array(
+                     'delete'=>array(
+                        'visible'=>'false'
+                      ),
+                     'view'=>array(
+                        'visible'=>'false'
+                     )
+                  ),
+                  'updateButtonUrl'=>"Action::decodePrintStockCardUrl(\$data)",
+               )
+	),
+)); ?>
