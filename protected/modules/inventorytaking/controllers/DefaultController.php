@@ -335,6 +335,7 @@ class DefaultController extends Controller
       			->join('detailinputinventorytakings b', 'b.id=a.id')
       			->where('a.idinventorytaking=:p_idit', array(':p_idit'=>$id))
       			->group('b.iditem, b.idwarehouse')
+      			->order('b.iditem')
       			->queryAll();
       		$this->render('stockcard',array(
       				'detailData'=>$detailData, 'model'=>$this->loadModel($id)
