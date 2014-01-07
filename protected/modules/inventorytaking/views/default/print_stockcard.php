@@ -175,7 +175,7 @@ $pdf->ColoredTable();
 // ---------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('KartuStok'.$itemname.'-'.date('Ymd').'.pdf', 'D');
+$pdf->Output('KartuStok'.$itemname.'-'.$warehousecode.'-'.date('Ymd').'.pdf', 'D');
 
 //============================================================+
 // END OF FILE                                                
