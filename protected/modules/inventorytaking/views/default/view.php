@@ -5,7 +5,7 @@
 $this->breadcrumbs=array(
 	'Master Data'=>array('/site/masterdata'),
 	'Daftar'=>array('index'),
-    'Kartu Stok'
+    'Lihat Data'
 );
 
 $this->menu=array(

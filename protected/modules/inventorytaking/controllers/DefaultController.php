@@ -398,6 +398,7 @@ EOS;
 			Yii::import('application.vendors.tcpdf.*');
 			require_once ('tcpdf.php');
 			$mypdf=new Stockcardpdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+			$mypdf->init();
 			foreach($detailData as $data) {
 				
 					
@@ -405,7 +406,7 @@ EOS;
 				$command->bindParam(':iditem', $data['iditem'], PDO::PARAM_STR);
 				$command->bindParam(':idwarehouse', $data['idwarehouse'], PDO::PARAM_STR);
 				$stockData=$command->queryAll();
-				$mypdf->init();
+				
 				$mypdf->LoadData(lookup::ItemNameFromItemID($data['iditem']), 
 						lookup::WarehouseNameFromWarehouseID($data['idwarehouse']), 
 						$stockData);	
@@ -413,7 +414,7 @@ EOS;
 				$mypdf->display();	
 				
 			}
-			$mypdf->Output('KartuStok'.'-'.date('Ymd').'.pdf', 'D');
+			$mypdf->Output('KartuStok'.'-'.date('Ymd').'.pdf', 'I');
 			//$mypdf->Output('KartuStok'.$this->itemname.'-'.$this->warehousecode.'-'.date('Ymd').'.pdf', 'D');
  		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');

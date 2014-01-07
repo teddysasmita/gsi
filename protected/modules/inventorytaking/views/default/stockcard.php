@@ -5,7 +5,8 @@
 $this->breadcrumbs=array(
 	'Master Data'=>array('/site/masterdata'),
 	'Daftar'=>array('index'),
-      'Lihat Data'
+      'Lihat Data'=>array('view', 'id'=>$model->id),
+	'Print Kartu Stok'
 );
 
 $this->menu=array(
