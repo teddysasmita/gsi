@@ -374,4 +374,49 @@ EOS;
 		};
 	}
 	
+	public function actionPrintallstockcard($id)
+	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+				Yii::app()->user->id))  {
+			$detailData=Yii::app()->db->createCommand()
+				->select('b.iditem, b.idwarehouse, sum(b.qty) as totalqty')
+				->from('inputinventorytakings a')
+				->join('detailinputinventorytakings b', 'b.id=a.id')
+				->where('a.idinventorytaking=:p_idit', array(':p_idit'=>$id))
+				->group('b.iditem, b.idwarehouse')
+				->order('b.iditem')
+				->queryAll();
+			print_r($detailData);
+			echo '<br>';
+			$sql1=<<<EOS
+	select a.idatetime, sum(b.qty) as qty, 'Stok Opname' as message, c.operationlabel, b.userlog from inputinventorytakings a
+	join detailinputinventorytakings b on b.id = a.id
+	join inventorytakings c on c.id = a.idinventorytaking
+	where b.iditem = :iditem and b.idwarehouse = :idwarehouse
+	group by b.userlog
+EOS;
+			$command=Yii::app()->db->createCommand($sql1);
+			
+			Yii::import('application.vendors.tcpdf.*');
+			require_once ('tcpdf.php');
+			
+			foreach($detailData as $data) {
+				
+				$mypdf=new Stockcardpdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);	
+				$command=Yii::app()->db->createCommand($sql1);
+				$command->bindParam(':iditem', $iditem, PDO::PARAM_STR);
+				$command->bindParam(':idwarehouse', $idwarehouse, PDO::PARAM_STR);
+				$stockData=$command->queryAll();
+				$mypdf->init();
+				$mypdf->LoadData(lookup::ItemNameFromItemID($data['iditem']), 
+						lookup::WarehouseNameFromWarehouseID($data['idwarehouse']), 
+						$stockData);	
+				print_r($stockData);
+				//$mypdf->display();	
+			}
+ 		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+	
 }

@@ -16,7 +16,8 @@ $this->menu=array(
 	array('label'=>'Sejarah', 'url'=>array('history', 'id'=>$model->id)),
 	array('label'=>'Data-data yang telah terhapus', 'url'=>array('deleted', 'id'=>$model->id)),
 	array('label'=>'Cetak', 'url'=>array('printsummary', 'id'=>$model->id)),
-	array('label'=>'Cetak Kartu Stok', 'url'=>array('stockCard', 'id'=>$model->id)),	
+	array('label'=>'Cetak Kartu Stok', 'url'=>array('stockCard', 'id'=>$model->id)),
+	array('label'=>'Cetak Semua Kartu Stok', 'url'=>array('printallstockCard', 'id'=>$model->id)),
 );
 ?>
 
