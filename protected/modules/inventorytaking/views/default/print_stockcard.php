@@ -175,7 +175,7 @@ $pdf->ColoredTable();
 // ---------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('BTBP'.idmaker::getDateTime().'.pdf', 'I');
+$pdf->Output('KartuStok'.$itemname.'-'.date('Ymd').'.pdf', 'D');
 
 //============================================================+
 // END OF FILE                                                
