@@ -386,8 +386,6 @@ EOS;
 				->group('b.iditem, b.idwarehouse')
 				->order('b.iditem')
 				->queryAll();
-			print_r($detailData);
-			echo '<br>';
 			$sql1=<<<EOS
 	select a.idatetime, sum(b.qty) as qty, 'Stok Opname' as message, c.operationlabel, b.userlog from inputinventorytakings a
 	join detailinputinventorytakings b on b.id = a.id
@@ -399,21 +397,24 @@ EOS;
 			
 			Yii::import('application.vendors.tcpdf.*');
 			require_once ('tcpdf.php');
-			
+			$mypdf=new Stockcardpdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 			foreach($detailData as $data) {
 				
-				$mypdf=new Stockcardpdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);	
+					
 				$command=Yii::app()->db->createCommand($sql1);
-				$command->bindParam(':iditem', $iditem, PDO::PARAM_STR);
-				$command->bindParam(':idwarehouse', $idwarehouse, PDO::PARAM_STR);
+				$command->bindParam(':iditem', $data['iditem'], PDO::PARAM_STR);
+				$command->bindParam(':idwarehouse', $data['idwarehouse'], PDO::PARAM_STR);
 				$stockData=$command->queryAll();
 				$mypdf->init();
 				$mypdf->LoadData(lookup::ItemNameFromItemID($data['iditem']), 
 						lookup::WarehouseNameFromWarehouseID($data['idwarehouse']), 
 						$stockData);	
-				print_r($stockData);
-				//$mypdf->display();	
+				//echo 'boom<br>';
+				$mypdf->display();	
+				
 			}
+			$mypdf->Output('KartuStok'.'-'.date('Ymd').'.pdf', 'D');
+			//$mypdf->Output('KartuStok'.$this->itemname.'-'.$this->warehousecode.'-'.date('Ymd').'.pdf', 'D');
  		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		};
