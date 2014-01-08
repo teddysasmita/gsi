@@ -26,7 +26,10 @@ $this->menu=array(
 	
 	$dataProvider=new CArrayDataProvider($detailData, array(
 		'totalItemCount'=>count($detailData),
-		'keyField'=>'iditem'	
+		'keyField'=>'iditem',
+		'pagination'=>array(
+			'pageSize'=>25,
+		),	
 	));
 	$this->widget('zii.widgets.grid.CGridView', array(
 		'dataProvider'=>$dataProvider,
