@@ -50,7 +50,7 @@ class MYPDF extends TCPDF {
 		for($i=0;$i<34;$i++) {
 			if ($i<count($this->detaildata)) {
 				$row=$this->detaildata[$i];
-				$counter=+$row['qty'];
+				$counter+=$row['qty'];
 				$this->Cell($headerwidths[0], 6, $row['idatetime'], 'LRB', 0, 'C', $fill);
 				$this->Cell($headerwidths[1], 6, $row['message'].'- '.$row['operationlabel'], 'LRB', 0, 'L', $fill);
 				if ($row['qty']>0)
