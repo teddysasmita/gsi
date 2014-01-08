@@ -421,4 +421,46 @@ EOS;
 		};
 	}
 	
+	public function actionPrintstockcard2()
+	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+				Yii::app()->user->id))  {
+			$this->trackActivity('v');
+			if (isset($_POST['yt0'])) {
+				$checkboxes=$_POST['yw0_c3'];
+				$sql1=<<<EOS
+	select a.idatetime, sum(b.qty) as qty, 'Stok Opname' as message, c.operationlabel, b.userlog from inputinventorytakings a
+	join detailinputinventorytakings b on b.id = a.id
+	join inventorytakings c on c.id = a.idinventorytaking
+	where b.iditem = :iditem and b.idwarehouse = :idwarehouse
+	group by b.userlog
+EOS;
+				$command=Yii::app()->db->createCommand($sql1);
+					
+				Yii::import('application.vendors.tcpdf.*');
+				require_once ('tcpdf.php');
+				$mypdf=new Stockcardpdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+				$mypdf->init();
+				
+				foreach($checkboxes as $cb) {
+					$temp=explode('-', $cb);
+					$command=Yii::app()->db->createCommand($sql1);
+					$command->bindParam(':iditem', $temp[0], PDO::PARAM_STR);
+					$command->bindParam(':idwarehouse', $temp[1], PDO::PARAM_STR);
+					$stockData=$command->queryAll();
+					
+					$mypdf->LoadData(lookup::ItemNameFromItemID($temp[0]),
+							lookup::WarehouseNameFromWarehouseID($temp[1]),
+							$stockData);
+					//echo 'boom<br>';
+					$mypdf->display();
+					$command=Yii::app()->db->createCommand($sql1);
+				}
+				$mypdf->Output('KartuStok'.'-'.date('Ymd').'.pdf', 'I');
+			}
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+	
 }

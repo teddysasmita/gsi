@@ -41,6 +41,11 @@ class Action extends CComponent {
       return Yii::app()->createUrl('salesorder/detailsalesorders/view', array('iddetail'=>$data['iddetail']));
    }
    
+   public static function decodePrintStockCard2($data)
+   {
+   		return $data['iditem'].'-'.$data['idwarehouse'];
+   	
+   }
    
    public static function decodeRestoreHistoryDetailSalesOrderUrl($data)
    {

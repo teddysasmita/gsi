@@ -22,7 +22,8 @@ $this->menu=array(
 <h1>Stok Opname</h1>
 
 <?php 
-
+	echo CHtml::form(Yii::app()->createUrl('inventorytaking/default/printstockcard2'));
+	
 	$dataProvider=new CArrayDataProvider($detailData, array(
 		'totalItemCount'=>count($detailData),
 		'keyField'=>'iditem'	
@@ -45,7 +46,7 @@ $this->menu=array(
                   'name'=>'idwarehouse',
 				'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
                ), 
-               array(
+               /*array(
                   'class'=>'CButtonColumn',
                   'buttons'=> array(
                      'delete'=>array(
@@ -56,6 +57,15 @@ $this->menu=array(
                      )
                   ),
                   'updateButtonUrl'=>"Action::decodePrintStockCardUrl(\$data)",
-               )
+               )*/
+				array(
+					'class'=>'CCheckBoxColumn',
+					'selectableRows'=>'2',
+					'value'=>"Action::decodePrintStockCard2(\$data)"
+				)
 	),
-)); ?>
+)); 
+
+	echo CHtml::submitButton('Print');
+	echo CHtml::endForm();
+?>
