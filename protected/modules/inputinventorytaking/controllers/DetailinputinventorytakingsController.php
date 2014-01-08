@@ -171,6 +171,24 @@ class DetailinputinventorytakingsController extends Controller
             }
                 
         }
+        
+        public function actionDelete2($iddetail)
+        {
+        	if(Yii::app()->authManager->checkAccess($this->formid.'-Delete',
+        			Yii::app()->user->id))  {
+        		$this->trackActivity('d');
+        
+        		$model=$this->loadModel($iddetail);
+        		$model->delete();
+        		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+        		if(!isset($_GET['ajax']))
+        			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('default/deleteDetail  ',
+        					'id'=>$iv['id']));
+        	} else {
+        		throw new CHttpException(404,'You have no authorization for this operation.');
+        	}
+        
+        }
              
 
 	/**
@@ -384,7 +402,7 @@ class DetailinputinventorytakingsController extends Controller
 				}
 			}
 		
-			$this->render('update',array(
+			$this->render('update2',array(
 					'model'=>$model,'master'=>$master
 			));
 		} else {

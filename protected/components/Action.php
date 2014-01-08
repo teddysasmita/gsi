@@ -102,6 +102,12 @@ class Action extends CComponent {
    	return Yii::app()->createUrl('inputinventorytaking/default/restoreDeleted', array('idtrack'=>$data['idtrack']));
    }
     
+   public static function decodeDeleteDetailInputInventoryTakingUrl($data)
+   {
+   	return Yii::app()->createUrl('inputinventorytaking/detailinputinventorytakings/delete2', array('iddetail'=>$data['iddetail']));	
+   	
+   }
+   
    public static function decodeRestoreHistoryInputInventoryTakingUrl($data)
    {
    	//return print_r($data);

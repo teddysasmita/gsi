@@ -49,13 +49,11 @@ $this->widget('zii.widgets.grid.CGridView', array(
           array(
               'class'=>'CButtonColumn',
               'buttons'=> array(
-                  'delete'=>array(
-                      'visible'=>'false'
-                  ),
                   'view'=>array(
                      'visible'=>'false'
                   )
               ),
+				'deleteButtonUrl'=>"Action::decodeDeleteDetailInputInventoryTakingUrl(\$data)",
               'updateButtonUrl'=>"Action::decodeUpdate2DetailInputInventoryTakingUrl(\$data)",
           )
       ),
