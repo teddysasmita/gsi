@@ -18,12 +18,13 @@ class MYPDF extends TCPDF {
 			->where('id = :id', array(':id'=>$id))
 			->queryRow();
 		$this->detailData=Yii::app()->db->createCommand()
-			->select('b.iditem, b.idwarehouse, sum(b.qty) as sumqty')
+			->select('b.iditem, b.idwarehouse, c.name, sum(b.qty) as sumqty')
 			->from('inputinventorytakings a')
 			->join('detailinputinventorytakings b', 'b.id = a.id')
+			->join('items c', 'c.id=b.iditem')
 			->where('a.idinventorytaking = :id', array(':id'=>$id))
 			->group('b.iditem, b.idwarehouse')
-			->order('b.iditem')->queryAll();
+			->order('c.name')->queryAll();
 	}
 
 	// Colored table
