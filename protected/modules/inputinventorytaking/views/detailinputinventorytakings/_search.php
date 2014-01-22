@@ -6,24 +6,35 @@
 
 <div class="wide form">
 
+<?php 
+	$myscript=<<<EOS
+	
+	
+EOS;
+	Yii::app()->clientScript->registerScript('myscript',$myscript, CClientScript::POS_READY);
+?>
+
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'action'=>Yii::app()->createUrl($this->route),
 	'method'=>'get',
 )); ?>
 
-	<div class="row">
-		<?php echo $form->label($model,'iddetail'); ?>
-		<?php echo $form->textField($model,'iddetail',array('size'=>21,'maxlength'=>21)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'id'); ?>
-		<?php echo $form->textField($model,'id',array('size'=>21,'maxlength'=>21)); ?>
-	</div>
-
+	<?php 
+		echo $form->hiddenField($model, 'iditem');
+		echo $form->hiddenField($model, 'idwarehouse');
+	?>
 	<div class="row">
 		<?php echo $form->label($model,'iditem'); ?>
-		<?php echo $form->textField($model,'iditem',array('size'=>21,'maxlength'=>21)); ?>
+		<?php 
+			//echo $form->textField($model,'iditem',array('size'=>21,'maxlength'=>21)); 
+			$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+					'name'=>'itemname',
+					'sourceUrl'=> Yii::app()->createUrl('LookUp/getItemName'),
+					'htmlOptions'=>array(
+							'style'=>'height:20px;',
+					),
+			));
+		?>
 	</div>
 
 	<div class="row">
@@ -32,13 +43,17 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'discount'); ?>
-		<?php echo $form->textField($model,'discount'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'price'); ?>
-		<?php echo $form->textField($model,'price'); ?>
+		<?php echo $form->label($model,'idwarehouse'); ?>
+		<?php 
+			//echo $form->textField($model,'idwarehouse'); 
+			$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+					'name'=>'whcode',
+					'sourceUrl'=> Yii::app()->createUrl('LookUp/getWareHouse'),
+					'htmlOptions'=>array(
+							'style'=>'height:20px;',
+					),
+			));
+		?>
 	</div>
 
 	<div class="row buttons">

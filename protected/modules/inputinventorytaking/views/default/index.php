@@ -12,7 +12,7 @@ $this->menu=array(
 	array('label'=>'Pencarian Data', 'url'=>array('admin')),
     array('label'=>'Data-data yang telah terhapus', 'url'=>array('deleted')),
 	array('label'=>'Lihat Aktifitas User', 'url'=>array('viewuser')),
-		
+	array('label'=>'Pencarian Detil Data', 'url'=>array('detailinputinventorytakings/admin')),
         
 );
 ?>

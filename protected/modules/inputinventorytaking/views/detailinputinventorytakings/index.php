@@ -3,12 +3,15 @@
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
-	'Detailinputinventorytakings',
-);
+      'Proses'=>array('/site/proses'),
+      'Daftar'=>array('default/index'),
+      'Pencarian Data'
+); 
 
 $this->menu=array(
-	array('label'=>'Create Detailinputinventorytakings', 'url'=>array('create')),
+	/*array('label'=>'Create Detailinputinventorytakings', 'url'=>array('create')),
 	array('label'=>'Manage Detailinputinventorytakings', 'url'=>array('admin')),
+	*/
 );
 ?>
 

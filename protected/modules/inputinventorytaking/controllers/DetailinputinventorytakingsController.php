@@ -213,7 +213,6 @@ class DetailinputinventorytakingsController extends Controller
 	/**
 	 * Manages all models.
 	 */
-        /*
 	public function actionAdmin()
 	{
             if(Yii::app()->authManager->checkAccess($this->formid.'-List', 
@@ -232,7 +231,6 @@ class DetailinputinventorytakingsController extends Controller
                 throw new CHttpException(404,'You have no authorization for this operation.');
             }
 	}
-        */
         
         public function actionHistory($iddetail)
         {

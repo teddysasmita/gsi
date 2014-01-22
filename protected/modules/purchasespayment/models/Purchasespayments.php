@@ -42,7 +42,7 @@ class Purchasespayments extends CActiveRecord
 			array('remark', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, regnum, idatetime, idsupplier, total, discount, status, remark, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('regnum, idatetime, idsupplier,status, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -94,14 +94,17 @@ class Purchasespayments extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
+		//$criteria->compare('id',$this->id,true);
 		$criteria->compare('regnum',$this->regnum,true);
 		$criteria->compare('idatetime',$this->idatetime,true);
-		$criteria->compare('idsupplier',$this->idsupplier,true);
+		//$criteria->compare('idsupplier',$this->idsupplier,true);
+		$criteria->compare('idsupplier',lookup::SupplierIDFromFirstName($this->idsupplier),true);
+		$criteria->compare('idsupplier',lookup::SupplierIDFromLastName($this->idsupplier),true, 'or' );
 		$criteria->compare('total',$this->total);
 		$criteria->compare('discount',$this->discount);
 		$criteria->compare('status',$this->status,true);
-		$criteria->compare('remark',$this->remark,true);
+		//$criteria->compare('remark',$this->remark,true);
+		//$criteria->compare('userlog',lookup::UserIDFromName($this->userlog),true);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);
 

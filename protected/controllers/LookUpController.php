@@ -75,6 +75,46 @@ class LookUpController extends Controller {
         };
 	}
 	
+	public function actionGetItemName($term)
+	{
+		if (!Yii::app()->user->isGuest) {
+			$data=Yii::app()->db->createCommand()->selectDistinct('name')->from('items')
+			->where('name like :p_name', array(':p_name'=>'%'.$term.'%'))
+			->order('name')
+			->queryColumn();
+			if(count($data)) {
+				foreach($data as $key=>$value) {
+					//$data[$key]=rawurlencode($value);
+					$data[$key]=$value;
+				}
+			} else
+				$data[0]='NA';
+			echo json_encode($data);
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+	
+	public function actionGetWareHouse($term)
+	{
+		if (!Yii::app()->user->isGuest) {
+			$data=Yii::app()->db->createCommand()->selectDistinct('code')->from('warehouses')
+			->where('code like :p_code', array(':p_code'=>'%'.$term.'%'))
+			->order('code')
+			->queryColumn();
+			if(count($data)) {
+				foreach($data as $key=>$value) {
+					//$data[$key]=rawurlencode($value);
+					$data[$key]=$value;
+				}
+			} else
+				$data[0]='NA';
+			echo json_encode($data);
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+	
    public function actionGetItem($name)
    {
 		if (!Yii::app()->user->isGuest) {

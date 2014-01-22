@@ -41,19 +41,31 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 )); ?>
 </div><!-- search-form -->
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'stockentries-grid',
+<?php
+	//print_r($model->attributes);
+	echo lookup::SupplierIDFromFirstName('');
+	$this->widget('zii.widgets.grid.CGridView', array(
+	'id'=>'purchasespayments-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id',
+		//'id',
 		'regnum',
 		'idatetime',
-		'idsupplier',
-            'idpurchaseorder',
-		/*
-		'discount',
+		array(
+			'name'=>'idsupplier',
+			'value'=>"lookup::SupplierNameFromSupplierID(\$data['idsupplier'])"
+		),
 		'status',
+		array(
+			'name'=>'userlog',
+			'value'=>"lookup::UserNameFromUserID(\$data['userlog'])",
+		),
+		'datetimelog',
+         /*   'idpurchaseorder',
+		
+		'discount',
+		
 		'remark',
 		'userlog',
 		'datetimelog',

@@ -102,6 +102,19 @@ class lookup extends CComponent {
       return Yii::app()->authdb->createCommand($sql)->queryScalar();
    }
    
+   public static function UserIDFromName($name)
+   {
+		if(strlen($name)>0)
+			$name='%'.$name.'%';
+		$sql="select id from users where fullname like '$name'";
+		$data=Yii::app()->authdb->createCommand($sql)->queryScalar();
+   	
+		if($data===false)
+   			return '';
+   		else
+   			return $data;
+   }
+   
    public static function SalesInvoiceNumFromInvoiceID($id)
    {
       $sql="select regnum from salesinvoices where id='$id'";
@@ -130,6 +143,51 @@ class lookup extends CComponent {
    {
       $sql="select concat(firstname, ' ', lastname) as name from suppliers where id='$id'";
       return Yii::app()->db->createCommand($sql)->queryScalar();
+   }
+   
+   public static function SupplierIDFromLastName($name)
+   {
+   		if(strlen($name)>0) {
+   			$name='%'.$name.'%';
+   		} else
+   			$name='%';
+   		$data=Yii::app()->db->createCommand()
+   			->select('id')->from('suppliers')->where("lastname like :boom", array(':boom'=>$name))
+			->queryScalar();
+		
+		if($data==false)
+			return 'NAN';
+   		else
+   			return $data;
+   }
+   public static function SupplierIDFromFirstName($name)
+	{	
+		if(strlen($name)>0) {
+			$name='%'.$name.'%';
+		} else
+			$name='%';
+	   	$data=Yii::app()->db->createCommand()
+			->select('id')->from('suppliers')->where("firstname like :boom", array(':boom'=>$name))
+			->queryScalar();
+	   	
+   		if($data==false)
+   			return 'NAN';
+   		else
+   			return $data;	
+	   	/*
+   	for($i=1; $i<count($suppliername)-1; $i++) {
+   		$command->bindParam(2, $suppliername[$i]);
+		$data=$command->queryColumn();
+		print_r($data);
+		die();
+		if (count($data)==1)
+			break;
+   	};
+   	if (count($data)>0)
+		return $data[0];
+   	else
+   		return '';
+   	*/	
    }
    
    public static function WarehouseNameFromWarehouseID($id)

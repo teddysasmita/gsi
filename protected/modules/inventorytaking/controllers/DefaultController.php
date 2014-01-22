@@ -330,12 +330,13 @@ class DefaultController extends Controller
       		$this->trackActivity('v');
       		
       		$detailData=Yii::app()->db->createCommand()
-      			->select('b.iditem, b.idwarehouse, sum(b.qty) as totalqty')
+      			->select('b.iditem, b.idwarehouse, c.name, sum(b.qty) as totalqty')
       			->from('inputinventorytakings a')
       			->join('detailinputinventorytakings b', 'b.id=a.id')
+      			->join('items c', 'c.id=b.iditem')
       			->where('a.idinventorytaking=:p_idit', array(':p_idit'=>$id))
       			->group('b.iditem, b.idwarehouse')
-      			->order('b.iditem')
+      			->order('c.name')
       			->queryAll();
       		$this->render('stockcard',array(
       				'detailData'=>$detailData, 'model'=>$this->loadModel($id)

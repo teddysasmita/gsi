@@ -30,12 +30,7 @@
 		<?php echo $form->label($model,'idsupplier'); ?>
 		<?php echo $form->textField($model,'idsupplier',array('size'=>21,'maxlength'=>21)); ?>
 	</div>
-   
-      <div class="row">
-		<?php echo $form->label($model,'idpurchaseorder'); ?>
-		<?php echo $form->textField($model,'idpurchaseorder',array('size'=>21,'maxlength'=>21)); ?>
-	</div>
-   
+      
 	<div class="row">
 		<?php echo $form->label($model,'userlog'); ?>
 		<?php echo $form->textField($model,'userlog',array('size'=>21,'maxlength'=>21)); ?>

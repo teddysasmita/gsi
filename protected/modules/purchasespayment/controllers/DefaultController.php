@@ -258,9 +258,9 @@ class DefaultController extends Controller
          $this->trackActivity('s');
          $model=new Purchasespayments('search');
          $model->unsetAttributes();  // clear any default values
-         if(isset($_GET['Purchasespayments']))
+         if(isset($_GET['Purchasespayments'])){
             $model->attributes=$_GET['Purchasespayments'];
-
+         }
          $this->render('admin',array(
             'model'=>$model,
          ));
