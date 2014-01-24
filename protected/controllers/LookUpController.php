@@ -155,7 +155,7 @@ class LookUpController extends Controller {
 		if (!Yii::app()->user->isGuest) {
       		$idsupplier=urldecode($idsupplier);
       		$data=Yii::app()->db->createCommand()->select('id, regnum')->from('purchasesorders')
-         		->where("status <> '2' and idsupplier = :idsupplier", array(':idsupplier'=>$idsupplier))
+         		->where("status <> '2' and idsupplier = :p_idsupplier", array(':p_idsupplier'=>$idsupplier))
          		->queryAll();
       		echo json_encode($data);
 		} else {
@@ -194,4 +194,53 @@ class LookUpController extends Controller {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		};
    }
+   
+	public function actionGetUserOperation($term)
+	{
+		if (!Yii::app()->user->isGuest) {
+			$data=Yii::app()->authdb->createCommand()
+				->select('description as label, name as value')
+				->from('AuthItem')
+				->where('type=:p_type and description like :p_desc', 
+     				array(':p_type'=>'0', ':p_desc'=>"%$term%"))
+				->queryAll();
+   		/*echo Yii::app()->db->createCommand()->select('a.donum, b.id')->from('stockentries a')
+   		 ->leftJoin('purchasesreceipts b','b.donum = a.donum' )
+   		->where("a.idsupplier = :idsupplier and b.id = NULL", array(':idsupplier'=>$idsupplier))->text;
+   		*/   		   
+			echo json_encode($data);
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+   		};
+	}
+   
+	public function actionGetUserTask($term)
+ 	{
+		if (!Yii::app()->user->isGuest) {
+			$data=Yii::app()->authdb->createCommand()
+   				->select('description as label, name as value')
+   				->from('AuthItem')
+   				->where('type=:p_type and description like :p_desc',
+   					array(':p_type'=>'1', ':p_desc'=>"%$term%"))
+   				->queryAll();
+		echo json_encode($data);
+   		} else {
+   			throw new CHttpException(404,'You have no authorization for this operation.');
+   		};
+	}
+ 
+	public function actionGetUserRole($term)
+	{
+		if (!Yii::app()->user->isGuest) {
+			$data=Yii::app()->authdb->createCommand()
+			->select('description as label, name as value')
+			->from('AuthItem')
+			->where('type=:p_type and description like :p_desc',
+					array(':p_type'=>'2', ':p_desc'=>"%$term%"))
+					->queryAll();
+			echo json_encode($data);
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
 }

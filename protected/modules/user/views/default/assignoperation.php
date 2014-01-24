@@ -4,7 +4,7 @@
 $this->breadcrumbs=array(
    'Penyesuaian'=>array('/site/setting'),
    'Daftar'=>array('index'),
-   'lihat Data'=>array('/user/default/view', 'id'=>$userid),
+   'Lihat Data'=>array('/user/default/view', 'id'=>$userid),
    'Pemberian Hak Operasi',
 );
 ?>

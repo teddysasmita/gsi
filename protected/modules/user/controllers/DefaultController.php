@@ -209,10 +209,12 @@ class DefaultController extends Controller
          $model=new authassignment;
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
+		
          if(isset($_POST['authassignment']))
          {
+         	print_r($_POST);
             $model->attributes=$_POST['authassignment'];
             if($model->save()) {
                $this->redirect(array('view', 'id'=>$id));

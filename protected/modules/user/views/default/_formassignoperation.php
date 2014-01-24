@@ -8,7 +8,7 @@
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'auth-item-form',
-	'enableAjaxValidation'=>false,
+	'enableAjaxValidation'=>true,
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
@@ -21,11 +21,18 @@
 	<div class="row">
 		<?php echo $form->labelEx($model,'Pilih Hak Operasi'); ?>
 		<?php 
-               $res=Yii::app()->authdb->createCommand('select name, type, description from AuthItem '.
-                  'where type=0')->queryAll();
-               $datas=CHtml::listData($res,'name', 'description');
-               echo $form->listBox($model,'itemname',$datas, array('size'=>10)); 
-            ?>
+			$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
+				'name'=>'authassignment[itemname]',
+				'sourceUrl'=>Yii::app()->createUrl('LookUp/getUserOperation'),
+				// additional javascript options for the autocomplete plugin
+				'options'=>array(
+						'minLength'=>'2',
+				),
+				'htmlOptions'=>array(
+						'style'=>'height:20px;',
+				),
+			));
+		?>
 		<?php echo $form->error($model,'itemname'); ?>
 	</div>
 
