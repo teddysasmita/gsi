@@ -29,22 +29,17 @@ $this->menu=array(
 		//'id',
 		'regnum',
 		'idatetime',
+		'transid',
+		'transname',
+      	'transinfo',
 		array(
-         'label'=>'Nomor PO',
-         'value'=>lookup::PurchasesOrderNumFromID($model->idpurchaseorder),
-      ),
-      array(
-         'label'=>'Nama Pemasok',
-         'value'=>lookup::SupplierNameFromSupplierID($model->idsupplier)
-      ),
-      array(
-         'label'=>'Nama Gudang',
-         'value'=>lookup::WarehouseNameFromWarehouseID($model->idwarehouse)
-      ),
+			'label'=>'Nama Gudang',
+			'value'=>lookup::WarehouseNameFromWarehouseID($model->idwarehouse)
+		),
 		array(
-               'label'=>'Userlog',
-               'value'=>lookup::UserNameFromUserID($model->userlog),
-            ),
+			'label'=>'Userlog',
+			'value'=>lookup::UserNameFromUserID($model->userlog),
+		),
 		'datetimelog',
 	),
 )); ?>

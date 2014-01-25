@@ -19,6 +19,11 @@ $supplierScript=<<<EOS
    			$('#Detailstockentries_serialnum').val('Belum Diterima');
    		}
       });
+	$('#Detailstockentries_serialnum').change(function() {
+   		var myserialnum = $('#Detailstockentries_serialnum').val();
+   		if (myserialnum !== 'Belum Diterima')
+   			$('#isAccepted').prop('checked', false);
+	});
 EOS;
    Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);
    

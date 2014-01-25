@@ -7,51 +7,28 @@
 <div class="form">
 
 <?php
-   $suppliers=Yii::app()->db->createCommand()
-      ->select('id, firstname, lastname')
-      ->from('suppliers')
-      ->order('firstname, lastname')
-      ->queryAll();
-   foreach($suppliers as $row) {
-      $supplierids[]=$row['id'];
-      $suppliernames[]=$row['firstname'].' '.$row['lastname'];
-   }
-   $supplierids=CJSON::encode($supplierids);
-   $suppliernames=CJSON::encode($suppliernames);
-   $supplierScript=<<<EOS
-      var supplierids=$supplierids;
-      var suppliernames=$suppliernames;
-      
-      $('#searchUndonePO').click(function() {
-         var activename=$('#Stockentries_suppliername').val();
-         $('#Stockentries_idsupplier').val(
-            supplierids[suppliernames.indexOf(activename)]);
-         $.getJSON('index.php?r=LookUp/getUndonePO',{ idsupplier: $('#Stockentries_idsupplier').val() },
+   $transScript=<<<EOS
+      $('#Stockentries_transid').change(
+		function() {
+			$.getJSON('index.php?r=LookUp/getTrans',{ id: $('#Stockentries_transid').val() },
             function(data) {
-               $('#Stockentries_idpurchaseorder').html('');
-               var ct=0;
-               $('#Stockentries_idpurchaseorder').append(
-                  "<option value=''>Harap Pilih</option>"
-               );
-               while(ct < data.length) {
-                  $('#Stockentries_idpurchaseorder').append(
-                     '<option value='+data[ct].id+'>'+unescape(data[ct].regnum)+'</option>'
-                  );
-                  ct++;
-               };
-            });
-      });
-      
-      $('#Stockentries_idpurchaseorder').change(
-         function(event) {
-            $('#command').val('setPO');
-            mainform=$('#stockentries-form');
-            mainform.submit();
-            event.preventDefault();
-         }
-      );   
+				if (data[0].id !== 'NA') {
+					$('#Stockentries_transname').val(data[0].transname);
+					$('#transinfo').html(data[0].transinfo);
+            		$('#Stockentries_transinfo').val(data[0].transinfo);
+            		$('#command').val('getPO');
+					$('#Stockentries_transinfo_em_').prop('style', 'display:none')
+					$('#stockentries-form').submit();
+				} else {
+					$('#Stockentries_transname').val();
+					$('#transinfo').html('');
+            		$('#Stockentries_transinfo_em_').html('Data tidak ditemukan');
+					$('#Stockentries_transinfo_em_').prop('style', 'display:block')
+				}
+			})
+		});
 EOS;
-   Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);
+   Yii::app()->clientScript->registerScript("transScript", $transScript, CClientscript::POS_READY);
 
    if($command=='create') 
       $form=$this->beginWidget('CActiveForm', array(
@@ -74,11 +51,12 @@ EOS;
       <?php 
         echo CHtml::hiddenField('command', '', array('id'=>'command'));
         echo $form->hiddenField($model, 'id');
-        echo $form->hiddenField($model, 'idsupplier');
+        echo $form->hiddenField($model, 'transname');
         echo $form->hiddenField($model, 'userlog');
         echo $form->hiddenField($model, 'datetimelog');
         echo $form->hiddenField($model, 'idwarehouse');
         echo $form->hiddenField($model, 'regnum');
+        echo $form->hiddenField($model, 'transinfo');
       ?>
         
 	<div class="row">
@@ -102,36 +80,22 @@ EOS;
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'idsupplier'); ?>
+		<?php echo $form->labelEx($model,'transid'); ?>
 		<?php 
-         $suppliers=Yii::app()->db->createCommand()
-            ->select("id,firstname,lastname")
-            ->from("suppliers")
-            ->order("firstname, lastname")   
-            ->queryAll();
-         foreach($suppliers as $row) {
-            $suppliername[]=$row['firstname'].' '.$row['lastname'];
-         }
-         $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
-             'name'=>'Stockentries_suppliername',
-             'source'=>$suppliername,
-           'value'=>lookup::SupplierNameFromSupplierID($model->idsupplier)
-         ));
-         echo CHtml::Button('Cari PO', array( 'id'=>'searchUndonePO'));   
-      ?>
-		<?php echo $form->error($model,'idsupplier'); ?>
+			echo $form->textField($model,'transid');
+		?>
+		<?php echo $form->error($model,'transid'); ?>
 	</div>
-
-      <div class="row">
-		<?php echo $form->labelEx($model,'idpurchaseorder'); ?>
+	
+    <div class="row">
+		<?php echo CHtml::label('Info', false); ?>
 		<?php 
-         echo $form->dropDownList($model,'idpurchaseorder',
-            array($model->idpurchaseorder=>lookup::PurchasesOrderNumFromID($model->idpurchaseorder)), 
-            array('empty'=>'Harap Pilih')); 
-      ?>
-		<?php echo $form->error($model,'idpurchaseorder'); ?>
+			echo CHtml::label($model->transinfo, false, 
+				array('id'=>'transinfo','width'=>'200px'));
+		?>
+		<?php echo $form->error($model,'transinfo'); ?>
 	</div>
-      
+	  
 	<div class="row">
 		<?php echo $form->labelEx($model,'idwarehouse'); ?>
          <?php 
@@ -139,15 +103,7 @@ EOS;
               array('class'=>'money')); 
          ?>
 	</div>
-	
-	<div class="row">
-		<?php echo $form->labelEx($model,'donum'); ?>
-        <?php 
-           echo $form->textField($model, 'donum'); 
-        ?>
-        <?php echo $form->error($model,'donum');?> 
-	</div>
-	
+		
 	<div class="row">
 		<?php echo $form->labelEx($model,'remark'); ?>
         <?php 

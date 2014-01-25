@@ -7,10 +7,10 @@
  * @property string $id
  * @property string $regnum
  * @property string $idatetime
- * @property string $idsupplier
- * @property string $idpurchaseorder
+ * @property string $transid
+ * @property string $transname
  * @property string $idwarehouse
- * @property string $donum
+ * @property string $transinfo
  * @property string $remark
  * @property string $userlog
  * @property string $datetimelog
@@ -33,15 +33,16 @@ class Stockentries extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, regnum, idatetime, idsupplier, idpurchaseorder, idwarehouse, donum, userlog, datetimelog', 'required'),
-			array('id, idsupplier, idpurchaseorder, idwarehouse, userlog', 'length', 'max'=>21),
+			array('id, regnum, idatetime, transid, transname, idwarehouse, transinfo, userlog, datetimelog', 'required'),
+			array('id, transid, idwarehouse, userlog', 'length', 'max'=>21),
+			array('transname', 'length', 'max'=>64),
+			array('transinfo', 'length', 'max'=>100),
 			array('regnum', 'length', 'max'=>12),
 			array('idatetime, datetimelog', 'length', 'max'=>19),
-			array('donum', 'length', 'max'=>50),
 			array('remark', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, regnum, idatetime, idsupplier, idpurchaseorder, idwarehouse, donum, remark, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('id, regnum, idatetime, transid, transname, idwarehouse, transinfo, remark, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,10 +66,10 @@ class Stockentries extends CActiveRecord
 			'id' => 'ID',
 			'regnum' => 'Nomor Urut',
 			'idatetime' => 'Tanggal',
-			'idsupplier' => 'Pemasok',
-			'idpurchaseorder' => 'Nomor PO',
+			'transid' => 'ID Transaksi',
+			'transname' => 'Jenis Transaksi',
 			'idwarehouse' => 'Gudang',
-			'donum' => 'Nomor SJ',
+			'transinfo' => 'Info Transaksi',
 			'remark' => 'Catatan',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
@@ -96,10 +97,10 @@ class Stockentries extends CActiveRecord
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('regnum',$this->regnum,true);
 		$criteria->compare('idatetime',$this->idatetime,true);
-		$criteria->compare('idsupplier',$this->idsupplier,true);
-		$criteria->compare('idpurchaseorder',$this->idpurchaseorder,true);
+		$criteria->compare('transid',$this->transid,true);
+		$criteria->compare('transname',$this->transname,true);
 		$criteria->compare('idwarehouse',$this->idwarehouse,true);
-		$criteria->compare('donum',$this->donum,true);
+		$criteria->compare('transinfo',$this->transinfo,true);
 		$criteria->compare('remark',$this->remark,true);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);

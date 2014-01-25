@@ -102,10 +102,10 @@ class DefaultController extends Controller
                          Yii::app()->session['Stockentries']=$_POST['Stockentries'];
                          $this->redirect(array('detailstockentries/create',
                             'id'=>$model->id));
-                      } else if ($_POST['command']=='setPO') {
+                      } else if ($_POST['command']=='getPO') {
                          $model->attributes=$_POST['Stockentries'];
                          Yii::app()->session['Stockentries']=$_POST['Stockentries'];
-                         $this->loadPO($model->idpurchaseorder, $model->id);
+                         $this->loadPO($model->transid, $model->id);
                       }
                    }
                 }
@@ -561,9 +561,10 @@ class DefaultController extends Controller
         $details=array();
 
         $dataPO=Yii::app()->db->createCommand()
-           ->select()
-           ->from('detailpurchasesorders')
-           ->where('id = :id', array(':id'=>$idpo) )
+           ->select('b.*')
+           ->from('purchasesorders a')
+           ->join('detailpurchasesorders b', 'b.id=a.id')
+           ->where('a.regnum = :p_id', array(':p_id'=>$idpo) )
            ->queryAll();
         Yii::app()->session->remove('Detailstockentries');
          foreach($dataPO as $row) {

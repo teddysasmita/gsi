@@ -23,7 +23,7 @@ $this->pageTitle=Yii::app()->name;
 <h3><?php echo CHtml::link('Penerimaan Pembayaran dari Pelanggan', Yii::app()->createUrl('receipts/index'))?></h3>
 
 <h2>Bagian Gudang</h2>
-<h3><?php echo CHtml::link('Terima Kiriman dari Pemasok', Yii::app()->createUrl('stockentries'))?></h3>
+<h3><?php echo CHtml::link('Terima Barang', Yii::app()->createUrl('stockentries'))?></h3>
 <h3><?php echo CHtml::link('Input Stok Opname', Yii::app()->createUrl('inputinventorytaking'))?></h3>
 
 <h2>Bagian Keuangan</h2>

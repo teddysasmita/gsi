@@ -13,10 +13,18 @@
 	<?php echo CHtml::encode($data->idatetime); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('idsupplier')); ?>:</b>
-	<?php echo CHtml::encode(lookup::SupplierNameFromSupplierID($data->idsupplier)); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('transid')); ?>:</b>
+	<?php echo CHtml::encode($data->transid); ?>
 	<br />
-      
+	
+	<b><?php echo CHtml::encode($data->getAttributeLabel('transname')); ?>:</b>
+	<?php echo CHtml::encode($data->transname); ?>
+	<br />
+	
+	<b><?php echo CHtml::encode($data->getAttributeLabel('transinfo')); ?>:</b>
+	<?php echo CHtml::encode($data->transname); ?>
+	<br />
+	  
       <b><?php echo CHtml::encode($data->getAttributeLabel('idwarehouse')); ?>:</b>
 	<?php echo CHtml::encode(lookup::WarehouseNameFromWarehouseID($data->idwarehouse)); ?>
 	<br />
