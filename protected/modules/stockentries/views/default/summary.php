@@ -22,7 +22,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>Penerimaan Barang dari Pemasok</h1>
+<h1>Penerimaan Barang</h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,

@@ -105,6 +105,14 @@ EOS;
 	</div>
 		
 	<div class="row">
+		<?php echo $form->labelEx($model,'donum'); ?>
+        <?php 
+           echo $form->textField($model, 'donum'); 
+        ?>
+        <?php echo $form->error($model,'donum');?> 
+	</div>
+	
+	<div class="row">
 		<?php echo $form->labelEx($model,'remark'); ?>
         <?php 
            echo $form->textArea($model, 'remark', array('COLS'=>40, 'ROWS'=>5)); 

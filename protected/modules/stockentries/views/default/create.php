@@ -31,6 +31,6 @@ EOH;
 Yii::app()->clientScript->registerScript('myscript', $jq, CClientScript::POS_READY);
 ?>
 
-<h1>Penerimaan Barang dari Pemasok</h1>
+<h1>Penerimaan Barang</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model, 'id'=>$model->id, 'command'=>'create')); ?>

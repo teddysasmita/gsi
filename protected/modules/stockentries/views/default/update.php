@@ -20,6 +20,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Penerimaan Barang dari Pemasok</h1>
+<h1>Penerimaan Barang</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model, 'command'=>'update')); ?>

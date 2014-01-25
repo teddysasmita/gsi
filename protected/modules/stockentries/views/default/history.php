@@ -15,7 +15,7 @@ $this->menu=array(
 
 ?>
 
-<h1>Penerimaan Barang dari Pemasok</h1>
+<h1>Penerimaan Barang</h1>
 
 <?php    $data=Yii::app()->tracker->createCommand()->
        select()->from('stockentries')->where('id=:id',array(':id'=>$model->id))->queryAll();
