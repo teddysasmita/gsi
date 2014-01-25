@@ -366,7 +366,7 @@ class Action extends CComponent {
    public static function setStatusPO($idpo, $status)
    {
       Yii::app()->db->createCommand()
-         ->update('purchasesorders', array('status'=>$status), 'id=:id', array(':id'=>$idpo));
+         ->update('purchasesorders', array('status'=>$status), 'regnum=:id', array(':id'=>$idpo));
    }
    
    public static function setPaymentStatusPO($idpo, $status)

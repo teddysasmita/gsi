@@ -81,9 +81,9 @@ $this->menu=array(
 			array(
 				'header'=>'Nomor PO',
 				'name'=>'idpurchaseorder',
-				'value'=>"lookup::PurchasesOrderNumFromID(\$data['idpurchaseorder'])"
+				//'value'=>"lookup::PurchasesOrderNumFromID(\$data['idpurchaseorder'])"
 			),
-			array(
+			/*array(
                   'class'=>'CButtonColumn',
                   'buttons'=> array(
                       'delete'=>array(
@@ -97,7 +97,7 @@ $this->menu=array(
                      ),
                   ),
                   //'viewButtonUrl'=>"Action::decodeViewDetailStockEntryUrl(\$data)",
-              )
+              )*/
          ),
    ));
  ?>

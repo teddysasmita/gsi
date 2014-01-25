@@ -180,8 +180,14 @@ EOS;
                    'name'=>'iditem',
                    'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
                ),
-              'leftqty',
-				'qty',	
+				array(
+					'header'=>'Sisa',
+					'name'=>'leftqty'
+				),
+				array(
+					'header'=>'Qty',
+					'name'=>'qty'
+				),
 			array(
 				'header'=>'Gudang',
 				'name'=>'idwarehouse',
@@ -190,9 +196,9 @@ EOS;
 			array(
 				'header'=>'Nomor PO',
 				'name'=>'idpurchaseorder',
-				'value'=>"lookup::PurchasesOrderNumFromID(\$data['idpurchaseorder'])"
+				//'value'=>"lookup::PurchasesOrderNumFromID(\$data['idpurchaseorder'])"
 			),
-              array(
+              /*array(
                   'class'=>'CButtonColumn',
                   'buttons'=> array(
                       'delete'=>array(
@@ -205,7 +211,7 @@ EOS;
 						'visible'=>'false'
 					)
                   ),
-              )
+              )*/
           ),
     ));
     

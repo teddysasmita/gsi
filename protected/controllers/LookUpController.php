@@ -184,10 +184,13 @@ class LookUpController extends Controller {
 		   	->leftJoin('purchasesreceipts b','b.donum = a.donum' )
 		   	->where("a.idsupplier = :idsupplier and b.id = NULL", array(':idsupplier'=>$idsupplier))->text;
 		   	*/			
-		   	$data=Yii::app()->db->createCommand()->select('a.donum, b.id')->from('stockentries a')
-		   	->leftJoin('purchasesreceipts b','b.donum = a.donum' )
-		   	->where("a.idsupplier = :idsupplier and b.id is NULL", array(':idsupplier'=>$idsupplier))
-		   	->queryAll();
+		   	$data=Yii::app()->db->createCommand()->select('a.donum, c.id')
+		   		->from('stockentries a')
+		   		->join('purchasesorders b', 'b.regnum = a.transid')
+		   		->leftJoin('purchasesreceipts c','c.donum = a.donum' )
+		   		->where("b.idsupplier = :p_idsupplier and c.id is NULL",
+      				array(':p_idsupplier' => $idsupplier))
+		   		->queryAll();
 		   	
 		   	echo json_encode($data);
 		} else {

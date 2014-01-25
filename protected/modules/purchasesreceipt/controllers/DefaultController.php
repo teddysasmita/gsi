@@ -102,6 +102,7 @@ class DefaultController extends Controller
                          $this->redirect(array('detailpurchasesreceipts/create',
                             'id'=>$model->id));
                       } else if ($_POST['command']=='setDO') {
+                      	
                          $model->attributes=$_POST['Purchasesreceipts'];
                          Yii::app()->session['Purchasesreceipts']=$_POST['Purchasesreceipts'];
                          $this->loadDO($model->donum, $model->id);
@@ -559,8 +560,15 @@ class DefaultController extends Controller
       {
         $details=array();
 
+        $sql=<<<EOS
+        select a.qty from detailpurchasesorders a
+        join purchasesorders b on b.id = a.id
+        where b.regnum = :p_regnum and a.iditem = :p_iditem
+EOS;
+        $mycommand=Yii::app()->db->createCommand($sql);
+        
         $dataPO=Yii::app()->db->createCommand()
-           ->select('count(*) as totalqty, b.iditem, a.idwarehouse, a.idpurchaseorder')
+           ->select('count(*) as totalqty, b.iditem, a.idwarehouse, a.transid')
            ->from('detailstockentries b')
            ->join('stockentries a', 'a.id=b.id')
            ->where('a.donum = :donum and b.serialnum <> :serialnum', 
@@ -574,8 +582,11 @@ class DefaultController extends Controller
 			$detail['iditem']=$row['iditem'];
 			$detail['qty']=$row['totalqty'];
 			$detail['idwarehouse']=$row['idwarehouse'];
-			$detail['idpurchaseorder']=$row['idpurchaseorder'];
-			$detail['leftqty']=0;
+			$detail['idpurchaseorder']=$row['transid'];
+			$mycommand->bindParam(':p_regnum', $row['transid'], PDO::PARAM_STR);
+			$mycommand->bindParam(':p_iditem', $row['iditem'], PDO::PARAM_STR);
+			$orderqty=$mycommand->queryScalar();	
+			$detail['leftqty']=$orderqty-$row['totalqty'];
 			$detail['userlog']=Yii::app()->user->id;
 			$detail['datetimelog']=idmaker::getDateTime();
 			

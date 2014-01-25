@@ -66,7 +66,7 @@ class DefaultController extends Controller
                $this->performAjaxValidation($model);
 
                 if (isset($_POST)){
-                   if(isset($_POST['yt1'])) {
+                   if(isset($_POST['yt0'])) {
                       //The user pressed the button;
                       $model->attributes=$_POST['Stockentries'];
                       
@@ -77,7 +77,7 @@ class DefaultController extends Controller
                       if ($respond) {
                          $respond=$model->save();
                          if(!$respond) {
-                             throw new CHttpException(404,'There is an error in master posting');
+                             throw new CHttpException(404,'There is an error in master posting'. ' '. $model->errors);
                          }
 
                          if(isset(Yii::app()->session['Detailstockentries']) ) {
@@ -505,7 +505,7 @@ class DefaultController extends Controller
          $idmaker=new idmaker();
          $idmaker->saveRegNum($this->formid, $model->regnum);
          
-         $this->setStatusPO($model->idpurchaseorder,
+         $this->setStatusPO($model->transid,
             Yii::app()->session['Detailstockentries']);
      }
 
@@ -561,14 +561,25 @@ class DefaultController extends Controller
         $details=array();
 
         $dataPO=Yii::app()->db->createCommand()
-           ->select('b.*')
+           ->select('a.id, b.*')
            ->from('purchasesorders a')
            ->join('detailpurchasesorders b', 'b.id=a.id')
            ->where('a.regnum = :p_id', array(':p_id'=>$idpo) )
            ->queryAll();
         Yii::app()->session->remove('Detailstockentries');
+        $sql=<<<EOS
+    	select count(*) as received from stockentries a 
+		join detailstockentries b on b.id = a.id
+		where a.transid = :p_transid and b.iditem = :p_iditem and
+        b.serialnum <> 'Belum Diterima'   
+EOS;
+        $mycommand=Yii::app()->db->createCommand($sql);
          foreach($dataPO as $row) {
-            for ($index = 0; $index < $row['qty']; $index++) {
+         	$mycommand->bindParam(':p_transid', $idpo, PDO::PARAM_STR);
+         	$mycommand->bindParam(':p_iditem', $row['iditem'], PDO::PARAM_STR);
+         	$accepted=$mycommand->queryScalar();
+         	print_r($accepted);
+            for ($index = 0; $index < $row['qty'] - $accepted; $index++) {
                $detail['iddetail']=idmaker::getCurrentID2();
                $detail['id']=$id;
                $detail['iditem']=$row['iditem'];
