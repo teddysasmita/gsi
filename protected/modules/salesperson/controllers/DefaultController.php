@@ -253,9 +253,10 @@ class DefaultController extends Controller
         
       protected function afterInsert(& $model)
       {
-         $model->id=idmaker::getcurrentID2();  
+         //$model->id=idmaker::getcurrentID2();  
          $model->userlog=Yii::app()->user->id;
          $model->datetimelog=idmaker::getDateTime();
+         $model->status='0';
       }
         
       protected function afterPost(& $model)

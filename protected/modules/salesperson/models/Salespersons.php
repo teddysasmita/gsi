@@ -10,6 +10,7 @@
  * @property string $address
  * @property string $phone
  * @property string $email
+ * @property string $status
  * @property string $userlog
  * @property string $datetimelog
  */
@@ -31,14 +32,15 @@ class Salespersons extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, firstname, lastname, address, userlog, datetimelog', 'required'),
+			array('id, firstname, lastname, address, status, startdate, userlog, datetimelog', 'required'),
 			array('id, userlog', 'length', 'max'=>21),
+			array('status', 'length', 'max'=>1),
 			array('firstname, lastname, phone, email', 'length', 'max'=>100),
 			array('address', 'length', 'max'=>255),
-			array('datetimelog', 'length', 'max'=>19),
+			array('datetimelog, startdate', 'length', 'max'=>19),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, firstname, lastname, address, phone, email, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('id, firstname, lastname, address, startdate, status,phone, email, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,6 +67,8 @@ class Salespersons extends CActiveRecord
 			'address' => 'Address',
 			'phone' => 'Phone',
 			'email' => 'Email',
+			'status' => 'Status',
+			'startdate' => 'Tanggal Mulai',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
 		);
@@ -94,6 +98,8 @@ class Salespersons extends CActiveRecord
 		$criteria->compare('address',$this->address,true);
 		$criteria->compare('phone',$this->phone,true);
 		$criteria->compare('email',$this->email,true);
+		$criteria->compare('status',$this->status,true);
+		$criteria->compare('startdate',$this->startdate,true);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);
 
