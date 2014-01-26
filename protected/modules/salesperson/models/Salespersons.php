@@ -62,8 +62,8 @@ class Salespersons extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'firstname' => 'Firstname',
-			'lastname' => 'Lastname',
+			'firstname' => 'Nama Awal',
+			'lastname' => 'Nama Akhir',
 			'address' => 'Address',
 			'phone' => 'Phone',
 			'email' => 'Email',
