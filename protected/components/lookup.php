@@ -221,6 +221,16 @@ class lookup extends CComponent {
             return 'Jasa';
       } 
    }
+   
+   public static function BankNameFromID($id)
+   {
+   	$sql="select name from salesposbanks where id='$id'";
+   	$name=Yii::app()->db->createCommand($sql)->queryScalar();
+   	if(!$name) {
+   		return 'NA';
+   	} else
+   		return $name;
+   }
 }
 
 

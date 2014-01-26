@@ -269,4 +269,37 @@ EOS;
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		};
 	}
+	
+	public function actionGetBankName($term)
+	{
+		if (!Yii::app()->user->isGuest) {
+			$data=Yii::app()->db->createCommand()
+			->select('name')
+			->from('salesposbanks')
+			->where('name like :p_name',
+					array(':p_name'=>"%$term%"))
+					->queryColumn();
+			echo json_encode($data);
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+		
+	}
+	
+	public function actionGetBankID($name)
+	{
+		$name=urldecode($name);
+		if (!Yii::app()->user->isGuest) {
+			$data=Yii::app()->db->createCommand()
+			->select('id')
+			->from('salesposbanks')
+			->where('name = :p_name',
+					array(':p_name'=>$name))
+					->queryScalar();
+			echo json_encode($data);
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	
+	}
 }

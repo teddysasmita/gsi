@@ -45,7 +45,8 @@ return array(
             'inventorytaking',	
             'inputinventorytaking',
             'inventorycosting',
-            'purchasesretur'
+            'purchasesretur',
+            'salespos'
         ),
 
         
