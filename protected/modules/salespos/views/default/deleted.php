@@ -3,7 +3,7 @@
 /* @var $model Salesposcards */
 
 $this->breadcrumbs=array(
-	'Proses'=>array('/site/proses'),
+	'Master Data'=>array('/site/masterdata'),
 	'Daftar'=>array('index'),
 	'Data-data yang telah terhapus',
 );

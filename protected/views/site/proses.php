@@ -21,8 +21,6 @@ $this->pageTitle=Yii::app()->name;
 <h3><?php echo CHtml::link('Pesanan Pembeli', Yii::app()->createUrl('salesorder'))?></h3>
 <h3><?php echo CHtml::link('Pengiriman Barang ke Pelanggan', Yii::app()->createUrl('stockdeliveries/index'))?></h3>
 <h3><?php echo CHtml::link('Penerimaan Pembayaran dari Pelanggan', Yii::app()->createUrl('receipts/index'))?></h3>
-<h3><?php echo CHtml::link('Bank Penerbit Kartu', Yii::app()->createUrl('salespos/salesposbanks'))?></h3>
-<h3><?php echo CHtml::link('Jenis Kartu', Yii::app()->createUrl('salespos'))?></h3>
 
 <h2>Bagian Gudang</h2>
 <h3><?php echo CHtml::link('Terima Barang', Yii::app()->createUrl('stockentries'))?></h3>
