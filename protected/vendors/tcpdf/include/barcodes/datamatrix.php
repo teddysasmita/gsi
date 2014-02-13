@@ -3,8 +3,8 @@
 // File name   : datamatrix.php
 // Version     : 1.0.004
 // Begin       : 2010-06-07
-// Last Update : 2013-02-04
-// Author      : Nicola Asuni - Tecnick.com LTD - Manor Coach House, Church Hill, Aldershot, Hants, GU12 4RQ, UK - www.tecnick.com - info@tecnick.com
+// Last Update : 2013-12-12
+// Author      : Nicola Asuni - Tecnick.com LTD - www.tecnick.com - info@tecnick.com
 // License     : GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)
 // -------------------------------------------------------------------
 // Copyright (C) 2010-2012  Nicola Asuni - Tecnick.com LTD
@@ -860,6 +860,10 @@ class Datamatrix {
 							++$field_lenght;
 						}
 						if (($field_lenght == 4) OR ($epos == $data_lenght) OR !$this->isCharMode($chr, ENC_EDF)) {
+							if (($epos == $data_lenght) AND ($field_lenght < 3)) {
+								$enc = ENC_ASCII;
+								break;
+							}
 							if ($field_lenght < 4) {
 								// set unlatch character
 								$temp_cw[] = 0x1f;

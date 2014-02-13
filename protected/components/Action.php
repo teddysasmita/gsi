@@ -231,6 +231,24 @@ class Action extends CComponent {
       return Yii::app()->createUrl('/stockentries/detailstockentries/view', array('iddetail'=>$data['iddetail']));
    }
    
+	public static function decodeDeleteDetailBarcodePrintUrl($data)
+   {
+      //return print_r($data);
+      return Yii::app()->createUrl('/barcodeprint/detailbarcodeprints/delete', array('iddetail'=>$data['iddetail']));
+   }
+   
+   public static function decodeUpdateDetailBarcodePrintUrl($data)
+   {
+      //return print_r($data);
+      return Yii::app()->createUrl('/barcodeprint/detailbarcodeprints/update', array('iddetail'=>$data['iddetail']))  ;
+   }
+   
+   public static function decodeViewDetailBarcodePrintUrl($data)
+   {
+      //return print_r($data);
+      return Yii::app()->createUrl('/barcodeprint/detailbarcodeprints/view', array('iddetail'=>$data['iddetail']));
+   }
+   
    public static function decodeDeleteDetailPurchasesReceiptUrl($data)
    {
    	//return print_r($data);

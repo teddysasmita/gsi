@@ -290,7 +290,7 @@ class DefaultController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
-    	}
+    }
         
         protected function afterInsert(& $model)
         {

@@ -46,7 +46,8 @@ return array(
             'inputinventorytaking',
             'inventorycosting',
             'purchasesretur',
-            'salespos'
+            'salespos',
+            'barcodeprint'
         ),
 
         

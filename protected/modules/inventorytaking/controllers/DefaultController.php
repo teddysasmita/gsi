@@ -398,7 +398,8 @@ EOS;
 			
 			Yii::import('application.vendors.tcpdf.*');
 			require_once ('tcpdf.php');
-			$mypdf=new Stockcardpdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+			$mypdf=new Stockcardpdf(PDF_PAGE_ORIENTATION, PDF_UNIT, 
+					PDF_PAGE_FORMAT, true, 'UTF-8', false);
 			$mypdf->init();
 			foreach($detailData as $data) {
 				
@@ -455,7 +456,6 @@ EOS;
 							$stockData);
 					//echo 'boom<br>';
 					$mypdf->display();
-					$command=Yii::app()->db->createCommand($sql1);
 				}
 				$mypdf->Output('KartuStok'.'-'.date('Ymd').'.pdf', 'I');
 			}
