@@ -7,7 +7,9 @@
  * @property string $id
  * @property string $name
  * @property string $idbank
- * @property string $type
+ * @property string $company
+ * @property string $surchargeamount
+ * @property string $surchargepct
  * @property string $userlog
  * @property string $datetimelog
  */
@@ -29,13 +31,14 @@ class Salesposcards extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, name, idbank, type, userlog, datetimelog', 'required'),
+			array('id, name, idbank, company, surchargeamount, surchargepct, userlog, datetimelog', 'required'),
 			array('id, idbank, userlog', 'length', 'max'=>21),
-			array('name, type', 'length', 'max'=>100),
+			array('surchargeamount, surchargepct', 'numerical'),
+			array('name, company', 'length', 'max'=>100),
 			array('datetimelog', 'length', 'max'=>19),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, idbank, type, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('id, name, idbank, company, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -59,7 +62,9 @@ class Salesposcards extends CActiveRecord
 			'id' => 'ID',
 			'name' => 'Nama',
 			'idbank' => 'Bank Penerbit',
-			'type' => 'Jenis',
+			'company' => 'Jaringan',
+			'surchargeamount' => 'Biaya Admin',
+			'surchargepct' => 'Biaya Admin (%)',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
 		);

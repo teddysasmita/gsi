@@ -27,7 +27,9 @@ $this->menu=array(
 			'name'=>'idbank',
 			'value'=>lookup::BankNameFromID($model->idbank)
 		),
-		'type',
+		'company',
+		'surchargeamount',
+		'surchargepct',
 		array(
 			'name'=>'userlog',
 			'value'=>lookup::UserNameFromUserID($model->userlog)

@@ -67,11 +67,25 @@ EOS;
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'type'); ?>
-		<?php echo $form->textField($model,'type',array('size'=>50,'maxlength'=>100)); ?>
-		<?php echo $form->error($model,'type'); ?>
+		<?php echo $form->labelEx($model,'company'); ?>
+		<?php echo $form->dropDownList($model,'company',array('Visa'=>'Visa',
+			'Master Card'=>'Master Card', 'Alto'=>'Alto'), array('empty'=>'Harap Pilih'));
+		?>
+		<?php echo $form->error($model,'company'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'surchargeamount'); ?>
+		<?php echo $form->textField($model,'surchargeamount',array('size'=>50)); ?>
+		<?php echo $form->error($model,'surchargeamount'); ?>
+	</div>
+	
+	<div class="row">
+		<?php echo $form->labelEx($model,'surchargepct'); ?>
+		<?php echo $form->textField($model,'surchargepct',array('size'=>50)); ?>
+		<?php echo $form->error($model,'surchargepct'); ?>
+	</div>
+	
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
 	</div>
