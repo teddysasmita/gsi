@@ -15,7 +15,7 @@ $this->menu=array(
 	array('label'=>'Pencarian Data', 'url'=>array('admin')),
    array('label'=>'Sejarah', 'url'=>array('history', 'id'=>$model->id)),
 	array('label'=>'Cetak Kartu Stok', 'url'=>array('printstockcard', 'id'=>$model->id)),
-	
+	array('label'=>'Cetak Kartu Stok Kosong', 'url'=>array('printblankstockcard', 'id'=>$model->id)),
 );
 ?>
 

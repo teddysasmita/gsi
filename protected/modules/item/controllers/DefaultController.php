@@ -354,4 +354,31 @@ EOS;
         		throw new CHttpException(404,'You have no authorization for this operation.');
         	};
        	}
+       	
+       	public function actionPrintblankstockcard($id)
+       	{
+       		if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+       				Yii::app()->user->id))  {
+       			$this->trackActivity('v');
+       			 
+       			if (isset($_POST['idwarehouse'])) {
+       				if (strlen($_POST['idwarehouse'])) {
+       					Yii::import('application.vendors.tcpdf.*');
+       					require_once ('tcpdf.php');
+       					$this->render('print_stockcard', array(
+       						'detailData'=>array(),
+       						'itemname'=>lookup::ItemNameFromItemID($_POST['id']),
+       						'warehousecode'=>lookup::WarehouseNameFromWarehouseID($_POST['idwarehouse'])
+       					));
+       				}
+       			}
+       									//else {
+       			$warehouses=Yii::app()->db->createCommand()
+       				->select('id, code')->from('warehouses')->queryAll();
+       			$this->render('stockcard',array( 'warehouses'=>$warehouses, 
+       				'id'=>$id));
+       		} else {
+       			throw new CHttpException(404,'You have no authorization for this operation.');
+       		};
+       	}
 }
