@@ -214,7 +214,6 @@ class DefaultController extends Controller
 		
          if(isset($_POST['authassignment']))
          {
-         	print_r($_POST);
             $model->attributes=$_POST['authassignment'];
             if($model->save()) {
                $this->redirect(array('view', 'id'=>$id));

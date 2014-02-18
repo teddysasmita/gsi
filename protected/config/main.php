@@ -47,7 +47,8 @@ return array(
             'inventorycosting',
             'purchasesretur',
             'salespos',
-            'barcodeprint'
+            'barcodeprint',
+            'sellingprice'
         ),
 
         
