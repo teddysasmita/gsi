@@ -22,7 +22,7 @@
 		<?php echo $form->labelEx($model,'Pilih Hak Operasi'); ?>
 		<?php 
 			$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
-				'name'=>'authassignment[itemname]',
+				'name'=>'AuthAssignment[itemname]',
 				'sourceUrl'=>Yii::app()->createUrl('LookUp/getUserOperation'),
 				// additional javascript options for the autocomplete plugin
 				'options'=>array(

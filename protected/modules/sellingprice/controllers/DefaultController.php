@@ -162,21 +162,22 @@ class DefaultController extends Controller
 	 */
 	public function actionAdmin()
 	{
-            if(Yii::app()->authManager->checkAccess($this->formid.'-List', 
-                Yii::app()->user->id)) {
-                $this->trackActivity('s');
-               
-                $model=new Sellingprices('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Sellingprices']))
-			$model->attributes=$_GET['Sellingprices'];
+		if(Yii::app()->authManager->checkAccess($this->formid.'-List', 
+			Yii::app()->user->id)) {
+			
+			$this->trackActivity('s');
+			$model=new Sellingprices('search');
+			$model->unsetAttributes();  // clear any default values
+			
+			if(isset($_GET['Sellingprices']))
+				$model->attributes=$_GET['Sellingprices'];
 
-		$this->render('admin',array(
-			'model'=>$model,
-		));
-            } else {
-                throw new CHttpException(404,'You have no authorization for this operation.');
-            }
+			$this->render('admin',array(
+				'model'=>$model,
+			));
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		}
 	}
 
          public function actionHistory($id)

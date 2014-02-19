@@ -206,15 +206,15 @@ class DefaultController extends Controller
       
       public function actionAssignoperation($id)
       {
-         $model=new authassignment;
+         $model=new AuthAssignment;
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
 
 		
-         if(isset($_POST['authassignment']))
+         if(isset($_POST['AuthAssignment']))
          {
-            $model->attributes=$_POST['authassignment'];
+            $model->attributes=$_POST['AuthAssignment'];
             if($model->save()) {
                $this->redirect(array('view', 'id'=>$id));
             }
@@ -227,14 +227,14 @@ class DefaultController extends Controller
       
       public function actionAssigntask($id)
       {
-         $model=new authassignment;
+         $model=new AuthAssignment;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-         if(isset($_POST['authassignment']))
+         if(isset($_POST['AuthAssignment']))
          {
-            $model->attributes=$_POST['authassignment'];
+            $model->attributes=$_POST['AuthAssignment'];
             if($model->save()) {
                $this->redirect(array('view', 'id'=>$id));
             }
@@ -247,14 +247,14 @@ class DefaultController extends Controller
       
         public function actionAssignrole($id)
         {
-             $model=new authassignment;
+             $model=new AuthAssignment;
 
                 // Uncomment the following line if AJAX validation is needed
                 // $this->performAjaxValidation($model);
 
-             if(isset($_POST['authassignment']))
+             if(isset($_POST['AuthAssignment']))
              {
-                $model->attributes=$_POST['authassignment'];
+                $model->attributes=$_POST['AuthAssignment'];
                 if($model->save()) {
                    $this->redirect(array('view', 'id'=>$id));
                 }
@@ -267,7 +267,7 @@ class DefaultController extends Controller
       
         public function loadModelAssignment($id)
 	{
-            $model=authassignment::model()->findByPk($id);
+            $model=AuthAssignment::model()->findByPk($id);
             if($model===null)
                     throw new CHttpException(404,'The requested page does not exist.');
             return $model;
