@@ -21,11 +21,18 @@
 	<div class="row">
 		<?php echo $form->labelEx($model,'Select Role'); ?>
 		<?php 
-               $res=Yii::app()->authdb->createCommand('select name, type, description from AuthItem '.
-                  'where type=2')->queryAll();
-               $datas=CHtml::listData($res,'name', 'description');
-               echo $form->listBox($model,'child',$datas, array()); 
-            ?>
+			$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
+				'name'=>'authitemchild[child]',
+				'sourceUrl'=>Yii::app()->createUrl('LookUp/getUserRole'),
+				// additional javascript options for the autocomplete plugin
+				'options'=>array(
+						'minLength'=>'2',
+				),
+				'htmlOptions'=>array(
+						'style'=>'height:20px;',
+				),
+			));
+		?>
 		<?php echo $form->error($model,'child'); ?>
 	</div>
 

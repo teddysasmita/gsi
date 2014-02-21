@@ -212,13 +212,12 @@ class DefaultController extends Controller
 		$this->performAjaxValidation($model);
 
 		
-         if(isset($_POST['AuthAssignment']))
-         {
-            $model->attributes=$_POST['AuthAssignment'];
+         if(isset($_POST['AuthAssignment'])) {
+         	$model->attributes=$_POST['AuthAssignment'];
             if($model->save()) {
                $this->redirect(array('view', 'id'=>$id));
             }
-         }
+         };
          
          $this->render('assignoperation',array(
 			'model'=>$model,'userid'=>$id

@@ -20,12 +20,19 @@
       
 	<div class="row">
 		<?php echo $form->labelEx($model,'Select Task'); ?>
-		<?php 
-               $res=Yii::app()->authdb->createCommand('select name, type, description from AuthItem '.
-                  'where type=1')->queryAll();
-               $datas=CHtml::listData($res,'name', 'description');
-               echo $form->listBox($model,'child',$datas, array()); 
-            ?>
+		 <?php 
+			$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
+				'name'=>'authitemchild[child]',
+				'sourceUrl'=>Yii::app()->createUrl('LookUp/getUserTask'),
+				// additional javascript options for the autocomplete plugin
+				'options'=>array(
+						'minLength'=>'2',
+				),
+				'htmlOptions'=>array(
+						'style'=>'height:20px;',
+				),
+			));
+		?>
 		<?php echo $form->error($model,'child'); ?>
 	</div>
 
