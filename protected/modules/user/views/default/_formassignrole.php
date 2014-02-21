@@ -22,7 +22,7 @@
 		<?php echo $form->labelEx($model,'Select Role'); ?>
 		<?php 
 			$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
-				'name'=>'authassignment[itemname]',
+				'name'=>'authassignment[child]',
 				'sourceUrl'=>Yii::app()->createUrl('LookUp/getUserRole'),
 				// additional javascript options for the autocomplete plugin
 				'options'=>array(
