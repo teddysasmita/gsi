@@ -22,7 +22,7 @@
 		<?php echo $form->labelEx($model,'Select Task'); ?>
 		<?php 
 			$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
-				'name'=>'authassignment[itemname]',
+				'name'=>'AuthAssignment[itemname]',
 				'sourceUrl'=>Yii::app()->createUrl('LookUp/getUserTask'),
 				// additional javascript options for the autocomplete plugin
 				'options'=>array(
