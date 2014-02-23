@@ -16,12 +16,15 @@ $this->pageTitle=Yii::app()->name;
 <h3><?php echo CHtml::link('Pembayaran ke Pemasok', Yii::app()->createUrl('purchasespayment'))?></h3>
 <h3><?php echo CHtml::link('Memo Pembelian', Yii::app()->createUrl('purchasesmemo'))?></h3>
 <h3><?php echo CHtml::link('Retur Pembelian', Yii::app()->createUrl('purchasesretur'))?></h3>
+<h3><?php echo CHtml::link('* Penerimaan Barang', Yii::app()->createUrl('purchasesstockentries'))?></h3>
 
 <h2>Bagian Penjualan</h2>
 <h3><?php echo CHtml::link('Pesanan Pembeli', Yii::app()->createUrl('salesorder'))?></h3>
 <h3><?php echo CHtml::link('Pengiriman Barang ke Pelanggan', Yii::app()->createUrl('stockdeliveries/index'))?></h3>
 <h3><?php echo CHtml::link('Penerimaan Pembayaran dari Pelanggan', Yii::app()->createUrl('receipts/index'))?></h3>
 <h3><?php echo CHtml::link('Penentuan Harga Jual', Yii::app()->createUrl('sellingprice'))?></h3>
+<h3><?php echo CHtml::link('Pembatalan Penjualan', Yii::app()->createUrl('salescancel'))?></h3>
+<h3><?php echo CHtml::link('Perubahan Penjualan', Yii::app()->createUrl('salesreplace'))?></h3>
 
 <h2>Bagian Gudang</h2>
 <h3><?php echo CHtml::link('Terima Barang', Yii::app()->createUrl('stockentries'))?></h3>

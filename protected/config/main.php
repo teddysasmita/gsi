@@ -48,7 +48,10 @@ return array(
             'purchasesretur',
             'salespos',
             'barcodeprint',
-            'sellingprice'
+            'sellingprice',
+            'salescancel',
+            'salesreplace',
+            'purchasesstockentries'
         ),
 
         
