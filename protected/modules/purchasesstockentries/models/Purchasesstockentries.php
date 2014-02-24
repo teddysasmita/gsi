@@ -61,7 +61,7 @@ class Purchasesstockentries extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'regnum'=>'Nomor Urut',	
+			'regnum'=>'Nomor LPB',	
 			'idatetime' => 'Tanggal',
 			'ponum' => 'Nomor PO',
 			'sjnum' => 'Nomor SJ',
