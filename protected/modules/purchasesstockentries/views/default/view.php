@@ -29,14 +29,14 @@ $this->menu=array(
 		//'id',
 		'regnum',
 		'idatetime',
-		array(
-         'label'=>'Nomor SJ',
-         'value'=>$model->sjnum,
-      ),
+		'sjnum',
+		'ponum',
+				
       array(
          'label'=>'Nama Pemasok',
          'value'=>lookup::SupplierNameFromSupplierID($model->idsupplier)
       ),
+		'remark',
 		array(
                'label'=>'Userlog',
                'value'=>lookup::UserNameFromUserID($model->userlog),

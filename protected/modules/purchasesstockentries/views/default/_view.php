@@ -16,7 +16,19 @@
 	<b><?php echo CHtml::encode($data->getAttributeLabel('idsupplier')); ?>:</b>
 	<?php echo CHtml::encode(lookup::SupplierNameFromSupplierID($data->idsupplier)); ?>
 	<br />
-      
+    
+    <b><?php echo CHtml::encode($data->getAttributeLabel('ponum')); ?>:</b>
+	<?php echo CHtml::encode($data->ponum); ?>
+	<br />
+    
+    <b><?php echo CHtml::encode($data->getAttributeLabel('sjnum')); ?>:</b>
+	<?php echo CHtml::encode($data->sjnum); ?>
+	<br />
+	  
+    <b><?php echo CHtml::encode($data->getAttributeLabel('remark')); ?>:</b>
+	<?php echo CHtml::encode($data->remark); ?>
+	<br />
+    
     <b><?php echo CHtml::encode($data->getAttributeLabel('userlog')); ?>:</b>
 	<?php echo CHtml::encode(lookup::UserNameFromUserID($data->userlog)); ?>
 	<br />
