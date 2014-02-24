@@ -35,7 +35,8 @@ class Purchasesstockentries extends CActiveRecord
 			array('id, idatetime, regnum,ponum, sjnum, idsupplier, userlog, datetimelog', 'required'),
 			array('id, idsupplier, userlog', 'length', 'max'=>21),
 			array('idatetime, datetimelog', 'length', 'max'=>19),
-			array('ponum, sjnum, regnum', 'length', 'max'=>12),
+			array('regnum', 'length', 'max'=>12),
+			array('ponum, sjnum', 'length', 'max'=>30),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, idatetime, regnum, ponum, sjnum, idsupplier, userlog, datetimelog', 'safe', 'on'=>'search'),
