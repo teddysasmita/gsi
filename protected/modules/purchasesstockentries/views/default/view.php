@@ -76,7 +76,7 @@ $this->menu=array(
 			'name'=>'sellprice',
 			'type'=>'number'
 		),
-			/*array(
+			array(
                   'class'=>'CButtonColumn',
                   'buttons'=> array(
                       'delete'=>array(
@@ -85,12 +85,12 @@ $this->menu=array(
                      'update'=>array(
                         'visible'=>'false'
                      ),
-					'view'=>array(
+					/*'view'=>array(
                         'visible'=>'false'
-                     ),
+                     ),*/
                   ),
-                  //'viewButtonUrl'=>"Action::decodeViewDetailStockEntryUrl(\$data)",
-              )*/
+                  'viewButtonUrl'=>"Action::decodeViewDetailPurchasesStockEntryUrl(\$data)",
+              )
          ),
    ));	
  ?>

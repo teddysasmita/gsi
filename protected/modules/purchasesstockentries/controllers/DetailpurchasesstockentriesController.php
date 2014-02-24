@@ -69,6 +69,7 @@ class DetailpurchasesstockentriesController extends Controller
                     //posting into session
                     $temp[]=$_POST['Detailpurchasesstockentries'];
                     
+                    
                     if ($model->validate()) {
                         Yii::app()->session['Detailpurchasesstockentries']=$temp;
                         if ($master=='create')
@@ -108,13 +109,13 @@ class DetailpurchasesstockentriesController extends Controller
                     $model->attributes=$this->loadSession($iddetail);
                 }
                 $this->afterEdit($model);
-                    
                 // Uncomment the following line if AJAX validation is needed
                 $this->performAjaxValidation($model);
                 
-               if(isset($_POST['Detailpurchasesstockentries'])) {
-                  $temp=Yii::app()->session['Detailpurchasesstockentries'];
-                  $model->attributes=$_POST['Detailpurchasesstockentries'];
+                
+			if(isset($_POST['Detailpurchasesstockentries'])) {
+				$temp=Yii::app()->session['Detailpurchasesstockentries'];
+				$model->attributes=$_POST['Detailpurchasesstockentries'];
                   foreach ($temp as $tk=>$tv) {
                      if($tv['iddetail']==$_POST['Detailpurchasesstockentries']['iddetail']) {
                          $temp[$tk]=$_POST['Detailpurchasesstockentries'];

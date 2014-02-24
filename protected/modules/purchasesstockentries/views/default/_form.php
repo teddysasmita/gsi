@@ -164,7 +164,7 @@ EOS;
 					'name'=>'sellprice',
 					'type'=>'number'
 				),
-              /*array(
+              array(
                   'class'=>'CButtonColumn',
                   'buttons'=> array(
                       'delete'=>array(
@@ -173,11 +173,12 @@ EOS;
                      'view'=>array(
                         'visible'=>'false'
                      ),
-					'update'=>array(
+					/*'update'=>array(
 						'visible'=>'false'
-					)
+					)*/
                   ),
-              )*/
+					'updateButtonUrl'=>"Action::decodeUpdateDetailPurchasesStockEntryUrl(\$data)"
+              )
           ),
     ));
     

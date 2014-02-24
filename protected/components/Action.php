@@ -406,6 +406,17 @@ class Action extends CComponent {
       return Yii::app()->createUrl('warehouse/default/restore', array('idtrack'=>$data['idtrack']));
    }
    
+   public static function decodeViewDetailPurchasesStockEntryUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('purchasesstockentries/detailpurchasesstockentries/view', array('iddetail'=>$data['iddetail']));
+   }
+   
+   public static function decodeUpdateDetailPurchasesStockEntryUrl($data)
+   {
+   		return Yii::app()->createUrl('purchasesstockentries/detailpurchasesstockentries/update', array('iddetail'=>$data['iddetail']));
+   }
+   
    public static function addFinancePayment($receipientname, $date, $duedate, $amount)
    {
 		Yii::app()->db->createCommand()

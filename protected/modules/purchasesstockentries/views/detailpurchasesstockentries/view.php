@@ -16,8 +16,9 @@ $this->menu=array(
 	array('label'=>'Update Detailpurchasesstockentries', 'url'=>array('update', 'id'=>$model->iddetail)),
 	array('label'=>'Delete Detailpurchasesstockentries', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->iddetail),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Manage Detailpurchasesstockentries', 'url'=>array('admin')),
-   array('label'=>'Ubah Detil', 'url'=>array('/purchasesorder/detailpurchasesstockentries/update',
-      'iddetail'=>$model->iddetail)),*/
+   */
+	array('label'=>'Ubah Detil', 'url'=>array('/purchasesstockentries/detailpurchasesstockentries/update',
+      'iddetail'=>$model->iddetail)),
    array('label'=>'Sejarah', 'url'=>array('history', 'iddetail'=>$model->iddetail)),
 );
 ?>
@@ -34,9 +35,18 @@ $this->menu=array(
                'value'=>lookup::ItemNameFromItemID($model->iditem)
             ),
 		//'idunit',
-		'qty',
-		'buyprice',
-		'sellprice',
+		array(
+			'name'=>'qty',
+			'type'=>'number'
+		),
+		array(
+				'name'=>'buyprice',
+				'type'=>'number'
+		),
+		array(
+				'name'=>'sellprice',
+				'type'=>'number'
+		),
 		array(
                'label'=>'Userlog',
                'value'=>lookup::UserNameFromUserID($model->userlog),
