@@ -53,7 +53,6 @@ EOS;
         echo $form->hiddenField($model, 'idsupplier');
         echo $form->hiddenField($model, 'userlog');
         echo $form->hiddenField($model, 'datetimelog');
-        echo $form->hiddenField($model, 'regnum');
       ?>
         
 	<div class="row">
@@ -74,6 +73,14 @@ EOS;
                ));
             ?>
 		<?php echo $form->error($model,'idatetime'); ?>
+	</div>
+	
+	<div class="row">
+		<?php echo $form->labelEx($model,'regnum'); ?>
+		<?php 
+         	echo $form->textField($model,'regnum'); 
+      	?>
+		<?php echo $form->error($model,'regnum'); ?>
 	</div>
 
 	<div class="row">

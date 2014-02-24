@@ -495,17 +495,16 @@ class DefaultController extends Controller
          $idmaker=new idmaker();
          $model->id=$idmaker->getCurrentID2();
          $model->idatetime=$idmaker->getDateTime();
-         $model->regnum=$idmaker->getRegNum($this->formid);
          $model->userlog=Yii::app()->user->id;
          $model->datetimelog=$idmaker->getDateTime();
      }
 
      protected function afterPost(& $model)
      {
-         $idmaker=new idmaker();
+         /*$idmaker=new idmaker();
          $idmaker->saveRegNum($this->formid, $model->regnum);
          
-         /*$this->setStatusPO($model->idpurchaseorder,
+         $this->setStatusPO($model->idpurchaseorder,
             Yii::app()->session['Detailpurchasesstockentries']);
          */
      }
@@ -516,7 +515,7 @@ class DefaultController extends Controller
 
          $model->userlog=Yii::app()->user->id;
          $model->datetimelog=$idmaker->getDateTime();
-         $model->regnum=$idmaker->getRegNum($this->formid);
+         //$model->regnum=$idmaker->getRegNum($this->formid);
      }
 
      protected function    beforeDelete(& $model)
