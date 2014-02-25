@@ -150,7 +150,7 @@ class DefaultController extends Controller
                 
                 $dataProvider=new CActiveDataProvider('Sellingprices', array(
 					'criteria'=>array(
-                		'order'=>'id desc'
+                		'order'=>'regnum desc'
                 )));
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
