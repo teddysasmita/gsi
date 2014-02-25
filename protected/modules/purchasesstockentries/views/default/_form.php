@@ -167,9 +167,9 @@ EOS;
               array(
                   'class'=>'CButtonColumn',
                   'buttons'=> array(
-                      'delete'=>array(
+                      /*'delete'=>array(
                        'visible'=>'false'
-                      ),
+                      ),*/
                      'view'=>array(
                         'visible'=>'false'
                      ),
@@ -177,6 +177,7 @@ EOS;
 						'visible'=>'false'
 					)*/
                   ),
+					'deleteButtonUrl'=>"Action::decodeDeleteDetailPurchasesStockEntryUrl(\$data)",
 					'updateButtonUrl'=>"Action::decodeUpdateDetailPurchasesStockEntryUrl(\$data)"
               )
           ),

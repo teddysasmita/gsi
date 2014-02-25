@@ -18,7 +18,7 @@ class DetailpurchasesstockentriesController extends Controller
 	{
 		return array(
 			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
+			//'postOnly + delete', // we only allow deletion via POST request
 		);
 	}
 
@@ -148,6 +148,7 @@ class DetailpurchasesstockentriesController extends Controller
 	 */
 	public function actionDelete($iddetail)
 	{
+		
             if(Yii::app()->authManager->checkAccess($this->formid.'-Delete', 
                     Yii::app()->user->id))  {
                 
@@ -170,7 +171,7 @@ class DetailpurchasesstockentriesController extends Controller
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('/purchasesstockentries/default/index'));
             } else {
                 throw new CHttpException(404,'You have no authorization for this operation.');
             }

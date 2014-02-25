@@ -168,9 +168,8 @@ class DefaultController extends Controller
                            throw new CHttpException(404,'There is an error in detail posting');
                          }
                      };
-                     
-                     if(isset(Yii::app()->session['DeleteDetailpurchasesstockentries'])) {
-                         $deletedetails=Yii::app()->session['DeleteDetailpurchasesstockentries'];
+                     if(isset(Yii::app()->session['Deletedetailpurchasesstockentries'])) {
+                         $deletedetails=Yii::app()->session['Deletedetailpurchasesstockentries'];
                          $respond=$respond&&$this->deleteDetails($deletedetails);
                          if(!$respond) {
                            throw new CHttpException(404,'There is an error in detail deletion');
@@ -180,7 +179,7 @@ class DefaultController extends Controller
                      if($respond) {
                          Yii::app()->session->remove('Purchasesstockentries');
                          Yii::app()->session->remove('Detailpurchasesstockentries');
-                         Yii::app()->session->remove('DeleteDetailpurchasesstockentries');
+                         Yii::app()->session->remove('Deletedetailpurchasesstockentries');
                          $this->redirect(array('view','id'=>$model->id));
                      }
                  }
@@ -469,7 +468,7 @@ class DefaultController extends Controller
              $detailmodel=Detailpurchasesstockentries::model()->findByPk($row['iddetail']);
              if($detailmodel) {
                  $this->tracker->init();
-                 $this->trackActivity('d', $this->__DETAILFORMID);
+                 $this->trackActivity('d');
                  $this->tracker->delete('detailpurchasesstockentries', $detailmodel->id);
                  $respond=$detailmodel->delete();
                  if (!$respond) {

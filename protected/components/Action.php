@@ -416,6 +416,11 @@ class Action extends CComponent {
    {
    		return Yii::app()->createUrl('purchasesstockentries/detailpurchasesstockentries/update', array('iddetail'=>$data['iddetail']));
    }
+
+   public static function decodeDeleteDetailPurchasesStockEntryUrl($data)
+   {
+   	return Yii::app()->createUrl('purchasesstockentries/detailpurchasesstockentries/delete', array('iddetail'=>$data['iddetail']));
+   }
    
    public static function addFinancePayment($receipientname, $date, $duedate, $amount)
    {
