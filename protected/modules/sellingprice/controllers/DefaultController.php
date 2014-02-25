@@ -148,7 +148,10 @@ class DefaultController extends Controller
                 Yii::app()->user->id)) {
                 $this->trackActivity('l');
                 
-                $dataProvider=new CActiveDataProvider('Sellingprices');
+                $dataProvider=new CActiveDataProvider('Sellingprices', array(
+					'criteria'=>array(
+                		'order'=>'id desc'
+                )));
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
