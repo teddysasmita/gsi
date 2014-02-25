@@ -15,10 +15,10 @@ $this->menu=array(
 	array('label'=>'Create Purchasesstockentries', 'url'=>array('create')),
 	array('label'=>'View Purchasesstockentries', 'url'=>array('view', 'id'=>$model->id)),
 	array('label'=>'Manage Purchasesstockentries', 'url'=>array('admin')),
-    array('label'=>'Tambah Detil', 'url'=>array('detailpurchasesstockentries/create', 
+    */
+	array('label'=>'Tambah Detil', 'url'=>array('detailpurchasesstockentries/create', 
        'id'=>$model->id, 'command'=>'update', 'regnum'=>$model->regnum),
           'linkOptions'=>array('id'=>'adddetail')),
-    */       
 );
 ?>
 
