@@ -61,11 +61,11 @@ class Salescancel extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'idatetime' => 'Idatetime',
-			'regnum' => 'Regnum',
-			'invnum' => 'Invnum',
+			'idatetime' => 'Tanggal',
+			'regnum' => 'Nomor Urut',
+			'invnum' => 'Nomor Faktur',
 			'total' => 'Total',
-			'reason' => 'Reason',
+			'reason' => 'Alasan',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
 		);

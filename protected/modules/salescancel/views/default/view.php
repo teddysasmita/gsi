@@ -27,7 +27,10 @@ $this->menu=array(
 		'regnum',
 		'invnum',
 		'reason',
-		'total'
+		array(
+			'name'=>'total',
+			'type'=>'number'
+		),
 		//'userlog',
 		//'datetimelog',
 	),

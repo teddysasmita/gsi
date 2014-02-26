@@ -73,34 +73,37 @@ class DefaultController extends Controller
 	 */
 	public function actionCreate()
 	{
-            if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
                     Yii::app()->user->id))  {            
 
-                $this->state='c';
-                $this->trackActivity('c');
+			$this->state='c';
+			$this->trackActivity('c');
+			$model=new Salescancel;
+			$this->afterInsert($model);
                 
-                $model=new Salescancel;
-                $this->afterInsert($model);
-                
-		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
+			// Uncomment the following line if AJAX validation is needed
+			$this->performAjaxValidation($model);
                         
-		if(isset($_POST['Salescancel'])) {
-                    $model->attributes=$_POST['Salescancel'];
-                    $this->beforePost($model);
-                    if($model->save()) {
-                        $this->afterPost($model);
-                        $this->redirect(array('view','id'=>$model->id));
-                    }    
-                }
+			if(isset($_POST['Salescancel'])) {
+				$model->attributes=$_POST['Salescancel'];
+				if(isset($_POST['yt0'])) {
+					$this->beforePost($model);
+					if($model->save()) {
+						$this->afterPost($model);
+						$this->redirect(array('view','id'=>$model->id));
+					};
+				} else if ($_POST['command'] == 'setInvnum') { 
+					$model->total = $this->loadInvoice($model->invnum);
+				}
+			}
                   
 
-		$this->render('create',array(
-			'model'=>$model,
-		));
-            } else {
-                throw new CHttpException(404,'You have no authorization for this operation.');
-            }
+			$this->render('create',array(
+				'model'=>$model,
+			));
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		}
 	}
 
 	/**
@@ -110,36 +113,40 @@ class DefaultController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-            if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
-                    Yii::app()->user->id))  {
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
+			Yii::app()->user->id))  {
                 
-                $this->state='u';
-                $this->trackActivity('u');
+			$this->state='u';
+			$this->trackActivity('u');
                 
-                $model=$this->loadModel($id);
-                $this->afterEdit($model);
+			$model=$this->loadModel($id);
+			$this->afterEdit($model);
 
-		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
+			// Uncomment the following line if AJAX validation is needed
+			$this->performAjaxValidation($model);
 
-		if(isset($_POST['Salescancel']))
-		{
-                    $model->attributes=$_POST['Salescancel'];
-                    
-                    $this->beforePost($model);    
-                    $this->tracker->modify('salescancel', $id);
-                    if($model->save()) {
-                        $this->afterPost($model);                    
-                        $this->redirect(array('view','id'=>$model->id));
-                    }
+			if(isset($_POST['Salescancel']))
+			{
+				$oldinvnum = $model->invnum;
+				$model->attributes=$_POST['Salescancel'];
+				if(isset($_POST['yt0'])) {    
+                	$this->beforePost($model);    
+					$this->tracker->modify('salescancel', $id);
+					if($model->save()) {
+						$this->afterPost($model);
+						if($oldinvnum !== $model->invnum)
+							$this->setInvStatus($oldinvnum, '1');
+						$this->redirect(array('view','id'=>$model->id));
+					}
+                } else if ($_POST['command'] == 'setInvnum') {
+                	$model->total = $this->loadInvoice($model->invnum);
+                }
+			}
+
+			$this->render('update',array('model'=>$model));
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
 		}
-
-		$this->render('update',array(
-                    'model'=>$model,
-		));
-            } else {
-                throw new CHttpException(404,'You have no authorization for this operation.');
-            }
 	}
 
 	/**
@@ -296,13 +303,15 @@ class DefaultController extends Controller
         {
             $idmaker=new idmaker();
             $model->id=$idmaker->getcurrentID2();  
+            $model->idatetime = $idmaker->getDateTime();
             $model->userlog=Yii::app()->user->id;
-            $model->datetimelog=$idmaker->getDateTime();    
+            $model->datetimelog=$model->idatetime;    
         }
         
         protected function afterPost(& $model)
         {
-            
+        	idmaker::saveRegnum($this->formid, $model->regnum);
+        	$this->setInvStatus($model->invnum, '0');
         }
         
         protected function beforePost(& $model)
@@ -311,6 +320,7 @@ class DefaultController extends Controller
             
             $model->userlog=Yii::app()->user->id;
             $model->datetimelog=$idmaker->getDateTime();
+            $model->regnum=$idmaker->getRegnum($this->formid);
         }
         
         protected function beforeDelete(& $model)
@@ -333,5 +343,65 @@ class DefaultController extends Controller
             $this->tracker=new Tracker();
             $this->tracker->init();
             $this->tracker->logActivity($this->formid, $action);
+        }
+        
+        protected function loadInvoice($invnum)
+        {
+        	$id=Yii::app()->db->createCommand()
+        		->select('id')->from('salespos')
+        		->where('status=:p_status and regnum=:p_regnum',
+                	array(':p_status'=>'1', ':p_regnum'=>$invnum))
+                ->queryScalar();
+        	if ($id !== FALSE) {
+        		$salesCash=Yii::app()->db->createCommand()
+        			->select('(cash-cashreturn) as total')
+        			->from('salespos')
+        			->where('regnum = :p_regnum',
+        				array(':p_regnum'=>$invnum))
+        			->queryScalar();
+        		//echo $salesCash. ' ';
+        		if (!$salesCash)
+        			$salesCash = 0;
+        		$salesNonCash=Yii::app()->db->createCommand()
+        			->select('sum(b.amount + b.surcharge) as total')
+        			->from('salespos a')
+        			->join('posreceipts b', "b.idpos = a.id")
+        			->where('a.regnum = :p_regnum',
+        				array(':p_regnum'=>$invnum))
+        			->queryScalar();
+        		//echo $salesNonCash. ' ';
+        		if (!$salesNonCash)
+        			$salesNonCash = 0;
+        		$receivableCash=Yii::app()->db->createCommand()
+        			->select('(a.cash-a.cashreturn) as total')
+        			->from('receivablespos a')
+        			->where('a.invnum = :p_regnum',
+        				array(':p_regnum'=>$invnum))
+        			->queryScalar();
+        		//echo $receivableCash. ' ';
+        		if (!$receivableCash)
+        			$receivableCash = 0;
+        		$receivableNonCash=Yii::app()->db->createCommand()
+        			->select('sum(b.amount+b.surcharge) as total')
+        			->from('receivablespos a')
+        			->join('posreceipts b', "b.idpos = a.id")
+        			->where('a.regnum = :p_regnum',
+        				array(':p_regnum'=>$invnum))
+        			->querySCalar();
+        		//echo $receivableNonCash. ' ';
+        		if (!$receivableNonCash)
+        			$receivableNonCash = 0;
+        		$total = $salesCash+$salesNonCash+$receivableCash+$receivableNonCash;
+        		//echo $total;
+        		return $total;
+        	} else
+        	return 0;
+        }	
+        
+        protected static function setInvStatus($invnum, $status)
+        {
+ 			$sql="update salespos set status = :p_status where regnum = :p_regnum ";
+        	$stmt=Yii::app()->db->createCommand($sql)
+        		->execute(array(':p_regnum'=>$invnum, ':p_status'=>$status));
         }
 }

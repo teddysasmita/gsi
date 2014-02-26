@@ -21,7 +21,6 @@
 	<?php echo CHtml::encode($data->userlog); ?>
 	<br />
 
-	<?php 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('datetimelog')); ?>:</b>
 	<?php echo CHtml::encode($data->datetimelog); ?>
 	<br />

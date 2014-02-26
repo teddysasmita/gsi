@@ -4,6 +4,18 @@
 /* @var $form CActiveForm */
 ?>
 
+
+<?php
+
+$myscript=<<<EOS
+	$('#Salescancel_invnum').change(function() {
+		$('#command').val('setInvnum');	
+		$('#salescancel-form').submit();
+	});
+EOS;
+Yii::app()->clientScript->registerScript('myscript', $myscript, CClientScript::POS_READY);
+?>
+
 <div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -27,7 +39,7 @@
 		<?php 
             //echo $form->dateField($model,'idatetime',array('size'=>19,'maxlength'=>19)); 
             $this->widget('zii.widgets.jui.CJuiDatePicker',array(
-               'name'=>'Salesorders[idatetime]',
+               'name'=>'Salescancel[idatetime]',
                   // additional javascript options for the date picker plugin
                'options'=>array(
                   'showAnim'=>'fold',
@@ -45,13 +57,17 @@
    
 	<div class="row">
 		<?php echo $form->labelEx($model,'invnum'); ?>
-		<?php echo $form->textField($model,'invnum',array('size'=>60,'maxlength'=>12)); ?>
+		<?php 
+			echo $form->textField($model,'invnum',array('size'=>20,'maxlength'=>12)); 
+			//echo CHtml::Button('Cari', array('id'=>'setInvnum'));
+		?>
 		<?php echo $form->error($model,'invnum'); ?>
+		
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'reason'); ?>
-		<?php echo $form->textField($model,'reason',array('cols'=>60,'rows'=>100)); ?>
+		<?php echo $form->textArea($model,'reason',array('cols'=>40,'rows'=>5)); ?>
 		<?php echo $form->error($model,'reason'); ?>
 	</div>
 
