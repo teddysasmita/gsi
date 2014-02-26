@@ -43,8 +43,14 @@ $dataProvider=new CSqlDataProvider($sql,array(
 $this->widget('zii.widgets.grid.CGridView', array(
 	'dataProvider'=>$dataProvider,
 	'columns'=>array(
-           'itemname',
-			'qty',
+        array(
+			'header'=>'Nama Barang',
+			'name'=>'itemname'
+		), 
+		array(
+			'header'=>'Jumlah',
+			'name'=>'qty'
+		),  	
           array(
               'class'=>'CButtonColumn',
               'buttons'=> array(
@@ -55,7 +61,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
                      'visible'=>'false'
                   )
               ),
-              'viewButtonUrl'=>"Action::decodeViewDetailSalesOrderUrl(\$data)",
+              'viewButtonUrl'=>"Action::decodeViewDetailDeliveryOrderNtUrl(\$data)",
           )
       ),
 ));
