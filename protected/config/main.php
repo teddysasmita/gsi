@@ -51,7 +51,8 @@ return array(
             'sellingprice',
             'salescancel',
             'salesreplace',
-            'purchasesstockentries'
+            'purchasesstockentries',
+            'deliveryordersnt'
         ),
 
         

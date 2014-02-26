@@ -26,6 +26,9 @@ $this->pageTitle=Yii::app()->name;
 <h3><?php echo CHtml::link('Pembatalan Penjualan', Yii::app()->createUrl('salescancel'))?></h3>
 <h3><?php echo CHtml::link('Perubahan Penjualan', Yii::app()->createUrl('salesreplace'))?></h3>
 
+<h2>Bagian CS</h2>
+<h3><?php echo CHtml::link('Pengiriman Barang Tanpa Transaksi', Yii::app()->createUrl('deliveryordersnt'))?></h3>
+
 <h2>Bagian Gudang</h2>
 <h3><?php echo CHtml::link('Terima Barang', Yii::app()->createUrl('stockentries'))?></h3>
 <h3><?php echo CHtml::link('Input Stok Opname', Yii::app()->createUrl('inputinventorytaking'))?></h3>
