@@ -78,7 +78,7 @@ EOS;
 	<div class="row">
 		<?php echo $form->labelEx($model,'regnum'); ?>
 		<?php 
-         	echo $form->textField($model,'regnum'); 
+         	echo $form->textField($model,'regnum', array('maxlength'=>30)); 
       	?>
 		<?php echo $form->error($model,'regnum'); ?>
 	</div>

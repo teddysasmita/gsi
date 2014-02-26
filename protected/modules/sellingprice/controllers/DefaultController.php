@@ -313,4 +313,28 @@ class DefaultController extends Controller
             $this->tracker->init();
             $this->tracker->logActivity($this->formid, $action);
         }
+        
+        public function actionDisplaysellingprice()
+        {
+        	if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+        			Yii::app()->user->id))  {
+        		$this->trackActivity('v');
+        		if (isset($_POST)) {
+        			if (isset($_POST['yt0'])) {
+        				$data = Yii::app()->db->createCommand()
+        					->select('a.*, b.name')->from('sellingprices a')
+        					->join('items b', 'b.id = a.iditem')
+        					->where('b.name like :p_name', array(':p_name'=>'%'.$itemname.'%'))
+        					->queryAll();
+        			}	
+        		}
+        		$this->render('display1',array(
+        				'data'=>$data,
+        		));
+        	} else {
+        		throw new CHttpException(404,'You have no authorization for this operation.');
+        	};
+        	
+        	
+        }
 }
