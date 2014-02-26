@@ -160,10 +160,11 @@ class DefaultController extends Controller
                     Yii::app()->user->id))  {
                 $this->trackActivity('d');
                 $model=$this->loadModel($id);
+                $oldinvnum = $model->invnum;
                 $this->beforeDelete($model);
                 $this->tracker->delete('salescancel', $id);
                 $model->delete();
-                $this->afterDelete();    
+                $this->afterDelete($oldinvnum);    
                     // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 
                 if(!isset($_GET['ajax']))
@@ -328,9 +329,9 @@ class DefaultController extends Controller
             
         }
         
-        protected function afterDelete()
+        protected function afterDelete($invnum)
         {
-               
+			$this->setInvStatus($invnum, '1');
         }
         
         protected function afterEdit(& $model)

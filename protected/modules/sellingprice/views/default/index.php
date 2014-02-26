@@ -11,7 +11,7 @@ $this->menu=array(
 	array('label'=>'Tambah Data', 'url'=>array('create')),
 	array('label'=>'Pencarian Data', 'url'=>array('admin')),
    array('label'=>'Data yang telah terhapus', 'url'=>array('deleted')),
-	array('label'=>'Cari Harga', 'url'=>array('displaysellingprice'))	
+	array('label'=>'Cari Harga', 'url'=>array('getsellingprice'))	
 );
 ?>
 

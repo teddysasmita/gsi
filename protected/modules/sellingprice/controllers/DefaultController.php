@@ -314,27 +314,32 @@ class DefaultController extends Controller
             $this->tracker->logActivity($this->formid, $action);
         }
         
-        public function actionDisplaysellingprice()
+        public function actionDisplaysellingprice($itemname)
         {
         	if(Yii::app()->authManager->checkAccess($this->formid.'-List',
         			Yii::app()->user->id))  {
         		$this->trackActivity('v');
-        		if (isset($_POST)) {
-        			if (isset($_POST['yt0'])) {
-        				$data = Yii::app()->db->createCommand()
-        					->select('a.*, b.name')->from('sellingprices a')
-        					->join('items b', 'b.id = a.iditem')
-        					->where('b.name like :p_name', array(':p_name'=>'%'.$itemname.'%'))
-        					->queryAll();
-        			}	
-        		}
-        		$this->render('display1',array(
-        				'data'=>$data,
-        		));
+        			$data = Yii::app()->db->createCommand()
+        				->select('a.*, b.name')->from('sellingprices a')
+						->join('items b', 'b.id = a.iditem')
+						->where('b.name like :p_name', array(':p_name'=>'%'.$itemname.'%'))
+						->order('b.name')
+						->queryAll();
+        		$this->render('display1a',array(
+        				'data'=>$data));
         	} else {
         		throw new CHttpException(404,'You have no authorization for this operation.');
         	};
-        	
-        	
+        }
+        
+        public function actionGetsellingprice()
+        {
+        	if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+        			Yii::app()->user->id))  {
+        		$this->trackActivity('v');
+        		$this->render('display1');
+        	} else {
+        		throw new CHttpException(404,'You have no authorization for this operation.');
+        	};
         }
 }
