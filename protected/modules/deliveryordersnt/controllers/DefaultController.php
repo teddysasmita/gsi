@@ -539,4 +539,24 @@ class DefaultController extends Controller
             else
                 $this->tracker->logActivity($this->formid, $action);
         }
+        
+        public function actionPrintsjm($id)
+        {
+        	if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
+        			Yii::app()->user->id)) {
+        		$this->trackActivity('p');
+        	
+        		$model=$this->loadModel($id);
+        		$detailmodel=$this->loadDetails($id);
+        		
+        		$this->render('printsjm',array(
+        				'model'=>$model,'detailmodel'=>$detailmodel)
+        		);
+        	} else {
+        		throw new CHttpException(404,'You have no authorization for this operation.');
+        	}
+        	
+        	
+        	
+        }
 }

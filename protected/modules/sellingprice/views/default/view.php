@@ -35,6 +35,7 @@ $this->menu=array(
 			'name'=>'minprice',
 			'value'=>number_format($model['minprice'])
 		),
+		'approvalby',
 		array(
 			'name'=>'userlog',
 			'value'=>lookup::UserNameFromUserID($model['userlog'])

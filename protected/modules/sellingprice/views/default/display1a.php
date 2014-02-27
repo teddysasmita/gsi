@@ -39,9 +39,18 @@ $('.search-form form').submit(function(){
 		'dataProvider'=>$mydp,
 		'columns'=>array(
 			//'id',
-			'regnum',
-			'idatetime',
-			'name',
+			array(
+				'header'=>'Nomor Urut',
+				'name'=>'regnum',
+			),
+			array(
+				'header'=>'Tanggal',
+				'name'=>'idatetime',
+			),
+			array(
+				'header'=>'Nama Barang',
+				'name'=>'name',
+			),
 			array(
 				'header'=>'Harga Jual',
 				'name'=>'normalprice',
@@ -52,6 +61,7 @@ $('.search-form form').submit(function(){
 				'name'=>'minprice',
 				'type'=>'number'
 			),
+			'approvalby'
 			//'userlog',
 			//'datetimelog',
 			/*array(

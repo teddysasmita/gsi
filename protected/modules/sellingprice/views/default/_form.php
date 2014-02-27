@@ -136,7 +136,16 @@ EOS;
      	?>
 		<?php echo $form->error($model,'minprice'); ?>
 	</div>	
-
+	
+	<div class="row">
+		<?php echo $form->labelEx($model,'approvalby'); ?>
+		<?php 
+         echo $form->dropDownList($model, 'approvalby', array('Ibu Linda T', 'Bp Welly T', 'Bp Sandy T', 'Ibu Vera T'),
+			array('empty'=>'Harap Pilih') );
+     	?>
+		<?php echo $form->error($model,'approvalby'); ?>
+	</div>	
+	
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
 	</div>
