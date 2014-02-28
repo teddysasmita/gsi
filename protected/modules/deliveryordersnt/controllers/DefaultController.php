@@ -548,7 +548,8 @@ class DefaultController extends Controller
         	
         		$model=$this->loadModel($id);
         		$detailmodel=$this->loadDetails($id);
-        		
+        		Yii::import('application.vendors.tcpdf.*');
+        		require_once ('tcpdf.php');
         		$this->render('printsjm',array(
         				'model'=>$model,'detailmodel'=>$detailmodel)
         		);
