@@ -6,6 +6,7 @@
  * The followings are the available columns in table 'salesposcards':
  * @property string $id
  * @property string $name
+ * @property string $kind
  * @property string $idbank
  * @property string $company
  * @property string $surchargeamount
@@ -31,11 +32,12 @@ class Salesposcards extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, name, idbank, company, surchargeamount, surchargepct, userlog, datetimelog', 'required'),
+			array('id, name, idbank, company, surchargeamount, surchargepct, kind, userlog, datetimelog', 'required'),
 			array('id, idbank, userlog', 'length', 'max'=>21),
 			array('surchargeamount, surchargepct', 'numerical'),
 			array('name, company', 'length', 'max'=>100),
 			array('datetimelog', 'length', 'max'=>19),
+			array('kind', 'length', 'max'=>2),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, name, idbank, company, userlog, datetimelog', 'safe', 'on'=>'search'),
@@ -61,6 +63,7 @@ class Salesposcards extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'name' => 'Nama',
+			'kind' => 'Jenis',		
 			'idbank' => 'Bank Penerbit',
 			'company' => 'Jaringan',
 			'surchargeamount' => 'Biaya Admin',
@@ -90,6 +93,7 @@ class Salesposcards extends CActiveRecord
 
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('name',$this->name,true);
+		$criteria->compare('kind',$this->kind,true);
 		$criteria->compare('idbank',$this->idbank,true);
 		$criteria->compare('type',$this->type,true);
 		$criteria->compare('userlog',$this->userlog,true);

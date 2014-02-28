@@ -27,6 +27,10 @@ $this->menu=array(
 			'name'=>'idbank',
 			'value'=>lookup::BankNameFromID($model->idbank)
 		),
+		array(
+			'name'=>'kind',
+			'value'=>lookup::CardType($model->kind)
+		),
 		'company',
 		'surchargeamount',
 		'surchargepct',

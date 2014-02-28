@@ -67,6 +67,14 @@ EOS;
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'kind'); ?>
+		<?php echo $form->dropDownList($model,'kind',array('KK'=>'Kartu Kredit',
+			'KD'=>'Kartu Debit'), array('empty'=>'Harap Pilih'));
+		?>
+		<?php echo $form->error($model,'kind'); ?>
+	</div>
+	
+	<div class="row">
 		<?php echo $form->labelEx($model,'company'); ?>
 		<?php echo $form->dropDownList($model,'company',array('Visa'=>'Visa',
 			'Master Card'=>'Master Card', 'Alto'=>'Alto'), array('empty'=>'Harap Pilih'));

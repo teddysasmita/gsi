@@ -231,6 +231,16 @@ class lookup extends CComponent {
    	} else
    		return $name;
    }
+   
+   public static function CardType($symbol)
+   {
+   		switch ($symbol) {
+   		case 'KK':
+   			return 'Kartu Kredit';
+   		case 'KD':
+   			return 'Kartu Debit';
+   		}	
+   }
 }
 
 
