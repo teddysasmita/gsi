@@ -40,7 +40,7 @@ class MYPDF extends TCPDF {
 		$counter=0;
 		$iditem='';
 		$this->SetXY(10, 52);
-		for($i=0;$i<10;$i++) {
+		for($i=0;$i<9;$i++) {
 			if ($i<count($this->detaildata)) {
 				$row=$this->detaildata[$i];
 				$counter+=1;
@@ -60,6 +60,18 @@ class MYPDF extends TCPDF {
 	public function header()
 	{
 		$this->master();
+	}
+	
+	public function footer()
+	{
+		$this->SetFillColor(224, 235, 255);
+		$this->SetTextColor(0);
+		$this->SetDrawColor(0, 0, 0);
+		$this->SetLineWidth(0.3);
+		$this->SetFont('', 'B');
+		$this->setXY(10, 110);
+		$this->Cell(30, 6, 'Supir', 'LTR', 0, 'C');
+		$this->Cell(30, 6, 'CS', 'LTR', 0, 'C');
 	}
 	
 	public function master()
@@ -85,20 +97,20 @@ class MYPDF extends TCPDF {
 		$this->Cell(23, 5, $this->data->regnum, 'LTR', 1, 'C');
 		
 		$this->SetFont('', 'B');
-		$this->Cell(35, 5, 'Nama Penerima', 'LTR');
+		$this->Cell(35, 5, 'Nama Penerima', 'LTR', 0,'C');
 		$this->SetFont('', '');
 		$this->Cell(80, 5, $this->data->receivername, 'LTR');
 		$this->SetFont('', 'B');
-		$this->Cell(30, 5, 'Telp Penerima', 'LTR');
+		$this->Cell(30, 5, 'Telp Penerima', 'LTR', 0,'C');
 		$this->SetFont('', '');
 		$this->Cell(50, 5, $this->data->receiverphone, 'LTR', 1);
 		
 		$this->SetFont('', 'B');
-		$this->Cell(35, 5, 'Alamat Penerima', 'LTR');
+		$this->Cell(35, 5, 'Alamat Penerima', 'LTR', 0,'C');
 		$this->SetFont('', '');
 		$this->Cell(160, 5, $this->data->receiveraddress, 'LTR', 1);
 		$this->SetFont('', 'B');
-		$this->Cell(35, 5, 'Info Kendaraan', 'LTRB');
+		$this->Cell(35, 5, 'Info Kendaraan', 'LTRB', 0,'C');
 		$this->SetFont('', '');
 		$this->Cell(160, 5, $this->data->vehicleinfo, 'LTRB', 1);
 		
@@ -133,7 +145,7 @@ $pdf->SetSubject('SJM');
 $pdf->SetKeywords('SJM');
 
 //$pdf->setPrintHeader(false);
-$pdf->setPrintFooter(false);
+//$pdf->setPrintFooter(false);
 // set header and footer fonts
 $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
