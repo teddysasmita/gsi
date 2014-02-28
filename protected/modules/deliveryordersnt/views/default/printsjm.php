@@ -133,9 +133,9 @@ class MYPDF extends TCPDF {
 
 
 // create new PDF document
-$pagesize = array(140, 215);
+$pagesize = array(100, 215);
 $pageorientation = 'L';
-$pdf = new MYPDF($pageorientation, PDF_UNIT, $pagesize, true, 'UTF-8', false);
+$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
@@ -175,8 +175,24 @@ $pdf->SetFont('helvetica', '', 12);
 // add a page
 $pdf->LoadData($model, $detailmodel);
 
+$page_format = array(
+    'MediaBox' => array ('llx' => 0, 'lly' => 0, 'urx' => 215, 'ury' => 140),
+    'CropBox' => array ('llx' => 0, 'lly' => 0, 'urx' => 210, 'ury' => 297),
+    'BleedBox' => array ('llx' => 5, 'lly' => 5, 'urx' => 205, 'ury' => 292),
+    'TrimBox' => array ('llx' => 10, 'lly' => 10, 'urx' => 200, 'ury' => 287),
+    'ArtBox' => array ('llx' => 15, 'lly' => 15, 'urx' => 195, 'ury' => 282),
+    'Dur' => 3,
+    'trans' => array(
+        'D' => 1.5,
+        'S' => 'Split',
+        'Dm' => 'V',
+        'M' => 'O'
+    ),
+    'Rotate' => 90,
+    'PZ' => 1,
+);
 
-$pdf->AddPage();
+$pdf->AddPage($pageorientation, $page_format);
 $pdf->ColoredTable();
 
 //$pdf->master();
