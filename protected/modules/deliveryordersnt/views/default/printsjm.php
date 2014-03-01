@@ -13,11 +13,16 @@ class MYPDF extends TCPDF {
 	private $headernames;
 	private $headerwidths;
 	
+	public $pageorientation;
+	public $pagesize;
+	
 	// Load table data from file
 	public function LoadData($data, array $detaildata) {
 		// Read file lines
 		$this->data = $data;
 		$this->detaildata = $detaildata;
+		$this->headernames = array('No', 'Nama Barang', 'Jumlah');
+		$this->headerwidths = array(10, 165, 20);
 	}
 
 	// Colored table
@@ -27,20 +32,19 @@ class MYPDF extends TCPDF {
 		$this->SetTextColor(0);
 		$this->SetDrawColor(0, 0, 0);
 		$this->SetLineWidth(0.3);
-		$this->SetFont('', 'B');
-		$this->SetFontSize(10);
-		// Color and font restoration
-		$this->SetFillColor(224, 235, 255);
-		$this->SetTextColor(0);
-		$this->SetFont('');
+		$this->SetFont('Courier', '');
 		$this->SetFontSize(10);
 		
 		// Data
 		$fill = 0;
 		$counter=0;
 		$iditem='';
-		$this->SetXY(10, 52);
-		for($i=0;$i<9;$i++) {
+		$this->SetXY(10, 56);
+		if (count($this->detaildata) <= 9)
+			$maxrows = 9;
+		else
+			$maxrows = count($this->detaildata);		
+		for($i=0;$i<$maxrows;$i++) {
 			if ($i<count($this->detaildata)) {
 				$row=$this->detaildata[$i];
 				$counter+=1;
@@ -53,6 +57,8 @@ class MYPDF extends TCPDF {
 				$this->Cell($this->headerwidths[2], 6, ' ', 'LRB', 0, 'C', $fill);
 				$this->ln();
 			}
+			//if ($i == 9)
+				//$this->checkPageBreak(6, '');
 		}
 		$this->Cell(array_sum($this->headerwidths), 0, '', 'T');
 	}
@@ -68,10 +74,14 @@ class MYPDF extends TCPDF {
 		$this->SetTextColor(0);
 		$this->SetDrawColor(0, 0, 0);
 		$this->SetLineWidth(0.3);
-		$this->SetFont('', 'B');
-		$this->setXY(10, 110);
-		$this->Cell(30, 6, 'Supir', 'LTR', 0, 'C');
-		$this->Cell(30, 6, 'CS', 'LTR', 0, 'C');
+		$this->SetFont('Helvetica', 'B');
+		$this->SetFontSize(10);
+		$this->setXY(10, 115);
+		$this->Cell(49, 15, 'Supir', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
+		$this->Cell(49, 15, 'CS', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
+		$this->Cell(49, 15, 'Pemeriksa', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
+		$this->Cell(48, 15, 'Penerima', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
+		
 	}
 	
 	public function master()
@@ -81,44 +91,44 @@ class MYPDF extends TCPDF {
 		$this->SetDrawColor(0, 0, 0);
 		$this->SetLineWidth(0.3);
 		$this->SetFont('', 'B');
+		$this->SetCellPadding(0.8);
 	
 		$this->setFontSize(20);
 		$this->setXY(100, 10);
 		$this->Cell(105, 10, 'Surat Jalan Manual', 'LTR', 1, 'C');
 		$this->SetFontSize(10);
 		$this->setXY(100, 20);
-		$this->Cell(22, 5, 'Tanggal SJ', 'LT');
-		$this->SetFont('', '');
-		$this->Cell(40, 5, $this->data->idatetime, 'LTR', 0, 'C');
-		$this->SetFont('', 'B');
+		$this->Cell(22, 5, 'Tanggal SJ', 'LT', 0, 'C');
+		$this->SetFont('Courier', '');
+		$this->Cell(45, 5, $this->data->idatetime, 'LTR', 0, 'C');
+		$this->SetFont('Helvetica', 'B');
 		//$this->setXY(100, 27);
-		$this->Cell(20, 5, 'Nomor SJ', 'LTR');
-		$this->SetFont('', '');
-		$this->Cell(23, 5, $this->data->regnum, 'LTR', 1, 'C');
+		$this->Cell(20, 5, 'Nomor SJ', 'LTR', 0, 'C');
+		$this->SetFont('Courier', '');
+		$this->Cell(18, 5, $this->data->regnum, 'LTR', 1, 'C');
 		
-		$this->SetFont('', 'B');
+		$this->SetFont('Helvetica', 'B');
 		$this->Cell(35, 5, 'Nama Penerima', 'LTR', 0,'C');
-		$this->SetFont('', '');
+		$this->SetFont('Courier', '');
 		$this->Cell(80, 5, $this->data->receivername, 'LTR');
-		$this->SetFont('', 'B');
+		$this->SetFont('Helvetica', 'B');
 		$this->Cell(30, 5, 'Telp Penerima', 'LTR', 0,'C');
-		$this->SetFont('', '');
+		$this->SetFont('Courier', '');
 		$this->Cell(50, 5, $this->data->receiverphone, 'LTR', 1);
 		
-		$this->SetFont('', 'B');
+		$this->SetFont('Helvetica', 'B');
 		$this->Cell(35, 5, 'Alamat Penerima', 'LTR', 0,'C');
-		$this->SetFont('', '');
+		$this->SetFont('Courier', '');
 		$this->Cell(160, 5, $this->data->receiveraddress, 'LTR', 1);
-		$this->SetFont('', 'B');
+		$this->SetFont('Helvetica', 'B');
 		$this->Cell(35, 5, 'Info Kendaraan', 'LTRB', 0,'C');
-		$this->SetFont('', '');
+		$this->SetFont('Courier', '');
 		$this->Cell(160, 5, $this->data->vehicleinfo, 'LTRB', 1);
 		
 		$this->ln(5);
 		$this->setFontSize(12);
-		$this->SetFont('', 'B');
-		$this->headernames = array('No', 'Nama Barang', 'Jumlah');
-		$this->headerwidths = array(15, 160, 20);
+		$this->SetFont('Helvetica', 'B');
+		
 		for($i = 0; $i < count($this->headernames); ++$i) {
 			$this->Cell($this->headerwidths[$i], 7, $this->headernames[$i], 1, 0, 'C');
 		}
@@ -130,62 +140,65 @@ class MYPDF extends TCPDF {
 	} 	
 }
 
+function execute($model, $detailmodel) {
 
-
-// create new PDF document
-$pagesize = array(215, 140);
-$pageorientation = 'L';
-$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-// set document information
-$pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor(lookup::UserNameFromUserID(Yii::app()->user->id));
-$pdf->SetTitle('Surat Jalan Manual');
-$pdf->SetSubject('SJM');
-$pdf->SetKeywords('SJM');
-
-//$pdf->setPrintHeader(false);
-//$pdf->setPrintFooter(false);
-// set header and footer fonts
-$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-// set default monospaced font
-$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-//set margins
-$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-$pdf->SetHeaderMargin(0);
-$pdf->SetFooterMargin(0);
-
-//set auto page breaks
-$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-//set image scale factor
-$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-//set some language-dependent strings
-$pdf->setLanguageArray($l);
-
-// ---------------------------------------------------------
-
-// set font
-$pdf->SetFont('helvetica', '', 12);
-
-// add a page
-$pdf->LoadData($model, $detailmodel);
-
-$pdf->AddPage($pageorientation, $page_format);
-$pdf->ColoredTable();
-
-//$pdf->master();
-// print colored table
-
-// ---------------------------------------------------------
-
-//Close and output PDF document
-$pdf->Output('BTBP'.idmaker::getDateTime().'.pdf', 'I');
-
+	// create new PDF document
+	
+	$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+	$pdf->pagesize = array(215, 140);
+	$pdf->pageorientation = 'L';
+	$pdf->setPageOrientation($pdf->pageorientation, TRUE);	
+	
+	// set document information
+	$pdf->SetCreator(PDF_CREATOR);
+	$pdf->SetAuthor(lookup::UserNameFromUserID(Yii::app()->user->id));
+	$pdf->SetTitle('Surat Jalan Manual');
+	$pdf->SetSubject('SJM');
+	$pdf->SetKeywords('SJM');
+	
+	//$pdf->setPrintHeader(false);
+	//$pdf->setPrintFooter(false);
+	// set header and footer fonts
+	$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+	$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+	
+	// set default monospaced font
+	$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+	
+	//set margins
+	$pdf->SetMargins(PDF_MARGIN_LEFT, 56, PDF_MARGIN_RIGHT);
+	$pdf->SetHeaderMargin(0);
+	$pdf->SetFooterMargin(0);
+	
+	//set auto page breaks
+	$pdf->SetAutoPageBreak(TRUE, 30);
+	
+	//set image scale factor
+	$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+	
+	//set some language-dependent strings
+	//$pdf->setLanguageArray($l);
+	
+	// ---------------------------------------------------------
+	
+	// set font
+	$pdf->SetFont('helvetica', '', 12);
+	
+	// add a page
+	$pdf->LoadData($model, $detailmodel);
+	
+	$pdf->AddPage($pdf->pageorientation, $pdf->pagesize);
+	//$pdf->AddPage();
+	
+	$pdf->ColoredTable();
+	//$pdf->master();
+	// print colored table
+	
+	// ---------------------------------------------------------
+	
+	//Close and output PDF document
+	$pdf->Output('SJM'.idmaker::getDateTime().'.pdf', 'I');
+}
 //============================================================+
 // END OF FILE                                                
 //============================================================+

@@ -550,9 +550,11 @@ class DefaultController extends Controller
         		$detailmodel=$this->loadDetails($id);
         		Yii::import('application.vendors.tcpdf.*');
         		require_once ('tcpdf.php');
-        		$this->render('printsjm',array(
-        				'model'=>$model,'detailmodel'=>$detailmodel)
-        		);
+        		Yii::import('application.modules.deliveryordersnt.views.default.*');
+        		require_once('printsjm.php');
+        		ob_end_clean();
+        		
+        		execute($model, $detailmodel);
         	} else {
         		throw new CHttpException(404,'You have no authorization for this operation.');
         	}
