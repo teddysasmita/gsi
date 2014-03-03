@@ -105,7 +105,7 @@ class DefaultController extends Controller
                       } else if ($_POST['command']=='getPO') {
                          $model->attributes=$_POST['Stockentries'];
                          Yii::app()->session['Stockentries']=$_POST['Stockentries'];
-                         $this->loadPO($model->transid, $model->id);
+                         $this->loadLPB($model->transid, $model->id);
                       }
                    }
                 }
@@ -168,8 +168,8 @@ class DefaultController extends Controller
                          }
                      };
                      
-                     if(isset(Yii::app()->session['DeleteDetailstockentries'])) {
-                         $deletedetails=Yii::app()->session['DeleteDetailstockentries'];
+                     if(isset(Yii::app()->session['Deletedetailstockentries'])) {
+                         $deletedetails=Yii::app()->session['Deletedetailstockentries'];
                          $respond=$respond&&$this->deleteDetails($deletedetails);
                          if(!$respond) {
                            throw new CHttpException(404,'There is an error in detail deletion');
@@ -179,7 +179,7 @@ class DefaultController extends Controller
                      if($respond) {
                          Yii::app()->session->remove('Stockentries');
                          Yii::app()->session->remove('Detailstockentries');
-                         Yii::app()->session->remove('DeleteDetailstockentries');
+                         Yii::app()->session->remove('Deletedetailstockentries');
                          $this->redirect(array('view','id'=>$model->id));
                      }
                  }
@@ -237,7 +237,7 @@ class DefaultController extends Controller
 
                Yii::app()->session->remove('Stockentries');
                Yii::app()->session->remove('Detailstockentries');
-               Yii::app()->session->remove('DeleteDetailstockentries');
+               Yii::app()->session->remove('Deletedetailstockentries');
                $dataProvider=new CActiveDataProvider('Stockentries',
                   array(
                      'criteria'=>array(
@@ -593,6 +593,41 @@ EOS;
         Yii::app()->session['Detailstockentries']=$details;
       }
      
+      private function loadLPB($nolpb, $id)
+      {
+      	$details=array();
+      
+      	$dataLPB=Yii::app()->db->createCommand()
+      	->select('a.id, b.*')
+      	->from('purchasesstockentries a')
+      	->join('detailpurchasesstockentries b', 'b.id=a.id')
+      	->where('a.regnum = :p_regnum', array(':p_regnum'=>$nolpb) )
+      	->queryAll();
+      	Yii::app()->session->remove('Detailstockentries');
+      	$sql=<<<EOS
+    	select count(*) as received from stockentries a
+		join detailstockentries b on b.id = a.id
+		where a.transid = :p_transid and b.iditem = :p_iditem and
+        b.serialnum <> 'Belum Diterima'
+EOS;
+      	$mycommand=Yii::app()->db->createCommand($sql);
+      	foreach($dataLPB as $row) {
+      		$mycommand->bindParam(':p_transid', $nolpb, PDO::PARAM_STR);
+      		$mycommand->bindParam(':p_iditem', $row['iditem'], PDO::PARAM_STR);
+			$accepted=$mycommand->queryScalar();
+			for ($index = 0; $index < $row['qty'] - $accepted; $index++) {
+				$detail['iddetail']=idmaker::getCurrentID2();
+      			$detail['id']=$id;
+				$detail['iditem']=$row['iditem'];
+				$detail['userlog']=Yii::app()->user->id;
+				$detail['datetimelog']=idmaker::getDateTime();
+				$detail['serialnum']='Belum Diterima';
+      			$details[]=$detail;
+			}
+		}
+		Yii::app()->session['Detailstockentries']=$details;
+	}
+      			
       private function checkSerialNum(array $details ) 
       {
          $respond=true;
