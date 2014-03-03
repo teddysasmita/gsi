@@ -550,9 +550,9 @@ class DefaultController extends Controller
         		$detailmodel=$this->loadDetails($id);
         		Yii::import('application.vendors.tcpdf.*');
         		require_once ('tcpdf.php');
-        		Yii::import('application.modules.deliveryordersnt.views.default.*');
+        		Yii::import('application.modules.deliveryordersnt.components.*');
         		require_once('printsjm.php');
-        		ob_end_clean();
+        		ob_clean();
         		
         		execute($model, $detailmodel);
         	} else {

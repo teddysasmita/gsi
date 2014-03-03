@@ -52,7 +52,7 @@ return array(
             'salescancel',
             'salesreplace',
             'purchasesstockentries',
-            'deliveryordersnt'
+            'deliveryordersnt',
         ),
 
         

@@ -1,6 +1,6 @@
 <?php
-/* @var $this SalesposbanksController */
-/* @var $model Salesposbanks */
+/* @var $this SalesposloansController */
+/* @var $model Salesposloans */
 
 $this->breadcrumbs=array(
 	'Master Data'=>array('/site/masterdata'),
@@ -13,6 +13,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Bank dan Pembiayaan</h1>
+<h1>Cicilan</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

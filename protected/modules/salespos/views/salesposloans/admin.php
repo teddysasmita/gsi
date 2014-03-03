@@ -1,6 +1,6 @@
 <?php
-/* @var $this SalesposbanksController */
-/* @var $model Salesposbanks */
+/* @var $this SalesposloansController */
+/* @var $model Salesposloans */
 
 $this->breadcrumbs=array(
 	'Master Data'=>array('/site/masterdata'),
@@ -18,7 +18,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#salesposbanks-grid').yiiGridView('update', {
+	$('#salesposloans-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -26,7 +26,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Bank dan Pembiayaan</h1>
+<h1>Cicilan</h1>
 
 <p>
 You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
@@ -41,12 +41,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 </div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'salesposbanks-grid',
+	'id'=>'salesposloans-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
-		'name',
+		'productname',
 		'userlog',
 		'datetimelog',
 		array(

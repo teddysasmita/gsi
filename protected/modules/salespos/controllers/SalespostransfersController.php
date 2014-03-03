@@ -1,13 +1,13 @@
 <?php
 
-class SalesposbanksController extends Controller
+class SalespostransfersController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
       public $layout='//layouts/column2';
-      public $formid='AB8';
+      public $formid='AB9';
       public $tracker;
       public $state;
 
@@ -45,14 +45,14 @@ class SalesposbanksController extends Controller
             $this->state='c';
             $this->trackActivity('c');    
 
-            $model=new Salesposbanks;
+            $model=new Salespostransfers;
             $this->afterInsert($model);
 
             // Uncomment the following line if AJAX validation is needed
             $this->performAjaxValidation($model);
 
-            if(isset($_POST['Salesposbanks'])) {
-               $model->attributes=$_POST['Salesposbanks'];
+            if(isset($_POST['Salespostransfers'])) {
+               $model->attributes=$_POST['Salespostransfers'];
                $this->beforePost($model);
                if($model->save()) {
                   $this->afterPost($model);
@@ -85,11 +85,11 @@ class SalesposbanksController extends Controller
             // Uncomment the following line if AJAX validation is needed
             $this->performAjaxValidation($model);
 
-            if(isset($_POST['Salesposbanks'])) {
-               $model->attributes=$_POST['Salesposbanks'];
+            if(isset($_POST['Salespostransfers'])) {
+               $model->attributes=$_POST['Salespostransfers'];
 
                $this->beforePost($model);   
-               $this->tracker->modify('salesposbanks', $id);
+               $this->tracker->modify('salespostransfers', $id);
                if($model->save()) {
                   $this->afterPost($model);
                   $this->redirect(array('view','id'=>$model->id));
@@ -116,7 +116,7 @@ class SalesposbanksController extends Controller
             $model=$this->loadModel($id);
             $this->beforeDelete($model);
             
-            $this->tracker->delete('salesposbanks', $id);
+            $this->tracker->delete('salespostransfers', $id);
 
             $model->delete();
             $this->afterDelete();
@@ -138,7 +138,7 @@ class SalesposbanksController extends Controller
             Yii::app()->user->id)) {
             $this->trackActivity('l');
 
-            $dataProvider=new CActiveDataProvider('Salesposbanks',
+            $dataProvider=new CActiveDataProvider('Salespostransfers',
                array(
                   'criteria'=>array(
                      'order'=>'id desc'
@@ -162,10 +162,10 @@ class SalesposbanksController extends Controller
             Yii::app()->user->id)) {
             $this->trackActivity('s');
 
-            $model=new Salesposbanks('search');
+            $model=new Salespostransfers('search');
             $model->unsetAttributes();  // clear any default values
-            if(isset($_GET['Salesposbanks']))
-               $model->attributes=$_GET['Salesposbanks'];
+            if(isset($_GET['Salespostransfers']))
+               $model->attributes=$_GET['Salespostransfers'];
 
             $this->render('admin',array('model'=>$model));
          } else {
@@ -201,9 +201,9 @@ class SalesposbanksController extends Controller
          if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
             Yii::app()->user->id)) {
             $this->trackActivity('r');
-            $this->tracker->restore('salesposbanks', $idtrack);
+            $this->tracker->restore('salespostransfers', $idtrack);
 
-            $dataProvider=new CActiveDataProvider('Salesposbanks');
+            $dataProvider=new CActiveDataProvider('Salespostransfers');
             $this->render('index',array('dataProvider'=>$dataProvider));
          } else {
             throw new CHttpException(404,'You have no authorization for this operation.');
@@ -215,9 +215,9 @@ class SalesposbanksController extends Controller
          if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
             Yii::app()->user->id)) {
             $this->trackActivity('n');
-            $this->tracker->restoreDeleted('salesposbanks', $idtrack);
+            $this->tracker->restoreDeleted('salespostransfers', $idtrack);
 
-            $dataProvider=new CActiveDataProvider('Salesposbanks');
+            $dataProvider=new CActiveDataProvider('Salespostransfers');
             $this->render('index',array('dataProvider'=>$dataProvider));
          } else {
             throw new CHttpException(404,'You have no authorization for this operation.');
@@ -228,12 +228,12 @@ class SalesposbanksController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Salesposbanks the loaded model
+	 * @return Salespostransfers the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-         $model=Salesposbanks::model()->findByPk($id);
+         $model=Salespostransfers::model()->findByPk($id);
          if($model===null)
                throw new CHttpException(404,'The requested page does not exist.');
          return $model;
@@ -241,11 +241,11 @@ class SalesposbanksController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Salesposbanks $model the model to be validated
+	 * @param Salespostransfers $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-         if(isset($_POST['ajax']) && $_POST['ajax']==='salesposbanks-form')
+         if(isset($_POST['ajax']) && $_POST['ajax']==='salespostransfers-form')
          {
                echo CActiveForm::validate($model);
                Yii::app()->end();

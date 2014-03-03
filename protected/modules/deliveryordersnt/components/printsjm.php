@@ -21,8 +21,8 @@ class MYPDF extends TCPDF {
 		// Read file lines
 		$this->data = $data;
 		$this->detaildata = $detaildata;
-		$this->headernames = array('No', 'Nama Barang', 'Jumlah');
-		$this->headerwidths = array(10, 165, 20);
+		$this->headernames = array('No', 'Nama Barang', 'Jumlah', 'Keterangan');
+		$this->headerwidths = array(10, 135, 20, 30);
 	}
 
 	// Colored table
@@ -48,17 +48,20 @@ class MYPDF extends TCPDF {
 			if ($i<count($this->detaildata)) {
 				$row=$this->detaildata[$i];
 				$counter+=1;
-				$this->Cell($this->headerwidths[0], 6, $counter, 'LRB', 0, 'C', $fill);
-				$this->Cell($this->headerwidths[1], 6, $row['itemname'], 'LRB', 0, 'L', $fill);
-				$this->Cell($this->headerwidths[2], 6, $row['qty'], 'LRB', 1, 'R', $fill);
+				$this->Cell($this->headerwidths[0], 6, $counter, 'LR', 0, 'C', $fill);
+				$this->Cell($this->headerwidths[1], 6, $row['itemname'], 'LR', 0, 'L', $fill);
+				$this->Cell($this->headerwidths[2], 6, $row['qty'], 'LR', 0, 'R', $fill);
+				$this->Cell($this->headerwidths[3], 6, '', 'LR', 1, 'R', $fill);
 			} else {
-				$this->Cell($this->headerwidths[0], 6, ' ', 'LRB', 0, 'C', $fill);
-				$this->Cell($this->headerwidths[1], 6, ' ', 'LRB', 0, 'L', $fill);
-				$this->Cell($this->headerwidths[2], 6, ' ', 'LRB', 0, 'C', $fill);
-				$this->ln();
+				$this->Cell($this->headerwidths[0], 6, ' ', 'LR', 0, 'C', $fill);
+				$this->Cell($this->headerwidths[1], 6, ' ', 'LR', 0, 'L', $fill);
+				$this->Cell($this->headerwidths[2], 6, ' ', 'LR', 0, 'R', $fill);
+				$this->Cell($this->headerwidths[3], 6, ' ', 'LR', 1, 'R', $fill);
+				//$this->ln();
 			}
-			//if ($i == 9)
+			if (($i > 0) && ($i % 8 == 0))
 				//$this->checkPageBreak(6, '');
+				$this->Cell(array_sum($this->headerwidths), 0, '', 'T', 1);
 		}
 		$this->Cell(array_sum($this->headerwidths), 0, '', 'T');
 	}
@@ -77,11 +80,15 @@ class MYPDF extends TCPDF {
 		$this->SetFont('Helvetica', 'B');
 		$this->SetFontSize(10);
 		$this->setXY(10, 115);
-		$this->Cell(49, 15, 'Supir', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
-		$this->Cell(49, 15, 'CS', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
-		$this->Cell(49, 15, 'Pemeriksa', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
-		$this->Cell(48, 15, 'Penerima', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
-		
+		$this->Cell(43, 15, 'Supir', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
+		$this->Cell(43, 15, 'CS', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
+		$this->Cell(43, 15, 'Pemeriksa', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
+		$this->Cell(43, 15, 'Penerima', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
+		$this->Cell(23, 5, 'Halaman', 'LTR', 1, 'C', false,'', 0, false, 'T', 'T');
+		$this->setX(182);
+		$this->Cell(23, 5, $this->PageNo().' dari ', 'LR', 1, 'C', false,'', 0, false, 'T', 'T');
+		$this->setX(182);
+		$this->Cell(23, 5, 'total '.trim($this->getAliasNbPages()), 'LRB', 1, 'C', false,'', 0, false, 'T', 'T');
 	}
 	
 	public function master()
@@ -171,7 +178,7 @@ function execute($model, $detailmodel) {
 	$pdf->SetFooterMargin(0);
 	
 	//set auto page breaks
-	$pdf->SetAutoPageBreak(TRUE, 30);
+	$pdf->SetAutoPageBreak(TRUE, 25);
 	
 	//set image scale factor
 	$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);

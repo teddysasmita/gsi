@@ -1,6 +1,6 @@
 <?php
-/* @var $this SalesposbanksController */
-/* @var $model Salesposbanks */
+/* @var $this SalespostransfersController */
+/* @var $model Salespostransfers */
 
 $this->breadcrumbs=array(
 	'Master Data'=>array('/site/masterdata'),
@@ -17,13 +17,14 @@ $this->menu=array(
 );
 ?>
 
-<h1>Bank dan Pembiayaan</h1>
+<h1>Akun Transfer</h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
 		'id',
-		'name',
+		'holdername',
+		'acctno',
 		'userlog',
 		'datetimelog',
 	),

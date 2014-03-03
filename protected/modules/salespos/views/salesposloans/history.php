@@ -1,6 +1,6 @@
 <?php
-/* @var $this SalesposbanksController */
-/* @var $model Salesposbanks */
+/* @var $this SalesposloansController */
+/* @var $model Salesposloans */
 
 $this->breadcrumbs=array(
 	'Master Data'=>array('/site/masterdata'),
@@ -14,15 +14,15 @@ $this->menu=array(
 
 ?>
 
-<h1>Bank dan Pembiayaan</h1>
+<h1>Cicilan</h1>
 
 <?php    $data=Yii::app()->tracker->createCommand()->
-       select()->from('salesposbanks')->where('id=:id',array(':id'=>$model->id))->queryAll();
+       select()->from('salesposloans')->where('id=:id',array(':id'=>$model->id))->queryAll();
     $ap=new CArrayDataProvider($data);
  ?> 
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'salesposbanks-grid',
+	'id'=>'salesposloans-grid',
 	'dataProvider'=>$ap,
 	'columns'=>array(
 		'id',

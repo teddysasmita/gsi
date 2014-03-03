@@ -1,5 +1,5 @@
 <?php
-/* @var $this SalesposbanksController */
+/* @var $this SalesposloansController */
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
@@ -14,7 +14,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>Bank dan Pembiayaan</h1>
+<h1>Cicilan</h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,

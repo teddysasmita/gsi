@@ -7,7 +7,7 @@ class DefaultController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
       public $layout='//layouts/column2';
-      public $formid='AB1';
+      public $formid='AB10';
       public $tracker;
       public $state;
 

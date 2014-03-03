@@ -15,6 +15,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Bank Penerbit Kartu</h1>
+<h1>Bank dan Pembiayaan</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

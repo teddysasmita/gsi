@@ -336,11 +336,11 @@ EOS;
 	            		$detailData=$command->queryAll();
 	            		Yii::import('application.vendors.tcpdf.*');
 						require_once ('tcpdf.php');
-	            		$this->render('print_stockcard', array(
-	            			'detailData'=>$detailData, 
-	            			'itemname'=>lookup::ItemNameFromItemID($_POST['id']),
-	            			'warehousecode'=>lookup::WarehouseNameFromWarehouseID($_POST['idwarehouse']) 			
-	            		));
+						Yii::import('application.modules.items.views.default.*');
+						ob_clean();
+						require_once ('print_stockcard.php');
+						execute(lookup::ItemNameFromItemID($_POST['id']), $detailData,
+                			lookup::WarehouseNameFromWarehouseID($_POST['idwarehouse']));
 	          		}
 	            } 
 	            //else {
@@ -365,11 +365,12 @@ EOS;
        				if (strlen($_POST['idwarehouse'])) {
        					Yii::import('application.vendors.tcpdf.*');
        					require_once ('tcpdf.php');
-       					$this->render('print_stockcard', array(
-       						'detailData'=>array(),
-       						'itemname'=>lookup::ItemNameFromItemID($_POST['id']),
-       						'warehousecode'=>lookup::WarehouseNameFromWarehouseID($_POST['idwarehouse'])
-       					));
+       					Yii::import('application.modules.item.views.default.*');
+       					require_once ('print_stockcard.php');
+       					ob_clean();
+       					execute(lookup::ItemNameFromItemID($_POST['id']), 
+       						lookup::WarehouseNameFromWarehouseID($_POST['idwarehouse']),
+		            		array());
        				}
        			}
        									//else {

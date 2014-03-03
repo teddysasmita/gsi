@@ -1,6 +1,6 @@
 <?php
-/* @var $this SalesposbanksController */
-/* @var $model Salesposbanks */
+/* @var $this SalesposloansController */
+/* @var $model Salesposloans */
 
 $this->breadcrumbs=array(
 	'Master Data'=>array('/site/masterdata'),
@@ -17,14 +17,16 @@ $this->menu=array(
 );
 ?>
 
-<h1>Bank dan Pembiayaan</h1>
+<h1>Cicilan</h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
-		'id',
-		'name',
-		'userlog',
+		'productname',
+		array(
+			'name'=>'userlog',
+			'value'=>lookup::UserNameFromUserID($model->userlog),
+		),
 		'datetimelog',
 	),
 )); ?>

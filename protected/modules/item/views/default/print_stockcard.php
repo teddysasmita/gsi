@@ -122,61 +122,62 @@ class MYPDF extends TCPDF {
 }
 
 
-
-// create new PDF document
-$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-// set document information
-$pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor(lookup::UserNameFromUserID(Yii::app()->user->id));
-$pdf->SetTitle('Kartu Stok');
-$pdf->SetSubject($itemname);
-$pdf->SetKeywords($itemname);
-
-// set default header data
-$pdf->setHeaderData(false, 0, 'Gunung Sari Intan', 
-	'Cetak Kartu Stok', 'Testing');
-
-// set header and footer fonts
-$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-// set default monospaced font
-$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-//set margins
-$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-//set auto page breaks
-$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-//set image scale factor
-$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-//set some language-dependent strings
-$pdf->setLanguageArray($l);
-
-// ---------------------------------------------------------
-
-// set font
-$pdf->SetFont('helvetica', '', 12);
-
-// add a page
-$pdf->AddPage();
-
-$pdf->LoadData($itemname, $warehousecode, $detailData);
-
-$pdf->master();
-// print colored table
-$pdf->ColoredTable();
-
-// ---------------------------------------------------------
-
-//Close and output PDF document
-$pdf->Output('BTBP'.idmaker::getDateTime().'.pdf', 'I');
-
+function execute($itemname, $warehousecode, $detaildata) 
+{
+	// create new PDF document
+	$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+	
+	// set document information
+	$pdf->SetCreator(PDF_CREATOR);
+	$pdf->SetAuthor(lookup::UserNameFromUserID(Yii::app()->user->id));
+	$pdf->SetTitle('Kartu Stok');
+	$pdf->SetSubject($itemname);
+	$pdf->SetKeywords($itemname);
+	
+	// set default header data
+	$pdf->setHeaderData(false, 0, 'Gunung Sari Intan', 
+		'Cetak Kartu Stok', 'Testing');
+	
+	// set header and footer fonts
+	$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+	$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+	
+	// set default monospaced font
+	$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+	
+	//set margins
+	$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+	$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+	$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+	
+	//set auto page breaks
+	$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+	
+	//set image scale factor
+	$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+	
+	//set some language-dependent strings
+	//$pdf->setLanguageArray($l);
+	
+	// ---------------------------------------------------------
+	
+	// set font
+	$pdf->SetFont('helvetica', '', 12);
+	
+	// add a page
+	$pdf->AddPage();
+	
+	$pdf->LoadData($itemname, $warehousecode, $detaildata);
+	
+	$pdf->master();
+	// print colored table
+	$pdf->ColoredTable();
+	
+	// ---------------------------------------------------------
+	
+	//Close and output PDF document
+	$pdf->Output('BTBP'.idmaker::getDateTime().'.pdf', 'I');
+};
 //============================================================+
 // END OF FILE                                                
 //============================================================+
