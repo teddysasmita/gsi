@@ -323,7 +323,7 @@ class DefaultController extends Controller
         				->select('a.*, b.name')->from('sellingprices a')
 						->join('items b', 'b.id = a.iditem')
 						->where('b.name like :p_name', array(':p_name'=>'%'.$itemname.'%'))
-						->order('b.name, a.idatetime')
+						->order('b.name, a.idatetime desc')
 						->queryAll();
         		$this->render('display1a',array(
         				'data'=>$data));
