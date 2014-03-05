@@ -251,19 +251,19 @@ class LookUpController extends Controller {
 	{
 		if (!Yii::app()->user->isGuest) {
 			$sql=<<<EOS
-			select a.id, a.regnum, 
-			concat( 'Pemesanan ke Pemasok - ', b.firstname, ' ', b.lastname, ' - ', a.idatetime) as transinfo, 
-			'AC2' as transname
-			from purchasesorders a
-			join suppliers b on b.id = a.idsupplier
-			where regnum=:p_regnum
+			select a.id, a.regnum,
+				concat( 'Penerimaan Barang - ', b.firstname, ' ', b.lastname, ' - ', a.idatetime) as transinfo,
+				'AC11' as transname
+				from purchasesstockentries a
+				join suppliers b on b.id = a.idsupplier
+				where regnum=:p_regnum
 EOS;
 			$command=Yii::app()->db->createCommand($sql);
 			$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
 			$data=$command->queryAll();
 			if (count($data)>0)
 				echo json_encode($data);
-			else
+			else 
 				echo json_encode(array(array('id'=>'NA')));
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
