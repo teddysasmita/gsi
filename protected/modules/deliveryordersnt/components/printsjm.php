@@ -85,9 +85,9 @@ class MYPDF extends TCPDF {
 		$this->Cell(43, 15, 'Pemeriksa', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
 		$this->Cell(43, 15, 'Penerima', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
 		$this->Cell(23, 5, 'Halaman', 'LTR', 1, 'C', false,'', 0, false, 'T', 'T');
-		$this->setX(182);
+		$this->setX(83);
 		$this->Cell(23, 5, $this->PageNo().' dari ', 'LR', 1, 'C', false,'', 0, false, 'T', 'T');
-		$this->setX(182);
+		$this->setX(83);
 		$this->Cell(23, 5, 'total '.trim($this->getAliasNbPages()), 'LRB', 1, 'C', false,'', 0, false, 'T', 'T');
 	}
 	
@@ -104,7 +104,7 @@ class MYPDF extends TCPDF {
 		$this->setXY(91, 10);
 		$this->Cell(105, 10, 'Surat Jalan Manual', 'LTR', 1, 'C');
 		$this->SetFontSize(10);
-		$this->setXY(100, 20);
+		$this->setXY(91, 20);
 		$this->Cell(22, 5, 'Tanggal SJ', 'LT', 0, 'C');
 		$this->Cell(45, 5, $this->data->idatetime, 'LTR', 0, 'C');
 		$this->SetFont('Helvetica', 'B');
