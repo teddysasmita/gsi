@@ -423,10 +423,16 @@ class DefaultController extends Controller
 
      protected function saveNewDetails(array $details)
      {                  
+     	Yii::import('application.modules.sellingprice.models.*');
+     	require_once('Sellingprices.php');
+     	
          foreach ($details as $row) {
              $detailmodel=new Detailpurchasesstockentries;
              $detailmodel->attributes=$row;
              $respond=$detailmodel->insert();
+             $this->setSellingPrice($row['iddetail'], idmaker::getDateTime(), 
+             		idmaker::getRegNum('AC11'), $row['iditem'], $row['sellprice'], 
+             		'Bp Welly T', Yii::app()->user->id);	
              if (!$respond) {
                 break;
              }
@@ -638,5 +644,21 @@ EOS;
         	throw new CHttpException(404,'You have no authorization for this operation.');
         };
       }
+      
+	private function setSellingPrice($id, $idatetime, $regnum, $iditem, $sellprice, 
+			$approvalby, $userlog ) 
+	{
+		$sellingprice = new Sellingprices();
+		$sellingprice->id = $id;
+		$sellingprice->regnum = $regnum;
+		$sellingprice->idatetime = $idatetime;
+		$sellingprice->iditem = $iditem;
+		$sellingprice->normalprice = $sellprice;
+		$sellingprice->minprice = $sellprice;
+		$sellingprice->approvalby = $approvalby;
+		$sellingprice->userlog= $userlog;
+		$sellingprice->datetimelog=$idatetime;
+		$sellingprice->insert();
+	}
       
 }
