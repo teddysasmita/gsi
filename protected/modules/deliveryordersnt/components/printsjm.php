@@ -39,7 +39,7 @@ class MYPDF extends TCPDF {
 		$fill = 0;
 		$counter=0;
 		$iditem='';
-		$this->SetXY(10, 56);
+		$this->SetXY(1, 56);
 		if (count($this->detaildata) <= 9)
 			$maxrows = 9;
 		else
@@ -79,7 +79,7 @@ class MYPDF extends TCPDF {
 		$this->SetLineWidth(0.3);
 		$this->SetFont('Helvetica', 'B');
 		$this->SetFontSize(10);
-		$this->setXY(10, 115);
+		$this->setXY(1, 115);
 		$this->Cell(43, 15, 'Supir', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
 		$this->Cell(43, 15, 'CS', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
 		$this->Cell(43, 15, 'Pemeriksa', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
@@ -101,7 +101,7 @@ class MYPDF extends TCPDF {
 		$this->SetCellPadding(0.8);
 	
 		$this->setFontSize(20);
-		$this->setXY(100, 10);
+		$this->setXY(91, 10);
 		$this->Cell(105, 10, 'Surat Jalan Manual', 'LTR', 1, 'C');
 		$this->SetFontSize(10);
 		$this->setXY(100, 20);
