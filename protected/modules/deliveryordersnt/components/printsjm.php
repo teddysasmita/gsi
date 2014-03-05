@@ -167,7 +167,7 @@ function execute($model, $detailmodel) {
 	$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 	
 	//set margins
-	$pdf->SetMargins(PDF_MARGIN_LEFT, 56, PDF_MARGIN_RIGHT);
+	$pdf->SetMargins(1, 56, PDF_MARGIN_RIGHT);
 	$pdf->SetHeaderMargin(0);
 	$pdf->SetFooterMargin(0);
 	
