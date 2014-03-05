@@ -32,7 +32,7 @@ class MYPDF extends TCPDF {
 		$this->SetTextColor(0);
 		$this->SetDrawColor(0, 0, 0);
 		$this->SetLineWidth(0.3);
-		$this->SetFont('Courier', '');
+		$this->SetFont('', 'B');
 		$this->SetFontSize(10);
 		
 		// Data
@@ -63,7 +63,7 @@ class MYPDF extends TCPDF {
 				//$this->checkPageBreak(6, '');
 				$this->Cell(array_sum($this->headerwidths), 0, '', 'T', 1);
 		}
-		$this->Cell(array_sum($this->headerwidths), 0, '', 'T');
+		//$this->Cell(array_sum($this->headerwidths), 0, '', 'T');
 	}
 	
 	public function header()
@@ -106,30 +106,24 @@ class MYPDF extends TCPDF {
 		$this->SetFontSize(10);
 		$this->setXY(100, 20);
 		$this->Cell(22, 5, 'Tanggal SJ', 'LT', 0, 'C');
-		$this->SetFont('Courier', '');
 		$this->Cell(45, 5, $this->data->idatetime, 'LTR', 0, 'C');
 		$this->SetFont('Helvetica', 'B');
 		//$this->setXY(100, 27);
 		$this->Cell(20, 5, 'Nomor SJ', 'LTR', 0, 'C');
-		$this->SetFont('Courier', '');
 		$this->Cell(18, 5, $this->data->regnum, 'LTR', 1, 'C');
 		
 		$this->SetFont('Helvetica', 'B');
 		$this->Cell(35, 5, 'Nama Penerima', 'LTR', 0,'C');
-		$this->SetFont('Courier', '');
 		$this->Cell(80, 5, $this->data->receivername, 'LTR');
 		$this->SetFont('Helvetica', 'B');
 		$this->Cell(30, 5, 'Telp Penerima', 'LTR', 0,'C');
-		$this->SetFont('Courier', '');
 		$this->Cell(50, 5, $this->data->receiverphone, 'LTR', 1);
 		
 		$this->SetFont('Helvetica', 'B');
 		$this->Cell(35, 5, 'Alamat Penerima', 'LTR', 0,'C');
-		$this->SetFont('Courier', '');
 		$this->Cell(160, 5, $this->data->receiveraddress, 'LTR', 1);
 		$this->SetFont('Helvetica', 'B');
 		$this->Cell(35, 5, 'Info Kendaraan', 'LTRB', 0,'C');
-		$this->SetFont('Courier', '');
 		$this->Cell(160, 5, $this->data->vehicleinfo, 'LTRB', 1);
 		
 		$this->ln(5);
@@ -151,7 +145,7 @@ function execute($model, $detailmodel) {
 
 	// create new PDF document
 	
-	$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+	$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, array(215, 140), true, 'UTF-8', false);
 	$pdf->pagesize = array(215, 140);
 	$pdf->pageorientation = 'L';
 	$pdf->setPageOrientation($pdf->pageorientation, TRUE);	
@@ -178,7 +172,7 @@ function execute($model, $detailmodel) {
 	$pdf->SetFooterMargin(0);
 	
 	//set auto page breaks
-	$pdf->SetAutoPageBreak(TRUE, 25);
+	$pdf->SetAutoPageBreak(TRUE, 20);
 	
 	//set image scale factor
 	$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
