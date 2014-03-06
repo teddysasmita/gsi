@@ -16,8 +16,8 @@ $this->menu=array(
 	array('label'=>'Sejarah', 'url'=>array('history', 'id'=>$model->id)),
 	array('label'=>'Data Detil yang dihapus', 
          'url'=>array('/purchasesorder/detailpurchasesstockentries/deleted', 'id'=>$model->id)),
-	/*array('label'=>'Ringkasan', 'url'=>array('summary', 'id'=>$model->id)),
-	array('label'=>'Cetak', 'url'=>array('printsummary', 'id'=>$model->id)),*/
+	/*array('label'=>'Ringkasan', 'url'=>array('summary', 'id'=>$model->id)),*/
+	array('label'=>'Cetak', 'url'=>array('printlpb', 'id'=>$model->id))
 );
 ?>
 

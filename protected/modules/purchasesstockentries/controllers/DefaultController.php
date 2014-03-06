@@ -660,5 +660,28 @@ EOS;
 		$sellingprice->datetimelog=$idatetime;
 		$sellingprice->insert();
 	}
+	
+	public function actionPrintlpb($id)
+	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
+				Yii::app()->user->id)) {
+			$this->trackActivity('p');
+			 
+			$model=$this->loadModel($id);
+			$detailmodel=$this->loadDetails($id);
+			Yii::import('application.vendors.tcpdf.*');
+			require_once ('tcpdf.php');
+			Yii::import('application.modules.purchasesstockentries.components.*');
+			require_once('printlpb.php');
+			ob_clean();
+	
+			execute($model, $detailmodel);
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		}
+		 
+		 
+		 
+	}
       
 }
