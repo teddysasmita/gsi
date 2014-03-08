@@ -47,7 +47,7 @@ class SalesposreportController extends Controller
 				->setDescription("Laporan Penjualan Bulanan")
 				->setKeywords("Laporan Penjualan")
 				->setCategory("Laporan");	
-			
+			$startdate=$startdate.' 23:59:59';
 			$selectfields = <<<EOS
 			a.idatetime, a.regnum, a.total, a.discount, a.cash, a.cashreturn, 
 			a.payer_name, a.payer_address, a.payer_phone, 
