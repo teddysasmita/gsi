@@ -1,0 +1,44 @@
+Master Data
+Barang Dagang (AB3)
+Pelanggan (AB1)
+Pemasok (AB2)
+Gudang (AB4)
+Tenaga Penjualan (Sales) (AB5)
+Stok Opname (AB6)
+Cetak Barcode (AB7)
+Bank dan Pembiayaan (AB8)
+Akun Bank (AB9)
+Kartu Kredit dan Debit (AB10)
+Cicilan (AB11)
+
+Bagian Pembelian
+Pesanan ke Pemasok (AC2)
+Penerimaan Barang dari Pemasok (AC5)
+Pembayaran ke Pemasok (AC7)
+Memo Pembelian (AC6)
+Retur Pembelian (AC10)
+Penerimaan Barang (AC12)
+
+Bagian Penjualan
+Pesanan Pembeli (AC1)
+Pengiriman Barang ke Pelanggan 
+Penerimaan Pembayaran dari Pelanggan 
+Penentuan Harga Jual (AC11)
+
+Bagian Customer Service
+Pengiriman Barang (AC13)
+Pengiriman Barang Tanpa Transaksi (AC14)
+Pembatalan Penjualan (AC23)
+
+Kasir
+Penjualan Tunai (AC20)
+Cetak Faktur Duplikat (AC21)
+Pelunasan (AC22)
+
+Bagian Gudang
+Terima Kiriman dari Pemasok (AC3)
+Pemasukan Saldo Stok Opname (AC8)
+
+Bagian Keuangan
+Pembayaran Pemasok (AC4)
+Penentuan Harga Pokok Opname(AC9)
