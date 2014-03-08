@@ -62,6 +62,7 @@ EOS;
 				->where('a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime', array(
 					':p_startidatetime'=>$startdate, ':p_endidatetime'=>$enddate
 				))
+				->order('a.idatetime, a.regnum')
 				->queryAll();
 			$headersfield = array( 'idatetime', 'regnum', 'total', 'discount', 'cash', 'cashreturn', 
 				'payer_name', 'payer_address', 'payer_phone', 
