@@ -8,7 +8,7 @@
 
 <?php
    $transScript=<<<EOS
-      $('#Stockentries_transid').change(
+		$('#Stockentries_transid').change(
 		function() {
 			$.getJSON('index.php?r=LookUp/getTrans',{ id: $('#Stockentries_transid').val() },
             function(data) {
@@ -27,6 +27,12 @@
 				}
 			})
 		});
+		$('.updateButton').click(
+		function(evt) {
+			$('#command').val('updateDetail');
+			$('#detailcommand').val(this.href);
+			$('#stockentries-form').submit();
+		});   
 EOS;
    Yii::app()->clientScript->registerScript("transScript", $transScript, CClientscript::POS_READY);
 
@@ -50,6 +56,7 @@ EOS;
         
       <?php 
         echo CHtml::hiddenField('command', '', array('id'=>'command'));
+        echo CHtml::hiddenField('detailcommand', '', array('id'=>'detailcommand'));
         echo $form->hiddenField($model, 'id');
         echo $form->hiddenField($model, 'transname');
         echo $form->hiddenField($model, 'userlog');
@@ -79,6 +86,7 @@ EOS;
 		<?php echo $form->error($model,'idatetime'); ?>
 	</div>
 
+	
 	<div class="row">
 		<?php echo $form->labelEx($model,'transid'); ?>
 		<?php 
@@ -119,8 +127,6 @@ EOS;
         ?>
         <?php echo $form->error($model,'remark');?> 
 	</div>
-	
-	
       
 <?php 
     if (isset(Yii::app()->session['Detailstockentries'])) {
@@ -156,6 +162,7 @@ EOS;
                         'visible'=>'false'
                      )
                   ),
+				'updateButtonOptions'=>array("class"=>'updateButton'),
                   'updateButtonUrl'=>"Action::decodeUpdateDetailStockEntryUrl(\$data)",
               )
           ),

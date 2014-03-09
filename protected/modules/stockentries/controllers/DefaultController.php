@@ -106,6 +106,9 @@ class DefaultController extends Controller
                          $model->attributes=$_POST['Stockentries'];
                          Yii::app()->session['Stockentries']=$_POST['Stockentries'];
                          $this->loadLPB($model->transid, $model->id);
+                      } else if ($_POST['command']=='updateDetail') {
+                         $model->attributes=$_POST['Stockentries'];
+                         Yii::app()->session['Stockentries']=$_POST['Stockentries'];
                       }
                    }
                 }

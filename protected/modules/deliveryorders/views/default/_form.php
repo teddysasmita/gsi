@@ -75,6 +75,19 @@ EOS;
             ?>
 		<?php echo $form->error($model,'idatetime'); ?>
 	</div>
+	
+	<div class="row">
+         <?php echo $form->labelEx($model,'invnum'); ?>
+         <?php 
+            /*$this->widget("zii.widgets.jui.CJuiAutoComplete", array(
+                'name'=>'Deliveryordersnt_receivername',
+                'sourceUrl'=>Yii::app()->createUrl('LookUp/getReceiverinfobyname'),
+              'value'=>$model->receivername
+            ));*/
+			echo $form->textField($model, 'invnum', array('size'=>30));
+         ?>
+         <?php echo $form->error($model,'invnum'); ?>
+	</div>
 
 	<div class="row">
          <?php echo $form->labelEx($model,'receivername'); ?>
