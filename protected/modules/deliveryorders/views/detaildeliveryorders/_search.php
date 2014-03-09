@@ -1,6 +1,6 @@
 <?php
-/* @var $this DetailsalesordersController */
-/* @var $model Detailsalesorders */
+/* @var $this DetailpurchasesordersController */
+/* @var $model Detailpurchasesorders */
 /* @var $form CActiveForm */
 ?>
 
@@ -27,6 +27,11 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->label($model,'idunit'); ?>
+		<?php echo $form->textField($model,'idunit',array('size'=>21,'maxlength'=>21)); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->label($model,'qty'); ?>
 		<?php echo $form->textField($model,'qty'); ?>
 	</div>
@@ -39,6 +44,16 @@
 	<div class="row">
 		<?php echo $form->label($model,'price'); ?>
 		<?php echo $form->textField($model,'price'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'userlog'); ?>
+		<?php echo $form->textField($model,'userlog',array('size'=>21,'maxlength'=>21)); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'datetimelog'); ?>
+		<?php echo $form->textField($model,'datetimelog',array('size'=>19,'maxlength'=>19)); ?>
 	</div>
 
 	<div class="row buttons">

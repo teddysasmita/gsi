@@ -1,6 +1,6 @@
 <?php
-/* @var $this DeliveryordersntController */
-/* @var $model Deliveryordersnt */
+/* @var $this PurchasesordersController */
+/* @var $model Purchasesorders */
 /* @var $form CActiveForm */
 ?>
 
@@ -17,23 +17,53 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->label($model,'regnum'); ?>
+		<?php echo $form->textField($model,'regnum',array('size'=>12,'maxlength'=>12)); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->label($model,'idatetime'); ?>
 		<?php echo $form->textField($model,'idatetime',array('size'=>19,'maxlength'=>19)); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'receivername'); ?>
-		<?php echo $form->textField($model,'receivername',array('size'=>50,'maxlength'=>100)); ?>
+		<?php echo $form->label($model,'rdatetime'); ?>
+		<?php echo $form->textField($model,'rdatetime',array('size'=>19,'maxlength'=>19)); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'receiveraddress'); ?>
-		<?php echo $form->textField($model,'receiveraddress', array('size'=>50,'maxlength'=>200)); ?>
+		<?php echo $form->label($model,'idsupplier'); ?>
+		<?php echo $form->textField($model,'idsupplier',array('size'=>21,'maxlength'=>21)); ?>
 	</div>
-	
+
 	<div class="row">
-		<?php echo $form->label($model,'receiverphone'); ?>
-		<?php echo $form->textField($model,'receiverphone', array('size'=>50,'maxlength'=>50)); ?>
+		<?php echo $form->label($model,'total'); ?>
+		<?php echo $form->textField($model,'total'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'discount'); ?>
+		<?php echo $form->textField($model,'discount'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'status'); ?>
+		<?php echo $form->textField($model,'status',array('size'=>10,'maxlength'=>10)); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'remark'); ?>
+		<?php echo $form->textArea($model,'remark',array('rows'=>6, 'cols'=>50)); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'userlog'); ?>
+		<?php echo $form->textField($model,'userlog',array('size'=>21,'maxlength'=>21)); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'datetimelog'); ?>
+		<?php echo $form->textField($model,'datetimelog',array('size'=>19,'maxlength'=>19)); ?>
 	</div>
 
 	<div class="row buttons">

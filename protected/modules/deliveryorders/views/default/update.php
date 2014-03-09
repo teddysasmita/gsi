@@ -1,25 +1,28 @@
 <?php
-/* @var $this DeliveryordersntController */
-/* @var $model Deliveryordersnt */
+/* @var $this DeliveryordersController */
+/* @var $model Deliveryorders */
 
 $this->breadcrumbs=array(
-   'Proses'=>array('/site/proses'),
+      'Proses'=>array('/site/proses'),
 	'Daftar'=>array('index'),
 	'Lihat Data'=>array('view','id'=>$model->id),
 	'Ubah Data',
 );
 
 $this->menu=array(
-	//array('label'=>'List Deliveryordersnt', 'url'=>array('index')),
-	//array('label'=>'Create Deliveryordersnt', 'url'=>array('create')),
-	//array('label'=>'View Deliveryordersnt', 'url'=>array('view', 'id'=>$model->id)),
-	//array('label'=>'Manage Deliveryordersnt', 'url'=>array('admin')),
-    array('label'=>'Tambah Detil', 'url'=>array('detaildeliveryordersnt/create', 'id'=>$model->id, 
-      'command'=>'update'),
-          'linkOptions'=>array('id'=>'adddetail')),     
+	//array('label'=>'List Deliveryorders', 'url'=>array('index')),
+	//array('label'=>'Create Deliveryorders', 'url'=>array('create')),
+	//array('label'=>'View Deliveryorders', 'url'=>array('view', 'id'=>$model->id)),
+	//array('label'=>'Manage Deliveryorders', 'url'=>array('admin')),
+    array('label'=>'Tambah Detil', 'url'=>array('detaildeliveryorders/create', 
+       'id'=>$model->id, 'command'=>'update', 'regnum'=>$model->regnum),
+          'linkOptions'=>array('id'=>'adddetail')), 
+   array('label'=>'Tambah Detil2', 'url'=>array('detaildeliveryorders2/create', 
+      'id'=>$model->id, 'command'=>'update', 'regnum'=>$model->regnum),
+          'linkOptions'=>array('id'=>'adddetail2')) 
 );
 ?>
 
-<h1>Pengiriman Barang Tanpa Transaksi</h1>
+<h1>Pengiriman Barang</h1>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model, 'command'=>'update')); ?>
+<?php $this->renderPartial('_form', array('model'=>$model, 'command'=>'update')); ?>

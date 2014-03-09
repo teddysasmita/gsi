@@ -1,33 +1,45 @@
 <?php
-/* @var $this DeliveryordersntController */
-/* @var $model Deliveryordersnt */
+/* @var $this DeliveryordersController */
+/* @var $model Deliveryorders */
 
 $this->breadcrumbs=array(
-	'Proses'=>array('/site/proses'),
+      'Proses'=>array('/site/proses'),
+	'Daftar'=>array('index'),
 	'Tambah Data',
 );
 
 $this->menu=array(
-	//array('label'=>'List Deliveryordersnt', 'url'=>array('index')),
-	//array('label'=>'Manage Deliveryordersnt', 'url'=>array('admin')),
-      array('label'=>'Tambah Detil', 'url'=>array('detaildeliveryordersnt/create', 'id'=>$model->id),
-          'linkOptions'=>array('id'=>'adddetail')),      
+	//array('label'=>'Daftar', 'url'=>array('index')),
+	//array('label'=>'Pengaturan', 'url'=>array('admin')),
+      array('label'=>'Tambah Detil', 'url'=>array('detaildeliveryorders/create', 
+         'id'=>$model->id),
+          'linkOptions'=>array('id'=>'adddetail')), 
+      array('label'=>'Tambah Detil2', 'url'=>array('detaildeliveryorders2/create', 
+         'id'=>$model->id),
+          'linkOptions'=>array('id'=>'adddetail2')) 
 );
+
 $jq=<<<EOH
-$(function(){
-  $('#adddetail').click(function(event){
-        var mainform;
-        var hiddenvar;
-        mainform=$('#deliveryordersnt-form');
-        $('#command').val('adddetail');
-        mainform.submit();
-        event.preventDefault();
-  });
-}); 
+   $('#adddetail').click(function(event){
+     var mainform;
+     var hiddenvar;
+     mainform=$('#deliveryorders-form');
+     $('#command').val('adddetail');
+     mainform.submit();
+     event.preventDefault();
+   });
+   $('#adddetail2').click(function(event){
+     var mainform;
+     var hiddenvar;
+     mainform=$('#deliveryorders-form');
+     $('#command').val('adddetail2');
+     mainform.submit();
+     event.preventDefault();
+   });
 EOH;
 Yii::app()->clientScript->registerScript('myscript', $jq, CClientScript::POS_READY);
 ?>
 
-<h1>Pengiriman Barang Tanpa Transaksi</h1>
+<h1>Pengiriman Barang</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model, 'id'=>$model->id, 'command'=>'create')); ?>

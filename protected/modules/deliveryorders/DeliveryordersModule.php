@@ -1,6 +1,6 @@
 <?php
 
-class DeliveryordersntModule extends CWebModule
+class DeliveryordersModule extends CWebModule
 {
 	public function init()
 	{
@@ -9,8 +9,8 @@ class DeliveryordersntModule extends CWebModule
 
 		// import the module-level models and components
 		$this->setImport(array(
-			'deliveryordersnt.models.*',
-			'deliveryordersnt.components.*',
+			'deliveryorders.models.*',
+			'deliveryorders.components.*',
 		));
 	}
 

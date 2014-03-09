@@ -1,60 +1,78 @@
 <?php
-/* @var $this DeliveryordersntController */
-/* @var $model Deliveryordersnt */
+/* @var $this DeliveryordersController */
+/* @var $model Deliveryorders */
 /* @var $form CActiveForm */
 ?>
 
 <div class="form">
 
-   <?php 
-   
+<?php
+   $suppliers=Yii::app()->db->createCommand()
+      ->select('id, firstname, lastname')
+      ->from('suppliers')
+      ->order('firstname, lastname')
+      ->queryAll();
+   foreach($suppliers as $row) {
+      $supplierids[]=$row['id'];
+      $suppliernames[]=$row['firstname'].' '.$row['lastname'];
+   }
+   $supplierids=CJSON::encode($supplierids);
+   $suppliernames=CJSON::encode($suppliernames);
+   $supplierScript=<<<EOS
+      var supplierids=$supplierids;
+      var suppliernames=$suppliernames;
+      $('#Deliveryorders_suppliername').change(function() {
+         var activename=$('#Deliveryorders_suppliername').val();
+         $('#Deliveryorders_idsupplier').val(
+            supplierids[suppliernames.indexOf(activename)]);
+      });
+EOS;
+   Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);
+
    if($command=='create') 
       $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'deliveryordersnt-form',
+	'id'=>'deliveryorders-form',
 	'enableAjaxValidation'=>true,
-      'action'=>Yii::app()->createUrl("/deliveryordersnt/default/create")
+      'action'=>Yii::app()->createUrl("/purchasesorder/default/create")
       ));
    else if($command=='update')
       $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'deliveryordersnt-form',
+	'id'=>'deliveryorders-form',
 	'enableAjaxValidation'=>true,
-      'action'=>Yii::app()->createUrl("/deliveryordersnt/default/update", array('id'=>$model->id))
+      'action'=>Yii::app()->createUrl("/purchasesorder/default/update", array('id'=>$model->id))
       ));
-   ?>
+  ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
 	<?php echo $form->errorSummary($model); ?>
-
-      <?php
-         echo $form->hiddenfield($model,'id');   
-         echo $form->hiddenField($model,'userlog');
-         echo $form->hiddenField($model,'datetimelog');
-         echo $form->hiddenField($model,'status');
-         echo $form->hiddenField($model,'regnum');
-         
-         echo CHtml::hiddenField('command');
+        
+      <?php 
+        echo CHtml::hiddenField('command', '', array('id'=>'command'));
+        echo $form->hiddenField($model, 'id');
+        echo $form->hiddenField($model, 'userlog');
+        echo $form->hiddenField($model, 'datetimelog');
+        echo $form->hiddenField($model, 'status');
+        echo $form->hiddenField($model, 'regnum');
       ?>
-      
+        
 	<div class="row">
 		<?php echo $form->labelEx($model,'idatetime'); ?>
-		<?php 
-            //echo $form->dateField($model,'idatetime',array('size'=>19,'maxlength'=>19)); 
-            $this->widget('zii.widgets.jui.CJuiDatePicker',array(
-               'name'=>'Deliveryordersnt[idatetime]',
-                  // additional javascript options for the date picker plugin
-               'options'=>array(
-                  'showAnim'=>'fold',
-                  'dateFormat'=>'yy/mm/dd',
-                  'defaultdate'=>$model->idatetime
-               ),
-               'htmlOptions'=>array(
-                  'style'=>'height:20px;',
-					'id'=>'Deliveryordersnt_idatetime'
-               ),
-               'value'=>$model->idatetime,
-            ));
-            ?> 
+            <?php
+               $this->widget('zii.widgets.jui.CJuiDatePicker',array(
+                  'name'=>'Deliveryorders[idatetime]',
+                     // additional javascript options for the date picker plugin
+                  'options'=>array(
+                     'showAnim'=>'fold',
+                     'dateFormat'=>'yy/mm/dd',
+                     'defaultdate'=>$model->idatetime
+                  ),
+                  'htmlOptions'=>array(
+                     'style'=>'height:20px;',
+                  ),
+                  'value'=>$model->idatetime,
+               ));
+            ?>
 		<?php echo $form->error($model,'idatetime'); ?>
 	</div>
 
@@ -74,11 +92,6 @@
 	<div class="row">
          <?php echo $form->labelEx($model,'receiveraddress'); ?>
          <?php 
-            /*$this->widget("zii.widgets.jui.CJuiAutoComplete", array(
-                'name'=>'Deliveryordersnt_receivername',
-                'sourceUrl'=>Yii::app()->createUrl('LookUp/getReceiverinfobyaddress'),
-              'value'=>$model->receiveraddress
-            ));*/
 			echo $form->textField($model, 'receiveraddress', array('size'=>50));
          ?>
          <?php echo $form->error($model,'receiveraddress'); ?>
@@ -87,11 +100,6 @@
 	<div class="row">
          <?php echo $form->labelEx($model,'receiverphone'); ?>
          <?php 
-            /*$this->widget("zii.widgets.jui.CJuiAutoComplete", array(
-                'name'=>'Deliveryordersnt_receiverphone',
-                'sourceUrl'=>Yii::app()->createUrl('LookUp/getReceiverinfobyname'),
-              'value'=>$model->receiverphone
-            ));*/
 			echo $form->textField($model, 'receiverphone');
          ?>
          <?php echo $form->error($model,'receiverphone'); ?>
@@ -113,42 +121,103 @@
 		<?php echo $form->error($model, 'vehicleinfo'); ?>
 	</div>
 
-      <?php 
-
-if (isset(Yii::app()->session['Detaildeliveryordersnt'])) {
-   $rawdata=Yii::app()->session['Detaildeliveryordersnt'];
-   $count=count($rawdata);
-} else {
-   $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryordersnt where id='$model->id'")->queryScalar();
-   $sql="select * from detaildeliveryordersnt where id='$model->id'";
-   $rawdata=Yii::app()->db->createCommand($sql)->queryAll ();
-}
-$dataProvider=new CArrayDataProvider($rawdata, array(
-      'totalItemCount'=>$count,
-));
-$this->widget('zii.widgets.grid.CGridView', array(
-	'dataProvider'=>$dataProvider,
-	'columns'=>array(
-			'itemname',
-			'qty',
-          array(
-              'class'=>'CButtonColumn',
-              'buttons'=> array(
+<?php 
+    if (isset(Yii::app()->session['Detaildeliveryorders'])) {
+       $rawdata=Yii::app()->session['Detaildeliveryorders'];
+       $count=count($rawdata);
+    } else {
+       $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryorders where id='$model->id'")->queryScalar();
+       $sql="select * from detaildeliveryorders where id='$model->id'";
+       $rawdata=Yii::app()->db->createCommand($sql)->queryAll ();
+    }
+    $dataProvider=new CArrayDataProvider($rawdata, array(
+          'totalItemCount'=>$count,
+    ));
+    $this->widget('zii.widgets.grid.CGridView', array(
+            'dataProvider'=>$dataProvider,
+            'columns'=>array(
+            array(
+               'header'=>'Item Name',
+               'name'=>'iditem',
+               'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
+            ),
+			array(
+				'header'=>'Faktur',
+				'name'=>'invqty',
+			),
+            array(
+               'header'=>'Sisa',
+               'name'=>'leftqty',
+            ),
+            array(
+				'header'=>'Kirim',
+				'name'=>'qty',
+			),
+            array(
+               'class'=>'CButtonColumn',
+               'buttons'=> array(
+                   'delete'=>array(
+                    'visible'=>'false'
+                   ),
                   'view'=>array(
                      'visible'=>'false'
                   )
-              ),
-              'updateButtonUrl'=>"Action::decodeUpdateDetailDeliveryOrderNtUrl(\$data)",
-			  'deleteButtonUrl'=>"Action::decodeDeleteDetailDeliveryOrderNtUrl(\$data)",
-          )
-      ),
-));
- ?>
- 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton(ucfirst($command)); ?>
-	</div>
+               ),
+               'updateButtonUrl'=>"Action::decodeUpdateDetailPurchasesOrderUrl(\$data, $model->regnum)",
+            )
+          ),
+    ));
+    
+    if (isset(Yii::app()->session['Detaildeliveryorders2'])) {
+       $rawdata=Yii::app()->session['Detaildeliveryorders2'];
+       $count=count($rawdata);
+    } else {
+       $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryorders2 where id='$model->id'")->queryScalar();
+       $sql="select * from detaildeliveryorders2 where id='$model->id'";
+       $rawdata=Yii::app()->db->createCommand($sql)->queryAll ();
+    }
+    $dataProvider=new CArrayDataProvider($rawdata, array(
+          'totalItemCount'=>$count,
+    ));
+    $this->widget('zii.widgets.grid.CGridView', array(
+            'dataProvider'=>$dataProvider,
+            'columns'=>array(
+				array(
+					'header'=>'Item Name',
+					'name'=>'iditem',
+					'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
+				),
+				array(
+					'header'=>'Faktur',
+					'name'=>'invqty',
+				),
+				array(
+					'header'=>'Gudang',
+					'name'=>'idwarehouse',
+					'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
+				),
+				array(
+					'class'=>'CButtonColumn',
+					'buttons'=> array(
+						'delete'=>array(
+							'visible'=>'false'
+						),
+						'update'=>array(
+	                        'visible'=>'false'
+						)
+					),
+					'viewButtonUrl'=>"Action::decodeViewDetailPurchasesOrder2Url(\$data, $model->regnum)",
+				)
+			),
+    	));
+?>
+
+   <div class="row buttons">
+      <?php echo CHtml::submitButton(ucfirst($command)); ?>
+   </div>
 
 <?php $this->endWidget(); ?>
 
+
+      
 </div><!-- form -->

@@ -1,5 +1,5 @@
 <?php
-/* @var $this DeliveryordersntController */
+/* @var $this DeliveryordersController */
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
@@ -8,14 +8,13 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'Tambah Data', 'url'=>array('create')),
-	array('label'=>'Pencarian Data', 'url'=>array('admin')),
-      array('label'=>'Data-data yang telah terhapus', 'url'=>array('deleted')),
-        
+   array('label'=>'Tambah Data', 'url'=>array('create')),
+   array('label'=>'Pencarian Data', 'url'=>array('admin')),
+   array('label'=>'Data yang telah dihapus', 'url'=>array('deleted')),
 );
 ?>
 
-<h1>Pengiriman Barang Tanpa Transaksi</h1>
+<h1>Pengiriman Barang</h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,

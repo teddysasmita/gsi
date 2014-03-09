@@ -54,6 +54,7 @@ return array(
             'salesreplace',
             'purchasesstockentries',
             'deliveryordersnt',
+            'deliveryorders',
         ),
 
         

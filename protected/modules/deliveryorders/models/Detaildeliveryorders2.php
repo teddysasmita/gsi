@@ -1,29 +1,25 @@
 <?php
 
 /**
- * This is the model class for table "deliveryordersnt".
+ * This is the model class for table "detaildeliveryorders2".
  *
- * The followings are the available columns in table 'deliveryordersnt':
+ * The followings are the available columns in table 'detaildeliveryorders2':
+ * @property string $iddetail
  * @property string $id
- * @property string $regnum
- * @property string $idatetime
- * @property string $drivername
- * @property string $vehicleinfo
- * @property string $receivername
- * @property string $receiveraddress
- * @property string $receiverphone
- * @property string $status
+ * @property string $iditem
+ * @property double $qty
+ * @property string $idwarehouse
  * @property string $userlog
  * @property string $datetimelog
  */
-class Deliveryordersnt extends CActiveRecord
+class Detaildeliveryorders2 extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'deliveryordersnt';
+		return 'detaildeliveryorders2';
 	}
 
 	/**
@@ -34,17 +30,13 @@ class Deliveryordersnt extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, regnum, idatetime, drivername, vehicleinfo, receivername, status, receiveraddress, receiverphone, userlog, datetimelog', 'required'),
-			array('id, userlog', 'length', 'max'=>21),
-			array('regnum', 'length', 'max'=>12),
-			array('idatetime, datetimelog', 'length', 'max'=>19),
-			array('drivername, receiveraddress', 'length', 'max'=>200),
-			array('vehicleinfo, receiverphone', 'length', 'max'=>50),
-			array('receivername', 'length', 'max'=>100),
-			array('status', 'length', 'max'=>10),
+			array('iddetail, id, iditem, qty, idwarehouse, userlog, datetimelog', 'required'),
+			array('qty', 'numerical'),
+			array('iddetail, id, iditem, idwarehouse, userlog', 'length', 'max'=>21),
+			array('datetimelog', 'length', 'max'=>19),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, regnum, idatetime, drivername, vehicleinfo, status, receivername, receiveraddress, receiverphone, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('iddetail, id, iditem, qty, idwarehouse, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,15 +57,11 @@ class Deliveryordersnt extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
+			'iddetail' => 'Iddetail',
 			'id' => 'ID',
-			'regnum' => 'Nomor Urut',
-			'idatetime' => 'Tanggal',
-			'drivername' => 'Nama Pengemudi',
-			'vehicleinfo' => 'Info Kendaraan',
-			'receivername' => 'Nama Penerima',
-			'receiveraddress' => 'Alamat Penerima',
-			'receiverphone' => 'No Telp Penerima',
-			'status'=>'status',
+			'iditem' => 'Nama Barang',
+			'qty' => 'Jumlah',
+			'idwarehouse' => 'Gudang',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
 		);
@@ -97,15 +85,11 @@ class Deliveryordersnt extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
+		$criteria->compare('iddetail',$this->iddetail,true);
 		$criteria->compare('id',$this->id,true);
-		$criteria->compare('regnum',$this->regnum,true);
-		$criteria->compare('idatetime',$this->idatetime,true);
-		$criteria->compare('drivername',$this->drivername,true);
-		$criteria->compare('vehicleinfo',$this->vehicleinfo,true);
-		$criteria->compare('receivername',$this->receivername,true);
-		$criteria->compare('receiveraddress',$this->receiveraddress,true);
-		$criteria->compare('receiverphone',$this->receiverphone,true);
-		$criteria->compare('status',$this->status,true);
+		$criteria->compare('iditem',$this->iditem,true);
+		$criteria->compare('qty',$this->qty);
+		$criteria->compare('idwarehouse',$this->idwarehouse,true);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);
 
@@ -118,7 +102,7 @@ class Deliveryordersnt extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Deliveryordersnt the static model class
+	 * @return Detaildeliveryorders2 the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
