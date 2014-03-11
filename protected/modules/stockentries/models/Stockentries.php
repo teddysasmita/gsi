@@ -35,10 +35,11 @@ class Stockentries extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id, regnum, idatetime, transid, transname, idwarehouse, donum, transinfo, userlog, datetimelog', 'required'),
-			array('id, transid, idwarehouse, userlog', 'length', 'max'=>21),
+			array('id, idwarehouse, userlog', 'length', 'max'=>21),
 			array('transname', 'length', 'max'=>64),
 			array('transinfo', 'length', 'max'=>100),
-			array('regnum, donum', 'length', 'max'=>12),
+			array('regnum', 'length', 'max'=>12),
+			array('transid', 'length', 'max'=>30),
 			array('donum', 'length', 'max'=>50),
 			array('idatetime, datetimelog', 'length', 'max'=>19),
 			array('remark', 'safe'),

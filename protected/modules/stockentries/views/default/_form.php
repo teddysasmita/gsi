@@ -90,7 +90,7 @@ EOS;
 	<div class="row">
 		<?php echo $form->labelEx($model,'transid'); ?>
 		<?php 
-			echo $form->textField($model,'transid');
+			echo $form->textField($model,'transid', array('maxlength'=>30));
 		?>
 		<?php echo $form->error($model,'transid'); ?>
 	</div>
@@ -115,7 +115,7 @@ EOS;
 	<div class="row">
 		<?php echo $form->labelEx($model,'donum'); ?>
         <?php 
-           echo $form->textField($model, 'donum'); 
+           echo $form->textField($model, 'donum', array('maxlength'=>50)); 
         ?>
         <?php echo $form->error($model,'donum');?> 
 	</div>
