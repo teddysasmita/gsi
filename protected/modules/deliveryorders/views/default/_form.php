@@ -26,6 +26,10 @@
          $('#Deliveryorders_idsupplier').val(
             supplierids[suppliernames.indexOf(activename)]);
       });
+		$('#Deliveryorders_invnum').change(function() {
+   			$('#command').val('loadInvoice');
+   			$('#deliveryorders-form').submit();
+		});
 EOS;
    Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);
 

@@ -39,6 +39,7 @@ class Stockentries extends CActiveRecord
 			array('transname', 'length', 'max'=>64),
 			array('transinfo', 'length', 'max'=>100),
 			array('regnum, donum', 'length', 'max'=>12),
+			array('donum', 'length', 'max'=>50),
 			array('idatetime, datetimelog', 'length', 'max'=>19),
 			array('remark', 'safe'),
 			// The following rule is used by search().

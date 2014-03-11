@@ -101,12 +101,16 @@ class DefaultController extends Controller
                          Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
                          $this->redirect(array('detaildeliveryorders/create',
                             'id'=>$model->id, 'regnum'=>$model->regnum));
-                      }
-                      if($_POST['command']=='adddetail2') {
+                      } else if($_POST['command']=='adddetail2') {
                          $model->attributes=$_POST['Deliveryorders'];
                          Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
                          $this->redirect(array('detaildeliveryorders2/create',
                             'id'=>$model->id, 'regnum'=>$model->regnum ));                          
+                      } else if($_POST['command']=='loadInvoice') {
+                         $model->attributes=$_POST['Deliveryorders'];
+                         Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
+	
+                         
                       }
                    }
                 }
@@ -724,5 +728,13 @@ class DefaultController extends Controller
         	$model->attributes=Yii::app()->session['Deliveryorders'];
         	$model->total=$total;
         	$model->discount=$totaldisc;
+        }
+        
+        private functon loadInvoice($invnum)
+        {
+        	$master=Yii::app()->db->createCommand()->
+        		select()
+        	
+        	
         }
 }
