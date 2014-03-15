@@ -430,9 +430,10 @@ class DefaultController extends Controller
              $detailmodel=new Detailpurchasesstockentries;
              $detailmodel->attributes=$row;
              $respond=$detailmodel->insert();
-             $this->setSellingPrice($row['iddetail'], idmaker::getDateTime(), 
+             /*$this->setSellingPrice($row['iddetail'], idmaker::getDateTime(), 
              		idmaker::getRegNum('AC11'), $row['iditem'], $row['sellprice'], 
              		'Bp Welly T', Yii::app()->user->id);	
+             */
              if (!$respond) {
                 break;
              }

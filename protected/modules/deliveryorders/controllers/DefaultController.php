@@ -107,10 +107,9 @@ class DefaultController extends Controller
                          $this->redirect(array('detaildeliveryorders2/create',
                             'id'=>$model->id, 'regnum'=>$model->regnum ));                          
                       } else if($_POST['command']=='loadInvoice') {
-                         $model->attributes=$_POST['Deliveryorders'];
-                         Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
-	
-                         
+						$model->attributes=$_POST['Deliveryorders'];
+						Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
+						$this->loadInvoice($model->invnum, $model->id);
                       }
                    }
                 }
@@ -730,11 +729,36 @@ class DefaultController extends Controller
         	$model->discount=$totaldisc;
         }
         
-        private functon loadInvoice($invnum)
+        private function loadInvoice($invnum, $id)
         {
-        	$master=Yii::app()->db->createCommand()->
-        		select()
-        	
-        	
+        	$master=Yii::app()->db->createCommand()
+        		->select()->from('salespos')->where('regnum = :p_regnum', 
+        		array(':p_regnum'=>$invnum))->queryAll(); 
+        	$details=Yii::app()->db->createCommand()
+        		->select('b.*')->from('salespos a')->join('detailsalespos b', 'b.id = a.id')
+        		->where('a.regnum = :p_regnum',
+				array(':p_regnum'=>$invnum))->queryAll();
+        	$detailsdone=Yii::app()->db->createCommand()
+        		->select('b.*')->from('deliveryorders a')->join('detaildeliveryorders b', 'b.id = a.id')
+        		->where('a.regnum = :p_regnum',
+        			array(':p_regnum'=>$invnum))->queryAll();
+        	foreach($details as $detail ) {
+        		$detaildata['id']=$id;
+        		$detaildata['iddetail']=idmaker::getCurrentID();
+        		$detaildata['iditem']=$detail['iditem'];
+        		$detaildata['invqty']=$detail['qty'];
+        		$detaildata['qty']=0;
+        		$detaildata['leftqty']=$detail['qty'];
+        		$detaildata['idwarehouse']='';
+        		$detaildata['userlog']=Yii::app()->user->id;
+				$detaildata['datetimelog']=idmaker::getDateTime();
+        		foreach($detailsdone as $detaildone) {
+        			if ($detaildone['iditem']=$detail['iditem']) {
+        				$detaildata['leftqty']=$detaildata['leftqty']-$detaildone['qty'];		
+        			}
+        		}
+        		$detailsdata[]=$detaildata;
+        	} 
+        	Yii::app()->session['Detaildeliveryorders'] = $detailsdata;
         }
 }
