@@ -62,8 +62,9 @@ class DefaultController extends Controller
                     $model->attributes=Yii::app()->session['Deliveryorders'];
                 }
                 
-               // Uncomment the following line if AJAX validation is needed
-               $this->performAjaxValidation($model);
+                // Uncomment the following line if AJAX validation is needed
+                $this->performAjaxValidation($model);
+               
 
                 if (isset($_POST)){
                    if(isset($_POST['yt0'])) {
@@ -110,6 +111,7 @@ class DefaultController extends Controller
 						$model->attributes=$_POST['Deliveryorders'];
 						Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
 						$this->loadInvoice($model->invnum, $model->id);
+						$model->attributes=Yii::app()->session['Deliveryorders'];
                       }
                    }
                 }
@@ -152,12 +154,13 @@ class DefaultController extends Controller
              if(!isset(Yii::app()->session['Detaildeliveryorders2'])) 
                Yii::app()->session['Detaildeliveryorders2']=$this->loadDetails2($id);
              
-             // Uncomment the following line if AJAX validation is needed
-             $this->performAjaxValidation($model);
+            
 
              if(isset($_POST)) {
                  if(isset($_POST['yt0'])) {
                      $model->attributes=$_POST['Deliveryorders'];
+                     // Uncomment the following line if AJAX validation is needed
+                     $this->performAjaxValidation($model);
                      $this->beforePost($model);
                      $this->tracker->modify('deliveryorders', $id);
                      $respond=$model->save();
@@ -683,7 +686,7 @@ class DefaultController extends Controller
         
         protected function afterInsertDetail(& $model, $details)
         {
-            $this->sumDetail($model, $details);
+            //$this->sumDetail($model, $details);
         }
         
         protected function afterInsertDetail2(& $model, $details)
@@ -693,7 +696,7 @@ class DefaultController extends Controller
 
         protected function afterUpdateDetail(& $model, $details)
         {
-        	$this->sumDetail($model, $details);
+        	//$this->sumDetail($model, $details);
         }
         
         protected function afterUpdateDetail2(& $model, $details)
@@ -733,7 +736,21 @@ class DefaultController extends Controller
         {
         	$master=Yii::app()->db->createCommand()
         		->select()->from('salespos')->where('regnum = :p_regnum', 
-        		array(':p_regnum'=>$invnum))->queryAll(); 
+        		array(':p_regnum'=>$invnum))->queryRow(); 
+        	
+        	$masterdata=Yii::app()->session['Deliveryorders'];
+        	if ($master['idreceiver'] <> '') {
+        		$receiver=Yii::app()->db->createCommand()
+        			->select()->from('salesreceivers')
+        			->where('id = :p_id', array(':p_id'=>$master['idreceiver']))
+        			->queryRow();
+        		if ($receiver !== FALSE) {
+        			$masterdata['receivername']=$receiver['name'];
+        			$masterdata['receiveraddress']=$receiver['address'];
+        			$masterdata['receiverphone']=$receiver['phone'];
+        		}
+        	};
+        	Yii::app()->session['Deliveryorders']=$masterdata;
         	$details=Yii::app()->db->createCommand()
         		->select('b.*')->from('salespos a')->join('detailsalespos b', 'b.id = a.id')
         		->where('a.regnum = :p_regnum',

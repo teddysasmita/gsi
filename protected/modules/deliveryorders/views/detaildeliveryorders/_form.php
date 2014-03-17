@@ -51,48 +51,14 @@ EOS;
          echo $form->hiddenField($model,'userlog');
          echo $form->hiddenField($model,'datetimelog');
          echo $form->hiddenField($model,'iditem');
-         echo $form->hiddenField($model, 'idunit');
+         echo $form->hiddenField($model,'leftqty');
+         echo $form->hiddenField($model,'invqty');
+         //echo $form->hiddenField($model, 'idunit');
         ?>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'iditem'); ?>
-		<?php 
-               echo CHtml::textField('Detaildeliveryorders_itemname', lookup::ItemNameFromItemID($model->iditem) , array('size'=>50));   
-               $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
-                  'id'=>'ItemDialog',
-                  'options'=>array(
-                      'title'=>'Pilih Barang',
-                      'autoOpen'=>false,
-                      'height'=>300,
-                      'width'=>600,
-                      'modal'=>true,
-                      'buttons'=>array(
-                          array('text'=>'Ok', 'click'=>'js:function(){
-                             $(\'#Detaildeliveryorders_itemname\').val($(\'#dialog-item-name\').val());
-                             $.get(\'index.php?r=LookUp/getItemID\',{ name: encodeURI($(\'#dialog-item-name\').val()) },
-                                 function(data) {
-                                    $(\'#Detaildeliveryorders_iditem\').val(data);
-                                 })
-                             $(this).dialog("close");
-                           }'),
-                          array('text'=>'Close', 'click'=>'js:function(){
-                              $(this).dialog("close");
-                          }'),
-                      ),
-                  ),
-               ));
-               $myd=<<<EOS
-         
-            <div><input type="text" name="itemname" id="dialog-item-name" size='50'/></div>
-            <div><select size='8' width='100' id='dialog-item-select'>   
-                <option>Harap Pilih</option>
-            </select>           
-            </div>
-            </select>           
-EOS;
-               echo $myd;
-               $this->endWidget('zii.widgets.jui.CJuiDialog');
-            ?>
+		<?php echo CHtml::label(lookup::ItemNameFromItemID($model->iditem), FALSE);?>
 		<?php echo $form->error($model,'iditem'); ?>
 	</div>
 
