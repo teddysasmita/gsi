@@ -21,8 +21,8 @@ class MYPDF extends TCPDF {
 		// Read file lines
 		$this->data = $data;
 		$this->detaildata = $detaildata;
-		$this->headernames = array('No', 'Nama Barang', 'Jumlah','Harga Beli', 'Harga Jual', 'Keterangan');
-		$this->headerwidths = array(10, 75, 20, 30, 30, 30);
+		$this->headernames = array('No', 'Nama Barang', 'Jmlh','H Beli', 'H Jual', 'Keterangan');
+		$this->headerwidths = array(10, 75, 12, 20, 20, 58);
 	}
 
 	// Colored table
@@ -39,9 +39,9 @@ class MYPDF extends TCPDF {
 		$fill = 0;
 		$counter=0;
 		$iditem='';
-		$this->SetXY(1, 54);
-		if (count($this->detaildata) <= 10)
-			$maxrows = 10;
+		$this->SetXY(1, 39);
+		if (count($this->detaildata) <= 12)
+			$maxrows = 12;
 		else
 			$maxrows = count($this->detaildata);		
 		for($i=0;$i<$maxrows;$i++) {
@@ -53,14 +53,14 @@ class MYPDF extends TCPDF {
 				$this->Cell($this->headerwidths[2], 6, $row['qty'], 'LR', 0, 'R', $fill);
 				$this->Cell($this->headerwidths[3], 6, number_format($row['buyprice']), 'LR', 0, 'R', $fill);
 				$this->Cell($this->headerwidths[4], 6, number_format($row['sellprice']), 'LR', 0, 'R', $fill);
-				$this->Cell($this->headerwidths[5], 6, '', 'LR', 1, 'R', $fill);
+				$this->Cell($this->headerwidths[5], 6, $row['remark'], 'LR', 1, 'L', $fill);
 			} else {
 				$this->Cell($this->headerwidths[0], 6, ' ', 'LR', 0, 'C', $fill);
 				$this->Cell($this->headerwidths[1], 6, ' ', 'LR', 0, 'L', $fill);
 				$this->Cell($this->headerwidths[2], 6, ' ', 'LR', 0, 'R', $fill);
 				$this->Cell($this->headerwidths[3], 6, ' ', 'LR', 0, 'R', $fill);
 				$this->Cell($this->headerwidths[4], 6, ' ', 'LR', 0, 'R', $fill);
-				$this->Cell($this->headerwidths[5], 6, ' ', 'LR', 1, 'R', $fill);
+				$this->Cell($this->headerwidths[5], 6, ' ', 'LR', 1, 'L', $fill);
 				//$this->ln();
 			}
 			if (($i > 0) && ($i % 11 == 0))
@@ -87,11 +87,12 @@ class MYPDF extends TCPDF {
 		$this->Cell(43, 15, 'Admin', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
 		$this->Cell(43, 15, 'Gudang', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
 		$this->Cell(43, 15, 'Pemeriksa', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
-		$this->Cell(43, 15, 'Penerima', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
+		$this->Cell(43, 5, 'Penerima', 'LTR', 0, 'C', false,'', 0, false, 'T', 'T');
 		$this->Cell(23, 5, 'Halaman', 'LTR', 1, 'C', false,'', 0, false, 'T', 'T');
 		$this->setX(173);
 		$this->Cell(23, 5, $this->PageNo().' dari ', 'LR', 1, 'C', false,'', 0, false, 'T', 'T');
-		$this->setX(173);
+		$this->setX(130);
+		$this->Cell(43, 5, lookup::UserNameFromUserID($this->data->userlog), 'LRB', 0, 'C', false,'', 0, false, 'T', 'T');
 		$this->Cell(23, 5, 'total '.trim($this->getAliasNbPages()), 'LRB', 1, 'C', false,'', 0, false, 'T', 'T');
 	}
 	
@@ -121,16 +122,18 @@ class MYPDF extends TCPDF {
 		$this->Cell(35, 5, $this->data->idatetime, 'LTR', 0, 'C');
 		$this->SetFont('Helvetica', 'B');
 		//$this->setXY(100, 27);
-		$this->Cell(20, 5, 'Nomor', 'LTR', 0, 'C');
+		$this->Cell(20, 5, 'No. LPB', 'LTR', 0, 'C');
 		$this->Cell(28, 5, $this->data->regnum, 'LTR', 1, 'C');
 		
 		$this->SetFont('Helvetica', 'B');
-		$this->Cell(35, 5, 'Pengirim', 'LTR', 0,'C');
+		$this->Cell(20, 5, 'Pengirim', 'LTR', 0,'C');
 		$this->Cell(80, 5, lookup::SupplierNameFromSupplierID($this->data->idsupplier), 'LTR');
 		$this->SetFont('Helvetica', 'B');
-		$this->Cell(30, 5, 'Telp ', 'LTR', 0,'C');
-		$this->Cell(50, 5, '', 'LTR', 1);
-		$this->Cell(195, 15, $this->data->remark, 'LTRB', 1);
+		$this->Cell(15, 5, 'Telp ', 'LTR', 0,'C');
+		$this->Cell(32, 5, '', 'LTR');
+		$this->Cell(20, 5, 'No. PO ', 'LTR', 0,'C');
+		$this->Cell(28, 5, $this->data->ponum, 'LTR', 1, 'C');
+		//$this->Cell(195, 15, $this->data->remark, 'LTRB', 1);
 		
 		//$this->ln();
 		$this->setFontSize(12);
@@ -204,7 +207,7 @@ function execute($model, $detailmodel) {
 	// ---------------------------------------------------------
 	
 	//Close and output PDF document
-	$pdf->Output('LPB-'.$model->regnum.'.pdf', 'I');
+	$pdf->Output('LPB-'.$model->regnum.'.pdf', 'D');
 }
 //============================================================+
 // END OF FILE                                                

@@ -66,7 +66,6 @@ class Purchasesstockentries extends CActiveRecord
 			'ponum' => 'Nomor PO',
 			'sjnum' => 'Nomor SJ',
 			'idsupplier' => 'Pemasok',
-			'remark' => 'Catatan',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
 		);
@@ -95,7 +94,6 @@ class Purchasesstockentries extends CActiveRecord
 		$criteria->compare('ponum',$this->ponum,true);
 		$criteria->compare('sjnum',$this->sjnum,true);
 		$criteria->compare('idsupplier',$this->idsupplier,true);
-		$criteria->compare('remark',$this->remark,true);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);
 

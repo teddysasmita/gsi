@@ -47,6 +47,7 @@ $this->menu=array(
 				'name'=>'sellprice',
 				'type'=>'number'
 		),
+		'remark',
 		array(
                'label'=>'Userlog',
                'value'=>lookup::UserNameFromUserID($model->userlog),

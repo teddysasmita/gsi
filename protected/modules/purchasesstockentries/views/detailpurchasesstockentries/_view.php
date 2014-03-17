@@ -28,6 +28,10 @@
 	<b><?php echo CHtml::encode($data->getAttributeLabel('sellprice')); ?>:</b>
 	<?php echo CHtml::encode(number_format($data->sellprice)); ?>
 	<br />
+	
+	<b><?php echo CHtml::encode($data->getAttributeLabel('remark')); ?>:</b>
+	<?php echo CHtml::encode($data->remark); ?>
+	<br />
 
 	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('userlog')); ?>:</b>

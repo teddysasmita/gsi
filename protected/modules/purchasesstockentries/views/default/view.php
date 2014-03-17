@@ -36,7 +36,6 @@ $this->menu=array(
          'label'=>'Nama Pemasok',
          'value'=>lookup::SupplierNameFromSupplierID($model->idsupplier)
       ),
-		'remark',
 		array(
                'label'=>'Userlog',
                'value'=>lookup::UserNameFromUserID($model->userlog),
@@ -75,6 +74,10 @@ $this->menu=array(
 			'header'=>'Harga Jual',
 			'name'=>'sellprice',
 			'type'=>'number'
+		),
+		array(
+			'header'=>'Catatan',
+			'name'=>'remark',
 		),
 			array(
                   'class'=>'CButtonColumn',

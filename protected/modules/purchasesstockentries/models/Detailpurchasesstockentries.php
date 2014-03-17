@@ -9,7 +9,8 @@
  * @property string $iditem
  * @property double $qty
  * @property double $buyprice
- * @property integer $sellprice
+ * @property double $sellprice
+ * @property string $remark
  * @property string $userlog
  * @property string $datetimelog
  */
@@ -32,13 +33,13 @@ class Detailpurchasesstockentries extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('iddetail, id, iditem, qty, buyprice, sellprice, userlog, datetimelog', 'required'),
-			array('sellprice', 'numerical', 'integerOnly'=>true),
-			array('qty, buyprice', 'numerical'),
+			array('qty, buyprice, sellprice', 'numerical'),
 			array('iddetail, id, iditem, userlog', 'length', 'max'=>21),
 			array('datetimelog', 'length', 'max'=>19),
+			array('remark', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('iddetail, id, iditem, qty, buyprice, sellprice, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('iddetail, id, iditem, qty, buyprice, sellprice, remark, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,6 +66,7 @@ class Detailpurchasesstockentries extends CActiveRecord
 			'qty' => 'Qty',
 			'buyprice' => 'Harga Beli',
 			'sellprice' => 'Harga Jual',
+			'remark' => 'Catatan',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
 		);
