@@ -32,6 +32,8 @@ Yii::app()->clientScript->registerScript('myscript', $myscript, CClientScript::P
        echo $form->hiddenField($model,'userlog');
        echo $form->hiddenField($model,'datetimelog');  
        echo $form->hiddenField($model,'regnum');
+       echo $form->hiddenfield($model, 'totalcash');
+       echo $form->hiddenfield($model, 'totalnoncash');
        echo CHtml::hiddenField('command');
    ?>
    <div class="row">
@@ -72,13 +74,19 @@ Yii::app()->clientScript->registerScript('myscript', $myscript, CClientScript::P
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'total'); ?>
-		<?php echo CHtml::label(number_format($model->total),'false',
+		<?php echo $form->labelEx($model,'totalcash'); ?>
+		<?php echo CHtml::label(number_format($model->totalcash),'false',
                     array('class'=>'money')); 
-                  echo $form->hiddenfield($model, 'total');
-            ?>
-         
-		<?php echo $form->error($model,'total'); ?>
+        ?>
+		<?php echo $form->error($model,'totalcash'); ?>
+	</div>
+	
+	<div class="row">
+		<?php echo $form->labelEx($model,'totalnoncash'); ?>
+		<?php echo CHtml::label(number_format($model->totalnoncash),'false',
+                    array('class'=>'money')); 
+        ?>
+		<?php echo $form->error($model,'totalnoncash'); ?>
 	</div>
 	
 	<div class="row buttons">

@@ -27,8 +27,12 @@ $this->menu=array(
 		'invnum',
 		'reason',
 		array(
-			'name'=>'total',
+			'name'=>'totalcash',
 			'type'=>'number'
+		),
+		array(
+				'name'=>'totalnoncash',
+				'type'=>'number'
 		),
 		//'userlog',
 		//'datetimelog',

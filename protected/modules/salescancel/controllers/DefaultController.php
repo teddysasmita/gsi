@@ -93,7 +93,9 @@ class DefaultController extends Controller
 						$this->redirect(array('view','id'=>$model->id));
 					};
 				} else if ($_POST['command'] == 'setInvnum') { 
-					$model->total = $this->loadInvoice($model->invnum);
+					$total = $this->loadInvoice($model->invnum);
+					$model->totalcash = $total['cash'];
+					$model->totalnoncash = $total['noncash'];
 				}
 			}
                   
@@ -392,11 +394,12 @@ class DefaultController extends Controller
         		//echo $receivableNonCash. ' ';
         		if (!$receivableNonCash)
         			$receivableNonCash = 0;
-        		$total = $salesCash+$salesNonCash+$receivableCash+$receivableNonCash;
+        		$total['cash'] = $salesCash+$receivableCash;
+        		$total['noncash'] = $salesNonCash+$receivableNonCash;
         		//echo $total;
         		return $total;
         	} else
-        	return 0;
+        	return array('cash'=>0, 'noncash'=>0);
         }	
         
         protected static function setInvStatus($invnum, $status)
