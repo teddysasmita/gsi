@@ -432,4 +432,24 @@ class DefaultController extends Controller
         		->where('a.regnum = :p_invnum', array(':p_invnum'=>$invnum))
         		->queryAll();
         }
+        
+        public function actionPrintcancel($id)
+        {
+        	if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
+        			Yii::app()->user->id)) {
+        		$this->trackActivity('p');
+        
+        		$model=$this->loadModel($id);
+        		$detailmodel=$this->loadSalesDetail($model->invnum);
+        		Yii::import('application.vendors.tcpdf.*');
+        		require_once ('tcpdf.php');
+        		Yii::import('application.modules.salescancel.components.*');
+        		require_once('printcancel.php');
+        		ob_clean();
+        
+        		execute($model, $detailmodel);
+        	} else {
+        		throw new CHttpException(404,'You have no authorization for this operation.');
+        	}
+        }
 }
