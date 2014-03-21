@@ -38,3 +38,36 @@ $this->menu=array(
 		//'datetimelog',
 	),
 )); ?>
+
+<?php 
+	if (isset($rawdata)) {
+		$dataProvider=new CArrayDataProvider($rawdata, array(
+          'totalItemCount'=>count($rawdata),
+		  'keyField'=>'iddetail'
+    	));
+    	$this->widget('zii.widgets.grid.CGridView', array(
+            'dataProvider'=>$dataProvider,
+            'columns'=>array(
+            array(
+               'header'=>'Nama Barang',
+               'name'=>'iditem',
+               'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
+            ),
+            array(
+               'header'=>'Qty',
+               'name'=>'qty',
+            ),
+            array(
+               'header'=>'Harga',
+               'name'=>'price',
+               'type'=>'number'
+            ),
+            array(
+               'header'=>'Diskon',
+               'name'=>'discount',
+               'type'=>'number'
+            ),
+          ),
+    	));
+	};
+?>

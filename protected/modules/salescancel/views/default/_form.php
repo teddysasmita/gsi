@@ -89,6 +89,38 @@ Yii::app()->clientScript->registerScript('myscript', $myscript, CClientScript::P
 		<?php echo $form->error($model,'totalnoncash'); ?>
 	</div>
 	
+	<?php 
+	if (isset($rawdata)) {
+		$dataProvider=new CArrayDataProvider($rawdata, array(
+          'totalItemCount'=>count($rawdata),
+		  'keyField'=>'iddetail'
+    	));
+    	$this->widget('zii.widgets.grid.CGridView', array(
+            'dataProvider'=>$dataProvider,
+            'columns'=>array(
+            array(
+               'header'=>'Nama Barang',
+               'name'=>'iditem',
+               'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
+            ),
+            array(
+               'header'=>'Qty',
+               'name'=>'qty',
+            ),
+            array(
+               'header'=>'Harga',
+               'name'=>'price',
+               'type'=>'number'
+            ),
+            array(
+               'header'=>'Diskon',
+               'name'=>'discount',
+               'type'=>'number'
+            ),
+          ),
+    	));
+	};
+?>
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
 	</div>

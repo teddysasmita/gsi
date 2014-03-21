@@ -59,8 +59,10 @@ class DefaultController extends Controller
 		if(Yii::app()->authManager->checkAccess($this->formid.'-List',
 				Yii::app()->user->id))  {
             $this->trackActivity('v');
+            $model = $this->loadModel($id);
+            $rawdata=$this->loadSalesDetail($model->invnum);
             $this->render('view',array(
-                'model'=>$this->loadModel($id),
+            	'model'=>$model, 'rawdata'=>$rawdata
             ));
 		} else {
         	throw new CHttpException(404,'You have no authorization for this operation.');
@@ -96,13 +98,18 @@ class DefaultController extends Controller
 					$total = $this->loadInvoice($model->invnum);
 					$model->totalcash = $total['cash'];
 					$model->totalnoncash = $total['noncash'];
+					$rawdata = $this->loadSalesDetail($model->invnum);
 				}
 			}
                   
-
-			$this->render('create',array(
-				'model'=>$model,
-			));
+			if (isset($rawdata))
+				$this->render('create',array(
+					'model'=>$model, 'rawdata'=>$rawdata
+				)); 
+			else
+				$this->render('create',array(
+						'model'=>$model,
+				));
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		}
@@ -126,7 +133,7 @@ class DefaultController extends Controller
 
 			// Uncomment the following line if AJAX validation is needed
 			$this->performAjaxValidation($model);
-
+			$rawdata = $this->loadSalesDetail($model->invnum);
 			if(isset($_POST['Salescancel']))
 			{
 				$oldinvnum = $model->invnum;
@@ -141,11 +148,19 @@ class DefaultController extends Controller
 						$this->redirect(array('view','id'=>$model->id));
 					}
                 } else if ($_POST['command'] == 'setInvnum') {
-                	$model->total = $this->loadInvoice($model->invnum);
+                	$total = $this->loadInvoice($model->invnum);
+                	$model->totalcash = $total['cash'];
+                	$model->totalnoncash = $total['noncash'];
+                	$rawdata = $this->loadSalesDetail($model->invnum);
                 }
 			}
 
-			$this->render('update',array('model'=>$model));
+			if (isset($rawdata))
+				$this->render('update',array(
+					'model'=>$model, 'rawdata'=>$rawdata
+				)); 
+			else 
+				$this->render('update',array('model'=>$model));
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		}
@@ -407,5 +422,14 @@ class DefaultController extends Controller
  			$sql="update salespos set status = :p_status where regnum = :p_regnum ";
         	$stmt=Yii::app()->db->createCommand($sql)
         		->execute(array(':p_regnum'=>$invnum, ':p_status'=>$status));
+        }
+        
+        protected function loadSalesDetail($invnum)
+        {
+        	 return Yii::app()->db->createCommand()
+        		->select('b.iddetail, b.iditem, b.qty, b.price, b.discount')
+        		->from('salespos a')->join('detailsalespos b', 'b.id = a.id')
+        		->where('a.regnum = :p_invnum', array(':p_invnum'=>$invnum))
+        		->queryAll();
         }
 }

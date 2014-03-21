@@ -1,17 +1,23 @@
 <?php
-/* @var $this DefaultController */
+/* @var $this SalescancelController */
+/* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
-	$this->module->id,
+    'Proses'=>array('/site/proses'),
+    'Daftar',
+);
+
+$this->menu=array(
+	array('label'=>'Tambah Data', 'url'=>array('create')),
+	array('label'=>'Cari Data', 'url'=>array('admin')),
+   array('label'=>'Terhapus', 'url'=>array('deleted')),
+   
 );
 ?>
-<h1><?php echo $this->uniqueId . '/' . $this->action->id; ?></h1>
 
-<p>
-This is the view content for action "<?php echo $this->action->id; ?>".
-The action belongs to the controller "<?php echo get_class($this); ?>"
-in the "<?php echo $this->module->id; ?>" module.
-</p>
-<p>
-You may customize this page by editing <tt><?php echo __FILE__; ?></tt>
-</p>
+<h1>Pembatalan Penjualan</h1>
+
+<?php $this->widget('zii.widgets.CListView', array(
+	'dataProvider'=>$dataProvider,
+	'itemView'=>'_view',
+)); ?>

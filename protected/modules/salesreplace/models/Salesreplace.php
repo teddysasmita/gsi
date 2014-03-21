@@ -8,8 +8,8 @@
  * @property string $idatetime
  * @property string $regnum
  * @property string $invnum
- * @property double $total
- * @property double $discount
+ * @property double $totalcash
+ * @property double $totalnoncash
  * @property string $reason
  * @property string $userlog
  * @property string $datetimelog
@@ -32,15 +32,15 @@ class Salesreplace extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, idatetime, regnum, invnum, total, discount, reason, userlog, datetimelog', 'required'),
-			array('total, discount', 'numerical'),
+			array('id, idatetime, regnum, invnum, totalcash, totalnoncash, reason, userlog, datetimelog', 'required'),
+			array('totalcash, totalnoncash', 'numerical'),
 			array('id, userlog', 'length', 'max'=>21),
 			array('idatetime, datetimelog', 'length', 'max'=>19),
 			array('regnum, invnum', 'length', 'max'=>12),
 			array('reason', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, idatetime, regnum, invnum, total, discount, reason, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('id, idatetime, regnum, invnum, totalcash, reason, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -50,7 +50,7 @@ class Salesreplace extends CActiveRecord
 	public function relations()
 	{
 		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
+		// class name for the relations automatically generaten below.
 		return array(
 		);
 	}
@@ -62,12 +62,12 @@ class Salesreplace extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'idatetime' => 'Idatetime',
-			'regnum' => 'Regnum',
-			'invnum' => 'Invnum',
-			'total' => 'Total',
-			'discount' => 'Discount',
-			'reason' => 'Reason',
+			'idatetime' => 'Tanggal',
+			'regnum' => 'Nomor Urut',
+			'invnum' => 'Nomor Faktur',
+			'totalcash' => 'Total Tunai',
+			'totalnoncash' => 'Total Non Tunai',
+			'reason' => 'Alasan',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
 		);
@@ -95,8 +95,8 @@ class Salesreplace extends CActiveRecord
 		$criteria->compare('idatetime',$this->idatetime,true);
 		$criteria->compare('regnum',$this->regnum,true);
 		$criteria->compare('invnum',$this->invnum,true);
-		$criteria->compare('total',$this->total);
-		$criteria->compare('discount',$this->discount);
+		$criteria->compare('totalcash',$tnonhis->totalcash);
+		$criteria->compare('totalnoncash',$this->totalnoncash);
 		$criteria->compare('reason',$this->reason,true);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);
