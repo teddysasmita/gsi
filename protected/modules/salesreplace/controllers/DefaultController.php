@@ -103,6 +103,7 @@ class DefaultController extends Controller
 						$total = $this->loadInvoice($model->invnum);
 						$model->totalcash = $total['cash'];
 						$model->totalnoncash = $total['noncash'];
+						$model->totaldiff = $total['diff'];
 						Yii::app()->session['Detailsalesreplace']=$this->loadSales($model->invnum,
 							$model->id);
 					  } else if ($_POST['command']=='updateDetail') {
@@ -491,10 +492,10 @@ class DefaultController extends Controller
             $model->id=$idmaker->getCurrentID2();
             $model->idatetime=$idmaker->getDateTime();
             $model->regnum=$idmaker->getRegNum($this->formid);
-            $model->totalcash = 0;
+            /*$model->totalcash = 0;
             $model->totalnoncash = 0;
             $model->totaldiff = 0;
-            $lookup=new lookup();
+            */$lookup=new lookup();
             //$model->status=$lookup->reverseOrderStatus('Belum Diproses');
         }
         
@@ -649,9 +650,10 @@ class DefaultController extends Controller
         			$receivableNonCash = 0;
         		$total['cash'] = $salesCash+$receivableCash;
         		$total['noncash'] = $salesNonCash+$receivableNonCash;
+        		$total['diff'] = 0;
         		//echo $total;
         		return $total;
         	} else
-        		return array('cash'=>0, 'noncash'=>0);
+        		return array('cash'=>0, 'noncash'=>0, 'diff'=>0);
         }
 }

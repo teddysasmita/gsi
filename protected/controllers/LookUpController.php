@@ -147,7 +147,7 @@ class LookUpController extends Controller {
 	      	if($data==FALSE) { 
 	           $data=-1;
 	      	}
-	      	echo json_encode($data);
+	      	echo $data;
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		};
