@@ -7,7 +7,7 @@ class DetailsalesreplaceController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $formid='AC2a';
+	public $formid='AC24a';
 	public $tracker;
 	public $state;
 
