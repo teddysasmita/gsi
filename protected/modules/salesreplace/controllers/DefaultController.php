@@ -586,7 +586,7 @@ class DefaultController extends Controller
         	->queryAll();
         	foreach($salesdetails as $detail) {
         		$canceldetail['id']=$id;
-        		$canceldetail['iddetail']=idmaker::getCurrentID();
+        		$canceldetail['iddetail']=idmaker::getCurrentID2();
         		$canceldetail['iditem']=$detail['iditem'];
         		$canceldetail['qty']=$detail['qty'];
         		$canceldetail['price']=$detail['price'];
