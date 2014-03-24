@@ -12,6 +12,7 @@
  * @property string $iditemnew
  * @property double $qtynew
  * @property double $pricenew
+ * @property string $deleted
  * @property string $userlog
  * @property string $datetimelog
  */
@@ -33,10 +34,11 @@ class Detailsalesreplace extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('iddetail, id, iditem, qty, iditemnew, qtynew, pricenew, userlog, datetimelog', 'required'),
+			array('iddetail, id, iditem, qty, iditemnew, qtynew, pricenew, deleted, userlog, datetimelog', 'required'),
 			array('qty, price, qtynew, pricenew', 'numerical'),
 			array('iddetail, id, iditem, iditemnew, userlog', 'length', 'max'=>21),
 			array('datetimelog', 'length', 'max'=>19),
+			array('deleted', 'length', 'max'=>2),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('iddetail, id, iditem, qty, price, iditemnew, qtynew, pricenew, userlog, datetimelog', 'safe', 'on'=>'search'),
@@ -62,12 +64,13 @@ class Detailsalesreplace extends CActiveRecord
 		return array(
 			'iddetail' => 'Iddetail',
 			'id' => 'ID',
-			'iditem' => 'Iditem',
+			'iditem' => 'Nama Barang',
 			'qty' => 'Qty',
-			'price' => 'Price',
-			'iditemnew' => 'Iditemnew',
-			'qtynew' => 'Qtynew',
-			'pricenew' => 'Pricenew',
+			'price' => 'Harga',
+			'iditemnew' => 'Nama Barang Ganti',
+			'qtynew' => 'Qty Baru',
+			'pricenew' => 'Harga Baru',
+			'deleted' => 'Perubahan',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
 		);
@@ -99,6 +102,7 @@ class Detailsalesreplace extends CActiveRecord
 		$criteria->compare('iditemnew',$this->iditemnew,true);
 		$criteria->compare('qtynew',$this->qtynew);
 		$criteria->compare('pricenew',$this->pricenew);
+		$criteria->compare('deleted',$this->deleted);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);
 

@@ -1,6 +1,6 @@
 <?php
-/* @var $this DetailpurchasesordersController */
-/* @var $data Detailpurchasesorders */
+/* @var $this DetailsalesreplaceController */
+/* @var $data Detailsalesreplace */
 ?>
 
 <div class="view">
@@ -15,10 +15,6 @@
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('iditem')); ?>:</b>
 	<?php echo CHtml::encode($data->iditem); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('idunit')); ?>:</b>
-	<?php echo CHtml::encode($data->idunit); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('qty')); ?>:</b>

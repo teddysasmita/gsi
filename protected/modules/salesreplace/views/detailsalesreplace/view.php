@@ -1,6 +1,6 @@
 <?php
-/* @var $this DetailpurchasesordersController */
-/* @var $model Detailpurchasesorders */
+/* @var $this DetailsalesreplaceController */
+/* @var $model Detailsalesreplace */
 
 
  $this->breadcrumbs=array(
@@ -11,18 +11,18 @@
  );
 
 $this->menu=array(
-	/*array('label'=>'List Detailpurchasesorders', 'url'=>array('index')),
-	array('label'=>'Create Detailpurchasesorders', 'url'=>array('create')),
-	array('label'=>'Update Detailpurchasesorders', 'url'=>array('update', 'id'=>$model->iddetail)),
-	array('label'=>'Delete Detailpurchasesorders', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->iddetail),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Detailpurchasesorders', 'url'=>array('admin')),
-   array('label'=>'Ubah Detil', 'url'=>array('/purchasesorder/detailpurchasesorders/update',
+	/*array('label'=>'List Detailsalesreplace', 'url'=>array('index')),
+	array('label'=>'Create Detailsalesreplace', 'url'=>array('create')),
+	array('label'=>'Update Detailsalesreplace', 'url'=>array('update', 'id'=>$model->iddetail)),
+	array('label'=>'Delete Detailsalesreplace', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->iddetail),'confirm'=>'Are you sure you want to delete this item?')),
+	array('label'=>'Manage Detailsalesreplace', 'url'=>array('admin')),
+   array('label'=>'Ubah Detil', 'url'=>array('/purchasesorder/detailsalesreplace/update',
       'iddetail'=>$model->iddetail)),*/
    array('label'=>'Sejarah', 'url'=>array('history', 'iddetail'=>$model->iddetail)),
 );
 ?>
 
-<h1>Detil Pemesanan ke Pemasok</h1>
+<h1>Detil Perubahan Penjualan</h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,

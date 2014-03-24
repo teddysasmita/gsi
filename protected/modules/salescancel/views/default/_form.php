@@ -90,6 +90,7 @@ Yii::app()->clientScript->registerScript('myscript', $myscript, CClientScript::P
 	</div>
 	
 	<?php 
+	
 	if (isset($rawdata)) {
 		$dataProvider=new CArrayDataProvider($rawdata, array(
           'totalItemCount'=>count($rawdata),

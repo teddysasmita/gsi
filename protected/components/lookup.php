@@ -247,6 +247,18 @@ class lookup extends CComponent {
    			return 'Kartu Debit';
    		}	
    }
+   
+   public static function SalesreplaceNameFromCode($code)
+   {
+   		switch ($code) {
+   			case '0':
+   				return 'Tetap';
+   			case '1':
+   				return 'Dirubah';
+   			case '2':
+   				return 'Dihapus';
+   		} 
+   }
 }
 
 

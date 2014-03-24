@@ -1,6 +1,6 @@
 <?php
-/* @var $this SalescancelController */
-/* @var $model Salescancel */
+/* @var $this SalesreplaceController */
+/* @var $model Salesreplace */
 
 $this->breadcrumbs=array(
     'Proses'=>array('/site/proses'),
@@ -16,6 +16,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Pembatalan Penjualan</h1>
+<h1>Perubahan Penjualan</h1>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php echo $this->renderPartial('_form', array('model'=>$model, 'command'=>'update')); ?>

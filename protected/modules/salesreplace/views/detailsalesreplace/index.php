@@ -1,18 +1,18 @@
 <?php
-/* @var $this DetailpurchasesordersController */
+/* @var $this DetailsalesreplaceController */
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
-	'Detailpurchasesorders',
+	'Detailsalesreplace',
 );
 
 $this->menu=array(
-	array('label'=>'Create Detailpurchasesorders', 'url'=>array('create')),
-	array('label'=>'Manage Detailpurchasesorders', 'url'=>array('admin')),
+	array('label'=>'Create Detailsalesreplace', 'url'=>array('create')),
+	array('label'=>'Manage Detailsalesreplace', 'url'=>array('admin')),
 );
 ?>
 
-<h1>Detailpurchasesorders</h1>
+<h1>Detailsalesreplace</h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,

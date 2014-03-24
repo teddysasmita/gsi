@@ -1,6 +1,6 @@
 <?php
-/* @var $this SalescancelController */
-/* @var $model Salescancel */
+/* @var $this SalesreplaceController */
+/* @var $model Salesreplace */
 /* @var $form CActiveForm */
 ?>
 

@@ -1,6 +1,6 @@
 <?php
-/* @var $this DetailpurchasesordersController */
-/* @var $model Detailpurchasesorders */
+/* @var $this DetailsalesreplaceController */
+/* @var $model Detailsalesreplace */
 
 $master=Yii::app()->session['master'];
 if($master=='create')
@@ -19,6 +19,6 @@ else if ($master=='update')
 
 ?>
 
-<h1>Pemesanan pada Pemasok</h1>
+<h1>Detil Perubahan Penjualan</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model, 'mode'=>'Create')); ?>

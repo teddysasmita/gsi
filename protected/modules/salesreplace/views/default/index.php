@@ -1,5 +1,5 @@
 <?php
-/* @var $this SalescancelController */
+/* @var $this SalesreplaceController */
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
@@ -15,7 +15,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>Pembatalan Penjualan</h1>
+<h1>Perubahan Penjualan</h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,

@@ -1,6 +1,6 @@
 <?php
-/* @var $this SalescancelController */
-/* @var $data Salescancel */
+/* @var $this SalesreplaceController */
+/* @var $data Salesreplace */
 ?>
 
 <div class="view">

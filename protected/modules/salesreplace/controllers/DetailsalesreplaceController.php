@@ -1,6 +1,6 @@
 <?php
 
-class DetailpurchasesordersController extends Controller
+class DetailsalesreplaceController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -32,8 +32,8 @@ class DetailpurchasesordersController extends Controller
 				Yii::app()->user->id))  {
             $this->trackActivity('v');
             $model=$this->loadModel($iddetail);
-            if(($model==NULL)&&isset(Yii::app()->session['Detailpurchasesorders'])) {
-                $model=new Detailpurchasesorders;
+            if(($model==NULL)&&isset(Yii::app()->session['Detailsalesreplace'])) {
+                $model=new Detailsalesreplace;
                 $model->attributes=$this->loadSession($iddetail);
             }  
             $this->render('view',array(
@@ -55,7 +55,7 @@ class DetailpurchasesordersController extends Controller
                 $this->state='c';
                 $this->trackActivity('c');    
                     
-                $model=new Detailpurchasesorders;
+                $model=new Detailsalesreplace;
                 $this->afterInsert($id, $model);
                 
                 $master=Yii::app()->session['master'];
@@ -63,14 +63,14 @@ class DetailpurchasesordersController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
                 
-                if(isset($_POST['Detailpurchasesorders'])) {
-                    $temp=Yii::app()->session['Detailpurchasesorders'];
-                    $model->attributes=$_POST['Detailpurchasesorders'];
+                if(isset($_POST['Detailsalesreplace'])) {
+                    $temp=Yii::app()->session['Detailsalesreplace'];
+                    $model->attributes=$_POST['Detailsalesreplace'];
                     //posting into session
-                    $temp[]=$_POST['Detailpurchasesorders'];
+                    $temp[]=$_POST['Detailsalesreplace'];
                     
                     if ($model->validate()) {
-                        Yii::app()->session['Detailpurchasesorders']=$temp;
+                        Yii::app()->session['Detailsalesreplace']=$temp;
                         if ($master=='create')
                             $this->redirect(array('default/createdetail'));
                         else if($master=='update')
@@ -103,8 +103,8 @@ class DetailpurchasesordersController extends Controller
                 $master=Yii::app()->session['master'];
                 
                 $model=$this->loadModel($iddetail);
-                if(isset(Yii::app()->session['Detailpurchasesorders'])) {
-                    $model=new Detailpurchasesorders;
+                if(isset(Yii::app()->session['Detailsalesreplace'])) {
+                    $model=new Detailsalesreplace;
                     $model->attributes=$this->loadSession($iddetail);
                 }
                 $this->afterEdit($model);
@@ -112,25 +112,27 @@ class DetailpurchasesordersController extends Controller
                 // Uncomment the following line if AJAX validation is needed
                 $this->performAjaxValidation($model);
                 
-                if(isset($_POST['Detailpurchasesorders']))
-		{
-                    $temp=Yii::app()->session['Detailpurchasesorders'];
-                    $model->attributes=$_POST['Detailpurchasesorders'];
+                if(isset($_POST['Detailsalesreplace']))
+				{
+                    $temp=Yii::app()->session['Detailsalesreplace'];
+                    $model->attributes=$_POST['Detailsalesreplace'];
                     foreach ($temp as $tk=>$tv) {
-                        if($tv['iddetail']==$_POST['Detailpurchasesorders']['iddetail']) {
-                            $temp[$tk]=$_POST['Detailpurchasesorders'];
+                        if($tv['iddetail']==$_POST['Detailsalesreplace']['iddetail']) {
+                            $temp[$tk]=$_POST['Detailsalesreplace'];
                             break;
                         }
                     }
                     //posting into session
-		    if($model->validate()) {
-                    	Yii::app()->session['Detailpurchasesorders']=$temp;
-			
+		    		if($model->validate()) {
+                    	Yii::app()->session['Detailsalesreplace']=$temp;
                     	if ($master=='create')
                         	$this->redirect(array('default/createdetail'));
                     	else if($master=='update')
                         	$this->redirect(array('default/updatedetail'));
-		    }	
+		    		} else {
+		    			echo 'error';	
+		    			die();	    		
+		    		}
                 }
                
                 $this->render('update',array(
@@ -153,20 +155,20 @@ class DetailpurchasesordersController extends Controller
                 
                 $this->trackActivity('d');
                 
-                $details=Yii::app()->session['Detailpurchasesorders'];
+                $details=Yii::app()->session['Detailsalesreplace'];
                 foreach ($details as $ik => $iv) {
                    if($iv['iddetail']==$iddetail) {
-                      if(isset(Yii::app()->session['Deletedetailpurchasesorders']))
-                         $deletelist=Yii::app()->session['Deletedetailpurchasesorders'];
+                      if(isset(Yii::app()->session['Deletedetailsalesreplace']))
+                         $deletelist=Yii::app()->session['Deletedetailsalesreplace'];
                       $deletelist[]=$iv;
-                      Yii::app()->session['Deletedetailpurchasesorders']=$deletelist;
+                      Yii::app()->session['Deletedetailsalesreplace']=$deletelist;
                       unset($details[$ik]);
                       break;
                    }
                 }
                 
                             
-                Yii::app()->session['Detailpurchasesorders']=$details;
+                Yii::app()->session['Detailsalesreplace']=$details;
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
@@ -206,9 +208,9 @@ class DetailpurchasesordersController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
                 $this->trackActivity('r');
-                $this->tracker->restore('detailpurchasesorders', $idtrack);
+                $this->tracker->restore('detailsalesreplace', $idtrack);
                 
-                $dataProvider=new CActiveDataProvider('Detailpurchasesorders');
+                $dataProvider=new CActiveDataProvider('Detailsalesreplace');
                 $this->render('index',array(
                     'dataProvider'=>$dataProvider,
                 ));
@@ -222,9 +224,9 @@ class DetailpurchasesordersController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
                 $this->trackActivity('n');
-                $this->tracker->restoreDeleted('detailpurchasesorders', $idtrack);
+                $this->tracker->restoreDeleted('detailsalesreplace', $idtrack);
                 
-                $dataProvider=new CActiveDataProvider('Detailpurchasesorders');
+                $dataProvider=new CActiveDataProvider('Detailsalesreplace');
                 $this->render('index',array(
                     'dataProvider'=>$dataProvider,
                 ));
@@ -237,12 +239,12 @@ class DetailpurchasesordersController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Detailpurchasesorders the loaded model
+	 * @return Detailsalesreplace the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Detailpurchasesorders::model()->findByPk($id);
+		$model=Detailsalesreplace::model()->findByPk($id);
 		/*if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		*/
@@ -251,11 +253,11 @@ class DetailpurchasesordersController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Detailpurchasesorders $model the model to be validated
+	 * @param Detailsalesreplace $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='detailpurchasesorders-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='detailsalesreplace-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
@@ -264,7 +266,7 @@ class DetailpurchasesordersController extends Controller
         
         protected function loadSession($iddetail)
         {
-            $details=Yii::app()->session['Detailpurchasesorders'];
+            $details=Yii::app()->session['Detailsalesreplace'];
             foreach ($details as $row) {
                 if($row['iddetail']==$iddetail)
                     return $row;

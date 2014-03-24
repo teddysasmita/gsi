@@ -10,7 +10,7 @@ class DefaultController extends Controller
 	public $formid='AC24';
 	public $tracker;
 	public $state;
-           
+
 	/**
 	 * @return array action filters
 	 */
@@ -23,34 +23,6 @@ class DefaultController extends Controller
 	}
 
 	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-        
-        /*
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
-        */    
-	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
@@ -60,11 +32,11 @@ class DefaultController extends Controller
 				Yii::app()->user->id))  {
             $this->trackActivity('v');
             $this->render('view',array(
-                'model'=>$this->loadModel($id),
-            ));
+				'model'=>$this->loadModel($id),
+			));
 		} else {
         	throw new CHttpException(404,'You have no authorization for this operation.');
-        };
+        };    
 	}
 
 	/**
@@ -73,36 +45,75 @@ class DefaultController extends Controller
 	 */
 	public function actionCreate()
 	{
-		if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
-                    Yii::app()->user->id))  {            
-
-			$this->state='c';
-			$this->trackActivity('c');
-			$model=new Salescancel;
-			$this->afterInsert($model);
+             if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
+                    Yii::app()->user->id))  {   
+                $this->state='c';
+                $this->trackActivity('c');    
+                    
+                $model=new Salesreplace;
+                $this->afterInsert($model);
                 
-			// Uncomment the following line if AJAX validation is needed
-			$this->performAjaxValidation($model);
-                        
-			if(isset($_POST['Salescancel'])) {
-				$model->attributes=$_POST['Salescancel'];
-				if(isset($_POST['yt0'])) {
-					$this->beforePost($model);
-					if($model->save()) {
-						$this->afterPost($model);
-						$this->redirect(array('view','id'=>$model->id));
-					};
-				} else if ($_POST['command'] == 'setInvnum') { 
-					$total = $this->loadInvoice($model->invnum);
-					$model->totalcash = $total['cash'];
-					$model->totalnoncash = $total['noncash'];
+                Yii::app()->session['master']='create';
+                //as the operator enter for the first time, we load the default value to the session
+                if (!isset(Yii::app()->session['Salesreplace'])) {
+                   Yii::app()->session['Salesreplace']=$model->attributes;
+                } else {
+                // use the session to fill the model
+                    $model->attributes=Yii::app()->session['Salesreplace'];
+                }
+                
+               // Uncomment the following line if AJAX validation is needed
+               $this->performAjaxValidation($model);
+
+                if (isset($_POST)){
+                   if(isset($_POST['yt0'])) {
+                      //The user pressed the button;
+                      $model->attributes=$_POST['Salesreplace'];
+                      
+                      $this->beforePost($model);
+                      $respond=$model->save();
+                      if($respond) {
+                          $this->afterPost($model);
+                      } else {
+                      	print_r($model->getErrors());
+                          //throw new CHttpException(404,'There is an error in master posting: ');
+                      }
+                      
+                      if(isset(Yii::app()->session['Detailsalesreplace']) ) {
+                        $details=Yii::app()->session['Detailsalesreplace'];
+                        $respond=$respond&&$this->saveNewDetails($details);
+                      } 
+                      
+                      if($respond) {
+                         Yii::app()->session->remove('Salesreplace');
+                         Yii::app()->session->remove('Detailsalesreplace');
+                         $this->redirect(array('view','id'=>$model->id));
+                      }
+
+                   } else if (isset($_POST['command'])){
+                      // save the current master data before going to the detail page
+                      if($_POST['command']=='adddetail') {
+                         $model->attributes=$_POST['Salesreplace'];
+                         Yii::app()->session['Salesreplace']=$_POST['Salesreplace'];
+                         $this->redirect(array('detailsalesreplace/create',
+                            'id'=>$model->id, 'regnum'=>$model->regnum));
+                      } else if ($_POST['command'] == 'setInvnum') {
+                      	$model->attributes=$_POST['Salesreplace'];
+                      	Yii::app()->session['Salesreplace']=$_POST['Salesreplace'];
+						$total = $this->loadInvoice($model->invnum);
+						$model->totalcash = $total['cash'];
+						$model->totalnoncash = $total['noncash'];
+						Yii::app()->session['Detailsalesreplace']=$this->loadSales($model->invnum,
+							$model->id);
+					  } else if ($_POST['command']=='updateDetail') {
+                         $model->attributes=$_POST['Salesreplace'];
+                         Yii::app()->session['Salesreplace']=$_POST['Salesreplace'];
+                      }
 				}
 			}
-                  
 
-			$this->render('create',array(
-				'model'=>$model,
-			));
+			$this->render('create',array('model'=>$model));
+                
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		}
@@ -115,40 +126,70 @@ class DefaultController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
-			Yii::app()->user->id))  {
-                
-			$this->state='u';
-			$this->trackActivity('u');
-                
-			$model=$this->loadModel($id);
-			$this->afterEdit($model);
+          if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
+                 Yii::app()->user->id))  {
 
-			// Uncomment the following line if AJAX validation is needed
-			$this->performAjaxValidation($model);
+             $this->state='u';
+             $this->trackActivity('u');
 
-			if(isset($_POST['Salescancel']))
-			{
-				$oldinvnum = $model->invnum;
-				$model->attributes=$_POST['Salescancel'];
-				if(isset($_POST['yt0'])) {    
-                	$this->beforePost($model);    
-					$this->tracker->modify('salesreplace', $id);
-					if($model->save()) {
-						$this->afterPost($model);
-						if($oldinvnum !== $model->invnum)
-							$this->setInvStatus($oldinvnum, '1');
-						$this->redirect(array('view','id'=>$model->id));
-					}
-                } else if ($_POST['command'] == 'setInvnum') {
-                	$model->total = $this->loadInvoice($model->invnum);
-                }
-			}
+             $model=$this->loadModel($id);
+             $this->afterEdit($model);
+             
+             Yii::app()->session['master']='update';
 
-			$this->render('update',array('model'=>$model));
-		} else {
-			throw new CHttpException(404,'You have no authorization for this operation.');
-		}
+             if(!isset(Yii::app()->session['Salesreplace']))
+                Yii::app()->session['Salesreplace']=$model->attributes;
+             else
+                $model->attributes=Yii::app()->session['Salesreplace'];
+			
+             if(!isset(Yii::app()->session['Detailsalesreplace'])) 
+               Yii::app()->session['Detailsalesreplace']=$this->loadDetails($id);
+             
+             // Uncomment the following line if AJAX validation is needed
+             $this->performAjaxValidation($model);
+
+             if(isset($_POST)) {
+                 if(isset($_POST['yt0'])) {
+                     $model->attributes=$_POST['Salesreplace'];
+                     $this->beforePost($model);
+                     $this->tracker->modify('salesreplace', $id);
+                     $respond=$model->save();
+                     if($respond) {
+                       $this->afterPost($model);
+                     } else {
+                       throw new CHttpException(404,'There is an error in master posting');
+                     }
+
+                     if(isset(Yii::app()->session['Detailsalesreplace'])) {
+                         $details=Yii::app()->session['Detailsalesreplace'];
+                         $respond=$respond&&$this->saveDetails($details);
+                         if(!$respond) {
+                           throw new CHttpException(404,'There is an error in detail posting');
+                         }
+                     };
+                     
+                     if(isset(Yii::app()->session['DeleteDetailsalesreplace'])) {
+                         $deletedetails=Yii::app()->session['DeleteDetailsalesreplace'];
+                         $respond=$respond&&$this->deleteDetails($deletedetails);
+                         if(!$respond) {
+                           throw new CHttpException(404,'There is an error in detail deletion');
+                         }
+                     };
+                     
+                     if($respond) {
+                         Yii::app()->session->remove('Salesreplace');
+                         Yii::app()->session->remove('Detailsalesreplace');
+                         Yii::app()->session->remove('DeleteDetailsalesreplace');
+                         $this->redirect(array('view','id'=>$model->id));
+                     }
+                 }
+             }
+             $this->render('update',array(
+                     'model'=>$model,
+             ));
+         }  else {
+             throw new CHttpException(404,'You have no authorization for this operation.');
+         }
 	}
 
 	/**
@@ -158,23 +199,31 @@ class DefaultController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-            if(Yii::app()->authManager->checkAccess($this->formid.'-Delete', 
-                    Yii::app()->user->id))  {
-                $this->trackActivity('d');
-                $model=$this->loadModel($id);
-                $oldinvnum = $model->invnum;
-                $this->beforeDelete($model);
-                $this->tracker->delete('salesreplace', $id);
-                $model->delete();
-                $this->afterDelete($oldinvnum);    
-                    // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+         if(Yii::app()->authManager->checkAccess($this->formid.'-Delete', 
+                 Yii::app()->user->id))  {
 
-                if(!isset($_GET['ajax']))
-                    $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
-            } else {
-                throw new CHttpException(404,'You have no authorization for this operation.');
+            $this->trackActivity('d');
+            $model=$this->loadModel($id);    
+            $this->beforeDelete($model);
+            $this->tracker->delete('salesreplace', $id);
+
+            $detailmodels=Detailsalesreplace::model()->findAll('id=:id',array(':id'=>$id));
+            foreach($detailmodels as $dm) {
+               $this->tracker->init();
+               $this->tracker->delete('detailsalesreplace', array('iddetail'=>$dm->iddetail));
+               $dm->delete();
             }
-	}
+
+            $model->delete();
+            $this->afterDelete();
+
+         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+         if(!isset($_GET['ajax']))
+               $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
+         } else {
+             throw new CHttpException(404,'You have no authorization for this operation.');
+         }
+     }
 
 	/**
 	 * Lists all models.
@@ -183,12 +232,21 @@ class DefaultController extends Controller
 	{
             if(Yii::app()->authManager->checkAccess($this->formid.'-List', 
                 Yii::app()->user->id)) {
-                $this->trackActivity('l');
-                
-                $dataProvider=new CActiveDataProvider('Salescancel');
-                $this->render('index',array(
-                    'dataProvider'=>$dataProvider,
-                ));
+               $this->trackActivity('l');
+				
+               Yii::app()->session->remove('Salesreplace');
+               Yii::app()->session->remove('Detailsalesreplace');
+               Yii::app()->session->remove('Deletedetailsalesreplace');
+               $dataProvider=new CActiveDataProvider('Salesreplace',
+                  array(
+                     'criteria'=>array(
+                        'order'=>'id desc'
+                     )
+                  )
+               );
+               $this->render('index',array(
+                     'dataProvider'=>$dataProvider,
+               ));
             } else {
                 throw new CHttpException(404,'You have no authorization for this operation.');
             }
@@ -202,11 +260,11 @@ class DefaultController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-List', 
                 Yii::app()->user->id)) {
                 $this->trackActivity('s');
-                
-                $model=new Salescancel('search');
+               
+                $model=new Salesreplace('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Salescancel']))
-			$model->attributes=$_GET['Salescancel'];
+		if(isset($_GET['Salesreplace']))
+			$model->attributes=$_GET['Salesreplace'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -215,8 +273,8 @@ class DefaultController extends Controller
                 throw new CHttpException(404,'You have no authorization for this operation.');
             }
 	}
-        
-        public function actionHistory($id)
+
+         public function actionHistory($id)
         {
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
@@ -249,7 +307,8 @@ class DefaultController extends Controller
                Yii::app()->user->id)) {
                 $this->trackActivity('r');
                 $this->tracker->restore('salesreplace', $idtrack);
-                $dataProvider=new CActiveDataProvider('Salescancel');
+                
+                $dataProvider=new CActiveDataProvider('Salesreplace');
                 $this->render('index',array(
                     'dataProvider'=>$dataProvider,
                 ));
@@ -264,7 +323,8 @@ class DefaultController extends Controller
                Yii::app()->user->id)) {
                 $this->trackActivity('n');
                 $this->tracker->restoreDeleted('salesreplace', $idtrack);
-                $dataProvider=new CActiveDataProvider('Salescancel');
+                
+                $dataProvider=new CActiveDataProvider('Salesreplace');
                 $this->render('index',array(
                     'dataProvider'=>$dataProvider,
                 ));
@@ -273,17 +333,16 @@ class DefaultController extends Controller
             }
         }
         
-
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Salescancel the loaded model
+	 * @return Salesreplace the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Salescancel::model()->findByPk($id);
+		$model=Salesreplace::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -291,7 +350,7 @@ class DefaultController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Salescancel $model the model to be validated
+	 * @param Salesreplace $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
@@ -300,21 +359,149 @@ class DefaultController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
-    }
+	}
+        
+      public function actionCreateDetail()
+      {
+      //this action continues the process from the detail page
+         if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
+                 Yii::app()->user->id))  {
+             $model=new Salesreplace;
+             $model->attributes=Yii::app()->session['Salesreplace'];
+
+             $details=Yii::app()->session['Detailsalesreplace'];
+             $this->afterInsertDetail($model, $details);
+
+             $this->render('create',array(
+                 'model'=>$model,
+             ));
+         } else {
+             throw new CHttpException(404,'You have no authorization for this operation.');
+         } 
+      }
+      
+      public function actionUpdateDetail()
+      {
+         if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
+                 Yii::app()->user->id))  {
+
+             $model=new Salesreplace;
+             $model->attributes=Yii::app()->session['Salesreplace'];
+
+             $details=Yii::app()->session['Detailsalesreplace'];
+             $this->afterUpdateDetail($model, $details);
+
+             $this->render('update',array(
+                 'model'=>$model,
+             ));
+         } else {
+             throw new CHttpException(404,'You have no authorization for this operation.');
+         }
+      }
+      
+      public function actionDeleteDetail()
+      {
+         if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
+                 Yii::app()->user->id))  {
+
+
+             $model=new Salesreplace;
+             $model->attributes=Yii::app()->session['Salesreplace'];
+
+             $details=Yii::app()->session['Detailsalesreplace'];
+             $this->afterDeleteDetail($model, $details);
+
+             $this->render('update',array(
+                 'model'=>$model,
+             ));
+         } else {
+             throw new CHttpException(404,'You have no authorization for this operation.');
+         }
+      }
+      
+     protected function saveNewDetails(array $details)
+     {                  
+         foreach ($details as $row) {
+             $detailmodel=new Detailsalesreplace;
+             $detailmodel->attributes=$row;
+             $respond=$detailmodel->insert();
+             if (!$respond) {
+             	throw new CHttpException(404,'There is an error in detail posting');
+                //break;
+             }
+         }
+         return $respond;
+     }
+     
+        protected function saveDetails(array $details)
+        {
+            $idmaker=new idmaker();
+            
+            $respond=true;
+            foreach ($details as $row) {
+                $detailmodel=Detailsalesreplace::model()->findByPk($row['iddetail']);
+                if($detailmodel==NULL) {
+                    $detailmodel=new Detailsalesreplace;
+                } else {
+                    if(count(array_diff($detailmodel->attributes,$row))) {
+                        $this->tracker->init();
+                        $this->tracker->modify('detailsalesreplace', array('iddetail'=>$detailmodel->iddetail));
+                    }    
+                }
+                $detailmodel->attributes=$row;
+                $detailmodel->userlog=Yii::app()->user->id;
+                $detailmodel->datetimelog=$idmaker->getDateTime();
+                $respond=$detailmodel->save();
+                if (!$respond) {
+                  break;
+                }
+             }
+             return $respond;
+        }
+        
+        protected function deleteDetails(array $details)
+        {
+            $respond=true;
+            foreach ($details as $row) {
+                $detailmodel=Detailsalesreplace::model()->findByPk($row['iddetail']);
+                if($detailmodel) {
+                    $this->tracker->init();
+                    $this->trackActivity('d', $this->__DETAILFORMID);
+                    $this->tracker->delete('detailsalesreplace', $detailmodel->id);
+                    $respond=$detailmodel->delete();
+                    if (!$respond) {
+                      break;
+                    }
+                }
+            }
+            return $respond;
+        }
+
+        protected function loadDetails($id)
+        {
+         $sql="select * from detailsalesreplace where id='$id'";
+         $details=Yii::app()->db->createCommand($sql)->queryAll();
+
+         return $details;
+        }
         
         protected function afterInsert(& $model)
         {
             $idmaker=new idmaker();
-            $model->id=$idmaker->getcurrentID2();  
-            $model->idatetime = $idmaker->getDateTime();
-            $model->userlog=Yii::app()->user->id;
-            $model->datetimelog=$model->idatetime;    
+            $model->id=$idmaker->getCurrentID2();
+            $model->idatetime=$idmaker->getDateTime();
+            $model->regnum=$idmaker->getRegNum($this->formid);
+            $model->totalcash = 0;
+            $model->totalnoncash = 0;
+            $model->totaldiff = 0;
+            $lookup=new lookup();
+            //$model->status=$lookup->reverseOrderStatus('Belum Diproses');
         }
         
         protected function afterPost(& $model)
         {
-        	idmaker::saveRegnum($this->formid, $model->regnum);
-        	$this->setInvStatus($model->invnum, '0');
+            $idmaker=new idmaker();
+            $idmaker->saveRegNum($this->formid, $model->regnum);    
         }
         
         protected function beforePost(& $model)
@@ -323,7 +510,7 @@ class DefaultController extends Controller
             
             $model->userlog=Yii::app()->user->id;
             $model->datetimelog=$idmaker->getDateTime();
-            $model->regnum=$idmaker->getRegnum($this->formid);
+            $model->regnum=$idmaker->getRegNum($this->formid);
         }
         
         protected function beforeDelete(& $model)
@@ -331,14 +518,30 @@ class DefaultController extends Controller
             
         }
         
-        protected function afterDelete($invnum)
+        protected function afterDelete()
         {
-			$this->setInvStatus($invnum, '1');
+               
         }
         
         protected function afterEdit(& $model)
         {
             
+        }
+        
+        protected function afterInsertDetail(& $model, $details)
+        {
+            $this->sumDetail($model, $details);
+        }
+        
+
+        protected function afterUpdateDetail(& $model, $details)
+        {
+        	$this->sumDetail($model, $details);
+        }
+        
+        protected function afterDeleteDetail(& $model, $details)
+        {
+        	$this->sumDetail($model, $details);
         }
         
         protected function trackActivity($action)
@@ -348,49 +551,99 @@ class DefaultController extends Controller
             $this->tracker->logActivity($this->formid, $action);
         }
         
+        private function sumDetail(& $model, $details)
+        {
+        	$total=0;
+        	$totaldisc=0;
+        	foreach ($details as $row) {
+        		$old=$row['price']*$row['qty'];
+        		if ($row['deleted']=='1')
+        			$new=$row['pricenew']*$row['qtynew'];
+        		else if ($row['deleted']=='0')
+        			$new=$old;
+        		else if ($row['deleted']=='2')
+        			$new=0;
+        		$total=$total+($old-$new);
+        		//$totaldisc=$totaldisc+$row['discount']*$row['qty'];
+        	}
+        	$model->attributes=Yii::app()->session['Salesreplace'];
+        	$model->totaldiff=$total;
+        }
+        
+        public static function setInvStatus($invnum, $status)
+        {
+        	$sql="update salespos set status = :p_status where regnum = :p_regnum ";
+        	$stmt=Yii::app()->db->createCommand($sql)
+        	->execute(array(':p_regnum'=>$invnum, ':p_status'=>$status));
+        }
+        
+        protected function loadSales($invnum, $id)
+        {
+        	$salesdetails=Yii::app()->db->createCommand()->select('b.*')
+        	->from('salespos a')->join('detailsalespos b', 'b.id = a.id')
+        	->where('a.regnum = :p_regnum', array(':p_regnum'=>$invnum))
+        	->queryAll();
+        	foreach($salesdetails as $detail) {
+        		$canceldetail['id']=$id;
+        		$canceldetail['iddetail']=idmaker::getCurrentID();
+        		$canceldetail['iditem']=$detail['iditem'];
+        		$canceldetail['qty']=$detail['qty'];
+        		$canceldetail['price']=$detail['price'];
+        		$canceldetail['deleted']='1';
+        		$canceldetail['iditemnew']=$detail['iditem'];
+        		$canceldetail['qtynew']=$detail['qty'];
+        		$canceldetail['pricenew']=$detail['price'];
+        		$canceldetail['userlog']=Yii::app()->user->id;
+        		$canceldetail['datetimelog']=idmaker::getDateTime();
+        
+        		$canceldetails[]=$canceldetail;
+        	};
+        	return $canceldetails;
+        }
+        
         protected function loadInvoice($invnum)
         {
         	$id=Yii::app()->db->createCommand()
-        		->select('id')->from('salespos')
-        		->where('status=:p_status and regnum=:p_regnum',
-                	array(':p_status'=>'1', ':p_regnum'=>$invnum))
-                ->queryScalar();
+        	->select('id')->from('salespos')
+        	->where('status=:p_status and regnum=:p_regnum',
+        			array(':p_status'=>'1', ':p_regnum'=>$invnum))
+        			->queryScalar();
         	if ($id !== FALSE) {
         		$salesCash=Yii::app()->db->createCommand()
-        			->select('(cash-cashreturn) as total')
-        			->from('salespos')
-        			->where('regnum = :p_regnum',
+        		->select('(cash-cashreturn) as total')
+        		->from('salespos')
+        		->where('regnum = :p_regnum',
         				array(':p_regnum'=>$invnum))
-        			->queryScalar();
+        				->queryScalar();
         		//echo $salesCash. ' ';
         		if (!$salesCash)
         			$salesCash = 0;
         		$salesNonCash=Yii::app()->db->createCommand()
-        			->select('sum(b.amount + b.surcharge) as total')
-        			->from('salespos a')
-        			->join('posreceipts b', "b.idpos = a.id")
-        			->where('a.regnum = :p_regnum',
+        		->select('sum(b.amount + b.surcharge) as total')
+        		->from('salespos a')
+        		->join('posreceipts b', "b.idpos = a.id")
+        		->where('a.regnum = :p_regnum',
         				array(':p_regnum'=>$invnum))
-        			->queryScalar();
+        				->queryScalar();
         		//echo $salesNonCash. ' ';
         		if (!$salesNonCash)
         			$salesNonCash = 0;
         		$receivableCash=Yii::app()->db->createCommand()
-        			->select('(a.cash-a.cashreturn) as total')
-        			->from('receivablespos a')
-        			->where('a.invnum = :p_regnum',
+        		->select('(a.cash-a.cashreturn) as total')
+        		->from('receivablespos a')
+        		->where('a.invnum = :p_regnum',
         				array(':p_regnum'=>$invnum))
-        			->queryScalar();
+        				->queryScalar();
         		//echo $receivableCash. ' ';
         		if (!$receivableCash)
         			$receivableCash = 0;
         		$receivableNonCash=Yii::app()->db->createCommand()
-        			->select('sum(b.amount+b.surcharge) as total')
-        			->from('receivablespos a')
-        			->join('posreceipts b', "b.idpos = a.id")
-        			->where('a.regnum = :p_regnum',
+        		->select('sum(b.amount+b.surcharge) as total')
+        		->from('receivablespos a')
+        		->join('posreceipts b', "b.idpos = a.id")
+        		->where('a.regnum = :p_regnum',
         				array(':p_regnum'=>$invnum))
-        			->querySCalar();
+        				->querySCalar();
         		//echo $receivableNonCash. ' ';
         		if (!$receivableNonCash)
         			$receivableNonCash = 0;
@@ -399,13 +652,6 @@ class DefaultController extends Controller
         		//echo $total;
         		return $total;
         	} else
-        	return array('cash'=>0, 'noncash'=>0);
-        }	
-        
-        protected static function setInvStatus($invnum, $status)
-        {
- 			$sql="update salespos set status = :p_status where regnum = :p_regnum ";
-        	$stmt=Yii::app()->db->createCommand($sql)
-        		->execute(array(':p_regnum'=>$invnum, ':p_status'=>$status));
+        		return array('cash'=>0, 'noncash'=>0);
         }
 }

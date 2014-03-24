@@ -10,6 +10,7 @@
  * @property string $invnum
  * @property double $totalcash
  * @property double $totalnoncash
+ * @property double $totaldiff
  * @property string $reason
  * @property string $userlog
  * @property string $datetimelog
@@ -32,15 +33,15 @@ class Salesreplace extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, idatetime, regnum, invnum, totalcash, totalnoncash, reason, userlog, datetimelog', 'required'),
-			array('totalcash, totalnoncash', 'numerical'),
+			array('id, idatetime, regnum, invnum, totalcash, totalnoncash, totaldiff, reason, userlog, datetimelog', 'required'),
+			array('totalcash, totalnoncash, totaldiff', 'numerical'),
 			array('id, userlog', 'length', 'max'=>21),
 			array('idatetime, datetimelog', 'length', 'max'=>19),
 			array('regnum, invnum', 'length', 'max'=>12),
 			array('reason', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, idatetime, regnum, invnum, totalcash, reason, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('id, idatetime, regnum, invnum, totalcash, totalnoncash, totaldiff, reason, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,6 +68,7 @@ class Salesreplace extends CActiveRecord
 			'invnum' => 'Nomor Faktur',
 			'totalcash' => 'Total Tunai',
 			'totalnoncash' => 'Total Non Tunai',
+			'totaldiff' => 'Total Selisih',	
 			'reason' => 'Alasan',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
@@ -97,6 +99,7 @@ class Salesreplace extends CActiveRecord
 		$criteria->compare('invnum',$this->invnum,true);
 		$criteria->compare('totalcash',$tnonhis->totalcash);
 		$criteria->compare('totalnoncash',$this->totalnoncash);
+		$criteria->compare('totaldiff',$this->totaldiff);
 		$criteria->compare('reason',$this->reason,true);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);

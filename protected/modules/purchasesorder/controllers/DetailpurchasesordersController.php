@@ -60,8 +60,8 @@ class DetailpurchasesordersController extends Controller
                 
                 $master=Yii::app()->session['master'];
                                 
-		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
+				// Uncomment the following line if AJAX validation is needed
+				$this->performAjaxValidation($model);
                 
                 if(isset($_POST['Detailpurchasesorders'])) {
                     $temp=Yii::app()->session['Detailpurchasesorders'];

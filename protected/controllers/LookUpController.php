@@ -136,6 +136,23 @@ class LookUpController extends Controller {
 		};
    }
    
+	public function actionGetItemPrice($iditem)
+   	{
+		if (!Yii::app()->user->isGuest) {
+	   		$data=Yii::app()->db->createCommand()->select('normalprice')->from('sellingprices')
+	              ->where('iditem = :p_iditem', array(':p_iditem'=>$iditem))
+	              ->order('idatetime desc')
+	              ->queryScalar();
+	      
+	      	if($data==FALSE) { 
+	           $data=-1;
+	      	}
+	      	echo json_encode($data);
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+   
    public function actionGetItemID($name)
    {
 		if (!Yii::app()->user->isGuest) {  		

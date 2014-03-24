@@ -1,6 +1,6 @@
 <?php
-/* @var $this SalescancelController */
-/* @var $model Salescancel */
+/* @var $this SalesreplaceController */
+/* @var $model Salesreplace */
 
 $this->breadcrumbs=array(
     'Proses'=>array('/site/proses'),
@@ -10,20 +10,20 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	//array('label'=>'List Salescancel', 'url'=>array('index')),
+	//array('label'=>'List Salesreplace', 'url'=>array('index')),
 	array('label'=>'Tambah Data', 'url'=>array('create')),
 );
 
 ?>
 
-<h1>Pembatalan Penjualan</h1>
+<h1>Perubahan Penjualan</h1>
 
 <?php 
     $data=Yii::app()->tracker->createCommand()->
-       select()->from('salescancel')->where("id='$model->id'")->queryAll();
+       select()->from('salesreplace')->where("id='$model->id'")->queryAll();
     $ap=new CArrayDataProvider($data);
     $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'salescancel-grid',
+	'id'=>'salesreplace-grid',
 	'dataProvider'=>$ap,
 	'columns'=>array(
 		'idatetime',

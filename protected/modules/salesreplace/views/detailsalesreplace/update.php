@@ -1,6 +1,6 @@
 <?php
-/* @var $this DetailpurchasesordersController */
-/* @var $model Detailpurchasesorders */
+/* @var $this DetailsalesreplaceController */
+/* @var $model Detailsalesreplace */
 
 $master=Yii::app()->session['master'];
 if($master=='create')
@@ -18,13 +18,13 @@ else if ($master=='update')
       'Ubah Detil');
 
 $this->menu=array(
-	//array('label'=>'List Detailpurchasesorders', 'url'=>array('index')),
-	//array('label'=>'Create Detailpurchasesorders', 'url'=>array('create')),
-	//array('label'=>'View Detailpurchasesorders', 'url'=>array('view', 'id'=>$model->iddetail)),
-	//array('label'=>'Manage Detailpurchasesorders', 'url'=>array('admin')), 
+	//array('label'=>'List Detailsalesreplace', 'url'=>array('index')),
+	//array('label'=>'Create Detailsalesreplace', 'url'=>array('create')),
+	//array('label'=>'View Detailsalesreplace', 'url'=>array('view', 'id'=>$model->iddetail)),
+	//array('label'=>'Manage Detailsalesreplace', 'url'=>array('admin')), 
 );
 ?>
 
-<h1>Pemesanan ke Pemasok</h1>
+<h1>Detil Perubahan Penjualan</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model, 'mode'=>'Update')); ?>
