@@ -51,10 +51,6 @@ class MYPDF extends TCPDF {
 				
 				$ih = $this->getStringHeight($this->headerwidths[1],lookup::ItemNameFromItemID($row['iditem']),
 					false, true, 2);
-				$ih2 = $this->getStringHeight($this->headerwidths[5],$row['remark'],
-					false, true, 2);
-				if ($ih < $ih2)
-					$ih = $ih2;
 				$this->Cell($this->headerwidths[0], $ih, $counter, 'LR', 0, 'C', $fill);
 				$this->MultiCell($this->headerwidths[1], 0, lookup::ItemNameFromItemID($row['iditem']), 'LR', 'L', 
 						false, 0);
