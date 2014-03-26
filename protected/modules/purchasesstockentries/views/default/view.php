@@ -31,7 +31,7 @@ $this->menu=array(
 		'idatetime',
 		'sjnum',
 		'ponum',
-		//'remark',		
+		'remark',		
       array(
          'label'=>'Nama Pemasok',
          'value'=>lookup::SupplierNameFromSupplierID($model->idsupplier)
@@ -75,10 +75,10 @@ $this->menu=array(
 			'name'=>'sellprice',
 			'type'=>'number'
 		),
-		array(
+		/*array(
 			'header'=>'Catatan',
 			'name'=>'remark',
-		),
+		),*/
 			array(
                   'class'=>'CButtonColumn',
                   'buttons'=> array(

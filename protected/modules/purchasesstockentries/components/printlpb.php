@@ -75,7 +75,7 @@ class MYPDF extends TCPDF {
 				$this->Cell(array_sum($this->headerwidths), 0, '', 'T', 1);
 		}
 		if ($this->data['remark'] <> '')
-			$this->MultiCell(195, 0, $this->data['remark'], 'LR', 'L', false, 0);
+			$this->MultiCell(195, 0, $this->data['remark'], 'LRBT', 'L', false, 0);
 		
 		//$this->Cell(array_sum($this->headerwidths), 0, '', 'T');
 	}
