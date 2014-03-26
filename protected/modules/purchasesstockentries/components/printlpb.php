@@ -48,12 +48,18 @@ class MYPDF extends TCPDF {
 			if ($i<count($this->detaildata)) {
 				$row=$this->detaildata[$i];
 				$counter+=1;
-				$this->Cell($this->headerwidths[0], 6, $counter, 'LR', 0, 'C', $fill);
-				$this->Cell($this->headerwidths[1], 6, lookup::ItemNameFromItemID($row['iditem']), 'LR', 0, 'L', $fill);
-				$this->Cell($this->headerwidths[2], 6, $row['qty'], 'LR', 0, 'R', $fill);
-				$this->Cell($this->headerwidths[3], 6, number_format($row['buyprice']), 'LR', 0, 'R', $fill);
-				$this->Cell($this->headerwidths[4], 6, number_format($row['sellprice']), 'LR', 0, 'R', $fill);
-				$this->Cell($this->headerwidths[5], 6, $row['remark'], 'LR', 1, 'L', $fill);
+				
+				$ih = $this->getStringHeight($this->headerwidths[1],lookup::ItemNameFromItemID($row['iditem']),
+					false, true, 2);
+				$this->Cell($this->headerwidths[0], $ih, $counter, 'LR', 0, 'C', $fill);
+				$this->MultiCell($this->headerwidths[1], 0, lookup::ItemNameFromItemID($row['iditem']), 'LR', 'L', 
+						false, 0);
+				// 0, 0, true, 0, false, true, 0, 'T', false);
+				$this->Cell($this->headerwidths[2], $ih, $row['qty'], 'LR', 0, 'R', $fill);
+				$this->Cell($this->headerwidths[3], $ih, number_format($row['buyprice']), 'LR', 0, 'R', $fill);
+				$this->Cell($this->headerwidths[4], $ih, number_format($row['sellprice']), 'LR', 0, 'R', $fill);
+				$this->Cell($this->headerwidths[5], $ih, $row['remark'], 'LR', 0, 'L', $fill);
+				$this->ln($ih);
 			} else {
 				$this->Cell($this->headerwidths[0], 6, ' ', 'LR', 0, 'C', $fill);
 				$this->Cell($this->headerwidths[1], 6, ' ', 'LR', 0, 'L', $fill);
@@ -114,25 +120,25 @@ class MYPDF extends TCPDF {
 		
 		$this->setFontSize(20);
 		$this->SetFont('', 'B');
-		$this->setXY(91, 10);
-		$this->Cell(105, 10, 'Penerimaan Barang', 'LTR', 1, 'C');
+		$this->setXY(100, 10);
+		$this->Cell(96, 10, 'Penerimaan Barang', 'LTR', 1, 'C');
 		$this->SetFontSize(10);
-		$this->setXY(91, 20);
-		$this->Cell(22, 5, 'Tanggal', 'LT', 0, 'C');
+		$this->setXY(100, 20);
+		$this->Cell(18, 5, 'Tanggal', 'LT', 0, 'C');
 		$this->Cell(35, 5, $this->data->idatetime, 'LTR', 0, 'C');
 		$this->SetFont('Helvetica', 'B');
 		//$this->setXY(100, 27);
-		$this->Cell(20, 5, 'No. LPB', 'LTR', 0, 'C');
-		$this->Cell(28, 5, $this->data->regnum, 'LTR', 1, 'C');
+		$this->Cell(18, 5, 'No. LPB', 'LTR', 0, 'C');
+		$this->Cell(25, 5, $this->data->regnum, 'LTR', 1, 'C');
 		
 		$this->SetFont('Helvetica', 'B');
-		$this->Cell(20, 5, 'Pengirim', 'LTR', 0,'C');
+		$this->Cell(19, 5, 'Pengirim', 'LTR', 0,'C');
 		$this->Cell(80, 5, lookup::SupplierNameFromSupplierID($this->data->idsupplier), 'LTR');
 		$this->SetFont('Helvetica', 'B');
-		$this->Cell(15, 5, 'No. SJ ', 'LTR', 0,'C');
-		$this->Cell(32, 5, $this->data->sjnum, 'LTR');
-		$this->Cell(20, 5, 'No. PO ', 'LTR', 0,'C');
-		$this->Cell(28, 5, $this->data->ponum, 'LTR', 1, 'C');
+		$this->Cell(18, 5, 'No. SJ ', 'LTR', 0,'C');
+		$this->Cell(35, 5, $this->data->sjnum, 'LTR', 0, 'C');
+		$this->Cell(18, 5, 'No. PO ', 'LTR', 0,'C');
+		$this->Cell(25, 5, $this->data->ponum, 'LTR', 1, 'C');
 		//$this->Cell(195, 15, $this->data->remark, 'LTRB', 1);
 		
 		//$this->ln();
