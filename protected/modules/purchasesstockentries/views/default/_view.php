@@ -24,6 +24,10 @@
     <b><?php echo CHtml::encode($data->getAttributeLabel('sjnum')); ?>:</b>
 	<?php echo CHtml::encode($data->sjnum); ?>
 	<br />
+	
+	<b><?php echo CHtml::encode($data->getAttributeLabel('remark')); ?>:</b>
+	<?php echo CHtml::encode($data->remark); ?>
+	<br />
     
     <b><?php echo CHtml::encode($data->getAttributeLabel('userlog')); ?>:</b>
 	<?php echo CHtml::encode(lookup::UserNameFromUserID($data->userlog)); ?>
@@ -38,9 +42,7 @@
 	<?php echo CHtml::encode($data->status); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('remark')); ?>:</b>
-	<?php echo CHtml::encode($data->remark); ?>
-	<br />
+	
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('userlog')); ?>:</b>
 	<?php echo CHtml::encode($data->userlog); ?>

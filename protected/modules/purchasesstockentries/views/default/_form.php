@@ -119,6 +119,13 @@ EOS;
         <?php echo $form->error($model,'sjnum');?> 
 	</div>
 	
+	<div class="row">
+		<?php echo $form->labelEx($model,'remark'); ?>
+        <?php 
+           echo $form->textArea($model, 'remark', array('COLS'=>40, 'ROWS'=>5)); 
+        ?>
+        <?php echo $form->error($model,'remark');?> 
+	</div>
       
 <?php 
     if (isset(Yii::app()->session['Detailpurchasesstockentries'])) {

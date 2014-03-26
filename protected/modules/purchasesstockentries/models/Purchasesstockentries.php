@@ -37,6 +37,7 @@ class Purchasesstockentries extends CActiveRecord
 			array('idatetime, datetimelog', 'length', 'max'=>19),
 			array('regnum', 'length', 'max'=>30),
 			array('ponum, sjnum', 'length', 'max'=>30),
+			array('remark', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, idatetime, regnum, ponum, sjnum, idsupplier, userlog, datetimelog', 'safe', 'on'=>'search'),
@@ -66,6 +67,7 @@ class Purchasesstockentries extends CActiveRecord
 			'ponum' => 'Nomor PO',
 			'sjnum' => 'Nomor SJ',
 			'idsupplier' => 'Pemasok',
+			'remark' => 'Catatan',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
 		);

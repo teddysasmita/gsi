@@ -113,13 +113,7 @@ EOS;
 		<?php echo $form->error($model,'sellprice'); ?>
 	</div>
 	
-	<div class="row">
-		<?php echo $form->labelEx($model,'remark'); ?>
-        <?php 
-           echo $form->textArea($model, 'remark', array('COLS'=>40, 'ROWS'=>5)); 
-        ?>
-        <?php echo $form->error($model,'remark');?> 
-	</div>
+	
    
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($mode); ?>
