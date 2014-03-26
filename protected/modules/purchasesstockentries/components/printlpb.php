@@ -21,8 +21,8 @@ class MYPDF extends TCPDF {
 		// Read file lines
 		$this->data = $data;
 		$this->detaildata = $detaildata;
-		$this->headernames = array('No', 'Nama Barang', 'Jmlh','H Beli', 'H Jual', 'Keterangan');
-		$this->headerwidths = array(10, 65, 12, 20, 20, 68);
+		$this->headernames = array('No', 'Nama Barang', 'Jmlh','H Beli', 'H Jual');
+		$this->headerwidths = array(10, 133, 12, 20, 20);
 	}
 
 	// Colored table
@@ -62,8 +62,7 @@ class MYPDF extends TCPDF {
 				$this->Cell($this->headerwidths[2], $ih, $row['qty'], 'LR', 0, 'R', $fill);
 				$this->Cell($this->headerwidths[3], $ih, number_format($row['buyprice']), 'LR', 0, 'R', $fill);
 				$this->Cell($this->headerwidths[4], $ih, number_format($row['sellprice']), 'LR', 0, 'R', $fill);
-				$this->MultiCell($this->headerwidths[5], 0, $row['remark'], 'LR', 'L', 
-						false, 0);
+				//$this->MultiCell($this->headerwidths[5], 0, $row['remark'], 'LR', 'L', false, 0);
 				//$this->Cell($this->headerwidths[5], $ih, $row['remark'], 'LR', 0, 'L', $fill);
 				$this->ln($ih);
 			} else {
@@ -71,14 +70,17 @@ class MYPDF extends TCPDF {
 				$this->Cell($this->headerwidths[1], 6, ' ', 'LR', 0, 'L', $fill);
 				$this->Cell($this->headerwidths[2], 6, ' ', 'LR', 0, 'R', $fill);
 				$this->Cell($this->headerwidths[3], 6, ' ', 'LR', 0, 'R', $fill);
-				$this->Cell($this->headerwidths[4], 6, ' ', 'LR', 0, 'R', $fill);
-				$this->Cell($this->headerwidths[5], 6, ' ', 'LR', 1, 'L', $fill);
+				$this->Cell($this->headerwidths[4], 6, ' ', 'LR', 1, 'R', $fill);
+				//$this->Cell($this->headerwidths[5], 6, ' ', 'LR', 1, 'L', $fill);
 				//$this->ln();
 			}
 			if (($i > 0) && ($i % 11 == 0))
 				//$this->checkPageBreak(6, '');
 				$this->Cell(array_sum($this->headerwidths), 0, '', 'T', 1);
 		}
+		
+		$this->MultiCell(195, 0, $data['remark'], 'LR', 'L', false, 0);
+		
 		//$this->Cell(array_sum($this->headerwidths), 0, '', 'T');
 	}
 	
