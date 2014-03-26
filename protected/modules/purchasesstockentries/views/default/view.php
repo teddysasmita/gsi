@@ -31,7 +31,7 @@ $this->menu=array(
 		'idatetime',
 		'sjnum',
 		'ponum',
-		'remark',		
+		//'remark',		
       array(
          'label'=>'Nama Pemasok',
          'value'=>lookup::SupplierNameFromSupplierID($model->idsupplier)
