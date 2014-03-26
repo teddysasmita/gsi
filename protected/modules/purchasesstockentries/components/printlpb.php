@@ -51,6 +51,10 @@ class MYPDF extends TCPDF {
 				
 				$ih = $this->getStringHeight($this->headerwidths[1],lookup::ItemNameFromItemID($row['iditem']),
 					false, true, 2);
+				$ih2 = $this->getStringHeight($this->headerwidths[5],$row['remark'],
+					false, true, 2);
+				if ($ih < $ih2)
+					$ih = $ih2;
 				$this->Cell($this->headerwidths[0], $ih, $counter, 'LR', 0, 'C', $fill);
 				$this->MultiCell($this->headerwidths[1], 0, lookup::ItemNameFromItemID($row['iditem']), 'LR', 'L', 
 						false, 0);
@@ -58,7 +62,9 @@ class MYPDF extends TCPDF {
 				$this->Cell($this->headerwidths[2], $ih, $row['qty'], 'LR', 0, 'R', $fill);
 				$this->Cell($this->headerwidths[3], $ih, number_format($row['buyprice']), 'LR', 0, 'R', $fill);
 				$this->Cell($this->headerwidths[4], $ih, number_format($row['sellprice']), 'LR', 0, 'R', $fill);
-				$this->Cell($this->headerwidths[5], $ih, $row['remark'], 'LR', 0, 'L', $fill);
+				$this->MultiCell($this->headerwidths[5], 0, $row['remark'], 'LR', 'L', 
+						false, 0);
+				//$this->Cell($this->headerwidths[5], $ih, $row['remark'], 'LR', 0, 'L', $fill);
 				$this->ln($ih);
 			} else {
 				$this->Cell($this->headerwidths[0], 6, ' ', 'LR', 0, 'C', $fill);
