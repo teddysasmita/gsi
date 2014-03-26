@@ -132,8 +132,8 @@ class MYPDF extends TCPDF {
 		$this->Cell(35, 5, $this->data->idatetime, 'LTR', 0, 'C');
 		$this->SetFont('Helvetica', 'B');
 		//$this->setXY(100, 27);
-		$this->Cell(18, 5, 'No. LPB', 'LTR', 0, 'C');
-		$this->Cell(25, 5, $this->data->regnum, 'LTR', 1, 'C');
+		$this->Cell(16, 5, 'No. LPB', 'LTR', 0, 'C');
+		$this->Cell(27, 5, $this->data->regnum, 'LTR', 1, 'C');
 		
 		$this->SetFont('Helvetica', 'B');
 		$this->Cell(19, 5, 'Pengirim', 'LTR', 0,'C');
@@ -141,8 +141,8 @@ class MYPDF extends TCPDF {
 		$this->SetFont('Helvetica', 'B');
 		$this->Cell(18, 5, 'No. SJ ', 'LTR', 0,'C');
 		$this->Cell(35, 5, $this->data->sjnum, 'LTR', 0, 'C');
-		$this->Cell(18, 5, 'No. PO ', 'LTR', 0,'C');
-		$this->Cell(25, 5, $this->data->ponum, 'LTR', 1, 'C');
+		$this->Cell(16, 5, 'No. PO ', 'LTR', 0,'C');
+		$this->Cell(27, 5, $this->data->ponum, 'LTR', 1, 'C');
 		//$this->Cell(195, 15, $this->data->remark, 'LTRB', 1);
 		
 		//$this->ln();
