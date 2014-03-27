@@ -109,7 +109,6 @@ class DefaultController extends Controller
 					  } else if ($_POST['command']=='updateDetail') {
                          $model->attributes=$_POST['Salesreplace'];
                          Yii::app()->session['Salesreplace']=$_POST['Salesreplace'];
-                         print_r(Yii::app()->session['Salesreplace']);
                       }
 				}
 			}
