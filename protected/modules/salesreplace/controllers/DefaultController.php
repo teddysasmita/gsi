@@ -99,20 +99,21 @@ class DefaultController extends Controller
                             'id'=>$model->id, 'regnum'=>$model->regnum));
                       } else if ($_POST['command'] == 'setInvnum') {
                       	$model->attributes=$_POST['Salesreplace'];
-                      	Yii::app()->session['Salesreplace']=$_POST['Salesreplace'];
 						$total = $this->loadInvoice($model->invnum);
 						$model->totalcash = $total['cash'];
 						$model->totalnoncash = $total['noncash'];
 						$model->totaldiff = $total['diff'];
+						Yii::app()->session['Salesreplace'] = $model->attributes;
 						Yii::app()->session['Detailsalesreplace']=$this->loadSales($model->invnum,
 							$model->id);
 					  } else if ($_POST['command']=='updateDetail') {
                          $model->attributes=$_POST['Salesreplace'];
                          Yii::app()->session['Salesreplace']=$_POST['Salesreplace'];
+                         print_r(Yii::app()->session['Salesreplace']);
                       }
 				}
 			}
-
+			
 			$this->render('create',array('model'=>$model));
                 
 		} else {
