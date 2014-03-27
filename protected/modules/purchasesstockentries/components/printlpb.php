@@ -47,7 +47,7 @@ class MYPDF extends TCPDF {
 			$maxrows = count($this->detaildata);		
 		for($i=0;$i<$maxrows;$i++) {
 		*/
-		for ($i=0; $i<$maxrows; $i++) {
+		for ($i=0; $i<count($this->detaildata); $i++) {
 			//if ($i<count($this->detaildata)) {
 				$row=$this->detaildata[$i];
 				$counter+=1;
