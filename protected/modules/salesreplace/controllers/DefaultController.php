@@ -656,4 +656,27 @@ class DefaultController extends Controller
         	} else
         		return array('cash'=>0, 'noncash'=>0, 'diff'=>0);
         }
+        
+		public function actionPrintreplace($id)
+		{
+			if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
+				Yii::app()->user->id)) {
+			$this->trackActivity('p');
+			 
+			$model=$this->loadModel($id);
+			$detailmodel=$this->loadDetails($id);
+			Yii::import('application.vendors.tcpdf.*');
+			require_once ('tcpdf.php');
+			Yii::import('application.modules.salesreplace.components.*');
+			require_once('printreplace.php');
+			ob_clean();
+	
+			execute($model, $detailmodel);
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		}
+		 
+		 
+		 
+	}
 }
