@@ -40,12 +40,15 @@ class MYPDF extends TCPDF {
 		$counter=0;
 		$iditem='';
 		$this->SetXY(1, 39);
+		/*
 		if (count($this->detaildata) <= 12)
 			$maxrows = 12;
 		else
 			$maxrows = count($this->detaildata);		
 		for($i=0;$i<$maxrows;$i++) {
-			if ($i<count($this->detaildata)) {
+		*/
+		for ($i=0; $i<$maxrows; $i++) {
+			//if ($i<count($this->detaildata)) {
 				$row=$this->detaildata[$i];
 				$counter+=1;
 				
@@ -61,7 +64,7 @@ class MYPDF extends TCPDF {
 				//$this->MultiCell($this->headerwidths[5], 0, $row['remark'], 'LR', 'L', false, 0);
 				//$this->Cell($this->headerwidths[5], $ih, $row['remark'], 'LR', 0, 'L', $fill);
 				$this->ln($ih);
-			} else {
+			/*} else {
 				$this->Cell($this->headerwidths[0], 6, ' ', 'LR', 0, 'C', $fill);
 				$this->Cell($this->headerwidths[1], 6, ' ', 'LR', 0, 'L', $fill);
 				$this->Cell($this->headerwidths[2], 6, ' ', 'LR', 0, 'R', $fill);
@@ -69,7 +72,7 @@ class MYPDF extends TCPDF {
 				$this->Cell($this->headerwidths[4], 6, ' ', 'LR', 1, 'R', $fill);
 				//$this->Cell($this->headerwidths[5], 6, ' ', 'LR', 1, 'L', $fill);
 				//$this->ln();
-			}
+			}*/
 			if (($i > 0) && ($i % 11 == 0))
 				//$this->checkPageBreak(6, '');
 				$this->Cell(array_sum($this->headerwidths), 0, '', 'T', 1);
