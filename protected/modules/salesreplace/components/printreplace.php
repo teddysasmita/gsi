@@ -87,8 +87,9 @@ class MYPDF extends TCPDF {
 			}*/
 			//if (($i > 0) && ($i % 10 == 0))
 				//$this->checkPageBreak(6, '');
-				$this->Cell(array_sum($this->headerwidths), 0, '', 'T', 1);
+				
 		}
+		$this->Cell(array_sum($this->headerwidths), 0, '', 'T', 1);
 		//$this->Cell(array_sum($this->headerwidths), 0, '', 'T');
 	}
 	
