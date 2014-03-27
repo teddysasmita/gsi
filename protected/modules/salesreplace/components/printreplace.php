@@ -40,13 +40,15 @@ class MYPDF extends TCPDF {
 		$counter=0;
 		$iditem='';
 		$this->SetXY(1, 42);
-		if (count($this->detaildata) <= 11)
+		/*if (count($this->detaildata) <= 11)
 			$maxrows = 11;
 		else
 			$maxrows = count($this->detaildata);		
 		for($i=0;$i<$maxrows;$i++) {
 			if ($i<count($this->detaildata)) {
-				$row=$this->detaildata[$i];
+		*/
+		for($i=0; $i<count($this->detaildata); $i++) {	
+			$row=$this->detaildata[$i];
 				$counter+=1;
 				$ih = $this->getStringHeight($this->headerwidths[1],lookup::ItemNameFromItemID($row['iditem']),
 					false, true, 2);
@@ -74,7 +76,7 @@ class MYPDF extends TCPDF {
 				}
 				//$this->Cell($this->headerwidths[4], 6, number_format($row['discount']), 'LR', 1, 'R', $fill);
 				//$this->Cell($this->headerwidths[5], 6, $row['remark'], 'LR', 1, 'L', $fill);
-			} else {
+			/*} else {
 				$this->Cell($this->headerwidths[0], 6, ' ', 'LR', 0, 'C', $fill);
 				$this->Cell($this->headerwidths[1], 6, ' ', 'LR', 0, 'L', $fill);
 				$this->Cell($this->headerwidths[2], 6, ' ', 'LR', 0, 'R', $fill);
@@ -82,8 +84,8 @@ class MYPDF extends TCPDF {
 				$this->Cell($this->headerwidths[4], 6, ' ', 'LR', 1, 'L', $fill);
 				//$this->Cell($this->headerwidths[5], 6, ' ', 'LR', 1, 'L', $fill);
 				//$this->ln();
-			}
-			if (($i > 0) && ($i % 10 == 0))
+			}*/
+			//if (($i > 0) && ($i % 10 == 0))
 				//$this->checkPageBreak(6, '');
 				$this->Cell(array_sum($this->headerwidths), 0, '', 'T', 1);
 		}
