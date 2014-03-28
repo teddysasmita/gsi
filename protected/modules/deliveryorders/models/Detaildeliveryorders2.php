@@ -8,7 +8,8 @@
  * @property string $id
  * @property string $iditem
  * @property double $qty
- * @property string $idwarehouse
+ * @property double $invqty
+ * @property double $leftqty
  * @property string $userlog
  * @property string $datetimelog
  */
@@ -30,13 +31,13 @@ class Detaildeliveryorders2 extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('iddetail, id, iditem, qty, idwarehouse, userlog, datetimelog', 'required'),
-			array('qty', 'numerical'),
-			array('iddetail, id, iditem, idwarehouse, userlog', 'length', 'max'=>21),
+			array('iddetail, id, iditem, qty, invqty, leftqty, userlog, datetimelog', 'required'),
+			array('qty, invqty, leftqty', 'numerical'),
+			array('iddetail, id, iditem, userlog', 'length', 'max'=>21),
 			array('datetimelog', 'length', 'max'=>19),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('iddetail, id, iditem, qty, idwarehouse, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('iddetail, id, iditem, qty, invqty, leftqty, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,8 +61,9 @@ class Detaildeliveryorders2 extends CActiveRecord
 			'iddetail' => 'Iddetail',
 			'id' => 'ID',
 			'iditem' => 'Nama Barang',
-			'qty' => 'Jumlah',
-			'idwarehouse' => 'Gudang',
+			'qty' => 'Jumlah Kirim',
+			'invqty' => 'Jumlah Faktur',
+			'leftqty' => 'Sisa',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
 		);
@@ -89,7 +91,8 @@ class Detaildeliveryorders2 extends CActiveRecord
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('iditem',$this->iditem,true);
 		$criteria->compare('qty',$this->qty);
-		$criteria->compare('idwarehouse',$this->idwarehouse,true);
+		$criteria->compare('invqty',$this->invqty);
+		$criteria->compare('leftqty',$this->leftqty);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);
 

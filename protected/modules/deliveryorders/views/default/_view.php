@@ -13,23 +13,23 @@
 	<?php echo CHtml::encode($data->idatetime); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('rdatetime')); ?>:</b>
-	<?php echo CHtml::encode($data->rdatetime); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('invnum')); ?>:</b>
+	<?php echo CHtml::encode($data->invnum); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('idsupplier')); ?>:</b>
-	<?php echo CHtml::encode(lookup::SupplierNameFromSupplierID($data->idsupplier)); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('receivername')); ?>:</b>
+	<?php echo CHtml::encode($data->receivername); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('total')); ?>:</b>
-	<?php echo CHtml::encode(number_format($data->total)); ?>
+	
+	<b><?php echo CHtml::encode($data->getAttributeLabel('receiveraddress')); ?>:</b>
+	<?php echo CHtml::encode($data->receiveraddress); ?>
 	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('discount')); ?>:</b>
-	<?php echo CHtml::encode(number_format($data->discount)); ?>
+	
+	<b><?php echo CHtml::encode($data->getAttributeLabel('receiverphone')); ?>:</b>
+	<?php echo CHtml::encode($data->receiverphone); ?>
 	<br />
-
-      <b><?php echo CHtml::encode($data->getAttributeLabel('userlog')); ?>:</b>
+	
+     <b><?php echo CHtml::encode($data->getAttributeLabel('userlog')); ?>:</b>
 	<?php echo CHtml::encode(lookup::UserNameFromUserID($data->userlog)); ?>
 	<br />
 

@@ -1,6 +1,6 @@
 <?php
-/* @var $this Detaildeliveryorders2Controller */
-/* @var $model Detaildeliveryorders2 */
+/* @var $this DetaildeliveryordersController */
+/* @var $model Detaildeliveryorders */
 
 $master=Yii::app()->session['master'];
 if($master=='create')
@@ -12,16 +12,13 @@ if($master=='create')
 else if ($master=='update')
    $this->breadcrumbs=array(
       'Proses'=>array('/site/proses'),
-      'Ubah Data'=>array('default/update','id'=>$model->id),
       'Daftar'=>array('default/index'),
+      'Lihat Data'=>array('default/view','id'=>$model->id),
+      'Ubah Data'=>array('default/update','id'=>$model->id),
       'Tambah Detil');
 
-/*$this->menu=array(
-	array('label'=>'List Detaildeliveryorders2', 'url'=>array('index')),
-	array('label'=>'Manage Detaildeliveryorders2', 'url'=>array('admin')),
-);*/
 ?>
 
-<h1>Detil Pengiriman Barang 2</h1>
+<h1>Pengiriman Barang</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model, 'mode'=>'Create')); ?>

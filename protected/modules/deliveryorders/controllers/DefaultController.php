@@ -10,6 +10,7 @@ class DefaultController extends Controller
 	public $formid='AC13';
 	public $tracker;
 	public $state;
+	private $recapdetails = array();
 
 	/**
 	 * @return array action filters
@@ -49,6 +50,7 @@ class DefaultController extends Controller
                     Yii::app()->user->id))  {   
                 $this->state='c';
                 $this->trackActivity('c');    
+                $error = '';
                     
                 $model=new Deliveryorders;
                 $this->afterInsert($model);
@@ -72,29 +74,33 @@ class DefaultController extends Controller
                       $model->attributes=$_POST['Deliveryorders'];
                       
                       $this->beforePost($model);
-                      $respond=$model->save();
-                      if($respond) {
-                          $this->afterPost($model);
+                      
+                      if ($this->checkDetailsItemQty()) {
+	                      $respond=$model->save();
+	                      if($respond) {
+	                          $this->afterPost($model);
+	                      } else {
+	                          throw new CHttpException(404,'There is an error in master posting');
+	                      }
+	                      
+	                      if(isset(Yii::app()->session['Detaildeliveryorders']) ) {
+	                        $details=Yii::app()->session['Detaildeliveryorders'];
+	                        $respond=$respond&&$this->saveNewDetails($details);
+	                      } 
+	                      
+	                      if(isset(Yii::app()->session['Detaildeliveryorders2']) ) {
+	                        $details=Yii::app()->session['Detaildeliveryorders2'];
+	                        $respond=$respond&&$this->saveNewDetails2($details);
+	                      }
+	                      
+	                      if($respond) {
+	                         Yii::app()->session->remove('Deliveryorders');
+	                         Yii::app()->session->remove('Detaildeliveryorders');
+	                         $this->redirect(array('view','id'=>$model->id));
+	                      }
                       } else {
-                          throw new CHttpException(404,'There is an error in master posting');
+                      	$error = 'Ada kesalahan dalam detil pengiriman';
                       }
-                      
-                      if(isset(Yii::app()->session['Detaildeliveryorders']) ) {
-                        $details=Yii::app()->session['Detaildeliveryorders'];
-                        $respond=$respond&&$this->saveNewDetails($details);
-                      } 
-                      
-                      if(isset(Yii::app()->session['Detaildeliveryorders2']) ) {
-                        $details=Yii::app()->session['Detaildeliveryorders2'];
-                        $respond=$respond&&$this->saveNewDetails2($details);
-                      }
-                      
-                      if($respond) {
-                         Yii::app()->session->remove('Deliveryorders');
-                         Yii::app()->session->remove('Detaildeliveryorders');
-                         $this->redirect(array('view','id'=>$model->id));
-                      }
-
                    } else if (isset($_POST['command'])){
                       // save the current master data before going to the detail page
                       if($_POST['command']=='adddetail') {
@@ -117,7 +123,7 @@ class DefaultController extends Controller
                 }
 
                 $this->render('create',array(
-                    'model'=>$model,
+                    'model'=>$model, 'form_error'=>$error
                 ));
                 
              } else {
@@ -408,7 +414,7 @@ class DefaultController extends Controller
              $this->afterInsertDetail($model, $details);
 
              $this->render('create',array(
-                 'model'=>$model,
+                 'model'=>$model, 'form_error'=>''
              ));
          } else {
              throw new CHttpException(404,'You have no authorization for this operation.');
@@ -776,6 +782,51 @@ class DefaultController extends Controller
         		}
         		$detailsdata[]=$detaildata;
         	} 
-        	Yii::app()->session['Detaildeliveryorders'] = $detailsdata;
+        	Yii::app()->session['Detaildeliveryorders2'] = $detailsdata;
         }
-}
+    	
+        private function addRecapItem($iditem, $qty) 
+        {
+        	foreach ($this->recapdetails as $recap ) {
+        		if ($recap['iditem'] == $iditem) {
+        			$recap['qty'] += $qty;
+        			return;
+        		}
+        	}
+        	$temp['iditem'] = $iditem;
+        	$temp['qty'] = $qty;
+        	$this->recapdetails[] = $temp;	
+        }
+               
+        private function checkDetailsItemQty()
+        {
+			$details2 = Yii::app()->session['Detaildeliveryorders2'];
+			$details1 = Yii::app()->session['Detaildeliveryorders'];
+			
+			foreach ($details1 as $deliverydata) {
+				$this->addRecapItem($deliverydata['iditem'], $deliverydata['qty']);
+        	}
+        	
+        	foreach ($this->recapdetails as $deliverydata) {
+        		$found = FALSE;
+        		foreach($details2 as $data) {
+        			if ($data['iditem'] == $deliverydata['iditem']) {
+        				$found = TRUE;
+        				if ($data['leftqty'] < $deliverydata['qty'])
+        					return FALSE;
+        			}
+        		}
+        		if (! $found) {
+        			return FALSE;
+        		}
+        	}
+        	return TRUE;
+        }
+        
+        private function updateDetail2()
+        {
+ 			$details2 = Yii::app()->session['Detaildeliveryorders2'];
+ 			       	
+        	
+        }
+ }

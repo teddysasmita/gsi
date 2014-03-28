@@ -3,11 +3,11 @@
 /* @var $model Detaildeliveryorders */
 
 $this->breadcrumbs=array(
-   'Proses'=>array('/site/proses'),
+	'Proses'=>array('/site/proses'),
    'Daftar'=>array('default/index'),
    'Lihat Data'=>array('default/view', 'id'=>$model->id),
    'Ubah Data'=>array('default/update', 'id'=>$model->id),
-   'Lihat Detil'=>array('/purchasesorder/detaildeliveryorders/view',
+   'Lihat Detil'=>array('/deliveryorders/detaildeliveryorders/view',
          'iddetail'=>$model->iddetail),
    'Sejarah'
 );
@@ -30,31 +30,23 @@ $this->menu=array(
 	'id'=>'detaildeliveryorders-grid',
 	'dataProvider'=>$ap,
 	'columns'=>array(
-		'iddetail',
-		'id',
-		'iditem',
-		'idunit',
-      'price',
-      'cost1',
-      'cost2',
-		'discount',
-      'qty',
-		/*
-		
+		//'iddetail',
+		//'id',
+		'vouchername',
+		'vouchervalue',
 		'userlog',
 		'datetimelog',
-		*/
 		array(
-                    'class'=>'CButtonColumn',
-                   'buttons'=> array(
-                        'view'=>array(
-                            'visible'=>'false',
-                        ),
-                        'delete'=>array(
-                          'visible'=>'false',
-                        ),
-                    ),
-                   'updateButtonUrl'=>"Action::decodeRestoreHistoryCustomerUrl(\$data)",
+			'class'=>'CButtonColumn',
+				'buttons'=> array(
+					'view'=>array(
+						'visible'=>'false',
+					),
+					'delete'=>array(
+						'visible'=>'false',
+					),
+			),
+			'updateButtonUrl'=>"Action::decodeRestoreHistoryCustomerUrl(\$data)",
 		),
 	),
 )); ?>

@@ -59,7 +59,7 @@ EOS;
         echo $form->hiddenField($model, 'status');
         echo $form->hiddenField($model, 'regnum');
       ?>
-        
+      
 	<div class="row">
 		<?php echo $form->labelEx($model,'idatetime'); ?>
             <?php
@@ -139,12 +139,13 @@ EOS;
 	</div>
 
 <?php 
-    if (isset(Yii::app()->session['Detaildeliveryorders'])) {
-       $rawdata=Yii::app()->session['Detaildeliveryorders'];
+   
+	if (isset(Yii::app()->session['Detaildeliveryorders2'])) {
+       $rawdata=Yii::app()->session['Detaildeliveryorders2'];
        $count=count($rawdata);
     } else {
-       $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryorders where id='$model->id'")->queryScalar();
-       $sql="select * from detaildeliveryorders where id='$model->id'";
+       $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryorders2 where id='$model->id'")->queryScalar();
+       $sql="select * from detaildeliveryorders2 where id='$model->id'";
        $rawdata=Yii::app()->db->createCommand($sql)->queryAll ();
     }
     $dataProvider=new CArrayDataProvider($rawdata, array(
@@ -159,7 +160,7 @@ EOS;
                'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
             ),
 			array(
-				'header'=>'Faktur',
+				'header'=>'Jmlh Faktur',
 				'name'=>'invqty',
 			),
             array(
@@ -170,27 +171,15 @@ EOS;
 				'header'=>'Kirim',
 				'name'=>'qty',
 			),
-            array(
-               'class'=>'CButtonColumn',
-               'buttons'=> array(
-                   'delete'=>array(
-                    'visible'=>'false'
-                   ),
-                  'view'=>array(
-                     'visible'=>'false'
-                  )
-               ),
-               'updateButtonUrl'=>"Action::decodeUpdateDetailDeliveryOrderUrl(\$data)",
-            )
           ),
     ));
-    
-    if (isset(Yii::app()->session['Detaildeliveryorders2'])) {
-       $rawdata=Yii::app()->session['Detaildeliveryorders2'];
+
+    if (isset(Yii::app()->session['Detaildeliveryorders'])) {
+       $rawdata=Yii::app()->session['Detaildeliveryorders'];
        $count=count($rawdata);
     } else {
-       $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryorders2 where id='$model->id'")->queryScalar();
-       $sql="select * from detaildeliveryorders2 where id='$model->id'";
+       $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryorders where id='$model->id'")->queryScalar();
+       $sql="select * from detaildeliveryorders where id='$model->id'";
        $rawdata=Yii::app()->db->createCommand($sql)->queryAll ();
     }
     $dataProvider=new CArrayDataProvider($rawdata, array(
@@ -200,13 +189,13 @@ EOS;
             'dataProvider'=>$dataProvider,
             'columns'=>array(
 				array(
-					'header'=>'Item Name',
+					'header'=>'Nama Barang',
 					'name'=>'iditem',
 					'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
 				),
 				array(
-					'header'=>'Faktur',
-					'name'=>'invqty',
+					'header'=>'Jmlh',
+					'name'=>'qty',
 				),
 				array(
 					'header'=>'Gudang',
@@ -216,19 +205,20 @@ EOS;
 				array(
 					'class'=>'CButtonColumn',
 					'buttons'=> array(
-						'delete'=>array(
+						'view'=>array(
 							'visible'=>'false'
 						),
-						'update'=>array(
-	                        'visible'=>'false'
-						)
 					),
-					'viewButtonUrl'=>"Action::decodeViewDetailPurchasesOrder2Url(\$data, $model->regnum)",
+					'updateButtonUrl'=>"Action::decodeUpdateDetailDeliveryOrderUrl(\$data)",
+					'deleteButtonUrl'=>"Action::decodeDeleteDetailDeliveryOrderUrl(\$data)",
 				)
 			),
     	));
 ?>
 
+	<div class='error'>
+		<?php echo CHtml::label($form_error, FALSE)?>
+	</div>
    <div class="row buttons">
       <?php echo CHtml::submitButton(ucfirst($command)); ?>
    </div>

@@ -1,6 +1,6 @@
 <?php
-/* @var $this Detaildeliveryorders2Controller */
-/* @var $data Detaildeliveryorders2 */
+/* @var $this DetaildeliveryordersController */
+/* @var $data Detaildeliveryorders */
 ?>
 
 <div class="view">
@@ -14,15 +14,11 @@
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('iditem')); ?>:</b>
-	<?php echo CHtml::encode(lookup::ItemNameFromItemID($model->iditem)); ?>
+	<?php echo CHtml::encode(lookup::ItemNameFromItemID($data->iditem)); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('qty')); ?>:</b>
-	<?php echo CHtml::encode(qty); ?>
-	<br />
-	
-	<b><?php echo CHtml::encode($data->getAttributeLabel('idwarehouse')); ?>:</b>
-	<?php echo CHtml::encode(lookup::WarehouseNameFromWarehouseID($model->idwarehouse)); ?>
+	<?php echo CHtml::encode(number_format($data->qty)); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('userlog')); ?>:</b>
@@ -31,7 +27,7 @@
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('datetimelog')); ?>:</b>
 	<?php echo CHtml::encode($data->datetimelog); ?>
-	<br />
+	<br />s
 
 
 </div>

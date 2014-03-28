@@ -12,13 +12,16 @@ if($master=='create')
 else if ($master=='update')
    $this->breadcrumbs=array(
       'Proses'=>array('/site/proses'),
-      'Daftar'=>array('default/index'),
-      'Lihat Data'=>array('default/view','id'=>$model->id),
       'Ubah Data'=>array('default/update','id'=>$model->id),
+      'Daftar'=>array('default/index'),
       'Tambah Detil');
 
+/*$this->menu=array(
+	array('label'=>'List Detaildeliveryorders', 'url'=>array('index')),
+	array('label'=>'Manage Detaildeliveryorders', 'url'=>array('admin')),
+);*/
 ?>
 
-<h1>Pengiriman Barang</h1>
+<h1>Detil Pengiriman Barang </h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model, 'mode'=>'Create')); ?>

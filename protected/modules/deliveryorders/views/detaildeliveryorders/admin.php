@@ -3,13 +3,12 @@
 /* @var $model Detaildeliveryorders */
 
 $this->breadcrumbs=array(
-	'Detaildeliveryorders'=>array('index'),
-	'Manage',
+	'Daftar'=>array('index'),
+	'Pencarian Data',
 );
 
 $this->menu=array(
-	array('label'=>'List Detaildeliveryorders', 'url'=>array('index')),
-	array('label'=>'Create Detaildeliveryorders', 'url'=>array('create')),
+	array('label'=>'Tambah Detil', 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -26,7 +25,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Detil Pengiriman Barang</h1>
+<h1>Detil Pengiriman Barang </h1>
 
 <p>
 You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
@@ -47,15 +46,10 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'columns'=>array(
 		'iddetail',
 		'id',
-		'iditem',
-		'idunit',
-		'qty',
-		'discount',
-		/*
-		'price',
+		'vouchername',
+		'vouchervalue',
 		'userlog',
 		'datetimelog',
-		*/
 		array(
 			'class'=>'CButtonColumn',
 		),

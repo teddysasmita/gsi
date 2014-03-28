@@ -1,20 +1,19 @@
 <?php
-/* @var $this Detaildeliveryorders2Controller */
-/* @var $model Detaildeliveryorders2 */
+/* @var $this DetaildeliveryordersController */
+/* @var $model Detaildeliveryorders */
 
 $this->breadcrumbs=array(
-	'Proses'=>array('/site/proses'),
+      'Proses'=>array('/site/proses'),
 	'Daftar'=>array('default/index'),
       'Lihat Data'=>array('default/view', 'id'=>$id),
 	'Data Detil yang telah terhapus',
 );
 
 $this->menu=array(
-   /*
-   array('label'=>'List Detaildeliveryorders2', 'url'=>array('index')),
-   array('label'=>'Create Detaildeliveryorders2', 'url'=>array('create')),
-   */
-);
+	/*array('label'=>'List Detaildeliveryorders', 'url'=>array('index')),
+	array('label'=>'Create Detaildeliveryorders', 'url'=>array('create')),
+      */
+ );
 
 ?>
 
@@ -28,23 +27,30 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 <?php
     
     $data=Yii::app()->tracker->createCommand()->
-       select('a.*')->from('detaildeliveryorders2 a')->join('userjournal b', 'b.id=a.idtrack')
-       ->where('b.action=:action', array(':action'=>'d'))->queryAll();
+       select('a.*')->from('detaildeliveryorders a')->join('userjournal b', 'b.id=a.idtrack')
+       ->where('b.action=:action and a.id=:id', array(':action'=>'d', 'id'=>$id))->queryAll();
     $ap=new CArrayDataProvider($data);
 ?>
  
 
 <?php
  $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'detaildeliveryorders2-grid',
+	'id'=>'detaildeliveryorders-grid',
 	'dataProvider'=>$ap,
 	'columns'=>array(
 		'iddetail',
 		'id',
-		'vouchername',
-		'vouchervalue',
+		'iditem',
+		'idunit',
+		'price',
+      'cost1',
+      'cost2',
+		'discount',
+      'qty',
+		/*
 		'userlog',
 		'datetimelog',
+		*/
 		array(
                     'class'=>'CButtonColumn',
                    'buttons'=> array(

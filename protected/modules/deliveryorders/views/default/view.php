@@ -16,8 +16,6 @@ $this->menu=array(
       array('label'=>'Sejarah', 'url'=>array('history', 'id'=>$model->id)),
       array('label'=>'Data Detil yang dihapus', 
          'url'=>array('/purchasesorder/detaildeliveryorders/deleted', 'id'=>$model->id)),
-      array('label'=>'Data Detil Voucher yang dihapus', 
-         'url'=>array('/purchasesorder/detaildeliveryorders2/deleted', 'id'=>$model->id)),
 );
 ?>
 
@@ -63,9 +61,9 @@ $this->menu=array(
 )); ?>
 
 <?php 
-   $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryorders where id='$model->id'")
+   $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryorders2 where id='$model->id'")
       ->queryScalar();
-   $sql="select * from detaildeliveryorders where id='$model->id'";
+   $sql="select * from detaildeliveryorders2 where id='$model->id'";
 
    $dataProvider=new CSqlDataProvider($sql,array(
 		'totalItemCount'=>$count,
@@ -90,24 +88,12 @@ $this->menu=array(
 				'header'=>'Jumlah',
 				'name'=>'qty',
 			),
-            array(
-               'class'=>'CButtonColumn',
-               'buttons'=> array(
-                   'delete'=>array(
-                    'visible'=>'false'
-                   ),
-                  'update'=>array(
-                     'visible'=>'false'
-                  )
-               ),
-               'viewButtonUrl'=>"Action::decodeViewDetailPurchasesOrderUrl(\$data, $model->regnum)",
-            )
          ),
    ));
    
-   $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryorders2 where id='$model->id'")
+   $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryorders where id='$model->id'")
       ->queryScalar();
-   $sql="select * from detaildeliveryorders2 where id='$model->id'";
+   $sql="select * from detaildeliveryorders where id='$model->id'";
 
    $dataProvider=new CSqlDataProvider($sql,array(
           'totalItemCount'=>$count,
@@ -139,7 +125,7 @@ $this->menu=array(
 										'visible'=>'false'
 								)
 						),
-						'viewButtonUrl'=>"Action::decodeViewDetailPurchasesOrderUrl(\$data, $model->regnum)",
+						'viewButtonUrl'=>"Action::decodeViewDetailDeliveryOrderUrl(\$data)",
 				)
 		),
 	));

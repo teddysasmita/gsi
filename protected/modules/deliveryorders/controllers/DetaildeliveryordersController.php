@@ -37,7 +37,7 @@ class DetaildeliveryordersController extends Controller
                 $model->attributes=$this->loadSession($iddetail);
             }  
             $this->render('view',array(
-				'model'=>$this->loadModel($iddetail),
+				'model'=>$this->loadModel($iddetail), 
 			));
 		} else {
         	throw new CHttpException(404,'You have no authorization for this operation.');
@@ -61,7 +61,7 @@ class DetaildeliveryordersController extends Controller
                 $master=Yii::app()->session['master'];
                                 
 		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
+               $this->performAjaxValidation($model);
                 
                 if(isset($_POST['Detaildeliveryorders'])) {
                     $temp=Yii::app()->session['Detaildeliveryorders'];
@@ -79,7 +79,7 @@ class DetaildeliveryordersController extends Controller
                 }                
 
                 $this->render('create',array(
-                    'model'=>$model, 'master'=>$master
+                    'model'=>$model, 'master'=>$master,
                 ));
                 
              } else {
@@ -95,7 +95,7 @@ class DetaildeliveryordersController extends Controller
 	public function actionUpdate($iddetail)
 	{
              if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
-                    Yii::app()->user->id))  {
+                    Yii::app()->user-> id))  {
                 
                 $this->state='u';
                 $this->trackActivity('u');
@@ -113,7 +113,7 @@ class DetaildeliveryordersController extends Controller
                 $this->performAjaxValidation($model);
                 
                 if(isset($_POST['Detaildeliveryorders']))
-		{
+               {
                     $temp=Yii::app()->session['Detaildeliveryorders'];
                     $model->attributes=$_POST['Detaildeliveryorders'];
                     foreach ($temp as $tk=>$tv) {
@@ -182,14 +182,15 @@ class DetaildeliveryordersController extends Controller
                Yii::app()->user->id)) {
                 $model=$this->loadModel($iddetail);
                 $this->render('history', array(
-                   'model'=>$model,
+                   'model'=>$model
+                    
                 ));
             } else {
                 throw new CHttpException(404,'You have no authorization for this operation.');
             }   
         }
         
-        public function actionDeleted($id)
+        public function actionDeleted()
         {
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {

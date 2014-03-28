@@ -3,17 +3,18 @@
 /* @var $model Detaildeliveryorders */
 
 $this->breadcrumbs=array(
-      'Proses'=>array('/site/proses'),
+	'Proses'=>array('/site/proses'),
 	'Daftar'=>array('default/index'),
       'Lihat Data'=>array('default/view', 'id'=>$id),
 	'Data Detil yang telah terhapus',
 );
 
 $this->menu=array(
-	/*array('label'=>'List Detaildeliveryorders', 'url'=>array('index')),
-	array('label'=>'Create Detaildeliveryorders', 'url'=>array('create')),
-      */
- );
+   /*
+   array('label'=>'List Detaildeliveryorders', 'url'=>array('index')),
+   array('label'=>'Create Detaildeliveryorders', 'url'=>array('create')),
+   */
+);
 
 ?>
 
@@ -28,7 +29,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
     
     $data=Yii::app()->tracker->createCommand()->
        select('a.*')->from('detaildeliveryorders a')->join('userjournal b', 'b.id=a.idtrack')
-       ->where('b.action=:action and a.id=:id', array(':action'=>'d', 'id'=>$id))->queryAll();
+       ->where('b.action=:action', array(':action'=>'d'))->queryAll();
     $ap=new CArrayDataProvider($data);
 ?>
  
@@ -40,28 +41,21 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'columns'=>array(
 		'iddetail',
 		'id',
-		'iditem',
-		'idunit',
-		'price',
-      'cost1',
-      'cost2',
-		'discount',
-      'qty',
-		/*
+		'vouchername',
+		'vouchervalue',
 		'userlog',
 		'datetimelog',
-		*/
 		array(
-                    'class'=>'CButtonColumn',
-                   'buttons'=> array(
-                        'view'=>array(
-                            'visible'=>'false',
-                        ),
-                        'delete'=>array(
-                          'visible'=>'false',
-                        ),
-                    ),
-                   'updateButtonUrl'=>"Action::decodeRestoreHistoryCustomerUrl(\$data)",
+			'class'=>'CButtonColumn',
+				'buttons'=> array(
+					'view'=>array(
+						'visible'=>'false',
+					),
+					'delete'=>array(
+						'visible'=>'false',
+					),
+				),
+				'updateButtonUrl'=>"Action::decodeRestoreHistoryCustomerUrl(\$data)",
+			),
 		),
-	),
 )); ?>

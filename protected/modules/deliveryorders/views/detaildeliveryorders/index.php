@@ -3,12 +3,12 @@
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
-	'Detaildeliveryorders',
+	'Daftar'=>array('index'),
 );
 
 $this->menu=array(
-	array('label'=>'Create Detaildeliveryorders', 'url'=>array('create')),
-	array('label'=>'Manage Detaildeliveryorders', 'url'=>array('admin')),
+	array('label'=>'Tambah Data', 'url'=>array('create')),
+	array('label'=>'Pencarian Data', 'url'=>array('admin')),
 );
 ?>
 
