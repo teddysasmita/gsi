@@ -72,7 +72,7 @@ class MYPDF extends TCPDF {
 					$this->Cell($this->headerwidths[2], 6, $row['qtynew'], 'LR', 0, 'R', $fill);
 					$this->Cell($this->headerwidths[3], 6, number_format($row['pricenew']), 'LR', 0, 'R', $fill);
 					$this->Cell($this->headerwidths[4], 6, '', 'LR', 1, 'R', $fill);
-					$counter+=1;	
+					//$counter+=1;	
 				}
 				//$this->Cell($this->headerwidths[4], 6, number_format($row['discount']), 'LR', 1, 'R', $fill);
 				//$this->Cell($this->headerwidths[5], 6, $row['remark'], 'LR', 1, 'L', $fill);
