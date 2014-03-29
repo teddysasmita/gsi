@@ -11,10 +11,16 @@
 $invdetails=json_encode(Yii::app()->session['Detaildeliveryorders2']);
 $itemScript=<<<EOS
 	var invdetails=$invdetails;
-	function checkItemsQty(iditem, qty) {
-		for(var i=0; i<count(invdetails); i++ ) {
-			
+		
+	function checkItems(iditem) {
+		var found=false;
+		for(var i=0; i<invdetails.length(); i++ ) {
+			if ((invdetails[i].iditem == iditem)) {
+				found=true;
+				break;
+			}
 		}
+		return found;
 	};
 	
       $('#Detaildeliveryorders_itemname').focus(function(){
@@ -40,6 +46,15 @@ $itemScript=<<<EOS
            $('#dialog-item-name').val(unescape($('#dialog-item-select').val()));
          }
       );
+	
+	$('#yt0').click(
+		function(evt) {
+			if (!checkItems($('#Detaildeliveryorders_iditem'))) {
+				alert('Barang tidak terdaftar');
+				evt.preventDefault();
+			}
+		}
+	);
 EOS;
 Yii::app()->clientScript->registerScript('itemscript', $itemScript, CClientScript::POS_READY);
 
@@ -80,7 +95,6 @@ Yii::app()->clientScript->registerScript('itemscript', $itemScript, CClientScrip
                              $.get(\'index.php?r=LookUp/getItemID\',{ name: encodeURI($(\'#dialog-item-name\').val()) },
                                  function(data) {
                                     $(\'#Detaildeliveryorders_iditem\').val(data);
-									
                                  })
                              $(this).dialog("close");
                            }'),
@@ -122,7 +136,7 @@ EOS;
 	</div>
         
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($mode); ?>
+		<?php echo CHtml::submitButton($mode, array('id'=>'yt0')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

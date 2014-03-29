@@ -767,7 +767,7 @@ class DefaultController extends Controller
         			array(':p_regnum'=>$invnum))->queryAll();
         	foreach($details as $detail ) {
         		$detaildata['id']=$id;
-        		$detaildata['iddetail']=idmaker::getCurrentID();
+        		$detaildata['iddetail']=idmaker::getCurrentID2();
         		$detaildata['iditem']=$detail['iditem'];
         		$detaildata['invqty']=$detail['qty'];
         		$detaildata['qty']=0;

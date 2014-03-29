@@ -60,6 +60,10 @@ EOS;
         echo $form->hiddenField($model, 'regnum');
       ?>
       
+	<div class='error'>
+		<?php echo CHtml::label($form_error, FALSE)?>
+	</div>
+      
 	<div class="row">
 		<?php echo $form->labelEx($model,'idatetime'); ?>
             <?php
@@ -219,6 +223,7 @@ EOS;
 	<div class='error'>
 		<?php echo CHtml::label($form_error, FALSE)?>
 	</div>
+	
    <div class="row buttons">
       <?php echo CHtml::submitButton(ucfirst($command)); ?>
    </div>
