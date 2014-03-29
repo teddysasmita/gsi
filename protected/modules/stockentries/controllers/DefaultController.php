@@ -89,6 +89,7 @@ class DefaultController extends Controller
                             $this->afterPost($model);
                             Yii::app()->session->remove('Stockentries');
                             Yii::app()->session->remove('Detailstockentries');
+                            Yii::app()->session->remove('Deletedetailstockentries');
                             $this->redirect(array('view','id'=>$model->id));
                          } 
                          
