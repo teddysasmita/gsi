@@ -143,8 +143,8 @@ return array(
           'session'=>array(
               'class'=>'CDbHttpSession',
               'connectionID'=>'db',
-              'autoCreateSessionTable'=>'false'
-              
+              'autoCreateSessionTable'=>'false',
+              'timeout'=>46800,
           ),
           'clientscript'=>array(
               'class'=>'CClientScript',
