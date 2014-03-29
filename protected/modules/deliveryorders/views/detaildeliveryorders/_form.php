@@ -8,7 +8,15 @@
 
 <?php
 
+$invdetails=json_encode(Yii::app()->session['Detaildeliveryorders2']);
 $itemScript=<<<EOS
+	var invdetails=$invdetails;
+	function checkItemsQty(iditem, qty) {
+		for(var i=0; i<count(invdetails); i++ ) {
+			
+		}
+	};
+	
       $('#Detaildeliveryorders_itemname').focus(function(){
          $('#ItemDialog').dialog('open');
       });
@@ -72,6 +80,7 @@ Yii::app()->clientScript->registerScript('itemscript', $itemScript, CClientScrip
                              $.get(\'index.php?r=LookUp/getItemID\',{ name: encodeURI($(\'#dialog-item-name\').val()) },
                                  function(data) {
                                     $(\'#Detaildeliveryorders_iditem\').val(data);
+									
                                  })
                              $(this).dialog("close");
                            }'),
