@@ -16,6 +16,7 @@ $this->menu=array(
       array('label'=>'Sejarah', 'url'=>array('history', 'id'=>$model->id)),
       array('label'=>'Data Detil yang dihapus', 
          'url'=>array('/purchasesorder/detaildeliveryorders/deleted', 'id'=>$model->id)),
+	array('label'=>'Cetak', 'url'=>array('printsj', 'id'=>$model->id))
 );
 ?>
 

@@ -558,8 +558,5 @@ class DefaultController extends Controller
         	} else {
         		throw new CHttpException(404,'You have no authorization for this operation.');
         	}
-        	
-        	
-        	
         }
 }

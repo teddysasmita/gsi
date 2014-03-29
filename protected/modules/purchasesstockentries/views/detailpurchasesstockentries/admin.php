@@ -5,7 +5,7 @@
 $this->breadcrumbs=array(
 		'Proses'=>array('/site/proses'),
 		'Daftar'=>array('default/index'),
-		'Pencarian Data Detil');
+		'Pencarian Data Detil'
 );
 
 $this->menu=array(

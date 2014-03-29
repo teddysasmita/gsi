@@ -822,11 +822,25 @@ class DefaultController extends Controller
         	}
         	return TRUE;
         }
-        
-        private function updateDetail2()
+	
+		public function actionPrintsj($id)
         {
- 			$details2 = Yii::app()->session['Detaildeliveryorders2'];
- 			       	
+        	if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
+        			Yii::app()->user->id)) {
+        		$this->trackActivity('p');
         	
-        }
- }
+        		$model=$this->loadModel($id);
+        		$detailmodel=$this->loadDetails($id);
+        		Yii::import('application.vendors.tcpdf.*');
+        		require_once ('tcpdf.php');
+        		Yii::import('application.modules.deliveryorders.components.*');
+        		require_once('printsj.php');
+        		ob_clean();
+        		
+        		execute($model, $detailmodel);
+        	} else {
+        		throw new CHttpException(404,'You have no authorization for this operation.');
+        	}
+        }    
+	
+}
