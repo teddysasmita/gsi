@@ -39,9 +39,9 @@ class MYPDF extends TCPDF {
 		$fill = 0;
 		$counter=0;
 		$iditem='';
-		$this->SetXY(1, 56);
-		if (count($this->detaildata) <= 9)
-			$maxrows = 9;
+		$this->SetXY(1, 62);
+		if (count($this->detaildata) <= 8)
+			$maxrows = 8;
 		else
 			$maxrows = count($this->detaildata);		
 		for($i=0;$i<$maxrows;$i++) {
@@ -60,7 +60,7 @@ class MYPDF extends TCPDF {
 				$this->Cell($this->headerwidths[3], 6, ' ', 'LR', 1, 'R', $fill);
 				//$this->ln();
 			}
-			if (($i > 0) && ($i % 8 == 0))
+			if (($i > 0) && ($i % 7 == 0))
 				//$this->checkPageBreak(6, '');
 				$this->Cell(array_sum($this->headerwidths), 0, '', 'T', 1);
 		}
@@ -105,13 +105,19 @@ class MYPDF extends TCPDF {
 		$this->setXY(91, 10);
 		$this->Cell(105, 10, 'Surat Jalan', 'LTR', 1, 'C');
 		$this->SetFontSize(10);
+		
 		$this->setXY(91, 20);
-		$this->Cell(22, 5, 'Tanggal SJ', 'LT', 0, 'C');
-		$this->Cell(45, 5, $this->data->idatetime, 'LTR', 0, 'C');
+		$this->Cell(17, 5, 'Tanggal', 'LT', 0, 'C');
+		$this->Cell(88, 5, $this->data->regnum, 'LTR', 1, 'C');
+		
+		$this->setXY(91, 26);
+		$this->Cell(17, 5, 'No Faktur', 'LT', 0, 'C');
+		$this->Cell(40, 5, $this->data->invnum, 'LTR', 0, 'C');
 		$this->SetFont('Helvetica', 'B');
 		//$this->setXY(100, 27);
-		$this->Cell(20, 5, 'Nomor SJ', 'LTR', 0, 'C');
-		$this->Cell(18, 5, $this->data->regnum, 'LTR', 1, 'C');
+		$this->Cell(15, 5, 'No SJ', 'LTR', 0, 'C');
+		$this->Cell(33, 5, $this->data->regnum, 'LTR', 1, 'C');
+		
 		
 		$this->SetFont('Helvetica', 'B');
 		$this->Cell(35, 5, 'Nama Penerima', 'LTR', 0,'C');
@@ -168,7 +174,7 @@ function execute($model, $detailmodel) {
 	$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 	
 	//set margins
-	$pdf->SetMargins(1, 56, PDF_MARGIN_RIGHT);
+	$pdf->SetMargins(1, 62, PDF_MARGIN_RIGHT);
 	$pdf->SetHeaderMargin(0);
 	$pdf->SetFooterMargin(0);
 	
@@ -199,7 +205,7 @@ function execute($model, $detailmodel) {
 	// ---------------------------------------------------------
 	
 	//Close and output PDF document
-	$pdf->Output('SJM'.idmaker::getDateTime().'.pdf', 'I');
+	$pdf->Output('SJM'.idmaker::getDateTime().'.pdf', 'D');
 }
 //============================================================+
 // END OF FILE                                                
