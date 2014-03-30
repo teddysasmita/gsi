@@ -30,7 +30,10 @@ $this->menu=array(
 		'regnum',
 		'idatetime',
 		'transid',
-		'transname',
+		array(
+			'label'=>'Jenis Transaksi',
+			'value'=>Action::getTransName($model->transname),
+		),
       	'transinfo',
 		array(
 			'label'=>'Nama Gudang',

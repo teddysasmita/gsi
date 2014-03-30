@@ -270,7 +270,7 @@ class LookUpController extends Controller {
 			$sql=<<<EOS
 			select a.id, a.regnum,
 				concat( 'Penerimaan Barang - ', b.firstname, ' ', b.lastname, ' - ', a.idatetime) as transinfo,
-				'AC11' as transname
+				'AC12' as transname
 				from purchasesstockentries a
 				join suppliers b on b.id = a.idsupplier
 				where regnum=:p_regnum

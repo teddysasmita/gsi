@@ -15,6 +15,13 @@
 class Action extends CComponent {
    
    //put your code here
+   
+	public static function getTransName($id)
+	{
+		return Yii::app()->db->createCommand()->select('remark')
+			->from('information')->where('id = :p_id', array(':p_id'=>$id))
+			->queryScalar();
+	}
     
 	public static function decodePrintStockCardUrl($data)
 	{
