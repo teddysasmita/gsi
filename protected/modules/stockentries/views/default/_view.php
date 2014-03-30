@@ -18,7 +18,7 @@
 	<br />
 	
 	<b><?php echo CHtml::encode($data->getAttributeLabel('transname')); ?>:</b>
-	<?php echo CHtml::encode($data->transname); ?>
+	<?php echo CHtml::encode(Action::getTransName($data->transname)); ?>
 	<br />
 	
 	<b><?php echo CHtml::encode($data->getAttributeLabel('transinfo')); ?>:</b>
