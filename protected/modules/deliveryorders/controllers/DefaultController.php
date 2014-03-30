@@ -831,13 +831,18 @@ class DefaultController extends Controller
         	
         		$model=$this->loadModel($id);
         		$detailmodel=$this->loadDetails($id);
+        		$receivable=Yii::app()->db->createCommand()
+        			->select('receiveable')->from('salespos')
+        			->where('regnum = :p_regnum',array(':p_regnum'=>$model->invnum))
+        			->queryScalar();
+        			
         		Yii::import('application.vendors.tcpdf.*');
         		require_once ('tcpdf.php');
         		Yii::import('application.modules.deliveryorders.components.*');
         		require_once('printsj.php');
         		ob_clean();
         		
-        		execute($model, $detailmodel);
+        		execute($model, $detailmodel, $receivable);
         	} else {
         		throw new CHttpException(404,'You have no authorization for this operation.');
         	}

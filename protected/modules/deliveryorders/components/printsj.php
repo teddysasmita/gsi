@@ -10,6 +10,7 @@ class MYPDF extends TCPDF {
 
 	private $data;
 	private $detaildata;
+	private $receivable;
 	private $headernames;
 	private $headerwidths;
 	
@@ -17,10 +18,11 @@ class MYPDF extends TCPDF {
 	public $pagesize;
 	
 	// Load table data from file
-	public function LoadData($data, array $detaildata) {
+	public function LoadData($data, array $detaildata, $receivable) {
 		// Read file lines
 		$this->data = $data;
 		$this->detaildata = $detaildata;
+		$this->receivable = $receivable;
 		$this->headernames = array('No', 'Nama Barang', 'Jumlah', 'Keterangan');
 		$this->headerwidths = array(10, 135, 20, 30);
 	}
@@ -105,18 +107,23 @@ class MYPDF extends TCPDF {
 		$this->setXY(91, 10);
 		$this->Cell(105, 10, 'Surat Jalan', 'LTR', 1, 'C');
 		$this->SetFontSize(10);
-		
+		$this->SetFont('Helvetica', 'B');
 		$this->setXY(91, 20);
 		$this->Cell(17, 5, 'Tanggal', 'LT', 0, 'C');
-		$this->Cell(88, 5, $this->data->idatetime, 'LTR', 1, 'C');
+		$this->Cell(40, 5, $this->data->idatetime, 'LTR', 0, 'C');
+		$this->Cell(15, 5, 'No SJ', 'LTR', 0, 'C');
+		$this->Cell(33, 5, $this->data->regnum, 'LTR', 1, 'C');
 		
 		$this->setXY(91, 26);
 		$this->Cell(17, 5, 'No Faktur', 'LT', 0, 'C');
 		$this->Cell(40, 5, $this->data->invnum, 'LTR', 0, 'C');
-		$this->SetFont('Helvetica', 'B');
+		$this->Cell(15, 5, 'Status', 'LTR', 0, 'C');
+		if ($this->receivable > 0)
+			$this->Cell(33, 5, 'Piutang', 'LTR', 1, 'C');
+		else
+			$this->Cell(33, 5, 'Lunas', 'LTR', 1, 'C');
 		//$this->setXY(100, 27);
-		$this->Cell(15, 5, 'No SJ', 'LTR', 0, 'C');
-		$this->Cell(33, 5, $this->data->regnum, 'LTR', 1, 'C');
+		
 		
 		
 		$this->SetFont('Helvetica', 'B');
@@ -148,7 +155,7 @@ class MYPDF extends TCPDF {
 	} 	
 }
 
-function execute($model, $detailmodel) {
+function execute($model, $detailmodel, $receivable) {
 
 	// create new PDF document
 	
@@ -193,7 +200,7 @@ function execute($model, $detailmodel) {
 	$pdf->SetFont('helvetica', '', 12);
 	
 	// add a page
-	$pdf->LoadData($model, $detailmodel);
+	$pdf->LoadData($model, $detailmodel, $receivable);
 	
 	$pdf->AddPage($pdf->pageorientation, $pdf->pagesize);
 	//$pdf->AddPage();
