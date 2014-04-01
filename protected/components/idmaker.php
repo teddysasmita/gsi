@@ -25,8 +25,10 @@ class idmaker extends CComponent
              "date_format(sysdate(),'%d%H%i%s%f')) as ts";
       $newid=$command->queryScalar();
       */
-      $curdate=new DateTime();
-      $month=$curdate->format('n');
+	list($usec, $sec) = explode(' ', microtime());
+      //$curdate=new DateTime($sec);
+      //$month=$curdate->format('n');
+      $month=date('n', $sec);
       switch ($month) {
           case 10:
               $hexmonth='a';
@@ -41,11 +43,13 @@ class idmaker extends CComponent
               $hexmonth=$month;
               break;
       }
-      $newid=$curdate->format('y').$hexmonth.$curdate->format('dHisu');
+      $usec=$usec*1000000;
+      $newid=date('y', $sec).$hexmonth.date('dHis', $sec).$usec;
+      //$newid=$curdate->format('y').$hexmonth.$curdate->format('dHis').$usec;
       //$rand=mt_rand(1,999);
       //$newid=$newid.str_pad($rand, 6, '0',STR_PAD_LEFT);
       
-      $iterator=Yii::app()->db->createCommand()->select()->from('iditerator')->queryRow();
+      /*$iterator=Yii::app()->db->createCommand()->select()->from('iditerator')->queryRow();
       if($iterator['id']===$newid) {
           $iterator['iterator']=$iterator['iterator']+1;
       } else {
@@ -55,7 +59,7 @@ class idmaker extends CComponent
       Yii::app()->db->createCommand()->truncateTable('iditerator');
       Yii::app()->db->createCommand()->insert('iditerator', $iterator);
       $newid=$newid.str_pad($iterator['iterator'], 3,'0',STR_PAD_LEFT);
-      
+      */
       return $newid;
    }
    
