@@ -49,8 +49,10 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'id',
 		'regnum',
 		'idatetime',
-		'idsupplier',
-            'idpurchaseorder',
+		'transname',
+        'transid',
+		'donum',
+		'transinfo',
 		/*
 		'discount',
 		'status',
