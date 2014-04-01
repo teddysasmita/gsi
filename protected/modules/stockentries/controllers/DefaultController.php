@@ -64,7 +64,8 @@ class DefaultController extends Controller
                 
                // Uncomment the following line if AJAX validation is needed
                $this->performAjaxValidation($model);
-
+				
+               print_r(Yii::app()->session['Detailstockentries']);
                 if (isset($_POST)){
                    if(isset($_POST['yt0'])) {
                       //The user pressed the button;
@@ -376,7 +377,9 @@ class DefaultController extends Controller
 
              $details=Yii::app()->session['Detailstockentries'];
              $this->afterInsertDetail($model, $details);
-
+			 
+             print_r(Yii::app()->session['Detailstockentries']);
+             
              $this->render('create',array(
                  'model'=>$model,
              ));
