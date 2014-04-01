@@ -27,13 +27,18 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'idsupplier'); ?>
-		<?php echo $form->textField($model,'idsupplier',array('size'=>21,'maxlength'=>21)); ?>
+		<?php echo $form->label($model,'transname'); ?>
+		<?php echo $form->textField($model,'transname',array('size'=>21,'maxlength'=>21)); ?>
 	</div>
    
-      <div class="row">
-		<?php echo $form->label($model,'idpurchaseorder'); ?>
-		<?php echo $form->textField($model,'idpurchaseorder',array('size'=>21,'maxlength'=>21)); ?>
+    <div class="row">
+		<?php echo $form->label($model,'transid'); ?>
+		<?php echo $form->textField($model,'transid',array('size'=>21,'maxlength'=>21)); ?>
+	</div>
+   
+   <div class="row">
+		<?php echo $form->label($model,'donum'); ?>
+		<?php echo $form->textField($model,'donum',array('size'=>21,'maxlength'=>21)); ?>
 	</div>
    
       <div class="row">
