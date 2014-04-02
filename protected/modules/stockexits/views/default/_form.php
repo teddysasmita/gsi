@@ -1,6 +1,6 @@
    <?php
-/* @var $this StockentriesController */
-/* @var $model Stockentries */
+/* @var $this StockexitsController */
+/* @var $model Stockexits */
 /* @var $form CActiveForm */
 ?>
 
@@ -8,22 +8,22 @@
 
 <?php
    $transScript=<<<EOS
-		$('#Stockentries_transid').change(
+		$('#Stockexits_transid').change(
 		function() {
-			$.getJSON('index.php?r=LookUp/getTrans',{ id: $('#Stockentries_transid').val() },
+			$.getJSON('index.php?r=LookUp/getTrans',{ id: $('#Stockexits_transid').val() },
             function(data) {
 				if (data[0].id !== 'NA') {
-					$('#Stockentries_transname').val(data[0].transname);
+					$('#Stockexits_transname').val(data[0].transname);
 					$('#transinfo').html(data[0].transinfo);
-            		$('#Stockentries_transinfo').val(data[0].transinfo);
+            		$('#Stockexits_transinfo').val(data[0].transinfo);
             		$('#command').val('getPO');
-					$('#Stockentries_transinfo_em_').prop('style', 'display:none')
-					$('#stockentries-form').submit();
+					$('#Stockexits_transinfo_em_').prop('style', 'display:none')
+					$('#stockexits-form').submit();
 				} else {
-					$('#Stockentries_transname').val();
+					$('#Stockexits_transname').val();
 					$('#transinfo').html('');
-            		$('#Stockentries_transinfo_em_').html('Data tidak ditemukan');
-					$('#Stockentries_transinfo_em_').prop('style', 'display:block')
+            		$('#Stockexits_transinfo_em_').html('Data tidak ditemukan');
+					$('#Stockexits_transinfo_em_').prop('style', 'display:block')
 				}
 			})
 		});
@@ -31,22 +31,22 @@
 		function(evt) {
 			$('#command').val('updateDetail');
 			$('#detailcommand').val(this.href);
-			$('#stockentries-form').submit();
+			$('#stockexits-form').submit();
 		});   
 EOS;
    Yii::app()->clientScript->registerScript("transScript", $transScript, CClientscript::POS_READY);
 
    if($command=='create') 
       $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'stockentries-form',
+	'id'=>'stockexits-form',
 	'enableAjaxValidation'=>true,
-      'action'=>Yii::app()->createUrl("/stockentries/default/create")
+      'action'=>Yii::app()->createUrl("/stockexits/default/create")
       ));
    else if($command=='update')
       $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'stockentries-form',
+	'id'=>'stockexits-form',
 	'enableAjaxValidation'=>true,
-      'action'=>Yii::app()->createUrl("/stockentries/default/update", array('id'=>$model->id))
+      'action'=>Yii::app()->createUrl("/stockexits/default/update", array('id'=>$model->id))
       ));
   ?>
 
@@ -70,7 +70,7 @@ EOS;
 		<?php echo $form->labelEx($model,'idatetime'); ?>
             <?php
                $this->widget('zii.widgets.jui.CJuiDatePicker',array(
-                  'name'=>'Stockentries[idatetime]',
+                  'name'=>'Stockexits[idatetime]',
                      // additional javascript options for the date picker plugin
                   'options'=>array(
                      'showAnim'=>'fold',
@@ -129,12 +129,12 @@ EOS;
 	</div>
       
 <?php 
-    if (isset(Yii::app()->session['Detailstockentries'])) {
-       $rawdata=Yii::app()->session['Detailstockentries'];
+    if (isset(Yii::app()->session['Detailstockexits'])) {
+       $rawdata=Yii::app()->session['Detailstockexits'];
        $count=count($rawdata);
     } else {
-       $count=Yii::app()->db->createCommand("select count(*) from detailstockentries where id='$model->id'")->queryScalar();
-       $sql="select * from detailstockentries where id='$model->id'";
+       $count=Yii::app()->db->createCommand("select count(*) from detailstockexits where id='$model->id'")->queryScalar();
+       $sql="select * from detailstockexits where id='$model->id'";
        $rawdata=Yii::app()->db->createCommand($sql)->queryAll ();
     }
     $dataProvider=new CArrayDataProvider($rawdata, array(

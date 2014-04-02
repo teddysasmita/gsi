@@ -1,6 +1,6 @@
 <?php
-/* @var $this DetailstockentriesController */
-/* @var $model Detailstockentries */
+/* @var $this DetailstockexitsController */
+/* @var $model Detailstockexits */
 /* @var $form CActiveForm */
 ?> 
 
@@ -9,18 +9,18 @@
 <?php
    
    $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'detailstockentries-form',
+	'id'=>'detailstockexits-form',
 	'enableAjaxValidation'=>true,
    ));
 
 $supplierScript=<<<EOS
       $('#isAccepted').click(function() {
    		if ($('#isAccepted').prop('checked')) {
-   			$('#Detailstockentries_serialnum').val('Belum Diterima');
+   			$('#Detailstockexits_serialnum').val('Belum Diterima');
    		}
       });
-	$('#Detailstockentries_serialnum').change(function() {
-   		var myserialnum = $('#Detailstockentries_serialnum').val();
+	$('#Detailstockexits_serialnum').change(function() {
+   		var myserialnum = $('#Detailstockexits_serialnum').val();
    		if (myserialnum !== 'Belum Diterima')
    			$('#isAccepted').prop('checked', false);
 	});
