@@ -167,7 +167,7 @@ EOS;
                      )
                   ),
 				'updateButtonOptions'=>array("class"=>'updateButton'),
-                  'updateButtonUrl'=>"Action::decodeUpdateDetailStockEntryUrl(\$data)",
+                  'updateButtonUrl'=>"Action::decodeUpdateDetailStockExitUrl(\$data)",
               )
           ),
     ));

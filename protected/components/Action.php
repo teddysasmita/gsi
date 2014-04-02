@@ -286,22 +286,23 @@ class Action extends CComponent {
    	return Yii::app()->createUrl('/purchasespayment/detailpurchasespayments/view', array('iddetail'=>$data['iddetail']));
    }
    
-   public static function decodeDeleteDetailStockDeliveryUrl($data)
+
+   public static function decodeDeleteDetailStockExitUrl($data)
    {
-      //return print_r($data);
-      return Yii::app()->createUrl('detailstockdeliveries/delete', array('iddetail'=>$data['iddetail']));
+   	//return print_r($data);
+   	return Yii::app()->createUrl('detailstockexits/delete', array('iddetail'=>$data['iddetail']));
    }
-   
-   public static function decodeUpdateDetailStockDeliveryUrl($data)
+    
+   public static function decodeUpdateDetailStockExitUrl($data)
    {
-      //return print_r($data);
-      return Yii::app()->createUrl('detailstockdeliveries/update', array('iddetail'=>$data['iddetail']))  ;
+   	//return print_r($data);
+   	return Yii::app()->createUrl('detailstockexits/update', array('iddetail'=>$data['iddetail']))  ;
    }
-   
-   public static function decodeViewDetailStockDeliveryUrl($data)
+    
+   public static function decodeViewDetailStockExitUrl($data)
    {
-      //return print_r($data);
-      return Yii::app()->createUrl('detailstockdeliveries/view', array('iddetail'=>$data['iddetail']));
+   	//return print_r($data);
+   	return Yii::app()->createUrl('detailstockexits/view', array('iddetail'=>$data['iddetail']));
    }
    
    public static function decodeDeleteDetailPaymentUrl($data)
