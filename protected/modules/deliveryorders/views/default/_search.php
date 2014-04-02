@@ -51,10 +51,6 @@
 		<?php echo $form->textField($model,'status',array('size'=>10,'maxlength'=>10)); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->label($model,'remark'); ?>
-		<?php echo $form->textArea($model,'remark',array('rows'=>6, 'cols'=>50)); ?>
-	</div>
 
 	<div class="row">
 		<?php echo $form->label($model,'userlog'); ?>
