@@ -27,23 +27,23 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'rdatetime'); ?>
-		<?php echo $form->textField($model,'rdatetime',array('size'=>19,'maxlength'=>19)); ?>
+		<?php echo $form->label($model,'invnum'); ?>
+		<?php echo $form->textField($model,'invnum',array('size'=>12,'maxlength'=>12)); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'idsupplier'); ?>
-		<?php echo $form->textField($model,'idsupplier',array('size'=>21,'maxlength'=>21)); ?>
+		<?php echo $form->label($model,'receivername'); ?>
+		<?php echo $form->textField($model,'receivername'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'total'); ?>
-		<?php echo $form->textField($model,'total'); ?>
+		<?php echo $form->label($model,'receiveraddress'); ?>
+		<?php echo $form->textField($model,'receiveraddress'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'discount'); ?>
-		<?php echo $form->textField($model,'discount'); ?>
+		<?php echo $form->label($model,'receiverphone'); ?>
+		<?php echo $form->textField($model,'receiverphone'); ?>
 	</div>
 
 	<div class="row">
