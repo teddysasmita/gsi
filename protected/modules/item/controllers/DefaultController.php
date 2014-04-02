@@ -382,4 +382,64 @@ EOS;
        			throw new CHttpException(404,'You have no authorization for this operation.');
        		};
        	}
+       	
+       	public function actionExport2xcl()
+       	{
+       		if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+       				Yii::app()->user->id))  {
+       			$this->trackActivity('v');
+				
+       			if (isset($_POST['selectitems'])) {
+       				//print_r($_POST);
+       				$query = 'select id,code,name from items';
+       				if ($_POST['selectitems']['brand'] !== '')
+       					$where[] = 'brand = \''.$_POST['selectitems']['brand'].'\'';
+       				if ($_POST['selectitems']['object'] !== '')
+       					$where[] = 'objects = \''.$_POST['selectitems']['object'].'\'';
+       				if ($_POST['selectitems']['model'] !== '')
+       					$where[] = 'model = \''.$_POST['selectitems']['model'].'\'';
+       				if (isset($where)) {
+       					$query .= ' where ';
+       					$query = $query . implode(' and ', $where);
+       				};
+       				$xl = new PHPExcel();
+       				$xl->getProperties()->setCreator("Program GSI Malang")
+	       				->setLastModifiedBy("Program GSI Malang")
+	       				->setTitle("Daftar Barang")
+	       				->setSubject("Daftar Barang")
+	       				->setDescription("Daftar Barang")
+	       				->setKeywords("Nama Barang")
+	       				->setCategory("Daftar");
+       				$data = Yii::app()->db->createCommand($query)->queryAll();
+       				$headersfield = array( 'id', 'code', 'name');
+       				$headersname = array('ID', 'Kode', 'Nama Barang');
+       				for( $i=0;$i<count($headersname); $i++ ) {
+       					$xl->setActiveSheetIndex(0)
+       					->setCellValueByColumnAndRow($i,1, $headersname[$i]);
+       				}
+       				for( $i=0; $i<count($data); $i++){
+       					for( $j=0; $j<count($headersfield); $j++ ) {
+       						$cellvalue = $data[$i][$headersfield[$j]];
+       						if ($headersfield[$j] == 'idsales')
+       							$cellvalue = lookup::SalesPersonNameFromID($data[$i]['idsales']);
+       						else if ($headersfield[$j] == 'iditem')
+       							$cellvalue = lookup::ItemNameFromItemID($data[$i]['iditem']);
+       						$xl->setActiveSheetindex(0)
+       						->setCellValueByColumnAndRow($j,$i+2, $cellvalue);
+       					}
+       				}
+       					
+       				$xl->getActiveSheet()->setTitle('Laporan Penjualan');
+       				$xl->setActiveSheetIndex(0);
+       				header('Content-Type: application/pdf');
+       				header('Content-Disposition: attachment;filename="nama_barang.xlsx"');
+       				header('Cache-Control: max-age=0');
+       				$xlWriter = PHPExcel_IOFactory::createWriter($xl, 'Excel2007');
+       				$xlWriter->save('php://output');
+       			} else 
+       				$this->render('selectitems');
+       		} else {
+       			throw new CHttpException(404,'You have no authorization for this operation.');
+       		};
+       	}
 }
