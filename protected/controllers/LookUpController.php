@@ -278,7 +278,20 @@ EOS;
 			$command=Yii::app()->db->createCommand($sql);
 			$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
 			$data=$command->queryAll();
-			if (count($data)>0)
+			if ($data == FALSE) {
+				$sql=<<<EOS
+				select a.id, a.regnum,
+				concat( 'Pengiriman Barang - ', a.invnum, ' - ', a.receivername, ' - ', a.idatetime) as transinfo,
+				'AC13' as transname
+				from deliveryorders a
+				where regnum=:p_regnum
+EOS;
+				$command=Yii::app()->db->createCommand($sql);
+				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
+				$data=$command->queryAll();
+			}
+			
+			if ($data !== FALSE)
 				echo json_encode($data);
 			else 
 				echo json_encode(array(array('id'=>'NA')));
