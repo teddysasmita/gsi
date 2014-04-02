@@ -23,8 +23,8 @@ class MYPDF extends TCPDF {
 		$this->data = $data;
 		$this->detaildata = $detaildata;
 		$this->receivable = $receivable;
-		$this->headernames = array('No', 'Nama Barang', 'Jumlah', 'Keterangan');
-		$this->headerwidths = array(10, 135, 20, 30);
+		$this->headernames = array('No', 'Nama Barang', 'Jmlh', 'Gudang', 'Keterangan');
+		$this->headerwidths = array(10, 120, 15, 20, 30);
 	}
 
 	// Colored table
@@ -54,12 +54,15 @@ class MYPDF extends TCPDF {
 				$this->Cell($this->headerwidths[1], 6, lookup::ItemNameFromItemID($row['iditem']), 
 						'LR', 0, 'L', $fill);
 				$this->Cell($this->headerwidths[2], 6, $row['qty'], 'LR', 0, 'R', $fill);
-				$this->Cell($this->headerwidths[3], 6, '', 'LR', 1, 'R', $fill);
+				$this->Cell($this->headerwidths[3], 6, lookup::WarehouseNameFromWarehouseID($row['idwarehouse']), 
+						'LR', 0, 'R', $fill);
+				$this->Cell($this->headerwidths[4], 6, '', 'LR', 1, 'R', $fill);
 			} else {
 				$this->Cell($this->headerwidths[0], 6, ' ', 'LR', 0, 'C', $fill);
 				$this->Cell($this->headerwidths[1], 6, ' ', 'LR', 0, 'L', $fill);
 				$this->Cell($this->headerwidths[2], 6, ' ', 'LR', 0, 'R', $fill);
-				$this->Cell($this->headerwidths[3], 6, ' ', 'LR', 1, 'R', $fill);
+				$this->Cell($this->headerwidths[3], 6, ' ', 'LR', 0, 'R', $fill);
+				$this->Cell($this->headerwidths[4], 6, ' ', 'LR', 1, 'R', $fill);
 				//$this->ln();
 			}
 			if (($i > 0) && ($i % 7 == 0))
