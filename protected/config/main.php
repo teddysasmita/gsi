@@ -56,6 +56,7 @@ return array(
             'deliveryordersnt',
             'deliveryorders',
             'requestdisplays',
+            'stockexits',
         ),
 
         
