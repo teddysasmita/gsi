@@ -609,8 +609,8 @@ EOS;
       	->queryAll();
       	Yii::app()->session->remove('Detailstockexits');
       	$sql=<<<EOS
-    	select count(*) as received from deliveryorders a
-		join detaildeliveryorders b on b.id = a.id
+    	select count(*) as received from stockexits a
+		join detailstockexits b on b.id = a.id
 		where a.transid = :p_transid and b.iditem = :p_iditem and
         b.serialnum <> 'Belum Diterima'
 EOS;
