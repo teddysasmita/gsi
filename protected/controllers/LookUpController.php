@@ -280,7 +280,7 @@ EOS;
 			$data=$command->queryAll();
 			if ($data == FALSE) {
 				$sql=<<<EOS
-				select a.id, a.regnum,
+				select a.id, a.regnum, a.invnum,
 				concat( 'Pengiriman Barang - ', a.invnum, ' - ', a.receivername, ' - ', a.idatetime) as transinfo,
 				'AC13' as transname
 				from deliveryorders a

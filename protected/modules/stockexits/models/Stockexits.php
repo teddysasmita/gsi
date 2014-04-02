@@ -72,7 +72,7 @@ class Stockexits extends CActiveRecord
 			'transid' => 'Nomor SJ',
 			'transname' => 'Jenis Transaksi',
 			'idwarehouse' => 'Gudang',
-			'donum' => 'Nomor DO',
+			'donum' => 'Nomor Faktur',
 			'transinfo' => 'Info Transaksi',
 			'remark' => 'Catatan',
 			'userlog' => 'Userlog',

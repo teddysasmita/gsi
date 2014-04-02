@@ -16,6 +16,7 @@
 					$('#Stockexits_transname').val(data[0].transname);
 					$('#transinfo').html(data[0].transinfo);
             		$('#Stockexits_transinfo').val(data[0].transinfo);
+					$('#Stockexits_donum').val(data[0].invnum);
             		$('#command').val('getPO');
 					$('#Stockexits_transinfo_em_').prop('style', 'display:none')
 					$('#stockexits-form').submit();
@@ -64,6 +65,7 @@ EOS;
         echo $form->hiddenField($model, 'idwarehouse');
         echo $form->hiddenField($model, 'regnum');
         echo $form->hiddenField($model, 'transinfo');
+        echo $form->hiddenField($model, 'donum');
       ?>
         
 	<div class="row">
@@ -114,8 +116,9 @@ EOS;
 		
 	<div class="row">
 		<?php echo $form->labelEx($model,'donum'); ?>
-        <?php 
-           echo $form->textField($model, 'donum', array('maxlength'=>50)); 
+        <?php
+			echo CHtml::label($model->donum, false); 
+           //echo $form->textField($model, 'donum', array('maxlength'=>50)); 
         ?>
         <?php echo $form->error($model,'donum');?> 
 	</div>
