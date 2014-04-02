@@ -1,6 +1,6 @@
 <?php
 
-class StockentriesModule extends CWebModule
+class StockexitsModule extends CWebModule
 {
 	public function init()
 	{
@@ -9,8 +9,8 @@ class StockentriesModule extends CWebModule
 
 		// import the module-level models and components
 		$this->setImport(array(
-			'stockentries.models.*',
-			'stockentries.components.*',
+			'stockexits.models.*',
+			'stockexits.components.*',
 		));
 	}
 
