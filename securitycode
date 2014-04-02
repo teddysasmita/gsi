@@ -37,7 +37,8 @@ Cetak Faktur Duplikat (AC21)
 Pelunasan (AC22)
 
 Bagian Gudang
-Terima Kiriman dari Pemasok (AC3)
+Barang Masuk (AC3)
+Barang Keluar (AC15)
 Pemasukan Saldo Stok Opname (AC8)
 
 Bagian Keuangan
