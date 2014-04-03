@@ -155,8 +155,9 @@ class LookUpController extends Controller {
    
    public function actionGetItemID($name)
    {
-		if (!Yii::app()->user->isGuest) {  		
-      		$name=urldecode($name);
+		if (!Yii::app()->user->isGuest) {  	
+			//print_r($name);	
+      		$name=rawurldecode($name);
       		$data=Yii::app()->db->createCommand()->selectDistinct('id')->from('items')
               ->where("name = '$name'")
               ->order('id')
