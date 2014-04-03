@@ -21,8 +21,8 @@ class MYPDF extends TCPDF {
 		// Read file lines
 		$this->data = $data;
 		$this->detaildata = $detaildata;
-		$this->headernames = array('No', 'Nama Barang', 'Jmlh','H Beli', 'H Jual');
-		$this->headerwidths = array(10, 133, 12, 20, 20);
+		$this->headernames = array('No', 'Nama Barang', 'Jmlh','H Beli', 'H Jual', 'Total HB');
+		$this->headerwidths = array(10, 103, 12, 20, 20, 30);
 	}
 
 	// Colored table
@@ -38,6 +38,7 @@ class MYPDF extends TCPDF {
 		// Data
 		$fill = 0;
 		$counter=0;
+		$total=0;
 		$iditem='';
 		$this->SetXY(1, 39);
 		/*
@@ -61,6 +62,8 @@ class MYPDF extends TCPDF {
 				$this->Cell($this->headerwidths[2], $ih, $row['qty'], 'LR', 0, 'R', $fill);
 				$this->Cell($this->headerwidths[3], $ih, number_format($row['buyprice']), 'LR', 0, 'R', $fill);
 				$this->Cell($this->headerwidths[4], $ih, number_format($row['sellprice']), 'LR', 0, 'R', $fill);
+				$total=$total + $row['buyprice']*$row['qty'];
+				$this->Cell($this->headerwidths[5], $ih, number_format($row['buyprice']*$row['qty']), 'LR', 0, 'R', $fill);
 				//$this->MultiCell($this->headerwidths[5], 0, $row['remark'], 'LR', 'L', false, 0);
 				//$this->Cell($this->headerwidths[5], $ih, $row['remark'], 'LR', 0, 'L', $fill);
 				$this->ln($ih);
@@ -73,10 +76,13 @@ class MYPDF extends TCPDF {
 				//$this->Cell($this->headerwidths[5], 6, ' ', 'LR', 1, 'L', $fill);
 				//$this->ln();
 			}*/
-			if (($i > 0) && ($i % 11 == 0))
+			//if (($i > 0) && ($i % 11 == 0))
 				//$this->checkPageBreak(6, '');
-				$this->Cell(array_sum($this->headerwidths), 0, '', 'T', 1);
+				//$this->Cell(array_sum($this->headerwidths), 0, '', 'T', 1);
 		}
+		//$this->Cell(array_sum($this->headerwidths), 1, '', 'T', 1);
+		$this->Cell(165, 6, 'Total Harga Beli', 'LRTB', 0, 'R');
+		$this->Cell(30, 6, number_format($total), 'LRTB', 1, 'R');
 		if ($this->data['remark'] <> '')
 			$this->MultiCell(195, 0, $this->data['remark'], 'LRBT', 'L', false, 0);
 		

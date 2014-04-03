@@ -171,7 +171,7 @@ class LookUpController extends Controller {
    public function actionGetUndonePO($idsupplier)
    {
 		if (!Yii::app()->user->isGuest) {
-      		$idsupplier=urldecode($idsupplier);
+      		$idsupplier=rawurldecode($idsupplier);
       		$data=Yii::app()->db->createCommand()->select('id, regnum')->from('purchasesorders')
          		->where("status <> '2' and idsupplier = :p_idsupplier", array(':p_idsupplier'=>$idsupplier))
          		->queryAll();
@@ -184,7 +184,7 @@ class LookUpController extends Controller {
    public function actionGetUnsettledPO($idsupplier)
    {
    		if (!Yii::app()->user->isGuest) {
-   			$idsupplier=urldecode($idsupplier);
+   			$idsupplier=rawurldecode($idsupplier);
       		$data=Yii::app()->db->createCommand()->select('id, regnum')->from('purchasesorders')
          		->where("paystatus <> '2' and idsupplier = :idsupplier", array(':idsupplier'=>$idsupplier))
          		->queryAll();
@@ -197,7 +197,7 @@ class LookUpController extends Controller {
    public function actionGetUndoneDO($idsupplier)
    {
    		if (!Yii::app()->user->isGuest) {	   	
-	   		$idsupplier=urldecode($idsupplier);
+	   		$idsupplier=rawurldecode($idsupplier);
 		   	/*echo Yii::app()->db->createCommand()->select('a.donum, b.id')->from('stockentries a')
 		   	->leftJoin('purchasesreceipts b','b.donum = a.donum' )
 		   	->where("a.idsupplier = :idsupplier and b.id = NULL", array(':idsupplier'=>$idsupplier))->text;
@@ -319,7 +319,7 @@ EOS;
 	
 	public function actionGetBankID($name)
 	{
-		$name=urldecode($name);
+		$name=rawurldecode($name);
 		if (!Yii::app()->user->isGuest) {
 			$data=Yii::app()->db->createCommand()
 			->select('id')
