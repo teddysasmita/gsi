@@ -22,7 +22,7 @@ class MYPDF extends TCPDF {
 		$this->data = $data;
 		$this->detaildata = $detaildata;
 		$this->headernames = array('No', 'Nama Barang', 'Jmlh','H Beli', 'H Jual', 'Total HB');
-		$this->headerwidths = array(10, 103, 12, 20, 20, 30);
+		$this->headerwidths = array(10, 93, 12, 25, 25, 30);
 	}
 
 	// Colored table
@@ -100,7 +100,7 @@ class MYPDF extends TCPDF {
 		$this->SetTextColor(0);
 		$this->SetDrawColor(0, 0, 0);
 		$this->SetLineWidth(0.3);
-		$this->SetFont('Helvetica', 'B');
+		$this->SetFont('Courier', 'B');
 		$this->SetFontSize(10);
 		$this->setXY(1, 115);
 		$this->Cell(43, 15, 'Admin', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
@@ -132,31 +132,31 @@ class MYPDF extends TCPDF {
 		
 		
 		$this->setFontSize(20);
-		$this->SetFont('', 'B');
+		$this->SetFont('Courier', 'B');
 		$this->setXY(100, 10);
 		$this->Cell(96, 10, 'Penerimaan Barang', 'LTR', 1, 'C');
 		$this->SetFontSize(10);
 		$this->setXY(100, 20);
-		$this->Cell(18, 5, 'Tanggal', 'LT', 0, 'C');
-		$this->Cell(35, 5, $this->data->idatetime, 'LTR', 0, 'C');
-		$this->SetFont('Helvetica', 'B');
+		$this->Cell(10, 5, 'Tgl', 'LT', 0, 'C');
+		$this->Cell(43, 5, $this->data->idatetime, 'LTR', 0, 'C');
+		$this->SetFont('Courier', 'B');
 		//$this->setXY(100, 27);
-		$this->Cell(16, 5, 'No. LPB', 'LTR', 0, 'C');
+		$this->Cell(16, 5, 'No LPB', 'LTR', 0, 'C');
 		$this->Cell(27, 5, $this->data->regnum, 'LTR', 1, 'C');
 		
-		$this->SetFont('Helvetica', 'B');
+		$this->SetFont('Courier', 'B');
 		$this->Cell(19, 5, 'Pengirim', 'LTR', 0,'C');
 		$this->Cell(80, 5, lookup::SupplierNameFromSupplierID($this->data->idsupplier), 'LTR');
-		$this->SetFont('Helvetica', 'B');
-		$this->Cell(18, 5, 'No. SJ ', 'LTR', 0,'C');
-		$this->Cell(35, 5, $this->data->sjnum, 'LTR', 0, 'C');
-		$this->Cell(16, 5, 'No. PO ', 'LTR', 0,'C');
+		$this->SetFont('Courier', 'B');
+		$this->Cell(10, 5, 'NoSJ ', 'LTR', 0,'C');
+		$this->Cell(43, 5, $this->data->sjnum, 'LTR', 0, 'C');
+		$this->Cell(16, 5, 'No PO ', 'LTR', 0,'C');
 		$this->Cell(27, 5, $this->data->ponum, 'LTR', 1, 'C');
 		//$this->Cell(195, 15, $this->data->remark, 'LTRB', 1);
 		
 		//$this->ln();
 		$this->setFontSize(12);
-		$this->SetFont('Helvetica', 'B');
+		$this->SetFont('Courier', 'B');
 		
 		for($i = 0; $i < count($this->headernames); ++$i) {
 			$this->Cell($this->headerwidths[$i], 7, $this->headernames[$i], 1, 0, 'C');
@@ -211,7 +211,7 @@ function execute($model, $detailmodel) {
 	// ---------------------------------------------------------
 	
 	// set font
-	$pdf->SetFont('helvetica', '', 12);
+	$pdf->SetFont('Courier', '', 12);
 	
 	// add a page
 	$pdf->LoadData($model, $detailmodel);
