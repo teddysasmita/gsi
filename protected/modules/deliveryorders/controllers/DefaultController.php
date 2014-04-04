@@ -759,7 +759,11 @@ class DefaultController extends Controller
         			$masterdata['receiveraddress']=$master['payer_address'];
         			$masterdata['receiverphone']=$master['payer_phone'];
         		}
-        	};
+        	} else {
+        		$masterdata['receivername']=$master['payer_name'];
+        		$masterdata['receiveraddress']=$master['payer_address'];
+        		$masterdata['receiverphone']=$master['payer_phone'];
+        	}
         	Yii::app()->session['Deliveryorders']=$masterdata;
         	$details=Yii::app()->db->createCommand()
         		->select('b.*')->from('salespos a')->join('detailsalespos b', 'b.id = a.id')
