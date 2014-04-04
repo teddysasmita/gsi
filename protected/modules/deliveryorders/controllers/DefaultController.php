@@ -619,7 +619,7 @@ class DefaultController extends Controller
         {
             $respond=true;
             foreach ($details as $row) {
-                $detailmodel=Detaildeliveryorders::model()->findByPk($row['iddetail']);
+                $detailmodel=Detaildeliveryorders2::model()->findByPk($row['iddetail']);
                 if($detailmodel) {
                     $this->tracker->init();
                     $this->trackActivity('d', $this->__DETAILFORMID);
