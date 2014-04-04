@@ -790,7 +790,7 @@ class DefaultController extends Controller
         		$detailsdata[]=$detaildata;
         		
         		$detaildata2['id']=$id;
-        		$detaildata2['iddetail']=$id;
+        		$detaildata2['iddetail']=idmaker::getCurrentID2();
         		$detaildata2['iditem']=$detail['iditem'];
         		$detaildata2['qty']=$detaildata['leftqty'];
         		$detaildata2['idwarehouse']='-';
