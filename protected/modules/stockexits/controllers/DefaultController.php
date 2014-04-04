@@ -106,7 +106,7 @@ class DefaultController extends Controller
                       } else if ($_POST['command']=='getPO') {
                          $model->attributes=$_POST['Stockexits'];
                          Yii::app()->session['Stockexits']=$_POST['Stockexits'];
-                         $this->loadLPB($model->transid, $model->id);
+                         $this->loadLPB($model->transid, $model->id, $model->idwarehouse);
                       } else if ($_POST['command']=='updateDetail') {
                          $model->attributes=$_POST['Stockexits'];
                          Yii::app()->session['Stockexits']=$_POST['Stockexits'];
@@ -597,7 +597,7 @@ EOS;
         Yii::app()->session['Detailstockexits']=$details;
       }
      
-      private function loadLPB($nolpb, $id)
+      private function loadLPB($nolpb, $id, $idwh)
       {
       	$details=array();
       
@@ -605,7 +605,8 @@ EOS;
       	->select('a.id, b.*')
       	->from('deliveryorders a')
       	->join('detaildeliveryorders b', 'b.id=a.id')
-      	->where('a.regnum = :p_regnum', array(':p_regnum'=>$nolpb) )
+      	->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse', 
+      			array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
       	->queryAll();
       	Yii::app()->session->remove('Detailstockexits');
       	$sql=<<<EOS

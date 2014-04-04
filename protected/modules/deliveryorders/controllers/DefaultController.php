@@ -118,6 +118,9 @@ class DefaultController extends Controller
 						Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
 						$this->loadInvoice($model->invnum, $model->id);
 						$model->attributes=Yii::app()->session['Deliveryorders'];
+                      } else if ($_POST['command']=='updateDetail') {
+                         $model->attributes=$_POST['Deliveryorders'];
+                         Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
                       }
                    }
                 }
