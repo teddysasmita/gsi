@@ -754,6 +754,10 @@ class DefaultController extends Controller
         			$masterdata['receivername']=$receiver['name'];
         			$masterdata['receiveraddress']=$receiver['address'];
         			$masterdata['receiverphone']=$receiver['phone'];
+        		} else {
+        			$masterdata['receivername']=$master['payer_name'];
+        			$masterdata['receiveraddress']=$master['payer_address'];
+        			$masterdata['receiverphone']=$master['payer_phone'];
         		}
         	};
         	Yii::app()->session['Deliveryorders']=$masterdata;
