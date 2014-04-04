@@ -772,7 +772,6 @@ class DefaultController extends Controller
         		$detaildata['invqty']=$detail['qty'];
         		$detaildata['qty']=0;
         		$detaildata['leftqty']=$detail['qty'];
-        		$detaildata['idwarehouse']='';
         		$detaildata['userlog']=Yii::app()->user->id;
 				$detaildata['datetimelog']=idmaker::getDateTime();
         		foreach($detailsdone as $detaildone) {
@@ -781,8 +780,18 @@ class DefaultController extends Controller
         			}
         		}
         		$detailsdata[]=$detaildata;
+        		
+        		$detaildata2['id']=$id;
+        		$detaildata2['iddetail']=$id;
+        		$detaildata2['iditem']=$detail['iditem'];
+        		$detaildata2['qty']=$detaildata['leftqty'];
+        		$detaildata2['idwarehouse']='-';
+        		$detaildata2['userlog']=Yii::app()->user->id;
+        		$detaildata2['datetimelog']=idmaker::getDateTime();
+        		$detailsdata2[]=$detaildata2;
         	} 
         	Yii::app()->session['Detaildeliveryorders2'] = $detailsdata;
+        	Yii::app()->session['Detaildeliveryorders'] = $detailsdata2;
         }
     	
         private function addRecapItem($iditem, $qty) 

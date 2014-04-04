@@ -1,6 +1,6 @@
 <?php
-/* @var $this DeliveryordersntController */
-/* @var $model Deliveryordersnt */
+/* @var $this RequestdisplaysController */
+/* @var $model Requestdisplays */
 /* @var $form CActiveForm */
 ?>
 

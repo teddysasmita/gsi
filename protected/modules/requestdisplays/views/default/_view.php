@@ -1,6 +1,6 @@
 <?php
-/* @var $this DeliveryordersntController */
-/* @var $data Deliveryordersnt */
+/* @var $this RequestdisplaysController */
+/* @var $data Requestdisplays */
 ?>
 
 <div class="view">

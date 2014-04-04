@@ -6,7 +6,7 @@
  * The followings are the available columns in table 'detailrequestdisplays':
  * @property string $iddetail
  * @property string $id
- * @property string $itemname
+ * @property string $iditem
  * @property double $qty
  * @property string $idwarehouse
  * @property string $userlog
@@ -30,14 +30,13 @@ class Detailrequestdisplays extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('iddetail, id, itemname, qty, idwarehouse, userlog, datetimelog', 'required'),
+			array('iddetail, id, iditem, qty, idwarehouse, userlog, datetimelog', 'required'),
 			array('qty', 'numerical'),
-			array('iddetail, id, idwarehouse, userlog', 'length', 'max'=>21),
-			array('itemname', 'length', 'max'=>200),
+			array('iddetail, id, iditem, idwarehouse, userlog', 'length', 'max'=>21),
 			array('datetimelog', 'length', 'max'=>19),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('iddetail, id, itemname, qty, idwarehouse, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('iddetail, id, iditem, qty, idwarehouse, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,7 +59,7 @@ class Detailrequestdisplays extends CActiveRecord
 		return array(
 			'iddetail' => 'Iddetail',
 			'id' => 'ID',
-			'itemname' => 'Itemname',
+			'iditem' => 'Nama Barang',
 			'qty' => 'Qty',
 			'idwarehouse' => 'Idwarehouse',
 			'userlog' => 'Userlog',
@@ -88,7 +87,7 @@ class Detailrequestdisplays extends CActiveRecord
 
 		$criteria->compare('iddetail',$this->iddetail,true);
 		$criteria->compare('id',$this->id,true);
-		$criteria->compare('itemname',$this->itemname,true);
+		$criteria->compare('iditem',$this->iditem,true);
 		$criteria->compare('qty',$this->qty);
 		$criteria->compare('idwarehouse',$this->idwarehouse,true);
 		$criteria->compare('userlog',$this->userlog,true);

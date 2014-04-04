@@ -95,6 +95,29 @@ class LookUpController extends Controller {
 		};
 	}
 	
+	public function actionGetSalesName($term)
+	{
+		if (!Yii::app()->user->isGuest) {
+			$data=Yii::app()->db->createCommand()
+				->select('concat(firstname, \' \', lastname) as nama')->from('salespersons')
+				->where('firstname like :p_firstname or lastname like :p_lastname', 
+						array(':p_firstname'=>'%'.$term.'%', ':p_lastname'=>'%'.$term.'%'))
+				->order('nama')
+				->queryColumn();
+			if(count($data)) {
+				foreach($data as $key=>$value) {
+					//$data[$key]=rawurlencode($value);
+					$data[$key]=$value;
+				}
+			} else
+				$data[0]='NA';
+			echo json_encode($data);
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+	
+	
 	public function actionGetWareHouse($term)
 	{
 		if (!Yii::app()->user->isGuest) {

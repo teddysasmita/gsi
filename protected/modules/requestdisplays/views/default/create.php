@@ -1,6 +1,6 @@
 <?php
-/* @var $this DeliveryordersntController */
-/* @var $model Deliveryordersnt */
+/* @var $this RequestdisplaysController */
+/* @var $model Requestdisplays */
 
 $this->breadcrumbs=array(
 	'Proses'=>array('/site/proses'),
@@ -8,9 +8,9 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	//array('label'=>'List Deliveryordersnt', 'url'=>array('index')),
-	//array('label'=>'Manage Deliveryordersnt', 'url'=>array('admin')),
-      array('label'=>'Tambah Detil', 'url'=>array('detaildeliveryordersnt/create', 'id'=>$model->id),
+	//array('label'=>'List Requestdisplays', 'url'=>array('index')),
+	//array('label'=>'Manage Requestdisplays', 'url'=>array('admin')),
+      array('label'=>'Tambah Detil', 'url'=>array('detailrequestdisplays/create', 'id'=>$model->id),
           'linkOptions'=>array('id'=>'adddetail')),      
 );
 $jq=<<<EOH
@@ -18,7 +18,7 @@ $(function(){
   $('#adddetail').click(function(event){
         var mainform;
         var hiddenvar;
-        mainform=$('#deliveryordersnt-form');
+        mainform=$('#requestdisplays-form');
         $('#command').val('adddetail');
         mainform.submit();
         event.preventDefault();
@@ -28,6 +28,6 @@ EOH;
 Yii::app()->clientScript->registerScript('myscript', $jq, CClientScript::POS_READY);
 ?>
 
-<h1>Pengiriman Barang Tanpa Transaksi</h1>
+<h1>Permintaan Barang Display</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model, 'id'=>$model->id, 'command'=>'create')); ?>

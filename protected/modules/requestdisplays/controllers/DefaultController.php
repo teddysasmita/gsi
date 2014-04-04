@@ -50,16 +50,16 @@ class DefaultController extends Controller
                 $this->state='c';
                 $this->trackActivity('c'); 
                 
-                $model=new requestdisplays;
+                $model=new Requestdisplays;
                 $this->afterInsert($model);
                  
                 Yii::app()->session['master']='create';
                 //as the operator enter for the first time, we load the default value to the session
-                if (!isset(Yii::app()->session['requestdisplays'])) {
-                   Yii::app()->session['requestdisplays']=$model->attributes;
+                if (!isset(Yii::app()->session['Requestdisplays'])) {
+                   Yii::app()->session['Requestdisplays']=$model->attributes;
                 } else {
                 // use the session to fill the model
-                    $model->attributes=Yii::app()->session['requestdisplays'];
+                    $model->attributes=Yii::app()->session['Requestdisplays'];
                 }
 
                 // Uncomment the following line if AJAX validation is needed
@@ -69,7 +69,7 @@ class DefaultController extends Controller
                    if(isset($_POST['yt0']))
                    {
                       //The user pressed the button;
-                      $model->attributes=$_POST['requestdisplays'];
+                      $model->attributes=$_POST['Requestdisplays'];
                       
                       if(isset(Yii::app()->session['Detailrequestdisplays']))
                         $details=Yii::app()->session['Detailrequestdisplays'];
@@ -94,8 +94,8 @@ class DefaultController extends Controller
                    } else if (isset($_POST['command'])){
                       // save the current master data before going to the detail page
                       if($_POST['command']=='adddetail') {
-                         $model->attributes=$_POST['requestdisplays'];
-                         Yii::app()->session['requestdisplays']=$_POST['requestdisplays'];
+                         $model->attributes=$_POST['Requestdisplays'];
+                         Yii::app()->session['Requestdisplays']=$_POST['Requestdisplays'];
                          $this->redirect(array('detailrequestdisplays/create','id'=>$model->id));
                       }
                    }
@@ -126,10 +126,10 @@ class DefaultController extends Controller
                 
                 Yii::app()->session['master']='update';
                 
-                if(!isset(Yii::app()->session['requestdisplays']))
-                   Yii::app()->session['requestdisplays']=$model->attributes;
+                if(!isset(Yii::app()->session['Requestdisplays']))
+                   Yii::app()->session['Requestdisplays']=$model->attributes;
                 else
-                   $model->attributes=Yii::app()->session['requestdisplays'];
+                   $model->attributes=Yii::app()->session['Requestdisplays'];
                 
                 if(!isset(Yii::app()->session['Detailrequestdisplays'])) 
                     Yii::app()->session['Detailrequestdisplays']=$this->loadDetails($id);
@@ -139,7 +139,7 @@ class DefaultController extends Controller
 
                 if(isset($_POST)) {
                     if(isset($_POST['yt0'])) {
-                        $model->attributes=$_POST['requestdisplays'];
+                        $model->attributes=$_POST['Requestdisplays'];
                         
                         $this->beforePost($model);
                         $this->tracker->modify('requestdisplays', $id);
@@ -231,7 +231,7 @@ class DefaultController extends Controller
             Yii::app()->session->remove('Detailrequestdisplays');
             Yii::app()->session->remove('DeleteDetailrequestdisplays');
 
-            $dataProvider=new CActiveDataProvider('requestdisplays',
+            $dataProvider=new CActiveDataProvider('Requestdisplays',
                array(
                   'criteria'=>array(
                      'order'=>'id desc'
@@ -255,10 +255,10 @@ class DefaultController extends Controller
                 Yii::app()->user->id)) {
                 $this->trackActivity('s');
                 
-        	$model=new requestdisplays('search');
+        	$model=new Requestdisplays('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['requestdisplays']))
-			$model->attributes=$_GET['requestdisplays'];
+		if(isset($_GET['Requestdisplays']))
+			$model->attributes=$_GET['Requestdisplays'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -303,7 +303,7 @@ class DefaultController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=requestdisplays::model()->findByPk($id);
+		$model=Requestdisplays::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -328,8 +328,8 @@ class DefaultController extends Controller
          //this action continues the process from the detail page
             if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
                     Yii::app()->user->id))  {
-                $model=new requestdisplays;
-                $model->attributes=Yii::app()->session['requestdisplays'];
+                $model=new Requestdisplays;
+                $model->attributes=Yii::app()->session['Requestdisplays'];
 
                 $details=Yii::app()->session['Detailrequestdisplays'];
                 $this->afterInsertDetail($model, $details);
@@ -347,8 +347,8 @@ class DefaultController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                     Yii::app()->user->id))  {
             
-                $model=new requestdisplays;
-                $model->attributes=Yii::app()->session['requestdisplays'];
+                $model=new Requestdisplays;
+                $model->attributes=Yii::app()->session['Requestdisplays'];
 
                 $details=Yii::app()->session['Detailrequestdisplays'];
                 $this->afterUpdateDetail($model, $details);
@@ -367,8 +367,8 @@ class DefaultController extends Controller
                     Yii::app()->user->id))  {
             
                 
-                $model=new requestdisplays;
-                $model->attributes=Yii::app()->session['requestdisplays'];
+                $model=new Requestdisplays;
+                $model->attributes=Yii::app()->session['Requestdisplays'];
 
                 $details=Yii::app()->session['Detailrequestdisplays'];
                 $this->afterDeleteDetail($model, $details);

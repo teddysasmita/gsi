@@ -1,6 +1,6 @@
 <?php
-/* @var $this DeliveryordersntController */
-/* @var $model Deliveryordersnt */
+/* @var $this RequestdisplaysController */
+/* @var $model Requestdisplays */
 
 $this->breadcrumbs=array(
    'Proses'=>array('/site/proses'),
@@ -14,12 +14,12 @@ $this->menu=array(
 	array('label'=>'Hapus Data', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Pencarian Data', 'url'=>array('admin')),
         array('label'=>'Sejarah', 'url'=>array('history','id'=>$model->id)),
-        array('label'=>'Data Detil yang telah terhapus', 'url'=>array('detaildeliveryordersnt/deleted','id'=>$model->id)),
+        array('label'=>'Data Detil yang telah terhapus', 'url'=>array('detailrequestdisplays/deleted','id'=>$model->id)),
 	array('label'=>'Cetak', 'url'=>array('printsjm', 'id'=>$model->id))
 );
 ?>
 
-<h1>Pengiriman Barang Tanpa Transaksi</h1>
+<h1>Permintaan Barang Display</h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
@@ -35,8 +35,8 @@ $this->menu=array(
 )); ?>
 
 <?php 
-$count=Yii::app()->db->createCommand("select count(*) from detaildeliveryordersnt where id='$model->id'")->queryScalar();
-$sql="select * from detaildeliveryordersnt where id='$model->id'";
+$count=Yii::app()->db->createCommand("select count(*) from detailrequestdisplays where id='$model->id'")->queryScalar();
+$sql="select * from detailrequestdisplays where id='$model->id'";
 
 $dataProvider=new CSqlDataProvider($sql,array(
        'totalItemCount'=>$count,

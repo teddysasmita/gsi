@@ -59,9 +59,9 @@ class Requestdisplays extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'regnum' => 'Regnum',
-			'idatetime' => 'Idatetime',
-			'idsales' => 'Idsales',
+			'regnum' => 'Nomor Urut',
+			'idatetime' => 'Tanggal',
+			'idsales' => 'Nama SP',
 			'status' => 'Status',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',

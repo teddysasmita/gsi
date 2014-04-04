@@ -1,6 +1,6 @@
 <?php
-/* @var $this DeliveryordersntController */
-/* @var $model Deliveryordersnt */
+/* @var $this RequestdisplaysController */
+/* @var $model Requestdisplays */
 
 $this->breadcrumbs=array(
     'Proses'=>array('/site/proses'),
@@ -14,15 +14,15 @@ $this->menu=array(
 
 ?>
 
-<h1>Pengiriman Barang Tanpa Transaksi</h1>
+<h1>Permintaan Barang Display</h1>
 
 <?php 
     $data=Yii::app()->tracker->createCommand()
-       ->select('a.*')->from('deliveryordersnt a')->join('userjournal b', 'b.id=a.idtrack')
+       ->select('a.*')->from('requestdisplays a')->join('userjournal b', 'b.id=a.idtrack')
        ->where('b.action=:action', array(':action'=>'d'))->queryAll();
     $ap=new CArrayDataProvider($data);
     $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'deliveryordersnt-grid',
+	'id'=>'requestdisplays-grid',
 	'dataProvider'=>$ap,
 	'columns'=>array(
 		'idatetime',

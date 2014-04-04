@@ -1,6 +1,6 @@
 <?php
-/* @var $this DeliveryordersntController */
-/* @var $model Deliveryordersnt */
+/* @var $this RequestdisplaysController */
+/* @var $model Requestdisplays */
 
 $this->breadcrumbs=array(
    'Proses'=>array('/site/proses'),
@@ -10,16 +10,16 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	//array('label'=>'List Deliveryordersnt', 'url'=>array('index')),
-	//array('label'=>'Create Deliveryordersnt', 'url'=>array('create')),
-	//array('label'=>'View Deliveryordersnt', 'url'=>array('view', 'id'=>$model->id)),
-	//array('label'=>'Manage Deliveryordersnt', 'url'=>array('admin')),
-    array('label'=>'Tambah Detil', 'url'=>array('detaildeliveryordersnt/create', 'id'=>$model->id, 
+	//array('label'=>'List Requestdisplays', 'url'=>array('index')),
+	//array('label'=>'Create Requestdisplays', 'url'=>array('create')),
+	//array('label'=>'View Requestdisplays', 'url'=>array('view', 'id'=>$model->id)),
+	//array('label'=>'Manage Requestdisplays', 'url'=>array('admin')),
+    array('label'=>'Tambah Detil', 'url'=>array('detailrequestdisplays/create', 'id'=>$model->id, 
       'command'=>'update'),
           'linkOptions'=>array('id'=>'adddetail')),     
 );
 ?>
 
-<h1>Pengiriman Barang Tanpa Transaksi</h1>
+<h1>Permintaan Barang Display</h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model, 'command'=>'update')); ?>
