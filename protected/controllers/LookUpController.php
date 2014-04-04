@@ -124,7 +124,7 @@ class LookUpController extends Controller {
 			$name=rawurldecode($name);
 			list($firstname, $lastname) = explode(' ', $name);
 			$data=Yii::app()->db->createCommand()->selectDistinct('id')->from('salespersons')
-			->where("firstname = :p_firstname and lastname = :p_lastname", 
+			->where("firstname = :p_firstname or lastname = :p_lastname", 
 				array(':p_firstname'=> $firstname, ':p_lastname'=>$lastname))
 			->order('id')
 			->queryScalar();
