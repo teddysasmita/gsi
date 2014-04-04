@@ -230,7 +230,7 @@ class DefaultController extends Controller
          if(Yii::app()->authManager->checkAccess($this->formid.'-List', 
             Yii::app()->user->id)) {
             $this->trackActivity('l');
-            Yii::app()->session->remove('requestdisplays');
+            Yii::app()->session->remove('Requestdisplays');
             Yii::app()->session->remove('Detailrequestdisplays');
             Yii::app()->session->remove('DeleteDetailrequestdisplays');
 

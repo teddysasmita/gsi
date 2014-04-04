@@ -13,16 +13,8 @@
 	<?php echo CHtml::encode($data->idatetime); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('receivername')); ?>:</b>
-	<?php echo CHtml::encode($data->receivername); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('drivername')); ?>:</b>
-	<?php echo CHtml::encode($data->drivername); ?>
-	<br />
-	
-	<b><?php echo CHtml::encode($data->getAttributeLabel('vehicleinfo')); ?>:</b>
-	<?php echo CHtml::encode($data->vehicleinfo); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('idsales')); ?>:</b>
+	<?php echo CHtml::encode(lookup::SalesNameFromID($data->idsales)); ?>
 	<br />
 
 </div>
