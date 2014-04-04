@@ -7,6 +7,22 @@
 <div class="form">
 
    <?php 
+   $transScript=<<<EOS
+		$('.updateButton').click(
+		function(evt) {
+			$('#command').val('updateDetail');
+			$('#detailcommand').val(this.href);
+			$('#requestdisplays-form').submit();
+		});
+   		$('#Requestdisplays_salesname').change(
+   		function(evt) {
+			$.getJSON('index.php?r=LookUp/getSalesID',{ name: $('#Requestdisplays_salesname').val() },
+               function(data) {
+                  $('#Requestdisplays_idsales').val(data);
+               })		
+   		});
+EOS;
+   Yii::app()->clientScript->registerScript("transScript", $transScript, CClientscript::POS_READY);
    
    if($command=='create') 
       $form=$this->beginWidget('CActiveForm', array(
@@ -32,6 +48,7 @@
          echo $form->hiddenField($model,'datetimelog');
          echo $form->hiddenField($model,'status');
          echo $form->hiddenField($model,'regnum');
+         echo $form->hiddenField($model, 'idsales');
          
          echo CHtml::hiddenField('command');
       ?>
@@ -105,8 +122,9 @@ $this->widget('zii.widgets.grid.CGridView', array(
 					'visible'=>'false'
 				)
 			),
-			'updateButtonUrl'=>"Action::decodeUpdateDetailDeliveryOrderNtUrl(\$data)",
-			'deleteButtonUrl'=>"Action::decodeDeleteDetailDeliveryOrderNtUrl(\$data)",
+			'updateButtonOptions'=>array("class"=>'updateButton'),
+			'updateButtonUrl'=>"Action::decodeUpdateDetailRequestDisplayUrl(\$data)",
+			'deleteButtonUrl'=>"Action::decodeDeleteDetailRequestDisplayUrl(\$data)",
 		)
 	),
 ));

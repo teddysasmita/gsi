@@ -26,11 +26,11 @@ $this->menu=array(
 	'attributes'=>array(
 		'regnum',
 		'idatetime',
-		'receivername',
-		'receiveraddress',
-		'receiverphone',
-		'drivername',
-		'vehicleinfo',         
+		array(
+			'name'=>'idsales',
+			'label'=>'Nama Sales',
+			'value'=>lookup::SalesNameFromID($model->idsales)
+		)         
 	),
 )); ?>
 
@@ -46,12 +46,18 @@ $this->widget('zii.widgets.grid.CGridView', array(
 	'columns'=>array(
         array(
 			'header'=>'Nama Barang',
-			'name'=>'itemname'
+			'name'=>'iditem',
+			'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])",
 		), 
 		array(
 			'header'=>'Jumlah',
 			'name'=>'qty'
 		),  	
+		array(
+			'header'=>'Gudang',
+			'name'=>'idwarehouse',
+			'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])",
+		),
           array(
               'class'=>'CButtonColumn',
               'buttons'=> array(
@@ -62,7 +68,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
                      'visible'=>'false'
                   )
               ),
-              'viewButtonUrl'=>"Action::decodeViewDetailDeliveryOrderNtUrl(\$data)",
+              'viewButtonUrl'=>"Action::decodeViewDetailRequestDisplayUrl(\$data)",
           )
       ),
 ));

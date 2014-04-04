@@ -97,6 +97,9 @@ class DefaultController extends Controller
                          $model->attributes=$_POST['Requestdisplays'];
                          Yii::app()->session['Requestdisplays']=$_POST['Requestdisplays'];
                          $this->redirect(array('detailrequestdisplays/create','id'=>$model->id));
+                      } else if($_POST['command']=='updateDetail') {
+                         $model->attributes=$_POST['Requestdisplays'];
+                         Yii::app()->session['Requestdisplays']=$_POST['Requestdisplays'];
                       }
                    }
                 }
@@ -483,7 +486,6 @@ class DefaultController extends Controller
             $idmaker=new idmaker();
             $model->id=$idmaker->getCurrentID2();
             $model->idatetime=$idmaker->getDateTime();
-            $model->regnum=$idmaker->getRegNum($this->formid);
             $lookup=new lookup();
             $model->status=$lookup->reverseOrderStatus('Belum Diproses');
         }

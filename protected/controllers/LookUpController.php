@@ -117,6 +117,23 @@ class LookUpController extends Controller {
 		};
 	}
 	
+	public function actionGetSalesID($name)
+	{
+		if (!Yii::app()->user->isGuest) {
+			//print_r($name);
+			$name=rawurldecode($name);
+			list($firstname, $lastname) = explode(' ', $name);
+			$data=Yii::app()->db->createCommand()->selectDistinct('id')->from('salespersons')
+			->where("firstname = :p_firstname and lastname = :p_lastname", 
+				array(':p_firstname'=> $firstname, ':p_lastname'=>$lastname))
+			->order('id')
+			->queryScalar();
+			echo $data;
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+	
 	
 	public function actionGetWareHouse($term)
 	{
