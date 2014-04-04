@@ -30,6 +30,12 @@
    			$('#command').val('loadInvoice');
    			$('#deliveryorders-form').submit();
 		});
+		$('.updateButton').click(
+		function(evt) {
+			$('#command').val('updateDetail');
+			$('#detailcommand').val(this.href);
+			$('#deliveryorders-form').submit();
+		});  
 EOS;
    Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);
 
@@ -213,6 +219,7 @@ EOS;
 							'visible'=>'false'
 						),
 					),
+					'updateButtonOptions'=>array("class"=>'updateButton'),
 					'updateButtonUrl'=>"Action::decodeUpdateDetailDeliveryOrderUrl(\$data)",
 					'deleteButtonUrl'=>"Action::decodeDeleteDetailDeliveryOrderUrl(\$data)",
 				)
