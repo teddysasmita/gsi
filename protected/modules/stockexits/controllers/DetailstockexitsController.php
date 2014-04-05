@@ -257,9 +257,6 @@ class DetailstockexitsController extends Controller
 		if(isset($_POST['ajax']) && $_POST['ajax']==='detailstockexits-form')
 		{
 			echo CActiveForm::validate($model);
-			
-			if (Action::CheckItemSerial($model->iditem, $model->serialnum) == 0)
-				$model->addError('serialnum', 'Nomor seri tidak ditemukan');
 			Yii::app()->end();
 		}
 	}

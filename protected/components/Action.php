@@ -500,24 +500,6 @@ class Action extends CComponent {
 				'datetimelog'=>idmaker::getDateTime()
 			));	
    }
-   
-   public static function CheckItemSerial($iditem, $serialnum)
-   {
-   		$iditem=$iditem;
-   		$serialnum=$serialnum;
-   
-   		if (!Yii::app()->user->isGuest) {
-   			$data=Yii::app()->db->createCommand()
-   				->select('count(*) as total')
-   				->from('detailstockentries')
-   				->where('iditem = :p_iditem and serialnum = :p_serialnum',
-   					array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))
-   				->queryScalar();
-   			return $data;
-   		} else {
-   			throw new CHttpException(404,'You have no authorization for this operation.');
-   		};
-   }
 }
 
 ?>
