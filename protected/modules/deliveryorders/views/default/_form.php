@@ -35,6 +35,7 @@
 			$('#command').val('updateDetail');
 			$('#detailcommand').val(this.href);
 			$('#deliveryorders-form').submit();
+   			//evt.preventDefault();
 		});  
 EOS;
    Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);
