@@ -64,6 +64,9 @@ EOS;
         echo $form->hiddenField($model, 'datetimelog');
         echo $form->hiddenField($model, 'status');
         echo $form->hiddenField($model, 'regnum');
+        echo $form->hiddenField($model, 'receivername');
+        echo $form->hiddenField($model, 'receiveraddress');
+        echo $form->hiddenField($model, 'receiverphone');
       ?>
       
 	<div class='error'>
