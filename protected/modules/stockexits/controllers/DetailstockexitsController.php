@@ -60,8 +60,8 @@ class DetailstockexitsController extends Controller
                 
                 $master=Yii::app()->session['master'];
                                 
-		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
+				// Uncomment the following line if AJAX validation is needed
+				$this->performAjaxValidation($model);
                 
                 if(isset($_POST['Detailstockexits'])) {
                     $temp=Yii::app()->session['Detailstockexits'];
@@ -257,6 +257,9 @@ class DetailstockexitsController extends Controller
 		if(isset($_POST['ajax']) && $_POST['ajax']==='detailstockexits-form')
 		{
 			echo CActiveForm::validate($model);
+			
+			if (Action::CheckItemSerial($model->iditem, $model->serialnum) == 0)
+				$model->addError('serialnum', 'Nomor seri tidak ditemukan');
 			Yii::app()->end();
 		}
 	}

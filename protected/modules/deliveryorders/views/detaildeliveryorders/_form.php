@@ -46,15 +46,6 @@ $itemScript=<<<EOS
            $('#dialog-item-name').val(unescape($('#dialog-item-select').val()));
          }
       );
-	
-	$('#yt0').click(
-		function(evt) {
-			if (!checkItems($('#Detaildeliveryorders_iditem'))) {
-				alert('Barang tidak terdaftar');
-				evt.preventDefault();
-			}
-		}
-	);
 EOS;
 Yii::app()->clientScript->registerScript('itemscript', $itemScript, CClientScript::POS_READY);
 
