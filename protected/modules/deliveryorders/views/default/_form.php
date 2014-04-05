@@ -111,15 +111,17 @@ EOS;
                 'sourceUrl'=>Yii::app()->createUrl('LookUp/getReceiverinfobyname'),
               'value'=>$model->receivername
             ));*/
-			echo $form->textField($model, 'receivername', array('size'=>50));
+			//echo $form->textField($model, 'receivername', array('size'=>50));
+			echo CHtml::label($model->receivername, FALSE);
          ?>
          <?php echo $form->error($model,'receivername'); ?>
 	</div>
 	
 	<div class="row">
          <?php echo $form->labelEx($model,'receiveraddress'); ?>
-         <?php 
-			echo $form->textField($model, 'receiveraddress', array('size'=>50));
+         <?php
+         	echo CHtml::label($model->receiveraddress, FALSE); 
+			//echo $form->textField($model, 'receiveraddress', array('size'=>50));
          ?>
          <?php echo $form->error($model,'receiveraddress'); ?>
 	</div>
@@ -127,7 +129,8 @@ EOS;
 	<div class="row">
          <?php echo $form->labelEx($model,'receiverphone'); ?>
          <?php 
-			echo $form->textField($model, 'receiverphone');
+			//echo $form->textField($model, 'receiverphone');
+         echo CHtml::label($model->receiverphone, FALSE);
          ?>
          <?php echo $form->error($model,'receiverphone'); ?>
 	</div>

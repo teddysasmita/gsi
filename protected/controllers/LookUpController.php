@@ -310,11 +310,11 @@ class LookUpController extends Controller {
 		if (!Yii::app()->user->isGuest) {
 			$sql=<<<EOS
 			select a.id, a.regnum,
-				concat( 'Penerimaan Barang - ', b.firstname, ' ', b.lastname, ' - ', a.idatetime) as transinfo,
-				'AC12' as transname
-				from purchasesstockentries a
-				join suppliers b on b.id = a.idsupplier
-				where regnum=:p_regnum
+			concat( 'Penerimaan Barang - ', b.firstname, ' ', b.lastname, ' - ', a.idatetime) as transinfo,
+			'AC12' as transname
+			from purchasesstockentries a
+			join suppliers b on b.id = a.idsupplier
+			where regnum=:p_regnum
 EOS;
 			$command=Yii::app()->db->createCommand($sql);
 			$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
