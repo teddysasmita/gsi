@@ -602,13 +602,22 @@ EOS;
       	$details=array();
       
       	$dataLPB=Yii::app()->db->createCommand()
-      	->select('a.id, b.*')
-      	->from('deliveryorders a')
-      	->join('detaildeliveryorders b', 'b.id=a.id')
-      	->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse', 
-      			array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
-      	->queryAll();
-      	Yii::app()->session->remove('Detailstockexits');
+	      	->select('a.id, b.*')
+	      	->from('deliveryorders a')
+	      	->join('detaildeliveryorders b', 'b.id=a.id')
+	      	->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse', 
+	      		array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
+	      	->queryAll();
+      	if ($dataLPB == FALSE ) {
+      		$dataLPB=Yii::app()->db->createCommand()
+      			->select('a.id, b.*')
+      			->from('requestdisplays a')
+      			->join('detailrequestdisplays b', 'b.id=a.id')
+      			->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
+      				array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
+      				->queryAll();
+      	}
+      	
       	$sql=<<<EOS
     	select count(*) as received from stockexits a
 		join detailstockexits b on b.id = a.id
@@ -616,6 +625,7 @@ EOS;
         b.serialnum <> 'Belum Diterima'
 EOS;
       	$mycommand=Yii::app()->db->createCommand($sql);
+      	
       	foreach($dataLPB as $row) {
       		$mycommand->bindParam(':p_transid', $nolpb, PDO::PARAM_STR);
       		$mycommand->bindParam(':p_iditem', $row['iditem'], PDO::PARAM_STR);
@@ -630,6 +640,7 @@ EOS;
       			$details[]=$detail;
 			}
 		}
+		Yii::app()->session->remove('Detailstockexits');
 		Yii::app()->session['Detailstockexits']=$details;
 	}
       			

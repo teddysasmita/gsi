@@ -319,12 +319,28 @@ EOS;
 			$command=Yii::app()->db->createCommand($sql);
 			$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
 			$data=$command->queryAll();
+			
 			if ($data == FALSE) {
 				$sql=<<<EOS
 				select a.id, a.regnum, a.invnum,
 				concat( 'Pengiriman Barang - ', a.invnum, ' - ', a.receivername, ' - ', a.idatetime) as transinfo,
 				'AC13' as transname
 				from deliveryorders a
+				where regnum=:p_regnum
+EOS;
+				$command=Yii::app()->db->createCommand($sql);
+				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
+				$data=$command->queryAll();
+			}
+			
+			if ($data == FALSE) {
+				$sql=<<<EOS
+				select a.id, a.regnum, 'NA' as invnum,
+				concat( 'Permintaan Barang Display - NA - ', concat(b.firstname, ' ', b.lastname), 
+					' - ', a.idatetime) as transinfo,
+				'AC16' as transname
+				from requestdisplays a
+				join salespersons b on b.id = a.idsales
 				where regnum=:p_regnum
 EOS;
 				$command=Yii::app()->db->createCommand($sql);
