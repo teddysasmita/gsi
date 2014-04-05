@@ -61,7 +61,7 @@ class Detailrequestdisplays extends CActiveRecord
 			'id' => 'ID',
 			'iditem' => 'Nama Barang',
 			'qty' => 'Qty',
-			'idwarehouse' => 'Idwarehouse',
+			'idwarehouse' => 'Gudang',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
 		);

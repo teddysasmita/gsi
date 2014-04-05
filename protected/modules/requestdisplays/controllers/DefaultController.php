@@ -553,7 +553,7 @@ class DefaultController extends Controller
         		Yii::import('application.vendors.tcpdf.*');
         		require_once ('tcpdf.php');
         		Yii::import('application.modules.requestdisplays.components.*');
-        		require_once('printsjm.php');
+        		require_once('printmd.php');
         		ob_clean();
         		
         		execute($model, $detailmodel);
