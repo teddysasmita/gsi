@@ -21,8 +21,8 @@ class MYPDF extends TCPDF {
 		// Read file lines
 		$this->data = $data;
 		$this->detaildata = $detaildata;
-		$this->headernames = array('No', 'Nama Barang', 'Jumlah', 'Keterangan');
-		$this->headerwidths = array(10, 135, 20, 30);
+		$this->headernames = array('No', 'Nama Barang', 'Jumlah', 'Gudang', 'Keterangan');
+		$this->headerwidths = array(10, 115, 20, 20, 30);
 	}
 
 	// Colored table
@@ -39,9 +39,9 @@ class MYPDF extends TCPDF {
 		$fill = 0;
 		$counter=0;
 		$iditem='';
-		$this->SetXY(1, 56);
+		$this->SetXY(1, 39);
 		if (count($this->detaildata) <= 9)
-			$maxrows = 9;
+			$maxrows = 12;
 		else
 			$maxrows = count($this->detaildata);		
 		for($i=0;$i<$maxrows;$i++) {
@@ -49,17 +49,20 @@ class MYPDF extends TCPDF {
 				$row=$this->detaildata[$i];
 				$counter+=1;
 				$this->Cell($this->headerwidths[0], 6, $counter, 'LR', 0, 'C', $fill);
-				$this->Cell($this->headerwidths[1], 6, $row['itemname'], 'LR', 0, 'L', $fill);
+				$this->Cell($this->headerwidths[1], 6, lookup::ItemNameFromItemID($row['iditem']), 'LR', 0, 'L', $fill);
 				$this->Cell($this->headerwidths[2], 6, $row['qty'], 'LR', 0, 'R', $fill);
-				$this->Cell($this->headerwidths[3], 6, '', 'LR', 1, 'R', $fill);
+				$this->Cell($this->headerwidths[3], 6, lookup::WarehouseNameFromWarehouseID($row['idwarehouse']), 
+					'LR', 0, 'R', $fill);
+				$this->Cell($this->headerwidths[4], 6, '', 'LR', 1, 'R', $fill);
 			} else {
 				$this->Cell($this->headerwidths[0], 6, ' ', 'LR', 0, 'C', $fill);
 				$this->Cell($this->headerwidths[1], 6, ' ', 'LR', 0, 'L', $fill);
 				$this->Cell($this->headerwidths[2], 6, ' ', 'LR', 0, 'R', $fill);
-				$this->Cell($this->headerwidths[3], 6, ' ', 'LR', 1, 'R', $fill);
+				$this->Cell($this->headerwidths[3], 6, ' ', 'LR', 0, 'R', $fill);
+				$this->Cell($this->headerwidths[4], 6, ' ', 'LR', 1, 'R', $fill);
 				//$this->ln();
 			}
-			if (($i > 0) && ($i % 8 == 0))
+			if (($i > 0) && ($i % 11 == 0))
 				//$this->checkPageBreak(6, '');
 				$this->Cell(array_sum($this->headerwidths), 0, '', 'T', 1);
 		}
@@ -80,7 +83,7 @@ class MYPDF extends TCPDF {
 		$this->SetFont('Helvetica', 'B');
 		$this->SetFontSize(10);
 		$this->setXY(1, 115);
-		$this->Cell(43, 15, 'Supir', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
+		$this->Cell(43, 15, 'Sales', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
 		$this->Cell(43, 15, 'CS', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
 		$this->Cell(43, 15, 'Pemeriksa', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
 		$this->Cell(43, 15, 'Penerima', 'LTRB', 0, 'C', false,'', 0, false, 'T', 'T');
@@ -100,33 +103,21 @@ class MYPDF extends TCPDF {
 		$this->SetFont('', 'B');
 		$this->SetCellPadding(0.8);
 	
-		$this->setFontSize(20);
+		$this->setFontSize(15);
 		$this->setXY(91, 10);
-		$this->Cell(105, 10, 'Surat Jalan Manual', 'LTR', 1, 'C');
+		$this->Cell(105, 10, 'Permintaan Barang Display', 'LTR', 1, 'C');
 		$this->SetFontSize(10);
 		$this->setXY(91, 20);
-		$this->Cell(22, 5, 'Tanggal SJ', 'LT', 0, 'C');
-		$this->Cell(45, 5, $this->data->idatetime, 'LTR', 0, 'C');
+		$this->Cell(15, 5, 'Tgl', 'LT', 0, 'C');
+		$this->Cell(40, 5, $this->data->idatetime, 'LTR', 0, 'C');
 		$this->SetFont('Helvetica', 'B');
 		//$this->setXY(100, 27);
-		$this->Cell(20, 5, 'Nomor SJ', 'LTR', 0, 'C');
-		$this->Cell(18, 5, $this->data->regnum, 'LTR', 1, 'C');
-		
+		$this->Cell(15, 5, 'Nomor', 'LTR', 0, 'C');
+		$this->Cell(35, 5, $this->data->regnum, 'LTR', 1, 'C');
+		$this->setXY(91, 26);
 		$this->SetFont('Helvetica', 'B');
-		$this->Cell(35, 5, 'Nama Penerima', 'LTR', 0,'C');
-		$this->Cell(80, 5, $this->data->receivername, 'LTR');
-		$this->SetFont('Helvetica', 'B');
-		$this->Cell(30, 5, 'Telp Penerima', 'LTR', 0,'C');
-		$this->Cell(50, 5, $this->data->receiverphone, 'LTR', 1);
-		
-		$this->SetFont('Helvetica', 'B');
-		$this->Cell(35, 5, 'Alamat Penerima', 'LTR', 0,'C');
-		$this->Cell(160, 5, $this->data->receiveraddress, 'LTR', 1);
-		$this->SetFont('Helvetica', 'B');
-		$this->Cell(35, 5, 'Info Kendaraan', 'LTRB', 0,'C');
-		$this->Cell(160, 5, $this->data->vehicleinfo, 'LTRB', 1);
-		
-		$this->ln(5);
+		$this->Cell(25, 5, 'Nama Sales', 'LTR', 0,'C');
+		$this->Cell(80, 5, lookup::SalesNameFromID($this->data->idsales), 'LTR', 1);
 		$this->setFontSize(12);
 		$this->SetFont('Helvetica', 'B');
 		
@@ -167,7 +158,7 @@ function execute($model, $detailmodel) {
 	$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 	
 	//set margins
-	$pdf->SetMargins(1, 56, PDF_MARGIN_RIGHT);
+	$pdf->SetMargins(1, 39, PDF_MARGIN_RIGHT);
 	$pdf->SetHeaderMargin(0);
 	$pdf->SetFooterMargin(0);
 	
@@ -198,7 +189,7 @@ function execute($model, $detailmodel) {
 	// ---------------------------------------------------------
 	
 	//Close and output PDF document
-	$pdf->Output('SJM'.idmaker::getDateTime().'.pdf', 'I');
+	$pdf->Output('MD'.idmaker::getDateTime().'.pdf', 'I');
 }
 //============================================================+
 // END OF FILE                                                
