@@ -86,7 +86,7 @@ class DefaultController extends Controller
                           $respond=$respond&&$this->saveNewDetails($details);
                       }    
                       if($respond) {
-                         Yii::app()->session->remove('requestdisplays');
+                         Yii::app()->session->remove('Requestdisplays');
                          Yii::app()->session->remove('Detailrequestdisplays');
                          $this->redirect(array('view','id'=>$model->id));
                       }
@@ -176,7 +176,7 @@ class DefaultController extends Controller
                         };
                                                 
                         if($respond) {
-                            Yii::app()->session->remove('requestdisplays');
+                            Yii::app()->session->remove('Requestdisplays');
                             Yii::app()->session->remove('Detailrequestdisplays');
                             Yii::app()->session->remove('Deletedetailrequestdisplays');
                             $this->redirect(array('view','id'=>$model->id));
