@@ -121,8 +121,6 @@ class DefaultController extends Controller
                       } else if ($_POST['command']=='updateDetail') {
                          $model->attributes=$_POST['Deliveryorders'];
                          Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
-                         echo 'here';
-                         die();
                       }
                    }
                 }
