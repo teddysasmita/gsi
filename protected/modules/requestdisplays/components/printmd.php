@@ -189,7 +189,7 @@ function execute($model, $detailmodel) {
 	// ---------------------------------------------------------
 	
 	//Close and output PDF document
-	$pdf->Output('MD'.idmaker::getDateTime().'.pdf', 'I');
+	$pdf->Output('MD'.idmaker::getDateTime().'.pdf', 'D');
 }
 //============================================================+
 // END OF FILE                                                
