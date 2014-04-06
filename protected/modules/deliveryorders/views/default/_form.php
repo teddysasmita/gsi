@@ -50,7 +50,7 @@ EOS;
       $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'deliveryorders-form',
 	'enableAjaxValidation'=>true,
-      'action'=>Yii::app()->createUrl("/purchasesorder/default/update", array('id'=>$model->id))
+      'action'=>Yii::app()->createUrl("/deliveryorders/default/update", array('id'=>$model->id))
       ));
   ?>
 

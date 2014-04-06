@@ -102,6 +102,7 @@ class DefaultController extends Controller
                       	$error = 'Ada kesalahan dalam detil pengiriman';
                       }
                    } else if (isset($_POST['command'])){
+                   	
                       // save the current master data before going to the detail page
                       if($_POST['command']=='adddetail') {
                          $model->attributes=$_POST['Deliveryorders'];
@@ -121,6 +122,8 @@ class DefaultController extends Controller
                       } else if ($_POST['command']=='updateDetail') {
                          $model->attributes=$_POST['Deliveryorders'];
                          Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
+                         print_r($_POST);
+                   		die();
                       }
                    }
                 }
