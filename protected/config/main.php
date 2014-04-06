@@ -57,6 +57,8 @@ return array(
             'deliveryorders',
             'requestdisplays',
             'stockexits',
+            'salesreturs',
+            'itemtransfers',
         ),
 
         

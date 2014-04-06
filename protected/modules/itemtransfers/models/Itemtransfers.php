@@ -1,26 +1,26 @@
 <?php
 
 /**
- * This is the model class for table "detaildeliveryorders".
+ * This is the model class for table "itemtransfers".
  *
- * The followings are the available columns in table 'detaildeliveryorders':
- * @property string $iddetail
+ * The followings are the available columns in table 'itemtransfers':
  * @property string $id
- * @property string $iditem
- * @property double $leftqty
- * @property double $qty
- * @property string $idwarehouse
+ * @property string $regnum
+ * @property string $idatetime
+ * @property string $idwhsource
+ * @property string $idwhdest
+ * @property string $remark
  * @property string $userlog
  * @property string $datetimelog
  */
-class Detaildeliveryorders extends CActiveRecord
+class Itemtransfers extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'detaildeliveryorders';
+		return 'itemtransfers';
 	}
 
 	/**
@@ -31,13 +31,14 @@ class Detaildeliveryorders extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('iddetail, id, iditem, leftqty, qty, idwarehouse, userlog, datetimelog', 'required'),
-			array('leftqty, qty', 'numerical'),
-			array('iddetail, id, iditem, idwarehouse, userlog', 'length', 'max'=>21),
-			array('datetimelog', 'length', 'max'=>19),
+			array('id, regnum, idatetime, idwhsource, idwhdest, userlog, datetimelog', 'required'),
+			array('id, idwhsource, idwhdest, userlog', 'length', 'max'=>21),
+			array('regnum', 'length', 'max'=>12),
+			array('idatetime, datetimelog', 'length', 'max'=>19),
+			array('remark', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('iddetail, id, iditem, qty, leftqty, idwarehouse, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('id, regnum, idatetime, idwhsource, idwhdest, remark, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,12 +59,12 @@ class Detaildeliveryorders extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'iddetail' => 'Iddetail',
 			'id' => 'ID',
-			'iditem' => 'Nama Barang',
-			'qty' => 'Jumlah',
-			'leftqty' => 'Terkirim',
-			'idwarehouse' => 'Gudang',
+			'regnum' => 'Nomor Urut',
+			'idatetime' => 'Tanggal',
+			'idwhsource' => 'Gudang Asal',
+			'idwhdest' => 'Gudang Tujuan',
+			'remark' => 'Catatan',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
 		);
@@ -87,12 +88,12 @@ class Detaildeliveryorders extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('iddetail',$this->iddetail,true);
 		$criteria->compare('id',$this->id,true);
-		$criteria->compare('iditem',$this->iditem,true);
-		$criteria->compare('qty',$this->qty);
-		$criteria->compare('leftqty',$this->leftqty);
-		$criteria->compare('idwarehouse',$this->idwarehouse,true);
+		$criteria->compare('regnum',$this->regnum,true);
+		$criteria->compare('idatetime',$this->idatetime,true);
+		$criteria->compare('idwhsource',$this->idwhsource,true);
+		$criteria->compare('idwhdest',$this->idwhdest,true);
+		$criteria->compare('remark',$this->remark,true);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);
 
@@ -105,7 +106,7 @@ class Detaildeliveryorders extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Detaildeliveryorders the static model class
+	 * @return Itemtransfers the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

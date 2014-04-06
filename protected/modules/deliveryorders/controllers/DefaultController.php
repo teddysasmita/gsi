@@ -786,7 +786,7 @@ class DefaultController extends Controller
         		$detaildata['userlog']=Yii::app()->user->id;
 				$detaildata['datetimelog']=idmaker::getDateTime();
         		foreach($detailsdone as $detaildone) {
-        			if ($detaildone['iditem']=$detail['iditem']) {
+        			if ($detaildone['iditem']==$detail['iditem']) {
         				$detaildata['leftqty']=$detaildata['leftqty']-$detaildone['qty'];		
         			}
         		}

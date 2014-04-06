@@ -208,6 +208,21 @@ class LookUpController extends Controller {
 		};
    }
    
+   public function actionGetWareHouseID($name)
+   {
+   	if (!Yii::app()->user->isGuest) {
+   		//print_r($name);
+   		$name=rawurldecode($name);
+   		$data=Yii::app()->db->createCommand()->select('id')->from('warehouses')
+   		->where("code = '$name'")
+   		->order('id')
+   		->queryScalar();
+   		echo json_encode($data);
+   	} else {
+   		throw new CHttpException(404,'You have no authorization for this operation.');
+   	};
+   }
+   
    public function actionGetUndonePO($idsupplier)
    {
 		if (!Yii::app()->user->isGuest) {
