@@ -123,14 +123,14 @@ class DetaildeliveryordersController extends Controller
                         }
                     }
                     //posting into session
-		    if($model->validate()) {
+		    		if($model->validate()) {
                     	Yii::app()->session['Detaildeliveryorders']=$temp;
 			
                     	if ($master=='create')
                         	$this->redirect(array('default/createdetail'));
                     	else if($master=='update')
                         	$this->redirect(array('default/updatedetail'));
-		    }	
+		    		}	
                 }
                
                 $this->render('update',array(
