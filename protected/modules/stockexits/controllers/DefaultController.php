@@ -426,7 +426,7 @@ class DefaultController extends Controller
       }
       
 
-     protected function saveNewDetails(array $details)
+     protected function saveNewDetails(array $details, $idwh)
      {                  
          foreach ($details as $row) {
              $detailmodel=new Detailstockexits;
@@ -435,6 +435,7 @@ class DefaultController extends Controller
              if (!$respond) {
                 break;
              }
+             Action::deleteItemFromWarehouse($idwh, $row['serialnum']);
          }
          return $respond;
      }

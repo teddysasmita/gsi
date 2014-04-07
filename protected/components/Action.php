@@ -481,13 +481,14 @@ class Action extends CComponent {
 	public static function decodeUpdateDetailSalesReplaceUrl($data)
 	{
 		return Yii::app()->createUrl('salesreplace/detailsalesreplace/update', 
-				array('iddetail'=>$data['iddetail']));
+			array('iddetail'=>$data['iddetail']));
 	}
 	
    public static function addFinancePayment($receipientname, $date, $duedate, $amount)
    {
-		Yii::app()->db->createCommand()
-			->insert('financepayments', array(
+		if (!Yii::app()->user->isGuest) {
+   			Yii::app()->db->createCommand()
+				->insert('financepayments', array(
 				'id'=>idmaker::getCurrentID2(),
 				'idatetime'=>$date,
 				'receipient'=>$receipientname,
@@ -499,6 +500,49 @@ class Action extends CComponent {
 				'userlog'=>Yii::app()->user->id,
 				'datetimelog'=>idmaker::getDateTime()
 			));	
+		}  else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+        };
+   }
+   
+   public static function entryItemToWarehouse($idwh, $iddetail, $iditem, $serialnum)
+   {
+   		if (!Yii::app()->user->isGuest) {
+			Yii::app()->db->createCommand()
+				->insert('wh'.$idwh, array(
+					'iddetail'=>$iddetail,
+					'iditem'=>$iditem,
+					'serialnum'=>$serialnum
+				));
+   		} else {
+   			throw new CHttpException(404,'You have no authorization for this operation.');
+   		};
+   }
+   
+   public static function exitItemFromWarehouse($idwh, $iddetail, $iditem, $serialnum)
+   {
+	   	if (!Yii::app()->user->isGuest) {
+	   		Yii::app()->db->createCommand()
+	   			->insert('wh'.$idwh, array(
+	   				'iddetail'=>$iddetail,
+	   				'iditem'=>$iditem,
+	   				'serialnum'=>$serialnum
+	   			));
+	   	} else {
+	   		throw new CHttpException(404,'You have no authorization for this operation.');
+	   	};
+   }
+   
+   public static function deleteItemFromWarehouse($idwh, $serialnum)
+   {
+	   	if (!Yii::app()->user->isGuest) {
+	   		Yii::app()->db->createCommand()
+		   		->delete('wh'.$idwh, array(
+			   		'serialnum'=>$serialnum
+		   		));
+	   	} else {
+	   		throw new CHttpException(404,'You have no authorization for this operation.');
+	   	};
    }
 }
 

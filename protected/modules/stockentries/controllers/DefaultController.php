@@ -82,7 +82,7 @@ class DefaultController extends Controller
 
                          if(isset(Yii::app()->session['Detailstockentries']) ) {
                            $details=Yii::app()->session['Detailstockentries'];
-                           $respond=$respond&&$this->saveNewDetails($details);
+                           $respond=$respond&&$this->saveNewDetails($details, $model->idwarehouse	);
                          } 
 
                          if($respond) {
@@ -426,7 +426,7 @@ class DefaultController extends Controller
       }
       
 
-     protected function saveNewDetails(array $details)
+     protected function saveNewDetails(array $details, $idwh)
      {                  
          foreach ($details as $row) {
              $detailmodel=new Detailstockentries;
@@ -435,6 +435,7 @@ class DefaultController extends Controller
              if (!$respond) {
                 break;
              }
+             Action::addItemToWarehouse($idwh, $row['iddetail'], $row['iditem'], $row['serialnum']);
          }
          return $respond;
      }
@@ -696,7 +697,6 @@ EOS;
       	$this->render('printsummary',array(
       			'model'=>$this->loadModel($id),
       	));
-      	
       }
       
 }

@@ -50,9 +50,9 @@ class SalesposreportController extends Controller
 			$enddate=$enddate.' 23:59:59';
 			$selectfields = <<<EOS
 			a.idatetime, a.regnum, a.total, a.discount, a.cash, a.cashreturn, 
-			a.payer_name, a.payer_address, a.payer_phone, 
+			a.payer_name, a.payer_address, a.payer_phone, a.userlog, 
 			c.name, c.address, c.phone, 
-			b.idsales, b.iditem, b.qty, b.price, b.discount 	
+			b.idsales, b.iditem, b.qty, b.price, b.discount,	
 EOS;
 			$data=Yii::app()->db->createCommand()
 				->select($selectfields)				
@@ -65,10 +65,10 @@ EOS;
 				->order('a.idatetime, a.regnum')
 				->queryAll();
 			$headersfield = array( 'idatetime', 'regnum', 'total', 'discount', 'cash', 'cashreturn', 
-				'payer_name', 'payer_address', 'payer_phone', 
+				'payer_name', 'payer_address', 'payer_phone', 'userlog',
 				'name', 'address', 'phone','idsales', 'iditem', 'qty', 'price', 'discount');
 			$headersname = array('Tanggal', 'No Faktur', 'Total', 'Potongan', 'Terima Tunai', 'Kembalian',
-				'Nama Pembeli', 'Alamat Pembeli', 'Telp Pembeli', 'Nama Penerima', 'Alamat Penerima', 'Telp Penerima',
+				'Nama Pembeli', 'Alamat Pembeli', 'Telp Pembeli', 'Nama Kasir', 'Nama Penerima', 'Alamat Penerima', 'Telp Penerima',
 				'Nama Sales', 'Nama Barang', 'Qty', 'Harga', 'Potongan');
 			for( $i=0;$i<count($headersname); $i++ ) {
 				$xl->setActiveSheetIndex(0)
@@ -82,6 +82,8 @@ EOS;
 						$cellvalue = lookup::SalesPersonNameFromID($data[$i]['idsales']);
 					else if ($headersfield[$j] == 'iditem')
 						$cellvalue = lookup::ItemNameFromItemID($data[$i]['iditem']);
+					else if ($headersfield[$j] == 'userlog')
+						$cellvalue = lookup::UserNameFromUserID($data[$i]['userlog']);
 					$xl->setActiveSheetindex(0)
 						->setCellValueByColumnAndRow($j,$i+2, $cellvalue);
 				}
