@@ -82,7 +82,7 @@ class DefaultController extends Controller
 
                          if(isset(Yii::app()->session['Detailstockexits']) ) {
                            $details=Yii::app()->session['Detailstockexits'];
-                           $respond=$respond&&$this->saveNewDetails($details);
+                           $respond=$respond&&$this->saveNewDetails($details, $model->idwarehouse);
                          } 
 
                          if($respond) {
@@ -435,7 +435,7 @@ class DefaultController extends Controller
              if (!$respond) {
                 break;
              }
-             //Action::deleteItemFromWarehouse($idwh, $row['serialnum']);
+             Action::deleteItemFromWarehouse($idwh, $row['serialnum']);
          }
          return $respond;
      }
