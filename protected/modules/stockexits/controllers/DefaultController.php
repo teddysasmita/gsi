@@ -435,7 +435,7 @@ class DefaultController extends Controller
              if (!$respond) {
                 break;
              }
-             Action::deleteItemFromWarehouse($idwh, $row['serialnum']);
+             //Action::deleteItemFromWarehouse($idwh, $row['serialnum']);
          }
          return $respond;
      }
