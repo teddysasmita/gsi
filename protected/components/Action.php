@@ -537,8 +537,8 @@ class Action extends CComponent {
    {
 	   	if (!Yii::app()->user->isGuest) {
 	   		Yii::app()->db->createCommand()
-		   		->delete('wh'.$idwh, array(
-			   		'serialnum'=>$serialnum
+		   		->delete('wh'.$idwh, "serialnum = :p_serialnum", array(
+			   		':p_serialnum'=>$serialnum
 		   		));
 	   	} else {
 	   		throw new CHttpException(404,'You have no authorization for this operation.');
