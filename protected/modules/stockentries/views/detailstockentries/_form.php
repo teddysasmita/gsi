@@ -14,6 +14,8 @@
    ));
 
 $supplierScript=<<<EOS
+	$('input,select').keypress(function(event) { return event.keyCode != 13; });
+   		
       $('#isAccepted').click(function() {
    		if ($('#isAccepted').prop('checked')) {
    			$('#Detailstockentries_serialnum').val('Belum Diterima');

@@ -14,6 +14,8 @@
    ));
 
 $supplierScript=<<<EOS
+	$('input,select').keypress(function(event) { return event.keyCode != 13; });
+
       $('#isAccepted').click(function() {
    		if ($('#isAccepted').prop('checked')) {
    			$('#Detailstockexits_serialnum').val('Belum Diterima');
@@ -26,20 +28,22 @@ $supplierScript=<<<EOS
    			$('#isAccepted').prop('checked', false);
 	});
 	
-	$('#myButton').click(function(evt) {
-		$.getJSON('index.php?r=LookUp/checkItemSerial', { iditem: $('#Detailstockexits_iditem').val(), 
+   	$('#myButton').click(
+   		function(evt) {
+   			$.getJSON('index.php?r=LookUp/checkItemSerial', { iditem: $('#Detailstockexits_iditem').val(), 
    			serialnum: $('#Detailstockexits_serialnum').val() }, 
    			function(data) {
    				if (data=='0') {
             		$('#Detailstockexits_serialnum_em_').html('Data tidak ditemukan');
 					$('#Detailstockexits_serialnum_em_').prop('style', 'display:block');
+   					evt.preventDefault();
 				} else {
 					$('#Detailstockexits_serialnum_em_').html('');
 					$('#Detailstockexits_serialnum_em_').prop('style', 'display:none');
-   					$('#detailstockexits-form').submit();
    				};
    			});
-	});
+   	});
+   		
 EOS;
    Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);
    
@@ -79,7 +83,7 @@ EOS;
 	</div>
         
 	<div class="row buttons">
-		<?php echo CHtml::Button($mode, array('id'=>'myButton')); ?>
+		<?php echo CHtml::htmlButton($mode, array('id'=>'myButton')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
