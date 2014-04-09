@@ -387,7 +387,8 @@ EOS;
 				select a.id, a.regnum, a.invnum,
 				concat( 'Pengambilan Barang Pembeli - ',a.invnum,' - ', a.receivername, ' - ', a.idatetime) as transinfo,
 				'AC19' as transname
-				from detailorderretrievals a
+				from orderretrievals a 
+				join detailorderretrievals b
 				where regnum=:p_regnum
 EOS;
 				$command=Yii::app()->db->createCommand($sql);
