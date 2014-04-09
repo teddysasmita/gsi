@@ -30,6 +30,7 @@ $this->pageTitle=Yii::app()->name;
 <h2>Bagian CS</h2>
 <h3><?php echo CHtml::link('Pengiriman Barang Tanpa Transaksi', Yii::app()->createUrl('deliveryordersnt'))?></h3>
 <h3><?php echo CHtml::link('Pengiriman Barang Dengan Transaksi', Yii::app()->createUrl('deliveryorders'))?></h3>
+<h3><?php echo CHtml::link('Pengambilan Barang Pembeli', Yii::app()->createUrl('orderretrievals'))?></h3>
 <h3><?php echo CHtml::link('Permintaan Barang Display', Yii::app()->createUrl('requestdisplays'))?></h3>
 <h3><?php echo CHtml::link('Retur Penjualan', Yii::app()->createUrl('salesreturs'))?></h3>
 <h3><?php echo CHtml::link('Pemindahan Barang', Yii::app()->createUrl('itemtransfers'))?></h3>

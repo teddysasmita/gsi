@@ -59,6 +59,7 @@ return array(
             'stockexits',
             'salesreturs',
             'itemtransfers',
+            'orderretrievals',
         ),
 
         
