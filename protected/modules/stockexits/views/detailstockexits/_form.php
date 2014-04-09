@@ -83,7 +83,7 @@ EOS;
 	</div>
         
 	<div class="row buttons">
-		<?php echo CHtml::htmlButton($mode, array('id'=>'myButton')); ?>
+		<?php echo CHtml::Button($mode, array('id'=>'myButton')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
