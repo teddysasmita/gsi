@@ -112,19 +112,19 @@ class MYPDF extends TCPDF {
 		$this->SetFontSize(10);
 		$this->SetFont('Courier', 'B');
 		$this->setXY(91, 20);
-		$this->Cell(17, 5, 'Tanggal', 'LT', 0, 'C');
-		$this->Cell(40, 5, $this->data->idatetime, 'LTR', 0, 'C');
+		$this->Cell(20, 5, 'Tgl', 'LT', 0, 'C');
+		$this->Cell(45, 5, $this->data->idatetime, 'LTR', 0, 'C');
 		$this->Cell(15, 5, 'No SJ', 'LTR', 0, 'C');
-		$this->Cell(33, 5, $this->data->regnum, 'LTR', 1, 'C');
+		$this->Cell(25, 5, $this->data->regnum, 'LTR', 1, 'C');
 		
 		$this->setXY(91, 26);
-		$this->Cell(17, 5, 'No Faktur', 'LT', 0, 'C');
-		$this->Cell(40, 5, $this->data->invnum, 'LTR', 0, 'C');
+		$this->Cell(20, 5, 'No Faktur', 'LT', 0, 'C');
+		$this->Cell(45, 5, $this->data->invnum, 'LTR', 0, 'C');
 		$this->Cell(15, 5, 'Status', 'LTR', 0, 'C');
 		if ($this->receivable > 0)
-			$this->Cell(33, 5, 'Piutang', 'LTR', 1, 'C');
+			$this->Cell(25, 5, 'Piutang', 'LTR', 1, 'C');
 		else
-			$this->Cell(33, 5, 'Lunas', 'LTR', 1, 'C');
+			$this->Cell(25, 5, 'Lunas', 'LTR', 1, 'C');
 		//$this->setXY(100, 27);
 		
 		
