@@ -435,7 +435,7 @@ class DefaultController extends Controller
              if (!$respond) {
                 break;
              }
-             //Action::entryItemToWarehouse($idwh, $row['iddetail'], $row['iditem'], $row['serialnum']);
+             Action::entryItemToWarehouse($idwh, $row['iddetail'], $row['iditem'], $row['serialnum']);
          }
          return $respond;
      }

@@ -23,7 +23,22 @@
 	
 	<div class="row">
 		<?php echo $form->label($model,'iditem'); ?>
-		<?php echo $form->textField($model,'iditem',array('size'=>12,'maxlength'=>12)); ?>
+		<?php 
+			$this->widget('zii.widgets.jui.CJuiAutoComplete',array(
+				'name'=>'Sellingprices[iditem]',
+				'sourceUrl'=>Yii::app()->createUrl('LookUp/getItem2'),
+				// additional javascript options for the autocomplete plugin
+				'options'=>array(
+						'minLength'=>'2',
+				),
+				'htmlOptions'=>array(
+					'id'=>'Sellingprices_iditem',
+						'style'=>'height:20px;',
+				),
+			));
+			//echo $form->textField($model,'iditem',array('size'=>12,'maxlength'=>12)); 
+		
+		?>
 	</div>
 
 	<div class="row">

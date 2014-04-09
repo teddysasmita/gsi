@@ -512,34 +512,21 @@ class Action extends CComponent {
 				->insert('wh'.$idwh, array(
 					'iddetail'=>$iddetail,
 					'iditem'=>$iditem,
-					'serialnum'=>$serialnum
+					'serialnum'=>$serialnum,
+					'avail'=>1,
 				));
    		} else {
    			throw new CHttpException(404,'You have no authorization for this operation.');
    		};
    }
    
-   public static function exitItemFromWarehouse($idwh, $iddetail, $iditem, $serialnum)
+   public static function exitItemFromWarehouse($idwh, $serialnum)
    {
 	   	if (!Yii::app()->user->isGuest) {
 	   		Yii::app()->db->createCommand()
-	   			->insert('wh'.$idwh, array(
-	   				'iddetail'=>$iddetail,
-	   				'iditem'=>$iditem,
-	   				'serialnum'=>$serialnum
+	   			->update('wh'.$idwh, array('avail'=>0), 'serialnum = :p_serialnum', array(
+	   				':p_serialnum'=>$serialnum
 	   			));
-	   	} else {
-	   		throw new CHttpException(404,'You have no authorization for this operation.');
-	   	};
-   }
-   
-   public static function deleteItemFromWarehouse($idwh, $serialnum)
-   {
-	   	if (!Yii::app()->user->isGuest) {
-	   		Yii::app()->db->createCommand()
-		   		->delete('wh'.$idwh, "serialnum = :p_serialnum", array(
-			   		':p_serialnum'=>$serialnum
-		   		));
 	   	} else {
 	   		throw new CHttpException(404,'You have no authorization for this operation.');
 	   	};
