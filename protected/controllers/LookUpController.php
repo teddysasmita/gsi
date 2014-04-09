@@ -438,7 +438,7 @@ EOS;
 	
 	}
 	
-	public function actionCheckItemSerial($iditem, $serialnum)
+	public function actionCheckItemSerial($iditem, $serialnum, $idwh)
 	{
 		$iditem=rawurldecode($iditem);
 		$serialnum=rawurldecode($serialnum);
@@ -446,12 +446,19 @@ EOS;
 		if (!Yii::app()->user->isGuest) {
 			$data=Yii::app()->db->createCommand()
 				->select('count(*) as total')
-				->from('detailstockentries')
-				->where('iditem = :p_iditem and serialnum = :p_serialnum',
-					array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))
+				->from('stockentries a')
+				->join('detailstockentries b', 'b.id = a.id')
+				->where('b.iditem = :p_iditem and b.serialnum = :p_serialnum and a.idwarehouse = :p_idwh',
+					array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum, ':p_idwh'=>$idwh))
 					->queryScalar();
 			if ($data == FALSE) {
-				$data = 1;
+				$data=Yii::app()->db->createCommand()
+					->select('count(*) as total')
+					->from('wh'.$idwh.' a')
+					->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum and a.idwarehouse = :p_idwh',
+						array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum, ':p_idwh'=>$idwh))
+						->queryScalar();
+				//$data = 1;
 			}
 			echo json_encode($data);
 		} else {
