@@ -445,11 +445,14 @@ EOS;
 		
 		if (!Yii::app()->user->isGuest) {
 			$data=Yii::app()->db->createCommand()
-			->select('count(*) as total')
-			->from('detailstockentries')
-			->where('iditem = :p_iditem and serialnum = :p_serialnum',
+				->select('count(*) as total')
+				->from('detailstockentries')
+				->where('iditem = :p_iditem and serialnum = :p_serialnum',
 					array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))
 					->queryScalar();
+			if ($data == FALSE) {
+				$data = 1;
+			}
 			echo json_encode($data);
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
