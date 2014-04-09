@@ -7,7 +7,7 @@ class Detailorderretrievals2Controller extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $formid='AC13b';
+	public $formid='AC19b';
 	public $tracker;
 	public $state;
 
