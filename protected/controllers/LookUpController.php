@@ -382,6 +382,19 @@ EOS;
 				$data=$command->queryAll();
 			}
 			
+			if ($data == FALSE) {
+				$sql=<<<EOS
+				select a.id, a.regnum, a.invnum,
+				concat( 'Pengambilan Barang Pembeli - ',a.invnum,' - ', a.receivername, ' - ', a.idatetime) as transinfo,
+				'AC19' as transname
+				from detailorderretrievals a
+				where regnum=:p_regnum
+EOS;
+				$command=Yii::app()->db->createCommand($sql);
+				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
+				$data=$command->queryAll();
+			}
+			
 			if ($data !== FALSE)
 				echo json_encode($data);
 			else 

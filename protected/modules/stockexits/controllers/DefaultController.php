@@ -618,6 +618,15 @@ EOS;
       				array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
       				->queryAll();
       	}
+      	if ($dataLPB == FALSE ) {
+      		$dataLPB=Yii::app()->db->createCommand()
+      		->select('a.id, b.*')
+      		->from('orderretrievals a')
+      		->join('detailorderretrievals b', 'b.id=a.id')
+      		->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
+      				array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
+      				->queryAll();
+      	}
       	
       	$sql=<<<EOS
     	select count(*) as received from stockexits a
