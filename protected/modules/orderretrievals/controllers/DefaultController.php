@@ -847,7 +847,7 @@ class DefaultController extends Controller
         	return TRUE;
         }
 	
-		public function actionPrintsj($id)
+		public function actionPrintpb($id)
         {
         	if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
         			Yii::app()->user->id)) {
@@ -859,11 +859,11 @@ class DefaultController extends Controller
         			->select('receiveable')->from('salespos')
         			->where('regnum = :p_regnum',array(':p_regnum'=>$model->invnum))
         			->queryScalar();
-        			
+        		
         		Yii::import('application.vendors.tcpdf.*');
         		require_once ('tcpdf.php');
         		Yii::import('application.modules.orderretrievals.components.*');
-        		require_once('printsj.php');
+        		require_once('printpb.php');
         		ob_clean();
         		
         		execute($model, $detailmodel, $receivable);
