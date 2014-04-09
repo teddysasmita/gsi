@@ -36,10 +36,10 @@ $supplierScript=<<<EOS
    				if (data=='0') {
             		$('#Detailstockexits_serialnum_em_').html('Data tidak ditemukan');
 					$('#Detailstockexits_serialnum_em_').prop('style', 'display:block');
-   					evt.preventDefault();
 				} else {
 					$('#Detailstockexits_serialnum_em_').html('');
 					$('#Detailstockexits_serialnum_em_').prop('style', 'display:none');
+   					$('#detailstockexits-form').submit();
    				};
    			});
    	});
