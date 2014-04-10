@@ -850,8 +850,6 @@ class DefaultController extends Controller
         		$this->addInvItem($invdata['iditem'], $invdata['leftqty']);
         	}
         	
-        	print_r( $this->invdetails );
-        	print_r( $this->recapdetails );
         	 
         	foreach ($this->recapdetails as $deliverydata) {
         		$found = FALSE;
