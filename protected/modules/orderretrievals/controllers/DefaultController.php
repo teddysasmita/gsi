@@ -811,7 +811,7 @@ class DefaultController extends Controller
     	
         private function addRecapItem($iditem, $qty) 
         {
-        	foreach ($this->recapdetails as $recap ) {
+        	foreach ($this->recapdetails as &$recap ) {
         		if ($recap['iditem'] == $iditem) {
         			$recap['qty'] += $qty;
         			return;
