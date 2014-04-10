@@ -11,6 +11,8 @@ class DefaultController extends Controller
 	public $tracker;
 	public $state;
 	private $recapdetails = array();
+	private $invdetails = array();
+	
 
 	/**
 	 * @return array action filters
@@ -821,6 +823,20 @@ class DefaultController extends Controller
         	$temp['qty'] = $qty;
         	$this->recapdetails[] = $temp;	
         }
+        
+        private function addInvItem($iditem, $leftqty)
+        {
+        	foreach ($this->invdetails as &$inv ) {
+        		if ($inv['iditem'] == $iditem) {
+        			$inv['leftqty'] += $qty;
+        
+        			return;
+        		}
+        	}
+        	$temp['iditem'] = $iditem;
+        	$temp['leftqty'] = $qty;
+        	$this->invdetails[] = $temp;
+        }
                
         private function checkDetailsItemQty()
         {
@@ -830,9 +846,14 @@ class DefaultController extends Controller
 			foreach ($details1 as $deliverydata) {
 				$this->addRecapItem($deliverydata['iditem'], $deliverydata['qty']);
         	}
+        	
+        	foreach ($details2 as $invdata) {
+        		$this->addInvItem($invdata['iditem'], $invdata['leftqty']);
+        	}
+        	
         	foreach ($this->recapdetails as $deliverydata) {
         		$found = FALSE;
-        		foreach($details2 as $data) {
+        		foreach($this->invdetails as $data) {
         			if ($data['iditem'] == $deliverydata['iditem']) {
         				$found = TRUE;
         				if ($data['leftqty'] < $deliverydata['qty'])
