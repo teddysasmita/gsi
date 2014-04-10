@@ -296,7 +296,7 @@ class Action extends CComponent {
    public static function decodeUpdateDetailStockExitUrl($data)
    {
    	//return print_r($data);
-   	return Yii::app()->createUrl('/stockexits/detailstockexits/update', array('iddetail'=>$data['iddetail']))  ;
+   	return Yii::app()->createUrl('/stockexits/detailstockexits/update', array('iddetail'=>$data['iddetail']));
    }
     
    public static function decodeViewDetailStockExitUrl($data)

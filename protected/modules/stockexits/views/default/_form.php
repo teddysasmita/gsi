@@ -171,7 +171,6 @@ EOS;
               )
           ),
     ));
-    
 ?>
 
    <div class="row buttons">
