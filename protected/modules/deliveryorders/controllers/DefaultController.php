@@ -810,9 +810,10 @@ class DefaultController extends Controller
     	
         private function addRecapItem($iditem, $qty) 
         {
-        	foreach ($this->recapdetails as $recap ) {
+        	foreach ($this->recapdetails as &$recap ) {
         		if ($recap['iditem'] == $iditem) {
         			$recap['qty'] += $qty;
+       				
         			return;
         		}
         	}
@@ -829,7 +830,7 @@ class DefaultController extends Controller
 			foreach ($details1 as $deliverydata) {
 				$this->addRecapItem($deliverydata['iditem'], $deliverydata['qty']);
         	}
-        	
+        
         	foreach ($this->recapdetails as $deliverydata) {
         		$found = FALSE;
         		foreach($details2 as $data) {
