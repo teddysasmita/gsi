@@ -438,7 +438,7 @@ EOS;
 	
 	}
 	
-	public function actionCheckItemSerial($iditem, $serialnum)
+	public function actionCheckItemSerial($iditem, $serialnum, $idwh)
 	{
 		$iditem=rawurldecode($iditem);
 		$serialnum=rawurldecode($serialnum);
@@ -448,19 +448,19 @@ EOS;
 				->select('count(*) as total')
 				->from('stockentries a')
 				->join('detailstockentries b', 'b.id = a.id')
-				/*->where('b.iditem = :p_iditem and b.serialnum = :p_serialnum and a.idwarehouse = :p_idwh',
-					array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum, ':p_idwh'=>$idwh))*/
-				->where('b.iditem = :p_iditem and b.serialnum = :p_serialnum',
-					array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))
+				->where('b.iditem = :p_iditem and b.serialnum = :p_serialnum and a.idwarehouse = :p_idwh',
+					array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum, ':p_idwh'=>$idwh))
+				/*->where('b.iditem = :p_iditem and b.serialnum = :p_serialnum',
+					array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))*/
 				->queryScalar();
 			if ($data == FALSE) {
 				$data=Yii::app()->db->createCommand()
 					->select('count(*) as total')
 					->from('wh'.$idwh.' a')
-					/*->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum and a.idwarehouse = :p_idwh',
-						array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum, ':p_idwh'=>$idwh))*/
 					->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum',
-				 		array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))
+						array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))
+					/*->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum',
+				 		array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))*/
 						->queryScalar();
 				//$data = 1;
 			}

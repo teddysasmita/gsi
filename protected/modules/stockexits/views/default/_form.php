@@ -144,6 +144,7 @@ EOS;
           'totalItemCount'=>$count,
 		  'keyField'=>'iddetail',
     ));
+	$boom='biim';
     $this->widget('zii.widgets.grid.CGridView', array(
             'dataProvider'=>$dataProvider,
             'columns'=>array(
@@ -167,7 +168,7 @@ EOS;
                      )
                   ),
 				'updateButtonOptions'=>array("class"=>'updateButton'),
-                  'updateButtonUrl'=>"Action::decodeUpdateDetailStockExitUrl(\$data)",
+                  'updateButtonUrl'=>"Action::decodeUpdateDetailStockExitUrl(\$data, \"$model->idwarehouse\")",
               )
           ),
     ));

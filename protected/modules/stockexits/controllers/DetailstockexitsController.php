@@ -92,7 +92,7 @@ class DetailstockexitsController extends Controller
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionUpdate($iddetail)
+	public function actionUpdate($iddetail, $idwh)
 	{
              if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                     Yii::app()->user->id))  {
@@ -133,7 +133,7 @@ class DetailstockexitsController extends Controller
                 }
                
                 $this->render('update',array(
-                        'model'=>$model,'master'=>$master
+                        'model'=>$model,'master'=>$master, 'idwh'=>$idwh
                 ));
             }  else {
                 throw new CHttpException(404,'You have no authorization for this operation.');

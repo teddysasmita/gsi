@@ -31,7 +31,7 @@ $supplierScript=<<<EOS
    	$('#myButton').click(
    		function(evt) {
    			$.getJSON('index.php?r=LookUp/checkItemSerial', { iditem: $('#Detailstockexits_iditem').val(), 
-   			serialnum: $('#Detailstockexits_serialnum').val() }, 
+   			serialnum: $('#Detailstockexits_serialnum').val(), idwh:$('#idwh').val() }, 
    			function(data) {
    				if (data=='0') {
             		$('#Detailstockexits_serialnum_em_').html('Data tidak ditemukan');
@@ -59,6 +59,7 @@ EOS;
          echo $form->hiddenField($model,'userlog');
          echo $form->hiddenField($model,'datetimelog');
          echo $form->hiddenField($model,'iditem');
+         echo CHtml::hiddenField('idwh',$idwh);
         ?>
 
 	<div class="row">
