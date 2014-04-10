@@ -830,7 +830,7 @@ class DefaultController extends Controller
 			foreach ($details1 as $deliverydata) {
 				$this->addRecapItem($deliverydata['iditem'], $deliverydata['qty']);
         	}
-        	
+        	print_r( $this->recapdetails);
         	foreach ($this->recapdetails as $deliverydata) {
         		$found = FALSE;
         		foreach($details2 as $data) {
