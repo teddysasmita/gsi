@@ -827,13 +827,13 @@ class DefaultController extends Controller
         {
         	foreach ($this->invdetails as &$inv ) {
         		if ($inv['iditem'] == $iditem) {
-        			$inv['leftqty'] += $qty;
+        			$inv['leftqty'] += $leftqty;
         			 
         			return;
         		}
         	}
         	$temp['iditem'] = $iditem;
-        	$temp['leftqty'] = $qty;
+        	$temp['leftqty'] = $leftqty;
         	$this->invdetails[] = $temp;
         }
                
