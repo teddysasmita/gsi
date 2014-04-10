@@ -7,7 +7,7 @@ class SalesposreportController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
       public $layout='//layouts/column2';
-      public $formid='AD1';
+      public $formid='AD2';
       public $tracker;
       public $state;
 
@@ -33,7 +33,7 @@ class SalesposreportController extends Controller
          };
 	}
 	
-	public function actionGetexcel($startdate, $enddate)
+	public function actionGetexcel($startdate, $enddate, $brand, $objects)
 	{
 		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
 				Yii::app()->user->id))  {
@@ -54,6 +54,12 @@ class SalesposreportController extends Controller
 			c.name, c.address, c.phone, 
 			b.idsales, b.iditem, b.qty, b.price, b.discount,	
 EOS;
+			$selectwhere = <<<EOS
+			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime
+EOS;
+			if (isset($brand)) {
+				$selectwhere .= ''
+			}
 			$data=Yii::app()->db->createCommand()
 				->select($selectfields)				
 				->from('salespos a')

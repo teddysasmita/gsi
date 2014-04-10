@@ -48,7 +48,35 @@
                )); 
 		?>
 	</div>
-		
+	
+	<div class="row">
+	<?php echo $form->labelEx($model,'objects'); ?>
+	<?php
+               //$brands=Yii::app()->db->createCommand()->selectDistinct('brand')->from('items')->queryColumn();
+
+		$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+			'name'=>'objects',
+			'sourceUrl'=> Yii::app()->createUrl('LookUp/getObjects'),
+			'htmlOptions'=>array(
+				'style'=>'height:20px;',
+			),
+		));
+	?>
+	</div>
+	
+	<?php echo $form->labelEx($model,'brand'); ?>
+	<?php
+               //$brands=Yii::app()->db->createCommand()->selectDistinct('brand')->from('items')->queryColumn();
+
+		$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+			'name'=>'brand',
+			'sourceUrl'=> Yii::app()->createUrl('LookUp/getBrand'),
+			'htmlOptions'=>array(
+				'style'=>'height:20px;',
+			),
+		));
+	?>
+	
 	<div class="row buttons">
 		<?php echo CHtml::submitButton('Proses'); ?>
 	</div>
