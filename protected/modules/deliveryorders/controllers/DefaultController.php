@@ -123,8 +123,6 @@ class DefaultController extends Controller
                       } else if ($_POST['command']=='updateDetail') {
                          $model->attributes=$_POST['Deliveryorders'];
                          Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
-                         print_r($_POST);
-                   		die();
                       }
                    }
                 }
@@ -782,7 +780,6 @@ class DefaultController extends Controller
         			array(':p_regnum'=>$invnum))
         		->group('b.iditem')
         		->queryAll();
-        	print_r($detailsdone);
         	foreach($details as $detail ) {
         		$detaildata['id']=$id;
         		$detaildata['iddetail']=idmaker::getCurrentID2();
