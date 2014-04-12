@@ -50,7 +50,7 @@
 	</div>
 	
 	<div class="row">
-	<?php echo $form->labelEx($model,'objects'); ?>
+	<?php echo CHtml::label('Jenis Barang', FALSE); ?>
 	<?php
                //$brands=Yii::app()->db->createCommand()->selectDistinct('brand')->from('items')->queryColumn();
 
@@ -64,7 +64,7 @@
 	?>
 	</div>
 	
-	<?php echo $form->labelEx($model,'brand'); ?>
+	<?php echo CHtml::label('Merk Barang', FALSE); ?>
 	<?php
                //$brands=Yii::app()->db->createCommand()->selectDistinct('brand')->from('items')->queryColumn();
 
