@@ -58,6 +58,9 @@ EOS;
 			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime
 EOS;
 			unset($selectparam);
+			$selectparam['p_startidatetime'] = $startdate;
+			$selectparam['p_endidatetime'] = $enddate;
+				
 			if (isset($brand) && ($brand <> '')) {
 				$selectwhere .= ' and d.brand = :p_brand';
 				$selectparam[':p_brand'] = $brand;
