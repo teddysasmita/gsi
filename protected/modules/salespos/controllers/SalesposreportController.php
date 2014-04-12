@@ -57,10 +57,14 @@ EOS;
 			$selectwhere = <<<EOS
 			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime
 EOS;
-			if (isset($brand)) {
+			echo "boom";
+			print_r($brand);
+			print_r($objects);
+			die();
+			if (isset($brand) && ($brand <> '')) {
 				$selectwhere .= ' and d.brand = :p_brand';
 			}
-			if (isset($objects)) {
+			if (isset($objects) && ($objects <> '')) {
 				$selectwhere .= ' and d.objects = :p_objects';
 			}
 			$data=Yii::app()->db->createCommand()
