@@ -58,16 +58,18 @@ EOS;
 			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime
 EOS;
 			if (isset($brand)) {
-				$selectwhere .= ''
+				$selectwhere .= ' and d.brand = :p_brand';
+			}
+			if (isset($objects)) {
+				$selectwhere .= ' and d.objects = :p_objects';
 			}
 			$data=Yii::app()->db->createCommand()
 				->select($selectfields)				
 				->from('salespos a')
 				->join('detailsalespos b', 'b.id = a.id')
+				->join('items d', 'd.id = b.iditem')
 				->leftJoin('salesreceivers c', 'c.id = a.idreceiver')
-				->where('a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime', array(
-					':p_startidatetime'=>$startdate, ':p_endidatetime'=>$enddate
-				))
+				->where($selectwhere)
 				->order('a.idatetime, a.regnum')
 				->queryAll();
 			$headersfield = array( 'idatetime', 'regnum', 'total', 'discount', 'cash', 'cashreturn', 
