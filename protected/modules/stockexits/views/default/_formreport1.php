@@ -7,7 +7,7 @@
 <div class="form">
 
 <?php  
-	echo CHtml::beginForm(Yii::app()->createUrl('/stockexits/default/stockexitsreport/getexcel1'), 'get');
+	echo CHtml::beginForm(Yii::app()->createUrl('/stockexits/default/getexcel1'), 'get');
 ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
