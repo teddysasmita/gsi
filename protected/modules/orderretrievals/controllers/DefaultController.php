@@ -779,9 +779,11 @@ class DefaultController extends Controller
         		->where('a.regnum = :p_regnum',
 				array(':p_regnum'=>$invnum))->queryAll();
         	$detailsdone=Yii::app()->db->createCommand()
-        		->select('b.*')->from('orderretrievals a')->join('detailorderretrievals b', 'b.id = a.id')
+        		->select('b.iditem, sum(b.qty) as sentqty')->from('orderretrievals a')->join('detailorderretrievals b', 'b.id = a.id')
         		->where('a.regnum = :p_regnum',
-        			array(':p_regnum'=>$invnum))->queryAll();
+        			array(':p_regnum'=>$invnum))
+        		->group('b.iditem')
+        		->queryAll();
         	foreach($details as $detail ) {
         		$detaildata['id']=$id;
         		$detaildata['iddetail']=idmaker::getCurrentID2();
@@ -793,7 +795,7 @@ class DefaultController extends Controller
 				$detaildata['datetimelog']=idmaker::getDateTime();
         		foreach($detailsdone as $detaildone) {
         			if ($detaildone['iditem']==$detail['iditem']) {
-        				$detaildata['leftqty']=$detaildata['leftqty']-$detaildone['qty'];		
+        				$detaildata['leftqty']=$detaildata['leftqty']-$detaildone['sentqty'];		
         			}
         		}
         		$detailsdata[]=$detaildata;
