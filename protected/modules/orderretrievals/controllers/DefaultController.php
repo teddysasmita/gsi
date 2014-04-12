@@ -779,10 +779,17 @@ class DefaultController extends Controller
         		->where('a.regnum = :p_regnum',
 				array(':p_regnum'=>$invnum))->queryAll();
         	$detailsdone=Yii::app()->db->createCommand()
-        		->select('b.iditem, sum(b.qty) as sentqty')->from('orderretrievals a')->join('detailorderretrievals b', 'b.id = a.id')
-        		->where('a.regnum = :p_regnum',
+        		->select('b.iditem, sum(b.qty) as sentqty')->from('orderretrievals a')
+        		->join('detailorderretrievals b', 'b.id = a.id')
+        		->where('a.invnum = :p_regnum',
         			array(':p_regnum'=>$invnum))
-        		->group('b.iditem')
+        		->group('b.iditem')->queryAll();
+			$detailsdone2=Yii::app()->db->createCommand()
+        		->select('b.iditem, sum(b.qty) as sentqty')->from('deliveryorders a')
+        		->join('detaildeliveryorders b', 'b.id = a.id')
+        		->where('a.invnum = :p_regnum',
+        				array(':p_regnum'=>$invnum))
+        				->group('b.iditem')
         		->queryAll();
         	foreach($details as $detail ) {
         		$detaildata['id']=$id;
@@ -793,11 +800,18 @@ class DefaultController extends Controller
         		$detaildata['leftqty']=$detail['qty'];
         		$detaildata['userlog']=Yii::app()->user->id;
 				$detaildata['datetimelog']=idmaker::getDateTime();
+        		$doneqty = 0;
         		foreach($detailsdone as $detaildone) {
         			if ($detaildone['iditem']==$detail['iditem']) {
-        				$detaildata['leftqty']=$detaildata['leftqty']-$detaildone['sentqty'];		
+        				$doneqty = $detaildone['sentqty'];
         			}
         		}
+        		foreach($detailsdone2 as $detaildone2) {
+        			if ($detaildone2['iditem']==$detail['iditem']) {
+        				$doneqty += $detaildone2['sentqty'];
+        			}
+        		}
+        		$detaildata['leftqty']=$detaildata['leftqty']-$doneqty;
         		$detailsdata[]=$detaildata;
         		
         		$detaildata2['id']=$id;
