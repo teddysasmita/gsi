@@ -7,7 +7,7 @@ class SalesposreportController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
       public $layout='//layouts/column2';
-      public $formid='AD2';
+      public $formid='AD1';
       public $tracker;
       public $state;
 
