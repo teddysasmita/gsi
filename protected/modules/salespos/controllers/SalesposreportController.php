@@ -57,13 +57,14 @@ EOS;
 			$selectwhere = <<<EOS
 			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime
 EOS;
-			print_r($brand);
-			print_r($objects);
+			unset($selectparam);
 			if (isset($brand) && ($brand <> '')) {
 				$selectwhere .= ' and d.brand = :p_brand';
+				$selectparam[':p_brand'] = $brand;
 			}
 			if (isset($objects) && ($objects <> '')) {
 				$selectwhere .= ' and d.objects = :p_objects';
+				$selectparam[':p_objects'] = $objects;
 			}
 			$data=Yii::app()->db->createCommand()
 				->select($selectfields)				
@@ -71,7 +72,7 @@ EOS;
 				->join('detailsalespos b', 'b.id = a.id')
 				->join('items d', 'd.id = b.iditem')
 				->leftJoin('salesreceivers c', 'c.id = a.idreceiver')
-				->where($selectwhere)
+				->where($selectwhere, $selectparam)
 				->order('a.idatetime, a.regnum')
 				->queryAll();
 			$headersfield = array( 'idatetime', 'regnum', 'total', 'discount', 'cash', 'cashreturn', 
