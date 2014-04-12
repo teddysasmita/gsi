@@ -57,10 +57,8 @@ EOS;
 			$selectwhere = <<<EOS
 			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime
 EOS;
-			echo "boom";
 			print_r($brand);
 			print_r($objects);
-			die();
 			if (isset($brand) && ($brand <> '')) {
 				$selectwhere .= ' and d.brand = :p_brand';
 			}
