@@ -468,9 +468,9 @@ class Action extends CComponent {
    	return Yii::app()->createUrl('deliveryorders/detaildeliveryorders/view', array('iddetail'=>$data['iddetail']));
    }
    
-   public static function decodeUpdateDetailDeliveryOrderUrl($data, $idwh)
+   public static function decodeUpdateDetailDeliveryOrderUrl($data)
    {
-   	return Yii::app()->createUrl('deliveryorders/detaildeliveryorders/update', array('iddetail'=>$data['iddetail'], 'idwh'=>$idwh));
+   	return Yii::app()->createUrl('deliveryorders/detaildeliveryorders/update', array('iddetail'=>$data['iddetail']));
    }
     
    public static function decodeDeleteDetailDeliveryOrderUrl($data)

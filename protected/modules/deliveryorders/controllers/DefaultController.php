@@ -612,7 +612,7 @@ class DefaultController extends Controller
                 if($detailmodel) {
                     $this->tracker->init();
                     $this->trackActivity('d', $this->__DETAILFORMID);
-                    $this->tracker->delete('detaildeliveryorders', $detailmodel->id);
+                    $this->tracker->delete('detaildeliveryorders', $detailmodel->iddetail);
                     $respond=$detailmodel->delete();
                     if (!$respond) {
                       break;
@@ -630,7 +630,7 @@ class DefaultController extends Controller
                 if($detailmodel) {
                     $this->tracker->init();
                     $this->trackActivity('d', $this->__DETAILFORMID);
-                    $this->tracker->delete('detaildeliveryorders2', $detailmodel->id);
+                    $this->tracker->delete('detaildeliveryorders2', $detailmodel->iddetail);
                     $respond=$detailmodel->delete();
                     if (!$respond) {
                       break;
@@ -777,9 +777,12 @@ class DefaultController extends Controller
         		->where('a.regnum = :p_regnum',
 				array(':p_regnum'=>$invnum))->queryAll();
         	$detailsdone=Yii::app()->db->createCommand()
-        		->select('b.*')->from('deliveryorders a')->join('detaildeliveryorders b', 'b.id = a.id')
-        		->where('a.regnum = :p_regnum',
-        			array(':p_regnum'=>$invnum))->queryAll();
+        		->select('b.iditem, sum(b.qty) as sentqty')->from('deliveryorders a')->join('detaildeliveryorders b', 'b.id = a.id')
+        		->where('a.invnum = :p_regnum',
+        			array(':p_regnum'=>$invnum))
+        		->group('b.iditem')
+        		->queryAll();
+        	print_r($detailsdone);
         	foreach($details as $detail ) {
         		$detaildata['id']=$id;
         		$detaildata['iddetail']=idmaker::getCurrentID2();
@@ -791,7 +794,7 @@ class DefaultController extends Controller
 				$detaildata['datetimelog']=idmaker::getDateTime();
         		foreach($detailsdone as $detaildone) {
         			if ($detaildone['iditem']==$detail['iditem']) {
-        				$detaildata['leftqty']=$detaildata['leftqty']-$detaildone['qty'];		
+        				$detaildata['leftqty']=$detaildata['leftqty']-$detaildone['sentqty'];		
         			}
         		}
         		$detailsdata[]=$detaildata;
