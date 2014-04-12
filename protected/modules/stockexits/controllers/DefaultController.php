@@ -749,7 +749,7 @@ EOS;
       		->setCategory("Laporan");
       		$enddate=$enddate.' 23:59:59';
       		$selectfields = <<<EOS
-			a.idatetime, a.regnum, a.invnum, a.userlog,
+			a.idatetime, a.regnum, a.transid, a.transinfo, a.userlog,
 			b.iditem, b.serialnum, c.code
 EOS;
       		$selectwhere = <<<EOS
@@ -776,8 +776,8 @@ EOS;
       			->where($selectwhere, $selectparam)
       				->order('a.idatetime, a.regnum')
       				->queryAll();
-			$headersfield = array( 'idatetime', 'regnum', 'invnum', 'iditem', 'serialnum', 'code', 'userlog');
-			$headersname = array('Tanggal', 'Nomor Urut', 'Nomor Faktur', 'Nama Barang', 'Nomor Serial', 'Gudang', 'Operator');
+			$headersfield = array( 'idatetime', 'regnum', 'transid', 'transinfo', 'iditem', 'serialnum', 'code', 'userlog');
+			$headersname = array('Tanggal', 'Nomor Urut', 'Jenis Transaksi', 'Info Transaksi', 'Nama Barang', 'Nomor Serial', 'Gudang', 'Operator');
       		for( $i=0;$i<count($headersname); $i++ ) {
       			$xl->setActiveSheetIndex(0)
       				->setCellValueByColumnAndRow($i,1, $headersname[$i]);
