@@ -721,4 +721,89 @@ EOS;
       	
       }
       
+      public function actionStockexitsreport()
+      {
+      	if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
+      			Yii::app()->user->id))  {
+      		$this->trackActivity('v');
+      
+      		$this->render('report1');
+      	} else {
+      		throw new CHttpException(404,'You have no authorization for this operation.');
+      	};
+      }
+      
+      public function actionGetexcel1($startdate, $enddate, $brand, $objects)
+      {
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
+      			Yii::app()->user->id))  {
+      		$this->trackActivity('v');
+      			
+      		$xl = new PHPExcel();
+      		$xl->getProperties()->setCreator("Program GSI Malang")
+      		->setLastModifiedBy("Program GSI Malang")
+      		->setTitle("Laporan Penjualan")
+      		->setSubject("Laporan Penjualan")
+      		->setDescription("Laporan Penjualan Bulanan")
+      		->setKeywords("Laporan Penjualan")
+      		->setCategory("Laporan");
+      		$enddate=$enddate.' 23:59:59';
+      		$selectfields = <<<EOS
+			a.idatetime, a.regnum, a.invnum, a.userlog,
+			b.iditem, b.serialnum, c.code
+EOS;
+      		$selectwhere = <<<EOS
+			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime
+EOS;
+      		unset($selectparam);
+      		$selectparam['p_startidatetime'] = $startdate;
+      		$selectparam['p_endidatetime'] = $enddate;
+      
+      		if (isset($brand) && ($brand <> '')) {
+      			$selectwhere .= ' and d.brand = :p_brand';
+				$selectparam[':p_brand'] = $brand;
+      		}
+      		if (isset($objects) && ($objects <> '')) {
+      			$selectwhere .= ' and d.objects = :p_objects';
+				$selectparam[':p_objects'] = $objects;
+      		}
+      		$data=Yii::app()->db->createCommand()
+      			->select($selectfields)
+      			->from('stockexits a')
+      			->join('detailstockexits b', 'b.id = a.id')
+      			->join('warehouses c', 'c.id = a.idwarehouse')
+				->join('items d', 'd.id = b.iditem')
+      			->where($selectwhere, $selectparam)
+      				->order('a.idatetime, a.regnum')
+      				->queryAll();
+			$headersfield = array( 'idatetime', 'regnum', 'invnum', 'iditem', 'serialnum', 'code', 'userlog');
+			$headersname = array('Tanggal', 'Nomor Urut', 'Nomor Faktur', 'Nama Barang', 'Nomor Serial', 'Gudang', 'Operator');
+      		for( $i=0;$i<count($headersname); $i++ ) {
+      			$xl->setActiveSheetIndex(0)
+      				->setCellValueByColumnAndRow($i,1, $headersname[$i]);
+      		}
+      							
+      		for( $i=0; $i<count($data); $i++){
+      			for( $j=0; $j<count($headersfield); $j++ ) {
+      				$cellvalue = $data[$i][$headersfield[$j]];
+					if ($headersfield[$j] == 'iditem')
+      					$cellvalue = lookup::ItemNameFromItemID($data[$i]['iditem']);
+					else if ($headersfield[$j] == 'userlog')
+      					$cellvalue = lookup::UserNameFromUserID($data[$i]['userlog']);
+					$xl->setActiveSheetindex(0)
+      				->setCellValueByColumnAndRow($j,$i+2, $cellvalue);
+      			}
+			}
+      							
+      		$xl->getActiveSheet()->setTitle('Laporan Pengeluaran Barang');
+      		$xl->setActiveSheetIndex(0);
+			header('Content-Type: application/pdf');
+			header('Content-Disposition: attachment;filename="stockexit-report-'.idmaker::getDateTime().'.xls"');
+			header('Cache-Control: max-age=0');
+			$xlWriter = PHPExcel_IOFactory::createWriter($xl, 'Excel2003');
+			$xlWriter->save('php://output');
+      	} else {
+      		throw new CHttpException(404,'You have no authorization for this operation.');
+      	};
+	}  
 }
