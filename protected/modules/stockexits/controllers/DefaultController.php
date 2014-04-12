@@ -733,7 +733,7 @@ EOS;
       	};
       }
       
-      public function actionGetexcel1($startdate, $enddate, $brand, $objects)
+      public function actionGetexcel($startdate, $enddate, $brand, $objects)
       {
 		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
       			Yii::app()->user->id))  {
