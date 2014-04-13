@@ -91,7 +91,9 @@ class MYPDF extends TCPDF {
 				//$this->checkPageBreak(6, '');
 				
 		}
-		$this->Cell(array_sum($this->headerwidths), 0, '', 'T', 1);
+		//$this->Cell(array_sum($this->headerwidths), 0, '', 'T', 1);
+		$this->Cell(130, 6, 'Selisih', 'LRBT', 0, 'R');
+		$this->Cell(65, 6, number_format($this->data->totaldiff), 'RBT', 0, 'R');
 		//$this->Cell(array_sum($this->headerwidths), 0, '', 'T');
 	}
 	
@@ -234,7 +236,7 @@ function execute($model, $detailmodel) {
 	// ---------------------------------------------------------
 	
 	//Close and output PDF document
-	$pdf->Output('LPB-'.$model->regnum.'.pdf', 'D');
+	$pdf->Output('FG-'.$model->regnum.'.pdf', 'D');
 }
 //============================================================+
 // END OF FILE                                                

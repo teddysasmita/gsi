@@ -781,7 +781,7 @@ EOS;
       		for( $i=0;$i<count($headersname); $i++ ) {
       			$xl->setActiveSheetIndex(0)
       				->setCellValueByColumnAndRow($i,1, $headersname[$i]);
-      		}
+      		} 
       							
       		for( $i=0; $i<count($data); $i++){
       			for( $j=0; $j<count($headersfield); $j++ ) {

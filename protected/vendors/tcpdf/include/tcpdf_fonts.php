@@ -78,6 +78,7 @@ class TCPDF_FONTS {
 		$fmetric = array();
 		// build new font name for TCPDF compatibility
 		$font_path_parts = pathinfo($fontfile);
+		
 		if (!isset($font_path_parts['filename'])) {
 			$font_path_parts['filename'] = substr($font_path_parts['basename'], 0, -(strlen($font_path_parts['extension']) + 1));
 		}
