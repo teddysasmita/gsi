@@ -226,7 +226,7 @@ class DefaultController extends Controller
              }
 
              $this->render('update',array(
-                     'model'=>$model,
+                     'model'=>$model, 'form_error'=>''
              ));
          }  else {
              throw new CHttpException(404,'You have no authorization for this operation.');
