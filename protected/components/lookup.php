@@ -265,6 +265,16 @@ class lookup extends CComponent {
    				return 'Dihapus';
    		} 
    }
+   
+   public static function GetSupplierNameFromSerialnum($serialnum)
+   {
+   		return Yii::app()->db->createCommand()->select("concat('firstname, ' ', 'lastname') suppliername")
+   			->from('detailstockentries a')
+   			->join('stockentries b', 'a.id = b.id')
+   			->join('suppliers c', 'c.id = b.idsupplier')
+   			->where('a.serialnum = :p_serialnum', array(':p_serialnum'=>$serialnum))
+   			->queryScalar();
+   }
 }
 
 

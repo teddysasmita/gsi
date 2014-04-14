@@ -776,8 +776,9 @@ EOS;
       			->where($selectwhere, $selectparam)
       				->order('a.idatetime, a.regnum')
       				->queryAll();
-			$headersfield = array( 'idatetime', 'regnum', 'transid', 'transinfo', 'iditem', 'serialnum', 'code', 'userlog');
-			$headersname = array('Tanggal', 'Nomor Urut', 'Jenis Transaksi', 'Info Transaksi', 'Nama Barang', 'Nomor Serial', 'Gudang', 'Operator');
+			$headersfield = array( 'idatetime', 'regnum', 'transid', 'transinfo', 'iditem', 'serialnum', 'code', 'userlog', 'suppliername');
+			$headersname = array('Tanggal', 'Nomor Urut', 'Jenis Transaksi', 'Info Transaksi', 'Nama Barang', 'Nomor Serial', 
+				'Gudang', 'Operator', 'Supplier');
       		for( $i=0;$i<count($headersname); $i++ ) {
       			$xl->setActiveSheetIndex(0)
       				->setCellValueByColumnAndRow($i,1, $headersname[$i]);
@@ -790,8 +791,10 @@ EOS;
       					$cellvalue = lookup::ItemNameFromItemID($data[$i]['iditem']);
 					else if ($headersfield[$j] == 'userlog')
       					$cellvalue = lookup::UserNameFromUserID($data[$i]['userlog']);
+      				else if ($headersfield[$j] == 'suppliername')
+						$cellvalue = lookup::GetSupplierNameFromSerialnum($data[$i]['serialnum']);
 					$xl->setActiveSheetindex(0)
-      				->setCellValueByColumnAndRow($j,$i+2, $cellvalue);
+      					->setCellValueByColumnAndRow($j,$i+2, $cellvalue);
       			}
 			}
       							
