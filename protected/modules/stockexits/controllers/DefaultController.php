@@ -750,7 +750,7 @@ EOS;
       		$enddate=$enddate.' 23:59:59';
       		$selectfields = <<<EOS
 			a.idatetime, a.regnum, a.transid, a.transinfo, a.userlog,
-			b.iditem, b.serialnum, c.code, "NA" as suppliername
+			b.iditem, b.serialnum, c.code
 EOS;
       		$selectwhere = <<<EOS
 			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime
@@ -786,7 +786,8 @@ EOS;
       							
       		for( $i=0; $i<count($data); $i++){
       			for( $j=0; $j<count($headersfield); $j++ ) {
-      				$cellvalue = $data[$i][$headersfield[$j]];
+      				if ($j<count($headersfield)-1)
+      					$cellvalue = $data[$i][$headersfield[$j]];
 					if ($headersfield[$j] == 'iditem')
       					$cellvalue = lookup::ItemNameFromItemID($data[$i]['iditem']);
 					else if ($headersfield[$j] == 'userlog')
