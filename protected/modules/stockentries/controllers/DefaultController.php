@@ -603,34 +603,52 @@ EOS;
       	$details=array();
       
       	$dataLPB=Yii::app()->db->createCommand()
-      	->select('a.id, b.*')
-      	->from('purchasesstockentries a')
-      	->join('detailpurchasesstockentries b', 'b.id=a.id')
-      	->where('a.regnum = :p_regnum', array(':p_regnum'=>$nolpb) )
-      	->queryAll();
+      		->select('a.id, b.*')
+      		->from('purchasesstockentries a')
+      		->join('detailpurchasesstockentries b', 'b.id=a.id')
+      		->where('a.regnum = :p_regnum', array(':p_regnum'=>$nolpb) )
+      		->queryAll();
+      	if ($dataLPB == FALSE) {
+      		$dataLPB=Yii::app()->db->createCommand()
+      			->select('a.id, b.*')
+      			->from('requestdisplays a')
+      			->join('detailrequestdisplays b', 'b.id=a.id')
+      			->where('a.regnum = :p_regnum', array(':p_regnum'=>$nolpb) )
+      			->queryAll();
+      	}
+      	if ($dataLPB == FALSE) {
+      		$dataLPB=Yii::app()->db->createCommand()
+      		->select('a.id, b.*')
+      		->from('itemtransfers a')
+      		->join('detailitemtransfers b', 'b.id=a.id')
+      		->where('a.regnum = :p_regnum', array(':p_regnum'=>$nolpb) )
+      		->queryAll();
+      	}
       	Yii::app()->session->remove('Detailstockentries');
-      	$sql=<<<EOS
-    	select count(*) as received from stockentries a
-		join detailstockentries b on b.id = a.id
-		where a.transid = :p_transid and b.iditem = :p_iditem and
-        b.serialnum <> 'Belum Diterima'
+      	if ($dataLPB !== FALSE) {
+	      	$sql=<<<EOS
+	    	select count(*) as received from stockentries a
+			join detailstockentries b on b.id = a.id
+			where a.transid = :p_transid and b.iditem = :p_iditem and
+	        b.serialnum <> 'Belum Diterima'
 EOS;
-      	$mycommand=Yii::app()->db->createCommand($sql);
-      	foreach($dataLPB as $row) {
-      		$mycommand->bindParam(':p_transid', $nolpb, PDO::PARAM_STR);
-      		$mycommand->bindParam(':p_iditem', $row['iditem'], PDO::PARAM_STR);
-			$accepted=$mycommand->queryScalar();
-			for ($index = 0; $index < $row['qty'] - $accepted; $index++) {
-				$detail['iddetail']=idmaker::getCurrentID2();
-      			$detail['id']=$id;
-				$detail['iditem']=$row['iditem'];
-				$detail['userlog']=Yii::app()->user->id;
-				$detail['datetimelog']=idmaker::getDateTime();
-				$detail['serialnum']='Belum Diterima';
-      			$details[]=$detail;
+	      	$mycommand=Yii::app()->db->createCommand($sql);
+	      	foreach($dataLPB as $row) {
+	      		$mycommand->bindParam(':p_transid', $nolpb, PDO::PARAM_STR);
+	      		$mycommand->bindParam(':p_iditem', $row['iditem'], PDO::PARAM_STR);
+				$accepted=$mycommand->queryScalar();
+				for ($index = 0; $index < $row['qty'] - $accepted; $index++) {
+					$detail['iddetail']=idmaker::getCurrentID2();
+	      			$detail['id']=$id;
+					$detail['iditem']=$row['iditem'];
+					$detail['userlog']=Yii::app()->user->id;
+					$detail['datetimelog']=idmaker::getDateTime();
+					$detail['serialnum']='Belum Diterima';
+	      			$details[]=$detail;
+				}
 			}
-		}
-		Yii::app()->session['Detailstockentries']=$details;
+			Yii::app()->session['Detailstockentries']=$details;
+      	};
 	}
       			
       private function checkSerialNum(array $details ) 
