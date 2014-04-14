@@ -750,7 +750,7 @@ EOS;
       		$enddate=$enddate.' 23:59:59';
       		$selectfields = <<<EOS
 			a.idatetime, a.regnum, a.transid, a.transinfo, a.userlog,
-			b.iditem, b.serialnum, c.code
+			b.iditem, b.serialnum, c.code, '' as suppliername
 EOS;
       		$selectwhere = <<<EOS
 			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime
