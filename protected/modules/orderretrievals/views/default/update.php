@@ -25,4 +25,4 @@ $this->menu=array(
 
 <h1>Pengambilan Barang</h1>
 
-<?php $this->renderPartial('_form', array('model'=>$model, 'command'=>'update')); ?>
+<?php $this->renderPartial('_form', array('model'=>$model, 'command'=>'update', 'form_error'=>$form_error)); ?>
