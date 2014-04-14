@@ -614,7 +614,7 @@ class DefaultController extends Controller
                 if($detailmodel) {
                     $this->tracker->init();
                     $this->trackActivity('d', $this->__DETAILFORMID);
-                    $this->tracker->delete('detailorderretrievals', $detailmodel->id);
+                    $this->tracker->delete('detailorderretrievals', $detailmodel->iddetail);
                     $respond=$detailmodel->delete();
                     if (!$respond) {
                       break;
@@ -632,7 +632,7 @@ class DefaultController extends Controller
                 if($detailmodel) {
                     $this->tracker->init();
                     $this->trackActivity('d', $this->__DETAILFORMID);
-                    $this->tracker->delete('detailorderretrievals2', $detailmodel->id);
+                    $this->tracker->delete('detailorderretrievals2', $detailmodel->iddetail);
                     $respond=$detailmodel->delete();
                     if (!$respond) {
                       break;
