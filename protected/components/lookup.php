@@ -271,7 +271,7 @@ class lookup extends CComponent {
    		return Yii::app()->db->createCommand()->select("concat(d.firstname, ' ', d.lastname) as suppliername")
    			->from('detailstockentries a')
    			->join('stockentries b', 'a.id = b.id')
-   			->join('purchasestockentries c', 'c.regnum = b.transid')
+   			->join('purchasesstockentries c', 'c.regnum = b.transid')
    			->join('suppliers d', 'd.id = c.idsupplier')
    			->where('a.serialnum = :p_serialnum', array(':p_serialnum'=>$serialnum))
    			->queryScalar();
