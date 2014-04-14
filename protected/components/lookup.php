@@ -268,7 +268,7 @@ class lookup extends CComponent {
    
    public static function GetSupplierNameFromSerialnum($serialnum)
    {
-   		return Yii::app()->db->createCommand()->select("concat('firstname, ' ', 'lastname') as suppliername")
+   		return Yii::app()->db->createCommand()->select("concat(firstname, ' ', lastname) as suppliername")
    			->from('detailstockentries a')
    			->join('stockentries b', 'a.id = b.id')
    			->join('suppliers c', 'c.id = b.idsupplier')
