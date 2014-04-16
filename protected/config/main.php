@@ -60,6 +60,7 @@ return array(
             'salesreturs',
             'itemtransfers',
             'orderretrievals',
+            'returstocks',
         ),
 
         
