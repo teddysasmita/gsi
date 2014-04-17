@@ -608,7 +608,8 @@ class DefaultController extends Controller
      protected function afterPost(& $model)
      {
          $idmaker=new idmaker();
-         $idmaker->saveRegNum($this->formid, substr($model->regnum, 2)); 
+         if ($this->state == 'create')
+         	$idmaker->saveRegNum($this->formid, substr($model->regnum, 2)); 
          
          /*$this->setStatusPO($model->idpurchaseorder,
             Yii::app()->session['Detailreturstocks']);
@@ -621,8 +622,8 @@ class DefaultController extends Controller
 
          $model->userlog=Yii::app()->user->id;
          $model->datetimelog=$idmaker->getDateTime();
-         
-		$model->regnum='PR'.$idmaker->getRegNum($this->formid);
+         if ($this->state == 'create')
+			$model->regnum='PR'.$idmaker->getRegNum($this->formid);
      }
 
      protected function    beforeDelete(& $model)

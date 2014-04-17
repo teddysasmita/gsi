@@ -47,7 +47,7 @@ class DefaultController extends Controller
 	{
              if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
                     Yii::app()->user->id))  {   
-                $this->state='c';
+                $this->state='create';
                 $this->trackActivity('c');    
                     
                 $model=new Sellingprices;
@@ -84,7 +84,7 @@ class DefaultController extends Controller
 		if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                     Yii::app()->user->id))  {
                 
-			$this->state='u';
+			$this->state='update';
 			$this->trackActivity('u');
                 
 			$model=$this->loadModel($id);
@@ -280,6 +280,7 @@ class DefaultController extends Controller
         protected function afterPost(& $model)
         {
         	$idmaker=new idmaker();
+        	if ($this->state == 'create')
         		$idmaker->saveRegNum($this->formid, $model->regnum);
         }
         
@@ -289,6 +290,7 @@ class DefaultController extends Controller
             
             $model->userlog=Yii::app()->user->id;
             $model->datetimelog=$idmaker->getDateTime();
+            if ($this->state == 'create')
             	$model->regnum=$idmaker->getRegNum($this->formid);
         }
         

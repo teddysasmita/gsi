@@ -276,6 +276,20 @@ class lookup extends CComponent {
    			->where('a.serialnum = :p_serialnum', array(':p_serialnum'=>$serialnum))
    			->queryScalar();
    }
+
+   public static function OwnerNameFromCode($code)
+   {
+   	switch ($code) {
+   		case '0':
+   			return 'Ibu Linda T';
+   		case '1':
+   			return 'Bp Welly T';
+   		case '2':
+   			return 'Bp Sandy T';
+   		case '3':
+   			return 'Ibu Vera T';
+   	}
+   }
 }
 
 
