@@ -217,7 +217,7 @@ class DefaultController extends Controller
                          Yii::app()->session->remove('Deliveryorders');
                          Yii::app()->session->remove('Detaildeliveryorders');
                          Yii::app()->session->remove('DeleteDetaildeliveryorders');
-                         $this->redirect(array('view','id'=>$model->id));
+                         $this->redirect(array('view','id'=>$model->id, 'form_error'=>''));
                      }
                  }
              }

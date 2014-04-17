@@ -46,7 +46,7 @@ class DefaultController extends Controller
 	public function actionCreate()
 	{
 		if (Yii::app ()->authManager->checkAccess ( $this->formid . '-Append', Yii::app ()->user->id )) {
-			$this->state = 'c';
+			$this->state = 'create';
 			$this->trackActivity ( 'c' );
 			
 			$model = new Returstocks ();
@@ -137,7 +137,7 @@ class DefaultController extends Controller
           if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                  Yii::app()->user->id))  {
 
-             $this->state='u';
+             $this->state='update';
              $this->trackActivity('u');
 
              $model=$this->loadModel($id);
@@ -608,7 +608,7 @@ class DefaultController extends Controller
      protected function afterPost(& $model)
      {
          $idmaker=new idmaker();
-         	$idmaker->saveRegNum($this->formid, substr($model->regnum, 2)); 
+         $idmaker->saveRegNum($this->formid, substr($model->regnum, 2)); 
          
          /*$this->setStatusPO($model->idpurchaseorder,
             Yii::app()->session['Detailreturstocks']);
@@ -621,7 +621,8 @@ class DefaultController extends Controller
 
          $model->userlog=Yii::app()->user->id;
          $model->datetimelog=$idmaker->getDateTime();
-         	$model->regnum='PR'.$idmaker->getRegNum($this->formid);
+         
+		$model->regnum='PR'.$idmaker->getRegNum($this->formid);
      }
 
      protected function    beforeDelete(& $model)
