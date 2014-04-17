@@ -29,9 +29,11 @@ $this->menu=array(
 		//'id',
 		'regnum',
 		'idatetime',
-		'sjnum',
-		'ponum',
-		'remark',		
+		array(
+			'label'=>'Catatan',
+			'type'=>'ntext',
+			'name'=>'remark',
+		),
       array(
          'label'=>'Nama Pemasok',
          'value'=>lookup::SupplierNameFromSupplierID($model->idsupplier)
@@ -71,9 +73,9 @@ $this->menu=array(
 			'type'=>'number'
 		),
 		array(
-			'header'=>'Harga Jual',
-			'name'=>'sellprice',
-			'type'=>'number'
+			'header'=>'Gudang',
+			'name'=>'idwarehouse',
+			'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
 		),
 		/*array(
 			'header'=>'Catatan',
@@ -92,7 +94,55 @@ $this->menu=array(
                         'visible'=>'false'
                      ),*/
                   ),
-                  'viewButtonUrl'=>"Action::decodeViewDetailPurchasesStockEntryUrl(\$data)",
+                  'viewButtonUrl'=>"Action::decodeViewDetailReturStockUrl(\$data)",
+              )
+         ),
+   ));	
+ ?>
+ 
+ <?php 
+   $count=Yii::app()->db->createCommand("select count(*) from detailreturstocks2 where id='$model->id'")
+      ->queryScalar();
+   $sql="select * from detailreturstocks2 where id='$model->id'";
+
+   $dataProvider=new CSqlDataProvider($sql,array(
+          'totalItemCount'=>$count,
+          ));
+   $this->widget('zii.widgets.grid.CGridView', array(
+         'dataProvider'=>$dataProvider,
+         'columns'=>array(
+		array(
+			'header'=>'Nama Barang',
+			'name'=>'iditem',
+			'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
+		),
+		array(
+			'header'=>'Nomor Serial',
+			'name'=>'serialnum',
+		),
+		array(
+			'header'=>'Catatan',
+			'name'=>'remark',
+			'type'=>'ntext'
+		),
+		/*array(
+			'header'=>'Catatan',
+			'name'=>'remark',
+		),*/
+			array(
+                  'class'=>'CButtonColumn',
+                  'buttons'=> array(
+                      'delete'=>array(
+                       'visible'=>'false'
+                      ),
+                     'update'=>array(
+                        'visible'=>'false'
+                     ),
+					/*'view'=>array(
+                        'visible'=>'false'
+                     ),*/
+                  ),
+                  'viewButtonUrl'=>"Action::decodeViewDetailReturStock2Url(\$data)",
               )
          ),
    ));	

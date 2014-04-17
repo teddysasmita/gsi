@@ -59,7 +59,7 @@ class Returstocks extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'regnum'=>'Nomor LPB',	
+			'regnum'=>'Nomor Urut',	
 			'idatetime' => 'Tanggal',
 			'idsupplier' => 'Pemasok',
 			'remark' => 'Catatan',

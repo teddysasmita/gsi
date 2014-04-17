@@ -106,15 +106,19 @@ EOS;
 		<?php echo $form->textField($model,'buyprice'); ?>
 		<?php echo $form->error($model,'buyprice'); ?>
 	</div>
-
+	
+	
 	<div class="row">
-		<?php echo $form->labelEx($model,'sellprice'); ?>
-		<?php echo $form->textField($model,'sellprice'); ?>
-		<?php echo $form->error($model,'sellprice'); ?>
+		<?php echo $form->labelEx($model,'idwarehouse'); ?>
+		<?php
+			$data=Yii::app()->db->createCommand()->select('id,code')->from('warehouses')->queryAll();
+			$data=CHtml::listData($data, 'id', 'code'); 
+			echo $form->dropDownList($model, 'idwarehouse', $data, array('empty'=>'Harap Pilih')); 
+		?>
+		<?php echo $form->error($model,'idwarehouse'); ?>
 	</div>
-	
-	
-   
+
+	   
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($mode); ?>
 	</div>

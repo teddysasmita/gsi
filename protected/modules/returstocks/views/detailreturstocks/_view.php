@@ -24,6 +24,10 @@
 	<b><?php echo CHtml::encode($data->getAttributeLabel('buyprice')); ?>:</b>
 	<?php echo CHtml::encode(number_format($data->buyprice)); ?>
 	<br />
+	
+	<b><?php echo CHtml::encode($data->getAttributeLabel('idwarehouse')); ?>:</b>
+	<?php echo CHtml::encode(lookup::WarehouseNameFromWarehouseID($data->idwarehouse)); ?>
+	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('remark')); ?>:</b>
 	<?php echo CHtml::encode($data->remark); ?>

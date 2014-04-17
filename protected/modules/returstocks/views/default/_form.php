@@ -43,7 +43,9 @@ EOS;
       ));
   ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+	<p class="note">
+		Fields with <span class="required">*</span> are required.
+	</p>
 
 	<?php echo $form->errorSummary($model); ?>
         
@@ -52,6 +54,7 @@ EOS;
         echo $form->hiddenField($model, 'id');
         echo $form->hiddenField($model, 'idsupplier');
         echo $form->hiddenField($model, 'userlog');
+        echo $form->hiddenField($model, 'regnum');
         echo $form->hiddenField($model, 'datetimelog');
       ?>
         
@@ -73,14 +76,6 @@ EOS;
                ));
             ?>
 		<?php echo $form->error($model,'idatetime'); ?>
-	</div>
-	
-	<div class="row">
-		<?php echo $form->labelEx($model,'regnum'); ?>
-		<?php 
-         	echo $form->textField($model,'regnum', array('maxlength'=>30)); 
-      	?>
-		<?php echo $form->error($model,'regnum'); ?>
 	</div>
 
 	<div class="row">
@@ -142,8 +137,9 @@ EOS;
                    'type'=>'number'               
 				),
 				array(
-						'header'=>'Catatan',
-						'name'=>'remark',
+					'header'=>'Gudang',
+					'name'=>'idwarehouse',
+					'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['iditem'])"
 				),
               array(
                   'class'=>'CButtonColumn',
@@ -158,12 +154,64 @@ EOS;
 						'visible'=>'false'
 					)*/
                   ),
-					'deleteButtonUrl'=>"Action::decodeDeleteDetailPurchasesStockEntryUrl(\$data)",
-					'updateButtonUrl'=>"Action::decodeUpdateDetailPurchasesStockEntryUrl(\$data)"
+					'deleteButtonUrl'=>"Action::decodeDeleteDetailReturStockUrl(\$data)",
+					'updateButtonUrl'=>"Action::decodeUpdateDetailReturStockUrl(\$data)"
               )
           ),
     ));
     
+?>
+
+<?php 
+	$rawdata = FALSE;
+    if (isset(Yii::app()->session['Detailreturstocks2'])) {
+       $rawdata=Yii::app()->session['Detailreturstocks2'];
+       $count=count($rawdata);
+    } else {
+       $count=Yii::app()->db->createCommand("select count(*) from detailreturstocks2 where id='$model->id'")->queryScalar();
+       $sql="select * from detailreturstocks2 where id='$model->id'";
+       $rawdata=Yii::app()->db->createCommand($sql)->queryAll ();
+    }
+if (($rawdata !== FALSE) && count($rawdata) > 0) {
+	$dataProvider = new CArrayDataProvider ( $rawdata, array (
+			'totalItemCount' => $count 
+	) );
+	$this->widget ( 'zii.widgets.grid.CGridView', array (
+			'dataProvider' => $dataProvider,
+			'columns' => array (
+					array (
+							'header' => 'Item Name',
+							'name' => 'iditem',
+							'value' => "lookup::ItemNameFromItemID(\$data['iditem'])" 
+					),
+					array (
+							'header' => 'Nomor Seri',
+							'name' => 'serialnum' 
+					),
+					array (
+							'header' => 'Catatan',
+							'name' => 'remark' 
+					),
+					array (
+							'class' => 'CButtonColumn',
+							'buttons' => array (
+									'delete' => array (
+											'visible' => 'false' 
+									),
+									'view' => array (
+											'visible' => 'false' 
+									) 
+							),
+							'updateButtonOptions' => array (
+									"class" => 'updateButton' 
+							),
+							'updateButtonUrl' => "Action::decodeUpdateDetailReturStock2Url(\$data)" 
+					) 
+			) 
+	) );
+} else {
+	echo "Data nomor serial tidak ditemukan.";
+	}
 ?>
 
    <div class="row buttons">
@@ -174,4 +222,5 @@ EOS;
 
 
       
-</div><!-- form -->
+</div>
+<!-- form -->

@@ -45,6 +45,10 @@ $this->menu=array(
 		),
 		'remark',
 		array(
+				'label'=>'Gudang',
+				'value'=>lookup::WarehouseNameFromWarehouseID($model->idwarehouse)
+		),
+		array(
                'label'=>'Userlog',
                'value'=>lookup::UserNameFromUserID($model->userlog),
             ),

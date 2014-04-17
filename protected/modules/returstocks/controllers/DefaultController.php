@@ -7,7 +7,7 @@ class DefaultController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $formid='AC12';
+	public $formid='AC50';
 	public $tracker;
 	public $state;
 
@@ -45,79 +45,86 @@ class DefaultController extends Controller
 	 */
 	public function actionCreate()
 	{
-             if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
-                    Yii::app()->user->id))  {   
-                $this->state='c';
-                $this->trackActivity('c');    
-                    
-                $model=new Returstocks;
-                $this->afterInsert($model);
-                
-                Yii::app()->session['master']='create';
-                //as the operator enter for the first time, we load the default value to the session
-                if (!isset(Yii::app()->session['Returstocks'])) {
-                   Yii::app()->session['Returstocks']=$model->attributes;
-                } else {
-                // use the session to fill the model
-                    $model->attributes=Yii::app()->session['Returstocks'];
-                }
-                
-               // Uncomment the following line if AJAX validation is needed
-               $this->performAjaxValidation($model);
-
-                if (isset($_POST)){
-                   if(isset($_POST['yt0'])) {
-                      //The user pressed the button;
-                      $model->attributes=$_POST['Returstocks'];
-                      
-                      
-                      $this->beforePost($model);
-                      $respond=true;
-                      if ($respond) {
-                         $respond=$model->save();
-                         if(!$respond) {
-                         	print_r($model->errors);
-                             throw new CHttpException(404,'There is an error in master posting');
-                         }
-
-                         if(isset(Yii::app()->session['Detailreturstocks']) ) {
-                           $details=Yii::app()->session['Detailreturstocks'];
-                           $respond=$respond&&$this->saveNewDetails($details);
-                         } 
-
-                         if($respond) {
-                            $this->afterPost($model);
-                            Yii::app()->session->remove('Returstocks');
-                            Yii::app()->session->remove('Detailreturstocks');
-                            $this->redirect(array('view','id'=>$model->id));
-                         } 
-                         
-                      } else {
-                        throw new CHttpException(404,'Nomor Serial telah terdaftar.');
-                     }     
-                   } else if (isset($_POST['command'])){
-                      // save the current master data before going to the detail page
-                      if($_POST['command']=='adddetail') {
-                         $model->attributes=$_POST['Returstocks'];
-                         Yii::app()->session['Returstocks']=$_POST['Returstocks'];
-                         $this->redirect(array('detailreturstocks/create',
-                            'id'=>$model->id));
-                      } else if ($_POST['command']=='setDO') {
-                      	
-                         $model->attributes=$_POST['Returstocks'];
-                         Yii::app()->session['Returstocks']=$_POST['Returstocks'];
-                         $this->loadDO($model->donum, $model->id);
-                      }
-                   }
-                }
-
-                $this->render('create',array(
-                    'model'=>$model,
-                ));
-                
-             } else {
-                throw new CHttpException(404,'You have no authorization for this operation.');
-             }
+		if (Yii::app ()->authManager->checkAccess ( $this->formid . '-Append', Yii::app ()->user->id )) {
+			$this->state = 'c';
+			$this->trackActivity ( 'c' );
+			
+			$model = new Returstocks ();
+			$this->afterInsert ( $model );
+			
+			Yii::app ()->session ['master'] = 'create';
+			// as the operator enter for the first time, we load the default value to the session
+			if (! isset ( Yii::app ()->session ['Returstocks'] )) {
+				Yii::app ()->session ['Returstocks'] = $model->attributes;
+			} else {
+				// use the session to fill the model
+				$model->attributes = Yii::app ()->session ['Returstocks'];
+			}
+			
+			// Uncomment the following line if AJAX validation is needed
+			$this->performAjaxValidation ( $model );
+			
+			if (isset ( $_POST )) {
+				if (isset ( $_POST ['yt0'] )) {
+					// The user pressed the button;
+					$model->attributes = $_POST ['Returstocks'];
+					
+					$this->beforePost ( $model );
+					$respond = true;
+					if ($respond) {
+						$respond = $model->save ();
+						if (! $respond) {
+							print_r ( $model->errors );
+							throw new CHttpException ( 404, 'There is an error in master posting' );
+						}
+						
+						if (isset ( Yii::app ()->session ['Detailreturstocks'] )) {
+							$details = Yii::app ()->session ['Detailreturstocks'];
+							$respond = $respond && $this->saveNewDetails ( $details );
+						}
+						
+						if (isset ( Yii::app ()->session ['Detailreturstocks2'] )) {
+							$details = Yii::app ()->session ['Detailreturstocks2'];
+							$respond = $respond && $this->saveNewDetails2 ( $details );
+						}
+						
+						if ($respond) {
+							$this->afterPost ( $model );
+							Yii::app ()->session->remove ( 'Returstocks' );
+							Yii::app ()->session->remove ( 'Detailreturstocks' );
+							Yii::app ()->session->remove ( 'Detailreturstocks2' );
+							$this->redirect ( array (
+									'view',
+									'id' => $model->id 
+							) );
+						}
+					} else {
+						throw new CHttpException ( 404, 'Nomor Serial telah terdaftar.' );
+					}
+				} else if (isset ( $_POST ['command'] )) {
+					// save the current master data before going to the detail page
+					if ($_POST ['command'] == 'adddetail') {
+						$model->attributes = $_POST ['Returstocks'];
+						Yii::app ()->session ['Returstocks'] = $_POST ['Returstocks'];
+						$this->redirect ( array (
+								'detailreturstocks/create',
+								'id' => $model->id 
+						) );
+					} else if ($_POST ['command'] == 'setDO') {
+						
+						$model->attributes = $_POST ['Returstocks'];
+						Yii::app ()->session ['Returstocks'] = $_POST ['Returstocks'];
+						$this->loadDO ( $model->donum, $model->id );
+					}
+				}
+			}
+			
+			$this->render ( 'create', array (
+					'model' => $model 
+			) );
+		} else {
+			throw new CHttpException ( 404, 'You have no authorization for this operation.' );
+		}
 	}
 
 	/**
@@ -146,6 +153,12 @@ class DefaultController extends Controller
              if(!isset(Yii::app()->session['Detailreturstocks'])) 
                Yii::app()->session['Detailreturstocks']=$this->loadDetails($id);
              
+             if(!isset(Yii::app()->session['Detailreturstocks2'])) {
+             	Yii::app()->session['Detailreturstocks2']=$this->loadDetails2($id);
+             	if (count(Yii::app()->session['Detailreturstocks']) == 0) 
+             		$this->loadSerialNums($model->regnum);
+             }
+             	
              // Uncomment the following line if AJAX validation is needed
              $this->performAjaxValidation($model);
 
@@ -168,6 +181,15 @@ class DefaultController extends Controller
                            throw new CHttpException(404,'There is an error in detail posting');
                          }
                      };
+                     
+                     if(isset(Yii::app()->session['Detailreturstocks2'])) {
+                     	$details=Yii::app()->session['Detailreturstocks2'];
+                     	$respond=$respond&&$this->saveDetails2($details);
+                     	if(!$respond) {
+                     		throw new CHttpException(404,'There is an error in detail posting');
+                     	}
+                     };
+                     
                      if(isset(Yii::app()->session['Deletedetailreturstocks'])) {
                          $deletedetails=Yii::app()->session['Deletedetailreturstocks'];
                          $respond=$respond&&$this->deleteDetails($deletedetails);
@@ -175,16 +197,26 @@ class DefaultController extends Controller
                            throw new CHttpException(404,'There is an error in detail deletion');
                          }
                      };
+                     
+                     if(isset(Yii::app()->session['Deletedetailreturstocks2'])) {
+                     	$deletedetails=Yii::app()->session['Deletedetailreturstocks2'];
+                     	$respond=$respond&&$this->deleteDetails2($deletedetails);
+                     	if(!$respond) {
+                     		throw new CHttpException(404,'There is an error in detail deletion');
+                     	}
+                     };
                     
                      if($respond) {
                          Yii::app()->session->remove('Returstocks');
                          Yii::app()->session->remove('Detailreturstocks');
                          Yii::app()->session->remove('Deletedetailreturstocks');
+                         Yii::app()->session->remove('Detailreturstocks2');
+                         Yii::app()->session->remove('Deletedetailreturstocks2');
                          $this->redirect(array('view','id'=>$model->id));
                      }
                  }
              }
-
+             
              $this->render('update',array(
                      'model'=>$model,
              ));
@@ -214,6 +246,13 @@ class DefaultController extends Controller
                $this->tracker->delete('detailreturstocks', array('iddetail'=>$dm->iddetail));
                $dm->delete();
             }
+            
+            $detailmodels=Detailreturstocks2::model()->findAll('id=:id',array(':id'=>$id));
+            foreach($detailmodels as $dm) {
+            	$this->tracker->init();
+            	$this->tracker->delete('detailreturstocks2', array('iddetail'=>$dm->iddetail));
+            	$dm->delete();
+            }
 
             $model->delete();
             $this->afterDelete($model);
@@ -238,6 +277,8 @@ class DefaultController extends Controller
                Yii::app()->session->remove('Returstocks');
                Yii::app()->session->remove('Detailreturstocks');
                Yii::app()->session->remove('DeleteDetailreturstocks');
+               Yii::app()->session->remove('Detailreturstocks2');
+               Yii::app()->session->remove('DeleteDetailreturstocks2');
                $dataProvider=new CActiveDataProvider('Returstocks',
                   array(
                      'criteria'=>array(
@@ -258,21 +299,21 @@ class DefaultController extends Controller
 	 */
 	public function actionAdmin()
 	{
-            if(Yii::app()->authManager->checkAccess($this->formid.'-List', 
-                Yii::app()->user->id)) {
-                $this->trackActivity('s');
+		if(Yii::app()->authManager->checkAccess($this->formid.'-List', 
+			Yii::app()->user->id)) {
+			$this->trackActivity('s');
                
-                $model=new Returstocks('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Returstocks']))
-			$model->attributes=$_GET['Returstocks'];
+			$model=new Returstocks('search');
+			$model->unsetAttributes();  // clear any default values
+			if(isset($_GET['Returstocks']))
+				$model->attributes=$_GET['Returstocks'];
 
-		$this->render('admin',array(
-			'model'=>$model,
-		));
-            } else {
-                throw new CHttpException(404,'You have no authorization for this operation.');
-            }
+			$this->render('admin',array(
+				'model'=>$model,
+			));
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		}
 	}
 
          public function actionHistory($id)
@@ -423,22 +464,30 @@ class DefaultController extends Controller
 
      protected function saveNewDetails(array $details)
      {                  
-     	Yii::import('application.modules.sellingprice.models.*');
-     	require_once('Sellingprices.php');
      	
          foreach ($details as $row) {
              $detailmodel=new Detailreturstocks;
              $detailmodel->attributes=$row;
              $respond=$detailmodel->insert();
-             $this->setSellingPrice($row['iddetail'], idmaker::getDateTime(), 
-             		idmaker::getRegNum('AC11'), $row['iditem'], $row['sellprice'], 
-             		'Bp Welly T', Yii::app()->user->id);	
              if (!$respond) {
                 break;
              }
          }
          return $respond;
      }
+     
+     protected function saveNewDetails2(array $details)
+     {
+     	foreach ($details as $row) {
+     		$detailmodel=new Detailreturstocks2;
+     		$detailmodel->attributes=$row;
+     		$respond=$detailmodel->insert();
+     		if (!$respond) {
+     			break;
+     		}
+     	}
+     	return $respond;
+	}
      
 
      protected function saveDetails(array $details)
@@ -466,6 +515,32 @@ class DefaultController extends Controller
           }
           return $respond;
      }
+     
+     protected function saveDetails2(array $details)
+     {
+     	$idmaker=new idmaker();
+     
+     	$respond=true;
+     	foreach ($details as $row) {
+     		$detailmodel=Detailreturstocks2::model()->findByPk($row['iddetail']);
+     		if($detailmodel==NULL) {
+     			$detailmodel=new Detailreturstocks2;
+     		} else {
+     			if(count(array_diff($detailmodel->attributes,$row))) {
+     				$this->tracker->init();
+     				$this->tracker->modify('detailreturstocks2', array('iddetail'=>$detailmodel->iddetail));
+     			}
+     		}
+     		$detailmodel->attributes=$row;
+     		$detailmodel->userlog=Yii::app()->user->id;
+     		$detailmodel->datetimelog=$idmaker->getDateTime();
+     		$respond=$detailmodel->save();
+     		if (!$respond) {
+     			break;
+     		}
+     	}
+     	return $respond;
+     }
       
      protected function deleteDetails(array $details)
      {
@@ -486,12 +561,38 @@ class DefaultController extends Controller
      }
 
 
+     protected function deleteDetails2(array $details)
+     {
+     	$respond=true;
+     	foreach ($details as $row) {
+     		$detailmodel=Detailreturstocks2::model()->findByPk($row['iddetail']);
+     		if($detailmodel) {
+     			$this->tracker->init();
+     			$this->trackActivity('d');
+     			$this->tracker->delete('detailreturstocks2', $detailmodel->id);
+     			$respond=$detailmodel->delete();
+     			if (!$respond) {
+     				break;
+     			}
+     		}
+     	}
+     	return $respond;
+     }
+     
      protected function loadDetails($id)
      {
-      $sql="select * from detailreturstocks where id='$id'";
-      $details=Yii::app()->db->createCommand($sql)->queryAll();
+		$sql="select * from detailreturstocks where id='$id'";
+		$details=Yii::app()->db->createCommand($sql)->queryAll();
 
-      return $details;
+		return $details;
+     }
+     
+     protected function loadDetails2($id)
+     {
+     	$sql="select * from detailreturstocks2 where id='$id'";
+     	$details=Yii::app()->db->createCommand($sql)->queryAll();
+     
+     	return $details;
      }
 
 
@@ -508,7 +609,7 @@ class DefaultController extends Controller
      {
          $idmaker=new idmaker();
          if ($model->scenario == 'insert')
-         	$idmaker->saveRegNum($this->formid, $model->regnum);
+         	$idmaker->saveRegNum($this->formid, substr($model->regnum, 2)); 
          
          /*$this->setStatusPO($model->idpurchaseorder,
             Yii::app()->session['Detailreturstocks']);
@@ -522,7 +623,7 @@ class DefaultController extends Controller
          $model->userlog=Yii::app()->user->id;
          $model->datetimelog=$idmaker->getDateTime();
          if ($model->scenario == 'insert')
-         	$model->regnum=$idmaker->getRegNum($this->formid);
+         	$model->regnum='PR'.$idmaker->getRegNum($this->formid);
      }
 
      protected function    beforeDelete(& $model)
@@ -602,6 +703,27 @@ EOS;
         Yii::app()->session['Detailreturstocks']=$details;
       }
 
+      private function loadSerialNums($regnum, $id) 
+      {
+		$stockexits = Yii::app()->db->createCommand()
+			->select('b.serialnum, b.iditem, b.iddetail')
+			->from('stockexits a')
+			->join('detailstockexits b', 'b.id = a.id')
+			->where('a.transid = :p_transid', array(":p_transid"=>$regnum))
+			->queryAll();
+		$details = array();
+		foreach ($stockexits as $retur) {
+			$detail['id'] = $id;
+			$detail['iddetail'] = $retur['iddetail'];
+			$detail['iditem'] = $retur['iditem'];
+			$detail['serialnum'] = $retur['serialnum'];
+			$detail['userlog'] = Yii::app()->user->id;
+         	$detail['datetimelog']=$idmaker->getDateTime();
+			
+         	$details[] = $detail;
+		}	
+      	Yii::app()->session['Detailreturstocks2'] = $details;
+      }
       
       private function setStatusPO($idpo, array $details)
       {
@@ -647,21 +769,6 @@ EOS;
         };
       }
       
-	private function setSellingPrice($id, $idatetime, $regnum, $iditem, $sellprice, 
-			$approvalby, $userlog ) 
-	{
-		$sellingprice = new Sellingprices();
-		$sellingprice->id = $id;
-		$sellingprice->regnum = $regnum;
-		$sellingprice->idatetime = $idatetime;
-		$sellingprice->iditem = $iditem;
-		$sellingprice->normalprice = $sellprice;
-		$sellingprice->minprice = $sellprice;
-		$sellingprice->approvalby = $approvalby;
-		$sellingprice->userlog= $userlog;
-		$sellingprice->datetimelog=$idatetime;
-		$sellingprice->insert();
-	}
 	
 	public function actionPrintlpb($id)
 	{
