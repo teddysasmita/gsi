@@ -65,7 +65,6 @@ class DefaultController extends Controller
                 // use the session to fill the model
                     $model->attributes=Yii::app()->session['Orderretrievals'];
                 }
-                $model->scenario = 'insert';
                 // Uncomment the following line if AJAX validation is needed
                 $this->performAjaxValidation($model);
                
