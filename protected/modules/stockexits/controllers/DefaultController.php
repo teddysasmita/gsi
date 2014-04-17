@@ -634,7 +634,7 @@ EOS;
       		->select('a.id, b.*')
       		->from('itemtransfers a')
       		->join('detailitemtransfers b', 'b.id=a.id')
-      		->where('a.regnum = :p_regnum and b.idwhsource = :p_idwarehouse',
+      		->where('a.regnum = :p_regnum and a.idwhsource = :p_idwarehouse',
       				array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
       				->queryAll();
       	}
