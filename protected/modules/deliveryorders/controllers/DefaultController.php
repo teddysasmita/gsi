@@ -217,13 +217,13 @@ class DefaultController extends Controller
                          Yii::app()->session->remove('Deliveryorders');
                          Yii::app()->session->remove('Detaildeliveryorders');
                          Yii::app()->session->remove('DeleteDetaildeliveryorders');
-                         $this->redirect(array('view','id'=>$model->id, 'form_error'=>''));
+                         $this->redirect(array('view','id'=>$model->id));
                      }
                  }
              }
 
              $this->render('update',array(
-                     'model'=>$model,
+                     'model'=>$model,'form_error'=>''
              ));
          }  else {
              throw new CHttpException(404,'You have no authorization for this operation.');
