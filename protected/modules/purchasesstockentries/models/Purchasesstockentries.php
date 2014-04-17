@@ -95,6 +95,7 @@ class Purchasesstockentries extends CActiveRecord
 		$criteria->compare('idatetime',$this->idatetime,true);
 		$criteria->compare('ponum',$this->ponum,true);
 		$criteria->compare('sjnum',$this->sjnum,true);
+		$criteria->compare('regnum',$this->regnum,true);
 		$criteria->compare('idsupplier',$this->idsupplier,true);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);
