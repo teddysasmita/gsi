@@ -65,7 +65,7 @@ class DefaultController extends Controller
                 // use the session to fill the model
                     $model->attributes=Yii::app()->session['Orderretrievals'];
                 }
-                
+                $model->scenario = 'insert';
                 // Uncomment the following line if AJAX validation is needed
                 $this->performAjaxValidation($model);
                
@@ -168,7 +168,6 @@ class DefaultController extends Controller
              if(!isset(Yii::app()->session['Detailorderretrievals2'])) 
                Yii::app()->session['Detailorderretrievals2']=$this->loadDetails2($id);
              
-            
 
              if(isset($_POST)) {
                  if(isset($_POST['yt0'])) {
@@ -672,7 +671,6 @@ class DefaultController extends Controller
         protected function afterPost(& $model)
         {
             $idmaker=new idmaker();
-            if ($model->scenario == 'insert')
             	$idmaker->saveRegNum($this->formid, substr($model->regnum, 2));    
         }
         
@@ -682,7 +680,6 @@ class DefaultController extends Controller
             
             $model->userlog=Yii::app()->user->id;
             $model->datetimelog=$idmaker->getDateTime();
-            if ($model->scenario == 'insert')
             	$model->regnum='PB'.$idmaker->getRegNum($this->formid);
         }
         
