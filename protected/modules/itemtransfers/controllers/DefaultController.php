@@ -520,7 +520,8 @@ class DefaultController extends Controller
         protected function afterPost(& $model)
         {
             $idmaker=new idmaker();
-            $idmaker->saveRegNum($this->formid, substr($model->regnum, 2));    
+            if ($model->scenario == 'insert')
+            	$idmaker->saveRegNum($this->formid, substr($model->regnum, 2));    
         }
         
         protected function beforePost(& $model)
@@ -529,7 +530,8 @@ class DefaultController extends Controller
             
             $model->userlog=Yii::app()->user->id;
             $model->datetimelog=$idmaker->getDateTime();
-            $model->regnum='TB'.$idmaker->getRegNum($this->formid);
+            if ($model->scenario == 'insert')
+            	$model->regnum='TB'.$idmaker->getRegNum($this->formid);
         }
         
         protected function beforeDelete(& $model)

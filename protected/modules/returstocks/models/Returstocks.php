@@ -12,7 +12,7 @@
  * @property string $userlog
  * @property string $datetimelog
  */
-class Purchasesstockentries extends CActiveRecord
+class Returstocks extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
