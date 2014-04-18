@@ -336,11 +336,13 @@ EOS;
 	            		$detailData=$command->queryAll();
 	            		Yii::import('application.vendors.tcpdf.*');
 						require_once ('tcpdf.php');
-						Yii::import('application.modules.items.views.default.*');
-						ob_clean();
+						Yii::import('application.modules.item.views.default.*');
 						require_once ('print_stockcard.php');
-						execute(lookup::ItemNameFromItemID($_POST['id']), $detailData,
-                			lookup::WarehouseNameFromWarehouseID($_POST['idwarehouse']));
+						ob_clean();
+						execute(lookup::ItemNameFromItemID($_POST['id']), 
+                			lookup::WarehouseNameFromWarehouseID($_POST['idwarehouse']),
+                			$detailData
+                		);
 	          		}
 	            } 
 	            //else {
