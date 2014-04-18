@@ -475,7 +475,7 @@ class DefaultController extends Controller
              if($detailmodel) {
                  $this->tracker->init();
                  $this->trackActivity('d', $this->__DETAILFORMID);
-                 $this->tracker->delete('detailstockentries', $detailmodel->id);
+                 $this->tracker->delete('detailstockentries', $detailmodel->iddetail);
                  $respond=$detailmodel->delete();
                  if (!$respond) {
                    break;
