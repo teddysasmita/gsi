@@ -388,8 +388,22 @@ EOS;
 				concat( 'Pengambilan Barang Pembeli - ',a.invnum,' - ', a.receivername, ' - ', a.idatetime) as transinfo,
 				'AC19' as transname
 				from orderretrievals a 
-				join detailorderretrievals b
 				where regnum=:p_regnum
+EOS;
+				$command=Yii::app()->db->createCommand($sql);
+				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
+				$data=$command->queryAll();
+			}
+			
+			if ($data == FALSE) {
+				$sql=<<<EOS
+				select a.id, a.regnum, '-' as invnum,
+				concat( 'Pengembalian Barang ke Pemasok - ', a.regnum,' - ', concat(c.firstname, ' ', c.lastname), ' - ', a.idatetime) as transinfo,
+				'AC50' as transname
+				from returstocks a
+				join detailreturstocks b on b.id = a.id
+				join suppliers c on c.id = a.idsupplier
+				where a.regnum=:p_regnum
 EOS;
 				$command=Yii::app()->db->createCommand($sql);
 				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
