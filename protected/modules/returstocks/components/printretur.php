@@ -24,8 +24,8 @@ class MYPDF extends TCPDF {
 		// Read file lines
 		$this->data = $data;
 		$this->detaildata = $detaildata;
-		$this->headernames = array('No', 'Nama Barang', 'Jmlh','H Beli', 'H Jual', 'Total HB');
-		$this->headerwidths = array(10, 93, 12, 25, 25, 30);
+		$this->headernames = array('No', 'Nama Barang', 'Jmlh','H Beli', 'Total HB');
+		$this->headerwidths = array(10, 93, 12, 35, 45);
 	}
 	
 	public function LoadData2(array $detaildata2) {
@@ -71,7 +71,6 @@ class MYPDF extends TCPDF {
 				// 0, 0, true, 0, false, true, 0, 'T', false);
 				$this->Cell($this->headerwidths[2], $ih, $row['qty'], 'LR', 0, 'R', $fill);
 				$this->Cell($this->headerwidths[3], $ih, number_format($row['buyprice']), 'LR', 0, 'R', $fill);
-				$this->Cell($this->headerwidths[4], $ih, number_format($row['sellprice']), 'LR', 0, 'R', $fill);
 				$total=$total + $row['buyprice']*$row['qty'];
 				$this->Cell($this->headerwidths[5], $ih, number_format($row['buyprice']*$row['qty']), 'LR', 0, 'R', $fill);
 				//$this->MultiCell($this->headerwidths[5], 0, $row['remark'], 'LR', 'L', false, 0);
