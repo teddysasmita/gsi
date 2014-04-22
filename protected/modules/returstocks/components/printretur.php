@@ -50,7 +50,7 @@ class MYPDF extends TCPDF {
 		$counter=0;
 		$total=0;
 		$iditem='';
-		$this->SetXY(1, 29);
+		$this->SetXY(1, 32);
 		
 		$this->SetFont('Courier', 'B');
 		
@@ -120,7 +120,7 @@ class MYPDF extends TCPDF {
 		$counter=0;
 		$total=0;
 		$iditem='';
-		$this->SetXY(1, 29);
+		$this->SetXY(1, 32);
 		
 		$this->SetFont('Courier', 'B');
 		
@@ -141,21 +141,21 @@ class MYPDF extends TCPDF {
 			$counter+=1;
 			
 			$this->SetFontSize(10);
-			$ih = $this->getStringHeight($this->headerwidths[1],lookup::ItemNameFromItemID($row['iditem']),
+			$ih = $this->getStringHeight($this->headerwidths2[1],lookup::ItemNameFromItemID($row['iditem']),
 					false, true, 2);
 			$this->SetFontSize(8);
-			$ih2 = $this->getStringHeight($this->headerwidths[1],lookup::ItemNameFromItemID($row['iditem']),
+			$ih2 = $this->getStringHeight($this->headerwidths2[1],lookup::ItemNameFromItemID($row['iditem']),
 					false, true, 2);
 			if ($ih2 > $ih) 
 				$ih = $ih2;
 			$this->SetFontSize(10);
-			$this->Cell($this->headerwidths[0], $ih, $counter, 'LR', 0, 'C', $fill);
-			$this->MultiCell($this->headerwidths[1], 0, lookup::ItemNameFromItemID($row['iditem']), 'LR', 'L',
+			$this->Cell($this->headerwidths2[0], $ih, $counter, 'LR', 0, 'C', $fill);
+			$this->MultiCell($this->headerwidths2[1], 0, lookup::ItemNameFromItemID($row['iditem']), 'LR', 'L',
 					false, 0);
 			// 0, 0, true, 0, false, true, 0, 'T', false);
-			$this->Cell($this->headerwidths[2], $ih, $row['serialnum'], 'LR', 0, 'R', $fill);
+			$this->Cell($this->headerwidths2[2], $ih, $row['serialnum'], 'LR', 0, 'R', $fill);
 			$this->SetFontSize(8);
-			$this->Cell($this->headerwidths[3], $ih, $row['remark'], 'LR', 0, 'R', $fill);
+			$this->Cell($this->headerwidths2[3], $ih, $row['remark'], 'LR', 0, 'R', $fill);
 			$this->SetFontSize(10);
 			//$this->MultiCell($this->headerwidths[5], 0, $row['remark'], 'LR', 'L', false, 0);
 			//$this->Cell($this->headerwidths[5], $ih, $row['remark'], 'LR', 0, 'L', $fill);
@@ -234,7 +234,7 @@ class MYPDF extends TCPDF {
 		
 		$this->SetFont('Courier', 'B');
 		$this->Cell(19, 5, 'Pengirim', 'LTR', 0,'C');
-		$this->Cell(190, 5, lookup::SupplierNameFromSupplierID($this->data->idsupplier), 'LTR', 1);
+		$this->Cell(171, 5, lookup::SupplierNameFromSupplierID($this->data->idsupplier), 'LTR', 1);
 		//$this->Cell(195, 15, $this->data->remark, 'LTRB', 1);
 		
 		//$this->ln();
