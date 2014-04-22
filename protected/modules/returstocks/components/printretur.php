@@ -72,7 +72,7 @@ class MYPDF extends TCPDF {
 				$this->Cell($this->headerwidths[2], $ih, $row['qty'], 'LR', 0, 'R', $fill);
 				$this->Cell($this->headerwidths[3], $ih, number_format($row['buyprice']), 'LR', 0, 'R', $fill);
 				$total=$total + $row['buyprice']*$row['qty'];
-				$this->Cell($this->headerwidths[5], $ih, number_format($row['buyprice']*$row['qty']), 'LR', 0, 'R', $fill);
+				$this->Cell($this->headerwidths[4], $ih, number_format($row['buyprice']*$row['qty']), 'LR', 0, 'R', $fill);
 				//$this->MultiCell($this->headerwidths[5], 0, $row['remark'], 'LR', 'L', false, 0);
 				//$this->Cell($this->headerwidths[5], $ih, $row['remark'], 'LR', 0, 'L', $fill);
 				$this->ln($ih);
