@@ -30,18 +30,7 @@ $supplierScript=<<<EOS
 	
    	$('#myButton').click(
    		function(evt) {
-   			$.getJSON('index.php?r=LookUp/checkItemSerial', { iditem: $('#Detailreturstocks2_iditem').val(), 
-   			serialnum: $('#Detailreturstocks2_serialnum').val(), idwh:$('#idwh').val() }, 
-   			function(data) {
-   				if (data=='0') {
-            		$('#Detailreturstocks2_serialnum_em_').html('Data tidak ditemukan');
-					$('#Detailreturstocks2_serialnum_em_').prop('style', 'display:block');
-				} else {
-					$('#Detailreturstocks2_serialnum_em_').html('');
-					$('#Detailreturstocks2_serialnum_em_').prop('style', 'display:none');
-   					$('#detailreturstocks2-form').submit();
-   				};
-   			});
+   			$('#detailreturstocks2-form').submit();
    	});
    		
 EOS;
