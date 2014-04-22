@@ -719,7 +719,7 @@ EOS;
 			$detail['iditem'] = $retur['iditem'];
 			$detail['serialnum'] = $retur['serialnum'];
 			$detail['userlog'] = Yii::app()->user->id;
-         	$detail['datetimelog']=$idmaker->getDateTime();
+         	$detail['datetimelog']=idmaker::getDateTime();
 			
          	$details[] = $detail;
 		}	
