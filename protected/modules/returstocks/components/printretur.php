@@ -141,7 +141,7 @@ class MYPDF extends TCPDF {
 			// 0, 0, true, 0, false, true, 0, 'T', false);
 			$this->Cell($this->headerwidths[2], $ih, $row['serialnum'], 'LR', 0, 'R', $fill);
 			$this->SetFontSize(8);
-			$this->Cell($this->headerwidths[3], $ih, number_format($row['remark']), 'LR', 0, 'R', $fill);
+			$this->Cell($this->headerwidths[3], $ih, $row['remark'], 'LR', 0, 'R', $fill);
 			$this->SetFontSize(10);
 			//$this->MultiCell($this->headerwidths[5], 0, $row['remark'], 'LR', 'L', false, 0);
 			//$this->Cell($this->headerwidths[5], $ih, $row['remark'], 'LR', 0, 'L', $fill);
