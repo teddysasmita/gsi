@@ -50,7 +50,13 @@ class MYPDF extends TCPDF {
 		$counter=0;
 		$total=0;
 		$iditem='';
-		$this->SetXY(1, 39);
+		$this->SetXY(1, 29);
+		
+		$this->SetFont('Courier', 'B');
+		
+		for($i = 0; $i < count($this->headernames); ++$i) {
+			$this->Cell($this->headerwidths[$i], 7, $this->headernames[$i], 1, 0, 'C');
+		}
 		/*
 		if (count($this->detaildata) <= 12)
 			$maxrows = 12;
@@ -113,7 +119,13 @@ class MYPDF extends TCPDF {
 		$counter=0;
 		$total=0;
 		$iditem='';
-		$this->SetXY(1, 39);
+		$this->SetXY(1, 29);
+		
+		$this->SetFont('Courier', 'B');
+		
+		for($i = 0; $i < count($this->headernames2); ++$i) {
+			$this->Cell($this->headerwidths2[$i], 7, $this->headernames2[$i], 1, 0, 'C');
+		}
 		/*
 			if (count($this->detaildata) <= 12)
 			$maxrows = 12;
@@ -224,12 +236,12 @@ class MYPDF extends TCPDF {
 		//$this->Cell(195, 15, $this->data->remark, 'LTRB', 1);
 		
 		//$this->ln();
-		$this->setFontSize(12);
+		/*$this->setFontSize(12);
 		$this->SetFont('Courier', 'B');
 		
 		for($i = 0; $i < count($this->headernames); ++$i) {
 			$this->Cell($this->headerwidths[$i], 7, $this->headernames[$i], 1, 0, 'C');
-		}
+		}*/
 		/*$this->Cell(15, 7, 'No', 'LTRB', 0, 'C');
 		$this->Cell(160, 7, 'Nama Barang', 'LTRB', 0, 'C');
 		$this->Cell(20, 7, 'Jumlah', 'LTRB', 0 , 'C');*/
