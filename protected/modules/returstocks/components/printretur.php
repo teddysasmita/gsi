@@ -229,8 +229,8 @@ class MYPDF extends TCPDF {
 		$this->Cell(43, 5, $this->data->idatetime, 'LTR', 0, 'C');
 		$this->SetFont('Courier', 'B');
 		//$this->setXY(100, 27);
-		$this->Cell(16, 5, 'No LPB', 'LTR', 0, 'C');
-		$this->Cell(27, 5, $this->data->regnum, 'LTR', 1, 'C');
+		$this->Cell(19, 5, 'No Retur', 'LTR', 0, 'C');
+		$this->Cell(24, 5, $this->data->regnum, 'LTR', 1, 'C');
 		
 		$this->SetFont('Courier', 'B');
 		$this->Cell(19, 5, 'Pengirim', 'LTR', 0,'C');
