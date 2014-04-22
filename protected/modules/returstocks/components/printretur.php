@@ -32,7 +32,7 @@ class MYPDF extends TCPDF {
 		// Read file lines
 		$this->detaildata2 = $detaildata2;
 		$this->headernames2 = array('No', 'Nama Barang', 'Nomor Seri','Alasan');
-		$this->headerwidths2 = array(10, 90, 30, 60);
+		$this->headerwidths2 = array(10, 90, 30, 65);
 	}
 
 	// Colored table
@@ -173,7 +173,7 @@ class MYPDF extends TCPDF {
 			//$this->checkPageBreak(6, '');
 			//$this->Cell(array_sum($this->headerwidths), 0, '', 'T', 1);
 		}
-		//$this->Cell(array_sum($this->headerwidths), 1, '', 'T', 1);
+		$this->Cell(array_sum($this->headerwidths2), 1, '', 'T', 1);
 		//$this->Cell(array_sum($this->headerwidths), 0, '', 'T');
 	}
 	
@@ -234,7 +234,7 @@ class MYPDF extends TCPDF {
 		
 		$this->SetFont('Courier', 'B');
 		$this->Cell(19, 5, 'Pengirim', 'LTR', 0,'C');
-		$this->Cell(171, 5, lookup::SupplierNameFromSupplierID($this->data->idsupplier), 'LTR', 1);
+		$this->Cell(176, 5, lookup::SupplierNameFromSupplierID($this->data->idsupplier), 'LTR', 1);
 		//$this->Cell(195, 15, $this->data->remark, 'LTRB', 1);
 		
 		//$this->ln();
