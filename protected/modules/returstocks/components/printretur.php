@@ -221,12 +221,7 @@ class MYPDF extends TCPDF {
 		
 		$this->SetFont('Courier', 'B');
 		$this->Cell(19, 5, 'Pengirim', 'LTR', 0,'C');
-		$this->Cell(80, 5, lookup::SupplierNameFromSupplierID($this->data->idsupplier), 'LTR');
-		$this->SetFont('Courier', 'B');
-		$this->Cell(10, 5, 'NoSJ ', 'LTR', 0,'C');
-		$this->Cell(43, 5, $this->data->sjnum, 'LTR', 0, 'C');
-		$this->Cell(16, 5, 'No PO ', 'LTR', 0,'C');
-		$this->Cell(27, 5, $this->data->ponum, 'LTR', 1, 'C');
+		$this->Cell(190, 5, lookup::SupplierNameFromSupplierID($this->data->idsupplier), 'LTR');
 		//$this->Cell(195, 15, $this->data->remark, 'LTRB', 1);
 		
 		//$this->ln();
