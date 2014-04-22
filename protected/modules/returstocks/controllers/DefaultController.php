@@ -155,10 +155,10 @@ class DefaultController extends Controller
              
              if(!isset(Yii::app()->session['Detailreturstocks2'])) {
              	Yii::app()->session['Detailreturstocks2']=$this->loadDetails2($id);
-             	if (count(Yii::app()->session['Detailreturstocks']) == 0) {
-             		echo "here";
-             		$this->loadSerialNums($model->regnum);
-             	}
+             }
+             if (count(Yii::app()->session['Detailreturstocks']) == 0) {
+             	echo "here";
+             	$this->loadSerialNums($model->regnum);
              }
              	
              // Uncomment the following line if AJAX validation is needed
