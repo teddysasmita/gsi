@@ -786,7 +786,7 @@ EOS;
 			require_once('printretur.php');
 			ob_clean();
 	
-			execute($model, $detailmodel. $detailmodel2);
+			execute($model, $detailmodel, $detailmodel2);
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		}
