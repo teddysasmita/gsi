@@ -779,13 +779,14 @@ EOS;
 			 
 			$model=$this->loadModel($id);
 			$detailmodel=$this->loadDetails($id);
+			$detailmodel2=$this->loadDetails2($id);
 			Yii::import('application.vendors.tcpdf.*');
 			require_once ('tcpdf.php');
 			Yii::import('application.modules.returstocks.components.*');
-			require_once('printlpb.php');
+			require_once('printretur.php');
 			ob_clean();
 	
-			execute($model, $detailmodel);
+			execute($model, $detailmodel. $detailmodel2);
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		}

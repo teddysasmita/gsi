@@ -12,6 +12,9 @@ class MYPDF extends TCPDF {
 	private $detaildata;
 	private $headernames;
 	private $headerwidths;
+	private $detaildata2;
+	private $headernames2;
+	private $headerwidths2;
 	
 	public $pageorientation;
 	public $pagesize;
@@ -23,6 +26,13 @@ class MYPDF extends TCPDF {
 		$this->detaildata = $detaildata;
 		$this->headernames = array('No', 'Nama Barang', 'Jmlh','H Beli', 'H Jual', 'Total HB');
 		$this->headerwidths = array(10, 93, 12, 25, 25, 30);
+	}
+	
+	public function LoadData2(array $detaildata2) {
+		// Read file lines
+		$this->detaildata2 = $detaildata2;
+		$this->headernames2 = array('No', 'Nama Barang', 'Nomor Seri','Alasan');
+		$this->headerwidths2 = array(10, 90, 30, 60);
 	}
 
 	// Colored table
@@ -86,6 +96,71 @@ class MYPDF extends TCPDF {
 		if ($this->data['remark'] <> '')
 			$this->MultiCell(195, 0, $this->data['remark'], 'LRBT', 'L', false, 0);
 		
+		//$this->Cell(array_sum($this->headerwidths), 0, '', 'T');
+	}
+	
+	// Colored table
+	public function ColoredTable2() {
+		// Colors, line width and bold font
+		$this->SetFillColor(224, 235, 255);
+		$this->SetTextColor(0);
+		$this->SetDrawColor(0, 0, 0);
+		$this->SetLineWidth(0.3);
+		$this->SetFont('', 'B');
+		$this->SetFontSize(10);
+	
+		// Data
+		$fill = 0;
+		$counter=0;
+		$total=0;
+		$iditem='';
+		$this->SetXY(1, 39);
+		/*
+			if (count($this->detaildata) <= 12)
+			$maxrows = 12;
+		else
+			$maxrows = count($this->detaildata);
+		for($i=0;$i<$maxrows;$i++) {
+		*/
+		for ($i=0; $i<count($this->detaildata2); $i++) {
+			//if ($i<count($this->detaildata)) {
+			$row=$this->detaildata2[$i];
+			$counter+=1;
+			
+			$this->SetFontSize(10);
+			$ih = $this->getStringHeight($this->headerwidths[1],lookup::ItemNameFromItemID($row['iditem']),
+					false, true, 2);
+			$this->SetFontSize(8);
+			$ih2 = $this->getStringHeight($this->headerwidths[1],lookup::ItemNameFromItemID($row['iditem']),
+					false, true, 2);
+			if ($ih2 > $ih) 
+				$ih = $ih2;
+			$this->SetFontSize(10);
+			$this->Cell($this->headerwidths[0], $ih, $counter, 'LR', 0, 'C', $fill);
+			$this->MultiCell($this->headerwidths[1], 0, lookup::ItemNameFromItemID($row['iditem']), 'LR', 'L',
+					false, 0);
+			// 0, 0, true, 0, false, true, 0, 'T', false);
+			$this->Cell($this->headerwidths[2], $ih, $row['serialnum'], 'LR', 0, 'R', $fill);
+			$this->SetFontSize(8);
+			$this->Cell($this->headerwidths[3], $ih, number_format($row['remark']), 'LR', 0, 'R', $fill);
+			$this->SetFontSize(10);
+			//$this->MultiCell($this->headerwidths[5], 0, $row['remark'], 'LR', 'L', false, 0);
+			//$this->Cell($this->headerwidths[5], $ih, $row['remark'], 'LR', 0, 'L', $fill);
+			$this->ln($ih);
+			/*} else {
+			 $this->Cell($this->headerwidths[0], 6, ' ', 'LR', 0, 'C', $fill);
+			$this->Cell($this->headerwidths[1], 6, ' ', 'LR', 0, 'L', $fill);
+			$this->Cell($this->headerwidths[2], 6, ' ', 'LR', 0, 'R', $fill);
+			$this->Cell($this->headerwidths[3], 6, ' ', 'LR', 0, 'R', $fill);
+			$this->Cell($this->headerwidths[4], 6, ' ', 'LR', 1, 'R', $fill);
+			//$this->Cell($this->headerwidths[5], 6, ' ', 'LR', 1, 'L', $fill);
+			//$this->ln();
+			}*/
+			//if (($i > 0) && ($i % 11 == 0))
+			//$this->checkPageBreak(6, '');
+			//$this->Cell(array_sum($this->headerwidths), 0, '', 'T', 1);
+		}
+		//$this->Cell(array_sum($this->headerwidths), 1, '', 'T', 1);
 		//$this->Cell(array_sum($this->headerwidths), 0, '', 'T');
 	}
 	
@@ -169,7 +244,7 @@ class MYPDF extends TCPDF {
 	} 	
 }
 
-function execute($model, $detailmodel) {
+function execute($model, $detailmodel, $detailmodel2) {
 
 	// create new PDF document
 	
@@ -215,18 +290,24 @@ function execute($model, $detailmodel) {
 	
 	// add a page
 	$pdf->LoadData($model, $detailmodel);
+	$pdf->LoadData2($detailmodel2);
 	
 	$pdf->AddPage($pdf->pageorientation, $pdf->pagesize);
 	//$pdf->AddPage();
 	
 	$pdf->ColoredTable();
+	
+	$pdf->AddPage($pdf->pageorientation, $pdf->pagesize);
+	
+	$pdf->ColoredTable2();
+	
 	//$pdf->master();
 	// print colored table
 	
 	// ---------------------------------------------------------
 	
 	//Close and output PDF document
-	$pdf->Output('LPB-'.$model->regnum.'.pdf', 'D');
+	$pdf->Output('RETURLPB-'.$model->regnum.'.pdf', 'D');
 }
 //============================================================+
 // END OF FILE                                                
