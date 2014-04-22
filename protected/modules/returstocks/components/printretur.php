@@ -57,6 +57,7 @@ class MYPDF extends TCPDF {
 		for($i = 0; $i < count($this->headernames); ++$i) {
 			$this->Cell($this->headerwidths[$i], 7, $this->headernames[$i], 1, 0, 'C');
 		}
+		$this->ln();
 		/*
 		if (count($this->detaildata) <= 12)
 			$maxrows = 12;
@@ -126,6 +127,7 @@ class MYPDF extends TCPDF {
 		for($i = 0; $i < count($this->headernames2); ++$i) {
 			$this->Cell($this->headerwidths2[$i], 7, $this->headernames2[$i], 1, 0, 'C');
 		}
+		$this->ln();
 		/*
 			if (count($this->detaildata) <= 12)
 			$maxrows = 12;
