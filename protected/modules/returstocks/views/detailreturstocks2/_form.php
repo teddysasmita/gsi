@@ -87,13 +87,6 @@ EOS;
         <?php echo $form->error($model,'remark');?> 
 	</div>
 	
-	<div class="row">
-		<?php echo CHtml::label('Belum Diterima', false); ?>
-		<?php 
-			echo CHtml::checkBox('isAccepted', $model->serialnum == 'Belum Diterima'); 
-		?>
-	</div>
-        
 	<div class="row buttons">
 		<?php echo CHtml::Button($mode, array('id'=>'myButton')); ?>
 	</div>
