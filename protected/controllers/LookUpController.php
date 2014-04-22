@@ -410,6 +410,20 @@ EOS;
 				$data=$command->queryAll();
 			}
 			
+			if ($data == FALSE) {
+				$sql=<<<EOS
+				select a.id, a.regnum, 'NA' as invnum,
+				concat( 'Pemindahan Barang - NA - ', b.code, ' - ', a.idatetime) as transinfo,
+				'AC18' as transname
+				from itemtransfers a
+				join warehouses b on b.id = a.idwhsource
+				where a.regnum=:p_regnum
+EOS;
+				$command=Yii::app()->db->createCommand($sql);
+				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
+				$data=$command->queryAll();
+			}
+			
 			if ($data !== FALSE)
 				echo json_encode($data);
 			else 
