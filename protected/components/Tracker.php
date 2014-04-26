@@ -97,7 +97,7 @@ class Tracker extends CComponent {
                array(':myid'=>$data[$id]));
     }
     
-    public function restoreDeleted($tablename, $idtrack, $id='idtrack') 
+    public function restoreDeleted($tablename, $id='idtrack', $idtrack ) 
     {
         $datas=Yii::app()->tracker->createCommand()->select()->from($tablename)
          ->where("$id=:p_idtrack",array(':p_idtrack'=>$idtrack))->queryAll();

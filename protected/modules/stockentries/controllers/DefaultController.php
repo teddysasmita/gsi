@@ -327,7 +327,11 @@ class DefaultController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
                 $this->trackActivity('n');
-                $this->tracker->restoreDeleted('stockentries', $idtrack);
+                $id = Yii::app()->tracker->createCommand()->select('id')->from('stockentries')
+                ->where('idtrack = :p_idtrack', array(':p_idtrack'=>$idtrack))
+                ->queryScalar();
+                $this->tracker->restoreDeleted('detailstockentries', "id", $id );
+                $this->tracker->restoreDeleted('stockentries', "idtrack", $idtrack);
                 
                 $dataProvider=new CActiveDataProvider('Stockentries');
                 $this->render('index',array(

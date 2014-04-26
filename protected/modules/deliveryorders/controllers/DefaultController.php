@@ -254,7 +254,8 @@ class DefaultController extends Controller
 
             $detailmodels=Detaildeliveryorders2::model()->findAll('id=:id',array(':id'=>$id));
             foreach($detailmodels as $dm) {
-               $this->tracker->delete('detaildeliveryorders', array('iddetail'=>$dm->iddetail));
+            	$this->tracker->init();
+               $this->tracker->delete('detaildeliveryorders2', array('iddetail'=>$dm->iddetail));
                $dm->delete();
             }
 
@@ -368,7 +369,12 @@ class DefaultController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
                 $this->trackActivity('n');
-                $this->tracker->restoreDeleted('deliveryorders', $idtrack);
+                $id = Yii::app()->tracker->createCommand()->select('id')->from('deliveryorders')
+                	->where('idtrack = :p_idtrack', array(':p_idtrack'=>$idtrack))
+               	 	->queryScalar();
+                $this->tracker->restoreDeleted('detaildeliveryorders', "id", $id );
+                $this->tracker->restoreDeleted('detaildeliveryorders2', "id", $id );
+                $this->tracker->restoreDeleted('deliveryorders',"idtrack", $idtrack);
                 
                 $dataProvider=new CActiveDataProvider('Deliveryorders');
                 $this->render('index',array(
