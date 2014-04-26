@@ -305,6 +305,11 @@ class Action extends CComponent {
    	return Yii::app()->createUrl('/stockexits/detailstockexits/view', array('iddetail'=>$data['iddetail']));
    }
    
+   public static function decodeRestoreDeletedStockExitUrl($data)
+   {
+   		return Yii::app()->createUrl('/stockexits/default/restoreDeleted', array('idtrack'=>$data['idtrack']));
+   }
+   
    public static function decodeDeleteDetailPaymentUrl($data)
    {
       //return print_r($data);
