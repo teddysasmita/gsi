@@ -424,6 +424,20 @@ EOS;
 				$data=$command->queryAll();
 			}
 			
+			if ($data == FALSE) {
+				$sql=<<<EOS
+				select a.id, a.regnum, 'NA' as invnum,
+				concat( 'Pengiriman Barang Tanpa Transaksi - ',a.receivername,' - ', a.idatetime) as transinfo,
+				'AC14' as transname
+				from deliveryordersnt a
+				join detaildeliveryordersnt b on b.id = a.id
+				where a.regnum=:p_regnum
+EOS;
+				$command=Yii::app()->db->createCommand($sql);
+				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
+				$data=$command->queryAll();
+			}
+			
 			if ($data !== FALSE)
 				echo json_encode($data);
 			else 

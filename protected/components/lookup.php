@@ -90,6 +90,13 @@ class lookup extends CComponent {
       return Yii::app()->db->createCommand($sql)->queryScalar();
    }
    
+   public static function ItemIDFromItemName($id)
+   {
+   	$sql="select id from items where name='$name'";
+   	return Yii::app()->db->createCommand($sql)->queryScalar();
+   }
+    
+   
    public static function SalesPersonNameFromID($id)
    {
    	$sql="select concat(firstname, ' ', lastname) as name from salespersons where id='$id'";
