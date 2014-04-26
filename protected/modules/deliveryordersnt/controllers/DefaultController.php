@@ -47,7 +47,7 @@ class DefaultController extends Controller
 	{     
             if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
                     Yii::app()->user->id))  {   
-                $this->state='c';
+                $this->state='create';
                 $this->trackActivity('c'); 
                 
                 $model=new Deliveryordersnt;
@@ -118,7 +118,7 @@ class DefaultController extends Controller
 	{
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                     Yii::app()->user->id))  {
-                $this->state='u';
+                $this->state='update';
                 $this->trackActivity('u');  
                 
                 $model=$this->loadModel($id);
@@ -503,7 +503,8 @@ class DefaultController extends Controller
         protected function afterPost(& $model)
         {
             $idmaker=new idmaker();
-            	$idmaker->saveRegNum($this->formid, $model->regnum);             
+            if ($this->state == 'create')
+            	$idmaker->saveRegNum($this->formid, substr($model->regnum, 2));             
         }
         
         protected function beforePost(& $model)
@@ -512,7 +513,8 @@ class DefaultController extends Controller
             
             $model->userlog=Yii::app()->user->id;
             $model->datetimelog=$idmaker->getDateTime();
-            	$model->regnum=$idmaker->getRegNum($this->formid);
+            if ($this->state == 'create')
+            	$model->regnum='SM'.$idmaker->getRegNum($this->formid);
         }
         
         protected function beforeDelete(& $model)
