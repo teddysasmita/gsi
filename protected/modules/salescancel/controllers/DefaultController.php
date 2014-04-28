@@ -78,7 +78,7 @@ class DefaultController extends Controller
 		if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
                     Yii::app()->user->id))  {            
 
-			$this->state='c';
+			$this->state='create';
 			$this->trackActivity('c');
 			$model=new Salescancel;
 			$this->afterInsert($model);
@@ -125,7 +125,7 @@ class DefaultController extends Controller
 		if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
 			Yii::app()->user->id))  {
                 
-			$this->state='u';
+			$this->state='update';
 			$this->trackActivity('u');
                 
 			$model=$this->loadModel($id);
