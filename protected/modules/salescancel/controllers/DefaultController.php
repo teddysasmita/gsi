@@ -332,7 +332,7 @@ class DefaultController extends Controller
         
         protected function afterPost(& $model)
         {
-        		idmaker::saveRegnum($this->formid, $model->regnum);
+        	idmaker::saveRegnum($this->formid, substr($model->regnum, 2));
         	$this->setInvStatus($model->invnum, '0');
         }
         
@@ -342,7 +342,9 @@ class DefaultController extends Controller
             
             $model->userlog=Yii::app()->user->id;
             $model->datetimelog=$idmaker->getDateTime();
-            	$model->regnum=$idmaker->getRegnum($this->formid);
+            if ($this->state == 'create') {
+            	$model->regnum="KN".$idmaker->getRegnum($this->formid);
+            };
         }
         
         protected function beforeDelete(& $model)
