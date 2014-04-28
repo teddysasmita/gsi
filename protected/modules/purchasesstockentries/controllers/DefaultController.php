@@ -327,7 +327,7 @@ class DefaultController extends Controller
                 	->where('idtrack = :p_idtrack', array(':p_idtrack'=>$idtrack))
                 	->queryScalar();
                 $this->tracker->restoreDeleted('detailpurchasesstockentries', "id", $id );
-                $this->tracker->restoreDeleted('purchasesstockentries', $idtrack);
+                $this->tracker->restoreDeleted('purchasesstockentries', "idtrack", $idtrack);
                 
                 $dataProvider=new CActiveDataProvider('Purchasesstockentries');
                 $this->render('index',array(
