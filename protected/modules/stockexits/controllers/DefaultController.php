@@ -521,6 +521,16 @@ class DefaultController extends Controller
          
          $this->setStatusPO($model->transid,
             Yii::app()->session['Detailstockexits']);
+         
+         if ($model->transname == 'AC18') {
+         	$data = Yii::app()->db->createCommand()
+         		->select()->from('itemtransfers')
+         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
+         		->queryRow();
+         	if ($data['idwhdest'] == '14103215447754000') {
+         		$this->autoEntry($data['regnum'], $model->idwarehouse,$data['idwhdest']);
+         	}
+         }
      }
 
      protected function beforePost(& $model)
@@ -848,4 +858,48 @@ EOS;
       		throw new CHttpException(404,'You have no authorization for this operation.');
       	};
 	}  
+	
+	private function autoEntry($itnum, $idwhsource, $idwhdest)
+	{
+		$datamaster = Yii::app()->db->createCommand()
+			->select('a.*')->from("itemtransfers a")
+			->where("a.regnum = :p_regnum",
+				array(':p_regnum'=>$itnum))
+			->queryRow();
+		
+		$datadetails = Yii::app()->db->createCommand()
+			->select('c.iditem, c.serialnum')->from("itemtransfers a")
+			->join("stockexits b", "b.transid = a.regnum")
+			->join("detailstockexits c", "c.id = b.id")	
+			->where("a.idwhdest = :p_idwhdest and a.regnum = :p_regnum",
+				array(':p_idwhdest'=>$idwhdest, ':p_regnum'=>$itnum))
+			->queryAll();
+		
+		$entrymodel = new Stockentries();
+		$entrymodel->id = idmaker::getCurrentID2();
+		$entrymodel->regnum = idmaker::getRegNum('AC18');
+		$entrymodel->idatetime = idmaker::getDateTime();
+		$entrymodel->userlog = Yii::app()->user->id;
+		$entrymodel->datetimelog = $entrymodel->idatetime;
+		$entrymodel->transid = $itnum;
+		$entrymodel->transinfo = 'Pemindahan Barang - NA - '.	
+			lookup::WarehouseNameFromWarehouseID($idwhsource). ' - '. $entrymodel->idatetime;
+		$entrymodel->transname = 'AC18';
+		$entrymodel->donum = $itnum;
+		$entrymodel->save();
+		idmaker::saveRegNum('AC18', $entrymodel->regnum);
+		
+		foreach($datadetails as $detail) {
+			$detailentrymodel = new Detailstockentries();
+			$detailentrymodel->id = $entrymodel->id;
+			$detailentrymodel->iddetail = idmaker::getCurrentID2();
+			$detailentrymodel->userlog = Yii::app()->user->id;
+			$detailentrymodel->datetimelog = $entrymodel->idatetime;
+			$detailentrymodel->iditem = $detail['iditem'];
+			$detailentrymodel->serialnum = $detail['serialnum'];
+			
+			$detailentrymodel->save();
+		}
+		
+	}
 }
