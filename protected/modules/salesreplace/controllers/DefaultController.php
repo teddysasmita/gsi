@@ -47,7 +47,7 @@ class DefaultController extends Controller
 	{
              if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
                     Yii::app()->user->id))  {   
-                $this->state='c';
+                $this->state='create';
                 $this->trackActivity('c');    
                     
                 $model=new Salesreplace;
@@ -130,7 +130,7 @@ class DefaultController extends Controller
           if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                  Yii::app()->user->id))  {
 
-             $this->state='u';
+             $this->state='update';
              $this->trackActivity('u');
 
              $model=$this->loadModel($id);
@@ -323,7 +323,11 @@ class DefaultController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
                 $this->trackActivity('n');
-                $this->tracker->restoreDeleted('salesreplace', $idtrack);
+                $id = Yii::app()->tracker->createCommand()->select('id')->from('salesreplace')
+                	->where('idtrack = :p_idtrack', array(':p_idtrack'=>$idtrack))
+                	->queryScalar();
+                $this->tracker->restoreDeleted('detailsalesreplace', "id", $id );
+                $this->tracker->restoreDeleted('salesreplace', "idtrack", $idtrack);
                 
                 $dataProvider=new CActiveDataProvider('Salesreplace');
                 $this->render('index',array(
@@ -502,8 +506,8 @@ class DefaultController extends Controller
         protected function afterPost(& $model)
         {
             $idmaker=new idmaker();
-            if ($model->scenario == 'insert')
-            	$idmaker->saveRegNum($this->formid, $model->regnum);    
+            if ($this->state == 'create')
+            	$idmaker->saveRegNum($this->formid, substr($model->regnum,2));    
         }
         
         protected function beforePost(& $model)
@@ -512,8 +516,8 @@ class DefaultController extends Controller
             
             $model->userlog=Yii::app()->user->id;
             $model->datetimelog=$idmaker->getDateTime();
-            if ($model->scenario == 'insert')
-            	$model->regnum=$idmaker->getRegNum($this->formid);
+            if ($this->state == 'create')
+            	$model->regnum='FG'.$idmaker->getRegNum($this->formid);
         }
         
         protected function beforeDelete(& $model)

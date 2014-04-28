@@ -282,7 +282,9 @@ class DefaultController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
                 $this->trackActivity('n');
-                $this->tracker->restoreDeleted('salescancel', $idtrack);
+                
+                $this->tracker->restoreDeleted('salescancel', "idtrack", $idtrack);
+                
                 $dataProvider=new CActiveDataProvider('Salescancel');
                 $this->render('index',array(
                     'dataProvider'=>$dataProvider,
