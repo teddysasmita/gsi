@@ -220,6 +220,19 @@ class Action extends CComponent {
       return Yii::app()->createUrl('purchasesmemo/detailpurchasesmemos/view', array('iddetail'=>$data['iddetail']));
    }
    
+   
+   public static function decodeRestoreDeletedStockEntryUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('/stockentries/default/restoredeleted', array('idtrack'=>$data['idtrack']));
+   }
+   
+   public static function decodeRestoreHistoryStockEntryUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('/stockentries/default/restorehistory', array('idtrack'=>$data['idtrack']));
+   }
+   
    public static function decodeDeleteDetailStockEntryUrl($data)
    {
       //return print_r($data);

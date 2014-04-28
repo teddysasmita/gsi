@@ -42,11 +42,8 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
          'name'=>'idatetime',
          'header'=>'Tanggal',
       ),
-      array(
-         'name'=>'idsupplier',
-         'header'=>'Pemasok',
-         'value'=>"lookup::SupplierNameFromSupplierID(\$data['idsupplier'])",
-      ),
+		'transid',
+		'transinfo',
 		/*
 		'discount',
 		'status',
@@ -64,7 +61,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
               'visible'=>'false',
             ),
          ),
-         'updateButtonUrl'=>"Action::decodeRestoreHistoryCustomerUrl(\$data)",
+         'updateButtonUrl'=>"Action::decodeRestoreDeletedStockEntryUrl(\$data)",
 		),
 	),
 )); ?>
