@@ -522,7 +522,7 @@ class DefaultController extends Controller
          $this->setStatusPO($model->transid,
             Yii::app()->session['Detailstockexits']);
          
-         if ($model->transname == 'AC18') {
+         /*if ($model->transname == 'AC18') {
          	$data = Yii::app()->db->createCommand()
          		->select()->from('itemtransfers')
          		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
@@ -530,7 +530,7 @@ class DefaultController extends Controller
          	if ($data['idwhdest'] == '14103215447754000') {
          		$this->autoEntry($data['regnum'], $model->idwarehouse,$data['idwhdest']);
          	}
-         }
+         }*/
      }
 
      protected function beforePost(& $model)
