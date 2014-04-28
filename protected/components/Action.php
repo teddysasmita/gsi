@@ -444,10 +444,16 @@ class Action extends CComponent {
       return Yii::app()->createUrl('warehouse/default/restore', array('idtrack'=>$data['idtrack']));
    }
    
-   public static function decodeRestoreHistoryPurchasesStockEntryUrl($data)
+   public static function decodeRestoreDeletedPurchasesStockEntryUrl($data)
    {
    	//return print_r($data);
    	return Yii::app()->createUrl('/purchasesstockentries/default/restoreDeleted', array('idtrack'=>$data['idtrack']));
+   }
+   
+   public static function decodeRestoreHistoryPurchasesStockEntryUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('/purchasesstockentries/default/restore', array('idtrack'=>$data['idtrack']));
    }
    
    public static function decodeViewDetailPurchasesStockEntryUrl($data)
