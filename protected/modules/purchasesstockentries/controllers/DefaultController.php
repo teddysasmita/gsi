@@ -326,7 +326,7 @@ class DefaultController extends Controller
                 $id = Yii::app()->tracker->createCommand()->select('id')->from('purchasesstockentries')
                 	->where('idtrack = :p_idtrack', array(':p_idtrack'=>$idtrack))
                 	->queryScalar();
-                $this->tracker->restoreDeleted('detailpurchasesstockentries', "id", $id );
+                //$this->tracker->restoreDeleted('detailpurchasesstockentries', "id", $id );
                 $this->tracker->restoreDeleted('purchasesstockentries', "idtrack", $idtrack);
                 
                 $dataProvider=new CActiveDataProvider('Purchasesstockentries');
