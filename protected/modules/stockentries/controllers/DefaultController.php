@@ -630,6 +630,16 @@ EOS;
       		->where('a.regnum = :p_regnum', array(':p_regnum'=>$nolpb) )
       		->queryAll();
       	}
+      	
+      	/*if ($dataLPB == FALSE) {
+      		$dataLPB=Yii::app()->db->createCommand()
+      		->select('a.id, b.*')
+      		->from('salescancel a')
+      		->join('salespos b', 'b.regnum=a.invnum')
+      		->join('')
+      		->where('a.regnum = :p_regnum', array(':p_regnum'=>$nolpb) )
+      		->queryAll();
+      	}*/
       	Yii::app()->session->remove('Detailstockentries');
       	if ($dataLPB !== FALSE) {
 	      	$sql=<<<EOS
