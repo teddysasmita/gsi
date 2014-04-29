@@ -865,20 +865,21 @@ EOS;
       	};
 	}  
 	
-	private function autoEntry($itnum, $idwhsource, $idwhdest)
+	private function autoEntryDisplay($itnum, $idwhsource)
 	{
 		$datamaster = Yii::app()->db->createCommand()
-			->select('a.*')->from("itemtransfers a")
+			->select('a.*')->from("requestdisplays a")
 			->where("a.regnum = :p_regnum",
 				array(':p_regnum'=>$itnum))
 			->queryRow();
 		
 		$datadetails = Yii::app()->db->createCommand()
-			->select('c.iditem, c.serialnum')->from("itemtransfers a")
+			->select('c.iditem, c.serialnum')
+			->from("requestdisplays a")
 			->join("stockexits b", "b.transid = a.regnum")
 			->join("detailstockexits c", "c.id = b.id")	
-			->where("a.idwhdest = :p_idwhdest and a.regnum = :p_regnum",
-				array(':p_idwhdest'=>$idwhdest, ':p_regnum'=>$itnum))
+			->where("a.regnum = :p_regnum",
+				array(':p_regnum'=>$itnum))
 			->queryAll();
 		
 		$entrymodel = new Stockentries();
@@ -888,12 +889,12 @@ EOS;
 		$entrymodel->userlog = Yii::app()->user->id;
 		$entrymodel->datetimelog = $entrymodel->idatetime;
 		$entrymodel->transid = $itnum;
-		$entrymodel->transinfo = 'Pemindahan Barang - NA - '.	
-			lookup::WarehouseNameFromWarehouseID($idwhsource). ' - '. $entrymodel->idatetime;
-		$entrymodel->transname = 'AC18';
+		$entrymodel->transinfo = 'Permintaan Barang Display - '.$datamaster['regnum']. ' - '.	
+			$entrymodel->idatetime;
+		$entrymodel->transname = 'AC16';
 		$entrymodel->donum = $itnum;
 		$entrymodel->save();
-		idmaker::saveRegNum('AC18', $entrymodel->regnum);
+		idmaker::saveRegNum('AC16', $entrymodel->regnum);
 		
 		foreach($datadetails as $detail) {
 			$detailentrymodel = new Detailstockentries();
@@ -905,7 +906,7 @@ EOS;
 			$detailentrymodel->serialnum = $detail['serialnum'];
 			
 			$detailentrymodel->save();
-			Action::entryItemToWarehouse($idwhdest, $detailentrymodel->iddetail, 
+			Action::entryItemToWarehouse('wh14103215447754000', $detailentrymodel->iddetail, 
 				$detailentrymodel->$iditem, $detailentrymodel->$serialnum);			
 		}
 		
