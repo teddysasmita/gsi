@@ -527,7 +527,7 @@ class DefaultController extends Controller
         
          $details = $this->loadDetails($model->id);
          foreach($details as $detail) {
-         	Action::exitItemFromWarehouse($model->idwarehouse, $detail->serialnum);
+         	Action::exitItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
          };
          
          if ($model->transname == 'AC18') {
