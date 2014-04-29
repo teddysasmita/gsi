@@ -237,8 +237,6 @@ class DefaultController extends Controller
 	 */
 	public function actionIndex()
 	{
-		echo "here";
-		die();
             if(Yii::app()->authManager->checkAccess($this->formid.'-List', 
                 Yii::app()->user->id)) {
                $this->trackActivity('l');
