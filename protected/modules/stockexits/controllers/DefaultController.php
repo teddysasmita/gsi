@@ -677,7 +677,7 @@ EOS;
       		->select('a.id, b.*, c.id as iditem')
       		->from('deliveryordersnt a')
       		->join('detaildeliveryordersnt b', 'b.id=a.id')
-      		->join('items c', 'c.name = b.name')
+      		->join('items c', 'c.name = b.itemname')
       		->where('a.regnum = :p_regnum',
       				array(':p_regnum'=>$nolpb) )
 			->queryAll();
