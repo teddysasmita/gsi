@@ -516,6 +516,12 @@ class DefaultController extends Controller
          if ($this->state == 'create')
          	$idmaker->saveRegNum($this->formid, $model->regnum);
          
+         $details = $this->loadDetails($model->id);
+         foreach($details as $detail) {
+         	Action::entryItemToWarehouse($model->idwarehouse, $detail->iddetail, 
+         		$detail->iditem, $detail->$serialnum);
+         };
+         
          $this->setStatusPO($model->transid,
             Yii::app()->session['Detailstockentries']);
      }
