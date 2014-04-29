@@ -238,6 +238,7 @@ class DefaultController extends Controller
 	public function actionIndex()
 	{
 		echo "here";
+		die();
             if(Yii::app()->authManager->checkAccess($this->formid.'-List', 
                 Yii::app()->user->id)) {
                $this->trackActivity('l');
@@ -526,7 +527,7 @@ class DefaultController extends Controller
         
          $details = $this->loadDetails($model->id);
          foreach($details as $detail) {
-         	Action::exitItemFromWarehouse($model->idwhsource, $detail->serialnum);
+         	Action::exitItemFromWarehouse($model->idwarehouse, $detail->serialnum);
          };
          
          if ($model->transname == 'AC18') {
