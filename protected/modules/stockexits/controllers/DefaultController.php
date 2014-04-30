@@ -528,14 +528,12 @@ class DefaultController extends Controller
          	Action::exitItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
          };
          
-         if ($model->transname == 'AC18') {
+         if ($model->transname == 'AC16') {
          	$data = Yii::app()->db->createCommand()
-         		->select()->from('itemtransfers')
+         		->select()->from('requestdisplays')
          		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
          		->queryRow();
-         	if ($data['idwhdest'] == '14103215447754000') {
-         		$this->autoEntry($data['regnum'], $model->idwarehouse,$data['idwhdest']);
-         	}
+         	$this->autoEntry($data['regnum'], $model->idwarehouse, '14103215447754000');
          }
      }
 
