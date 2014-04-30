@@ -73,7 +73,7 @@ class DefaultController extends Controller
                       
                       $this->beforePost($model);
                       $respond=$this->checkWarehouse($model->idwarehouse);
-                      $respond=$respond && $this->checkSerialNum(Yii::app()->session['Detailstockexits']);
+                      $respond=$respond && $this->checkSerialNum(Yii::app()->session['Detailstockexits'], $model);
                       if ($respond) {
                          $respond=$model->save();
                          if(!$respond) {
@@ -96,7 +96,7 @@ class DefaultController extends Controller
                          } 
                          
                       } else {
-                        throw new CHttpException(404,'Nomor Serial telah terdaftar.');
+                        throw new CHttpException(707,'Nomor Serial telah terdaftar.');
                      }     
                    } else if (isset($_POST['command'])){
                       // save the current master data before going to the detail page
@@ -706,17 +706,22 @@ EOS;
 		Yii::app()->session['Detailstockexits']=$details;
 	}
       			
-      private function checkSerialNum(array $details ) 
+      private function checkSerialNum(array $details, $model ) 
       {
          $respond=true;
          
          foreach($details as $detail) {
             if ($detail['serialnum'] !== 'Belum Diterima') {
-               $count=Yii::app()->db->createCommand()
+               /*$count=Yii::app()->db->createCommand()
                   ->select('count(*)')
                   ->from('detailstockexits')
-                  ->where("serialnum = :serialnum", array(':serialnum'=>$detail['serialnum']))
-                  ->queryScalar();
+                  ->where("serialnum = :p_serialnum", array(':serialnum'=>$detail['serialnum']))
+                  ->queryScalar();*/
+				$count=Yii::app()->db->createCommand()
+					->select('count(*)')->from('wh'.$model->idwarehouse)
+					->where("serialnum = :p_serialnum and avail = :p_avail",
+      					array(':p_serialnum'=>$detail['serialnum'], ':p_avail'=>'0'))
+      				->queryScalar();
                $respond=$count==0;
                if(!$respond)
                   break;
