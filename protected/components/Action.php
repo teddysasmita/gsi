@@ -603,7 +603,7 @@ class Action extends CComponent {
 					'iddetail'=>$iddetail,
 					'iditem'=>$iditem,
 					'serialnum'=>$serialnum,
-					'avail'=>1,
+					'avail'=>'1',
 				));
    		} else {
    			throw new CHttpException(404,'You have no authorization for this operation.');
@@ -614,7 +614,7 @@ class Action extends CComponent {
    {
 	   	if (!Yii::app()->user->isGuest) {
 	   		Yii::app()->db->createCommand()
-	   			->update('wh'.$idwh, array('avail'=>0), 'serialnum = :p_serialnum', array(
+	   			->update('wh'.$idwh, array('avail'=>'0'), 'serialnum = :p_serialnum', array(
 	   				':p_serialnum'=>$serialnum
 	   			));
 	   	} else {
