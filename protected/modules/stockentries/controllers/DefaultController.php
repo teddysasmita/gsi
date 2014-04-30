@@ -518,8 +518,8 @@ class DefaultController extends Controller
          
          $details = $this->loadDetails($model->id);
          foreach($details as $detail) {
-         	Action::entryItemToWarehouse($model->idwarehouse, $detail->iddetail, 
-         		$detail->iditem, $detail->$serialnum);
+         	Action::entryItemToWarehouse($model->idwarehouse, $detail['iddetail'], 
+         		$detail['iditem'], $detail['$serialnum']);
          };
          
          $this->setStatusPO($model->transid,
