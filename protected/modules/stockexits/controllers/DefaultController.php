@@ -533,7 +533,7 @@ class DefaultController extends Controller
          		->select()->from('requestdisplays')
          		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
          		->queryRow();
-         	$this->autoEntry($data['regnum'], $model->idwarehouse, '14103215447754000');
+         	$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
          }
      }
 
@@ -909,7 +909,7 @@ EOS;
 			$detailentrymodel->serialnum = $detail['serialnum'];
 			
 			$detailentrymodel->save();
-			Action::entryItemToWarehouse('wh14103215447754000', $detailentrymodel->iddetail, 
+			Action::entryItemToWarehouse('14103215447754000', $detailentrymodel->iddetail, 
 				$detailentrymodel->$iditem, $detailentrymodel->$serialnum);			
 		}
 		
