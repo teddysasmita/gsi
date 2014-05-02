@@ -81,6 +81,7 @@ class LookUpController extends Controller {
 			$data=Yii::app()->db->createCommand()->selectDistinct('name')->from('items')
 			->where('name like :p_name', array(':p_name'=>'%'.$term.'%'))
 			->order('name')
+			->limit(12)
 			->queryColumn();
 			if(count($data)) {
 				foreach($data as $key=>$value) {
@@ -184,6 +185,7 @@ class LookUpController extends Controller {
    		->from('items')
    		->where('name like :p_name',
    				array(':p_name'=>"%$term%"))
+   		->limit(10)
    				->queryAll();
    		/*echo Yii::app()->db->createCommand()->select('a.donum, b.id')->from('stockentries a')
    		 ->leftJoin('purchasesreceipts b','b.donum = a.donum' )

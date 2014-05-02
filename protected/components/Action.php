@@ -606,7 +606,7 @@ class Action extends CComponent {
 					'avail'=>'1',
 				));
    		} else {
-   			throw new CHttpException(404,'You have no authorization for this operation.');
+   			throw new CHttpException(405,'You have no authorization for this operation.');
    		};
    }
    
