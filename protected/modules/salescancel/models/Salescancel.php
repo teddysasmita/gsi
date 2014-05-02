@@ -95,7 +95,7 @@ class Salescancel extends CActiveRecord
 		$criteria->compare('idatetime',$this->idatetime,true);
 		$criteria->compare('regnum',$this->regnum,true);
 		$criteria->compare('invnum',$this->invnum,true);
-		$criteria->compare('totalcash',$tnonhis->totalcash);
+		$criteria->compare('totalcash',$this->totalcash);
 		$criteria->compare('totalnoncash',$this->totalnoncash);
 		$criteria->compare('reason',$this->reason,true);
 		$criteria->compare('userlog',$this->userlog,true);
