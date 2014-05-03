@@ -43,7 +43,7 @@ class DefaultController extends Controller
 						->select("count(*) as total, a.iddetail, a.iditem, b.name, '${wh['code']}' as code")
 						->from("wh${wh['id']} a")
 						->join('items b', 'b.id = a.iditem')
-						->where("b.name like :p_name and a.avail = '1'", array(':p_name'=>"$itemnameparam%"))	
+						->where("b.name like :p_name and a.avail = '1'", array(':p_name'=>"%$itemnameparam%"))	
 						->group(array('iditem'))
 						->order('iditem')
 						->queryAll();
@@ -79,7 +79,7 @@ class DefaultController extends Controller
 					->select("a.iddetail, a.iditem, b.name, a.serialnum, concat('${wh['code']}') as code")
 					->from("wh${wh['id']} a")
 					->join('items b', 'b.id = a.iditem')
-					->where("b.name like :p_name and a.avail = '1'", array(':p_name'=>"$itemnameparam%"))
+					->where("b.name like :p_name and a.avail = '1'", array(':p_name'=>"%$itemnameparam%"))
 					->order('iditem')
 					->queryAll();
 					$alldata = array_merge($alldata, $data);
