@@ -673,7 +673,7 @@ EOS;
       	};
 	}
       			
-      private function checkSerialNum(array $details ) 
+      private function checkSerialNum(array $details, $idwh ) 
       {
          $respond=true;
          
@@ -681,8 +681,8 @@ EOS;
             if ($detail['serialnum'] !== 'Belum Diterima') {
                $count=Yii::app()->db->createCommand()
                   ->select('count(*)')
-                  ->from('detailstockentries')
-                  ->where("serialnum = :serialnum", array(':serialnum'=>$detail['serialnum']))
+                  ->from("wh$idwh")
+                  ->where("serialnum = :serialnum and avail = '1'", array(':serialnum'=>$detail['serialnum']))
                   ->queryScalar();
                $respond=$count==0;
                if(!$respond)

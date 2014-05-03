@@ -61,6 +61,7 @@ return array(
             'itemtransfers',
             'orderretrievals',
             'returstocks',
+            'stockadmin',
         ),
 
         

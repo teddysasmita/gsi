@@ -139,7 +139,7 @@ class LookUpController extends Controller {
 	public function actionGetWareHouse($term)
 	{
 		if (!Yii::app()->user->isGuest) {
-			$data=Yii::app()->db->createCommand()->selectDistinct('code')->from('warehouses')
+			$data=Yii::app()->db->createCommand()->select('code')->from('warehouses')
 			->where('code like :p_code', array(':p_code'=>'%'.$term.'%'))
 			->order('code')
 			->queryColumn();
@@ -219,7 +219,7 @@ class LookUpController extends Controller {
 		if (!Yii::app()->user->isGuest) {  	
 			//print_r($name);	
       		$name=rawurldecode($name);
-      		$data=Yii::app()->db->createCommand()->selectDistinct('id')->from('items')
+      		$data=Yii::app()->db->createCommand()->select('id')->from('items')
               ->where("name = '$name'")
               ->order('id')
               ->queryScalar();
