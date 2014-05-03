@@ -53,7 +53,10 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 
 //if (isset($alldata)) {
 	$mydp = new CArrayDataProvider($alldata, array(
-			'keyField'=>'iddetail'
+			'keyField'=>'iddetail',
+			'pagination'=>array(
+				'pageSize'=>20
+			),
 	));
 	$this->widget('zii.widgets.grid.CGridView', array(
 			'id'=>'quantity-grid',
