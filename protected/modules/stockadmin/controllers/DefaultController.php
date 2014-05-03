@@ -80,7 +80,7 @@ class DefaultController extends Controller
 					->from("wh${wh['id']} a")
 					->join('items b', 'b.id = a.iditem')
 					->where("b.name like :p_name and a.avail = '1'", array(':p_name'=>"%$itemnameparam%"))
-					->order('iditem')
+					->order('b.name')
 					->queryAll();
 					$alldata = array_merge($alldata, $data);
 				}
