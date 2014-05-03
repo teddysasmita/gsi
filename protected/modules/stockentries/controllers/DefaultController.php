@@ -775,13 +775,13 @@ EOS;
       				->order('iditem')
       				->queryAll();
       				$alldata = array_merge($alldata, $data);
-      	}
-      	usort($alldata, 'cmp');
-      }
-      $this->render('serial', array('alldata'=>$alldata, 'whcode'=>$whcodeparam, 'itemname'=>$itemnameparam));
-      } else {
-      	throw new CHttpException(404,'You have no authorization for this operation.');
-      };
+		      	}
+		      	usort($alldata, 'cmp');
+		      }
+		      $this->render('serial', array('alldata'=>$alldata, 'whcode'=>$whcodeparam, 'itemname'=>$itemnameparam));
+	      } else {
+	      	throw new CHttpException(404,'You have no authorization for this operation.');
+	      };
       }
       
 }
