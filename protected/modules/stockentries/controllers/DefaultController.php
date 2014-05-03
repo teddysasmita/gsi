@@ -73,7 +73,7 @@ class DefaultController extends Controller
                       
                       $this->beforePost($model);
                       $respond=$this->checkWarehouse($model->idwarehouse);
-                      $respond=$respond && $this->checkSerialNum(Yii::app()->session['Detailstockentries']);
+                      $respond=$respond && $this->checkSerialNum(Yii::app()->session['Detailstockentries'], $model->idwarehouse);
                       if ($respond) {
                          $respond=$model->save();
                          if(!$respond) {
