@@ -516,24 +516,22 @@ class DefaultController extends Controller
      protected function afterPost(& $model)
      {
          $idmaker=new idmaker();
-         if ($this->state == 'create')
+         if ($this->state == 'create') {
          	$idmaker->saveRegNum($this->formid, $model->regnum);
          
-         $this->setStatusPO($model->transid,
-            Yii::app()->session['Detailstockexits']);
-         
         
-         $details = $this->loadDetails($model->id);
-         foreach($details as $detail) {
-         	Action::exitItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
-         };
-         
-         if ($model->transname == 'AC16') {
-         	$data = Yii::app()->db->createCommand()
-         		->select()->from('requestdisplays')
-         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-         		->queryRow();
-         	$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
+         	$details = $this->loadDetails($model->id);
+	         foreach($details as $detail) {
+	         	Action::exitItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
+	         };
+	         
+	         if ($model->transname == 'AC16') {
+	         	$data = Yii::app()->db->createCommand()
+	         		->select()->from('requestdisplays')
+	         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
+	         		->queryRow();
+	         	$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
+	         }
          }
      }
 

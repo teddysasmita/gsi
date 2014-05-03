@@ -77,7 +77,11 @@ class DefaultController extends Controller
                       if ($respond) {
                          $respond=$model->save();
                          if(!$respond) {
-                             throw new CHttpException(5000,'There is an error in master posting'. ' '. $model->errors);
+                         	print_r($model->regnum);
+                         	print_r($model->errors);
+                         	
+                         	//die;
+                             throw new CHttpException(5000,'There is an error in master posting'. ' '. $model->getErrors());
                          }
 
                          if(isset(Yii::app()->session['Detailstockentries']) ) {
@@ -513,15 +517,15 @@ class DefaultController extends Controller
      protected function afterPost(& $model)
      {
          $idmaker=new idmaker();
-         if ($this->state == 'create')
+         if ($this->state == 'create') {
          	$idmaker->saveRegNum($this->formid, $model->regnum);
          
-         $details = $this->loadDetails($model->id);
-         foreach($details as $detail) {
-         	Action::entryItemToWarehouse($model->idwarehouse, $detail['iddetail'], 
-         		$detail['iditem'], $detail['$serialnum']);
+         	$details = $this->loadDetails($model->id);
+         	foreach($details as $detail) {
+         		Action::entryItemToWarehouse($model->idwarehouse, $detail['iddetail'], 
+         			$detail['iditem'], $detail['serialnum']);
+         	};
          };
-         
          $this->setStatusPO($model->transid,
             Yii::app()->session['Detailstockentries']);
      }
