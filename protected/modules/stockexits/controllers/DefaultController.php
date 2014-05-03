@@ -942,7 +942,7 @@ EOS;
 					->join("detailstockexits c", "c.id = a.id")
 					->join('items b', 'b.id = c.iditem')
 					->where("b.name like :p_name and a.idwarehouse = '${wh['id']}' and c.serialnum <> 'Belum Diterima'", array(':p_name'=>"%$itemnameparam%"))
-					->order('iditem')
+					->order('c.iditem')
 					->queryAll();
 					$alldata = array_merge($alldata, $data);
 			}
