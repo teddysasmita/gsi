@@ -1,5 +1,10 @@
 <?php
 
+function cmp($a, $b)
+{
+	return strcmp($a['iditem'], $b['iditem']);
+}
+
 class DefaultController extends Controller
 {
 	/**
@@ -741,6 +746,42 @@ EOS;
       	$this->render('printsummary',array(
       			'model'=>$this->loadModel($id),
       	));
+      }
+      
+      public function actionSerial()
+      {
+      	if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+      			Yii::app()->user->id))  {
+      		$this->trackActivity('v');
+      
+      		$alldata = array();
+      		$whcodeparam = '';
+      		$itemnameparam = '';
+      			
+      		if (isset($_GET['go'])) {
+      			$whcodeparam = $_GET['whcode'];
+      			$itemnameparam = $_GET['itemname'];
+      			$whs = Yii::app()->db->createCommand()
+      			->select("id, code")->from('warehouses')->where('code like :p_code',
+      					array(':p_code'=>'%'.$whcodeparam.'%'))
+      					->queryAll();
+      			foreach($whs as $wh) {
+      				$data = Yii::app()->db->createCommand()
+      				->select("c.iddetail, a.transid, c.iditem, b.name, c.serialnum, concat('${wh['code']}') as code")
+      				->from("stockentries a")
+      				->join("detailstockentries c", "c.id = a.id")
+      				->join('items b', 'b.id = c.iditem')
+      				->where("b.name like :p_name and c.serialnum <> 'Belum Diterima'", array(':p_name'=>"%$itemnameparam%"))
+      				->order('iditem')
+      				->queryAll();
+      				$alldata = array_merge($alldata, $data);
+      	}
+      	usort($alldata, 'cmp');
+      }
+      $this->render('serial', array('alldata'=>$alldata, 'whcode'=>$whcodeparam, 'itemname'=>$itemnameparam));
+      } else {
+      	throw new CHttpException(404,'You have no authorization for this operation.');
+      };
       }
       
 }
