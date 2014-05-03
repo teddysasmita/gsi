@@ -603,7 +603,7 @@ class Action extends CComponent {
 					'iddetail'=>$iddetail,
 					'iditem'=>$iditem,
 					'serialnum'=>$serialnum,
-					'avail'=>'1',
+					'avail'=>'1'
 				));
    		} else {
    			throw new CHttpException(405,'You have no authorization for this operation.');
