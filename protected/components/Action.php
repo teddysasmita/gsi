@@ -621,6 +621,18 @@ class Action extends CComponent {
 	   		throw new CHttpException(404,'You have no authorization for this operation.');
 	   	};
    }
+   
+   public static function deleteItemFromWarehouse($idwh, $serialnum)
+   {
+   	if (!Yii::app()->user->isGuest) {
+   		Yii::app()->db->createCommand()
+   		->delete('wh'.$idwh, 'serialnum = :p_serialnum', array(
+   			':p_serialnum'=>$serialnum
+   		));
+   	} else {
+   		throw new CHttpException(404,'You have no authorization for this operation.');
+   	};
+   }
 }
 
 ?>

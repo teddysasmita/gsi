@@ -550,9 +550,20 @@ class DefaultController extends Controller
          	$model->regnum=$idmaker->getRegNum($this->formid);
      }
 
-     protected function    beforeDelete(& $model)
+     protected function beforeDelete(& $model)
      {
-
+     	$details = $this->loadDetails($model->id);
+     	foreach($details as $detail) {
+     		Action::deleteItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
+     	};
+     	
+     	if ($model->transname == 'AC16') {
+     		$data = Yii::app()->db->createCommand()
+     		->select()->from('requestdisplays')
+     		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
+     		->queryRow();
+     		$this->removeEntryDisplay($data['regnum'], $model->idwarehouse);
+     	}
      }
 
      protected function afterDelete(& $model)
@@ -884,13 +895,14 @@ EOS;
 			->from("requestdisplays a")
 			->join("stockexits b", "b.transid = a.regnum")
 			->join("detailstockexits c", "c.id = b.id")	
-			->where("a.regnum = :p_regnum",
-				array(':p_regnum'=>$itnum))
+			->where("a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse",
+				array(':p_regnum'=>$itnum, ':p_idwarehouse'=>$idwhsource))
 			->queryAll();
 		
+		Yii::import('application.modules.stockentries.models.*');
 		$entrymodel = new Stockentries();
 		$entrymodel->id = idmaker::getCurrentID2();
-		$entrymodel->regnum = idmaker::getRegNum('AC18');
+		$entrymodel->regnum = idmaker::getRegNum('AC16');
 		$entrymodel->idatetime = idmaker::getDateTime();
 		$entrymodel->userlog = Yii::app()->user->id;
 		$entrymodel->datetimelog = $entrymodel->idatetime;
@@ -899,23 +911,40 @@ EOS;
 			$entrymodel->idatetime;
 		$entrymodel->transname = 'AC16';
 		$entrymodel->donum = $itnum;
-		$entrymodel->save();
-		idmaker::saveRegNum('AC16', $entrymodel->regnum);
+		$entrymodel->idwarehouse = '14103215447754000';
+		$entrymodel->validate();
+		$respond = $entrymodel->save();
+		if ($respond) {
+			idmaker::saveRegNum('AC16', $entrymodel->regnum);
 		
-		foreach($datadetails as $detail) {
-			$detailentrymodel = new Detailstockentries();
-			$detailentrymodel->id = $entrymodel->id;
-			$detailentrymodel->iddetail = idmaker::getCurrentID2();
-			$detailentrymodel->userlog = Yii::app()->user->id;
-			$detailentrymodel->datetimelog = $entrymodel->idatetime;
-			$detailentrymodel->iditem = $detail['iditem'];
-			$detailentrymodel->serialnum = $detail['serialnum'];
-			
-			$detailentrymodel->save();
-			Action::entryItemToWarehouse('14103215447754000', $detailentrymodel->iddetail, 
-				$detailentrymodel->$iditem, $detailentrymodel->$serialnum);			
+			foreach($datadetails as $detail) {
+				$detailentrymodel = new Detailstockentries();
+				$detailentrymodel->id = $entrymodel->id;
+				$detailentrymodel->iddetail = idmaker::getCurrentID2();
+				$detailentrymodel->userlog = Yii::app()->user->id;
+				$detailentrymodel->datetimelog = $entrymodel->idatetime;
+				$detailentrymodel->iditem = $detail['iditem'];
+				$detailentrymodel->serialnum = $detail['serialnum'];
+				
+				$detailentrymodel->save();
+				Action::entryItemToWarehouse('14103215447754000', $detailentrymodel->iddetail, 
+					$detailentrymodel->iditem, $detailentrymodel->serialnum);			
+			}
 		}
+	}
+	
+	private function removeEntryDisplay($itnum, $warehouse)
+	{
+		$stockEntry = Yii::app()->db->createCommand()
+			->select()->from('stockentries')->where('transid = :p_transid', 
+				array(':p_transid'=>$itnum))
+			->queryRow();
 		
+		Yii::app()->db->createCommand()->delete('detailstockentries', 'id = :p_id',
+			array(':p_id'=>$stockEntry['id']));
+		
+		Yii::app()->db->createCommand()->delete('stockentries', 'id = :p_id',
+			array(':p_id'=>$stockEntry['id']));
 	}
 	
 	public function actionSerial()
