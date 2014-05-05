@@ -64,6 +64,14 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 			'columns'=>array(
 					//'id',
 					array(
+							'header'=>'Nomor Urut',
+							'name'=>'regnum',
+					),
+					array(
+							'header'=>'Tanggal',
+							'name'=>'idatetime',
+					),
+					array(
 							'header'=>'Nama Barang',
 							'name'=>'name',
 					),

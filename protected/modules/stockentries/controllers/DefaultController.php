@@ -803,7 +803,7 @@ EOS;
       					->queryAll();
       			foreach($whs as $wh) {
       				$data = Yii::app()->db->createCommand()
-      				->select("a.regnum, a.idatetime, a.iditem, b.name, c.serialnum, concat('${wh['code']}') as code")
+      				->select("c.iddetail, a.regnum, a.idatetime, a.iditem, b.name, c.serialnum, concat('${wh['code']}') as code")
       				->from("acquisitions a")
       				->join("detailacquisitions c", "c.id = a.id")
       				->join('items b', 'b.id = a.iditem')
