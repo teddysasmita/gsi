@@ -75,6 +75,11 @@ $this->menu=array(
 				'type'=>'number'
 			),
 			array(
+				'header'=>'Diskon',
+				'name'=>'discount',
+				'type'=>'number'
+			),
+			array(
 				'header'=>'Barang Baru',
 				'name'=>'iditemnew',
 				'value'=>"lookup::ItemNameFromItemID(\$data['iditemnew'])"
@@ -87,6 +92,11 @@ $this->menu=array(
 			array(
 				'header'=>'Harga Baru',
 				'name'=>'pricenew',
+				'type'=>'number'
+			),
+			array(
+				'header'=>'Diskon Baru',
+				'name'=>'discountnew',
 				'type'=>'number'
 			),
 			array(

@@ -143,6 +143,11 @@ Yii::app()->clientScript->registerScript('myscript', $myscript, CClientScript::P
                'name'=>'price',
                'type'=>'number'
             ),
+			array(
+				'header'=>'Diskon',
+				'name'=>'discount',
+				'type'=>'number'
+			),
           	array(
 				'header'=>'Nama Barang Baru',
 				'name'=>'iditemnew',
@@ -155,6 +160,11 @@ Yii::app()->clientScript->registerScript('myscript', $myscript, CClientScript::P
 			array(
 				'header'=>'Harga Baru',
 				'name'=>'pricenew',
+				'type'=>'number'
+			),
+			array(
+				'header'=>'Diskon Baru',
+				'name'=>'discountnew',
 				'type'=>'number'
 			),
 			array(

@@ -9,9 +9,11 @@
  * @property string $iditem
  * @property double $qty
  * @property double $price
+ * @property double $discount
  * @property string $iditemnew
  * @property double $qtynew
  * @property double $pricenew
+ * @property double $discountnew
  * @property string $deleted
  * @property string $userlog
  * @property string $datetimelog
@@ -34,8 +36,8 @@ class Detailsalesreplace extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('iddetail, id, iditem, qty, iditemnew, qtynew, pricenew, deleted, userlog, datetimelog', 'required'),
-			array('qty, price, qtynew, pricenew', 'numerical'),
+			array('iddetail, id, iditem, qty, discount, discountnew, iditemnew, qtynew, pricenew, deleted, userlog, datetimelog', 'required'),
+			array('qty, price, qtynew, pricenew, discount, discountnew', 'numerical'),
 			array('iddetail, id, iditem, iditemnew, userlog', 'length', 'max'=>21),
 			array('datetimelog', 'length', 'max'=>19),
 			array('deleted', 'length', 'max'=>2),
@@ -67,9 +69,11 @@ class Detailsalesreplace extends CActiveRecord
 			'iditem' => 'Nama Barang',
 			'qty' => 'Qty',
 			'price' => 'Harga',
+			'discount'=> 'Potongan',
 			'iditemnew' => 'Nama Barang Ganti',
 			'qtynew' => 'Qty Baru',
 			'pricenew' => 'Harga Baru',
+			'discountnew'=> 'Potongan',
 			'deleted' => 'Perubahan',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
@@ -99,9 +103,11 @@ class Detailsalesreplace extends CActiveRecord
 		$criteria->compare('iditem',$this->iditem,true);
 		$criteria->compare('qty',$this->qty);
 		$criteria->compare('price',$this->price);
+		$criteria->compare('discount',$this->discount);
 		$criteria->compare('iditemnew',$this->iditemnew,true);
 		$criteria->compare('qtynew',$this->qtynew);
 		$criteria->compare('pricenew',$this->pricenew);
+		$criteria->compare('discountnew',$this->discountnew);
 		$criteria->compare('deleted',$this->deleted);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);

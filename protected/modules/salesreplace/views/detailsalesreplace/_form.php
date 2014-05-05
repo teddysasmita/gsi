@@ -170,6 +170,14 @@ EOS;
 	</div>
 	
 	<div class="row">
+		<?php echo $form->labelEx($model,'discount'); ?>
+		<?php //echo $form->textField($model,'price'); 
+			echo CHtml::label(number_format($model->discount), FALSE);
+		?>
+		<?php echo $form->error($model,'discount'); ?>
+	</div>
+	
+	<div class="row">
 		<?php echo $form->labelEx($model,'deleted'); ?>
 		<?php 
 			echo $form->dropDownList($model, 'deleted', 
@@ -233,6 +241,12 @@ EOS;
 		<?php echo $form->error($model,'qtynew'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'discountnew'); ?>
+		<?php echo $form->textField($model,'discountnew'); ?>
+		<?php echo $form->error($model,'discountnew'); ?>
+	</div>
+	
 	<div class="row">
 		<?php echo $form->labelEx($model,'pricenew'); ?>
 		<?php echo $form->textField($model,'pricenew'); ?>
