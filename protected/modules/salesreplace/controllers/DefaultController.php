@@ -596,10 +596,12 @@ class DefaultController extends Controller
         		$canceldetail['iditem']=$detail['iditem'];
         		$canceldetail['qty']=$detail['qty'];
         		$canceldetail['price']=$detail['price'];
+        		$canceldetail['discount']=$detail['discount'];
         		$canceldetail['deleted']='1';
         		$canceldetail['iditemnew']=$detail['iditem'];
         		$canceldetail['qtynew']=$detail['qty'];
         		$canceldetail['pricenew']=$detail['price'];
+        		$canceldetail['discountnew']=$detail['discountnew'];
         		$canceldetail['userlog']=Yii::app()->user->id;
         		$canceldetail['datetimelog']=idmaker::getDateTime();
         

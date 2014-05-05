@@ -13,4 +13,6 @@ $this->breadcrumbs=array(
 		Yii::app()->createUrl('stockadmin/default/quantity'))?></h3> 
 <h3><?php echo CHtml::link('Berdasarkan Nomor Seri dan Lokasi', 
 		Yii::app()->createUrl('stockadmin/default/serial'))?></h3>
+<h3><?php echo CHtml::link('Berdasarkan Nama Barang dan Gudang', 
+		Yii::app()->createUrl('stockadmin/default/flow'))?></h3>
 

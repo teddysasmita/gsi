@@ -5,6 +5,11 @@ function cmp($a, $b)
 	return strcmp($a['iditem'], $b['iditem']);
 }
 
+function cmp2($a, $b)
+{
+	return strcmp($a['idatetime'], $b['idatetime']);
+}
+
 class DefaultController extends Controller
 {
 	private $formid = 'AC51';
@@ -87,6 +92,47 @@ class DefaultController extends Controller
 				usort($alldata, 'cmp');
 			}
 			$this->render('serial', array('alldata'=>$alldata, 'whcode'=>$whcodeparam, 'itemname'=>$itemnameparam));
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+	
+	public function actionFlow()
+	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+				Yii::app()->user->id))  {
+			$this->trackActivity('v');
+		
+			$alldata = array();
+			$iditemparam = '';
+			$whcodeparam = '';
+				
+			if (isset($_GET['go'])) {
+				$sql=<<<EOS
+	select a.regnum, a.transid, a.idatetime, count(b.*) as total, b.iditem from stockentries a 
+	join detailstockentries b on b.id = a.id
+	where b.iditem = :p_b_iditem and a.idwarehouse like :p_a_idwh
+	union
+	select b.regnum, c.transid, c.idatetime, - (count(d.*)) as total, d.iditem from stockexits c 
+	join detailstockexits d on d.id = c.id
+	where d.iditem = :p_d_iditem and c.idwarehouse like :p_c_idwh
+	order by idatetime							
+EOS;
+				$iditemparam = $_GET['iditem'];
+				$whcodeparam = $_GET['whcode'];
+				$idwh = lookup::WarehouseIDFromCode($whcodeparam);
+				if ($idwh == FALSE)
+					$idwh = '';
+				$command = Yii::app()->db->createCommand($sql);
+				$command->bindParam(':p_b_iditem', $iditemparam, PDO::PARAM_STR);
+				$command->bindParam(':p_d_iditem', $iditemparam, PDO::PARAM_STR);
+				$command->bindParam(':p_a_idwh', $idwh.'%', PDO::PARAM_STR);
+				$command->bindParam(':p_c_idwh', $idwh.'%', PDO::PARAM_STR);
+				$alldata = $command->queryAll();
+				print_r($alldata);
+				usort($alldata, 'cmp2');
+			}
+			$this->render('flow', array('alldata'=>$alldata, 'iditem'=>$iditemparam, 'whcode'=>$whcodeparam));
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		};

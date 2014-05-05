@@ -282,6 +282,8 @@ class DetailsalesreplaceController extends Controller
             $model->iddetail=$idmaker->getCurrentID2();
             $model->userlog=Yii::app()->user->id;
             $model->datetimelog=$idmaker->getDateTime();
+            $model->discount=0;
+            $model->discountnew=0;
         }
         
         protected function afterPost(& $model)

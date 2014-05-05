@@ -229,6 +229,16 @@ class lookup extends CComponent {
          return $name;
    }
    
+   public static function WarehouseIDFromCode($code)
+   {
+   	$sql="select id from warehouses where code='$code'";
+   	$name=Yii::app()->db->createCommand($sql)->queryScalar();
+   	if(!$name) {
+   		return 'NA';
+   	} else
+   		return $name;
+   }
+   
    public static function TypeToName($type)
    {
       switch ($type) {

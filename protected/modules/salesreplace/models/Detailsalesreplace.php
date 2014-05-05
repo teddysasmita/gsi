@@ -73,7 +73,7 @@ class Detailsalesreplace extends CActiveRecord
 			'iditemnew' => 'Nama Barang Ganti',
 			'qtynew' => 'Qty Baru',
 			'pricenew' => 'Harga Baru',
-			'discountnew'=> 'Potongan',
+			'discountnew'=> 'Potongan Baru',
 			'deleted' => 'Perubahan',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
