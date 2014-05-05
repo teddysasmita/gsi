@@ -83,10 +83,6 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 							'header'=>'Gudang',
 							'name'=>'code',
 					),
-					array(
-							'header'=>'Nomor SJ',
-							'name'=>'transid',
-					),
 			),
 	));
 //}
