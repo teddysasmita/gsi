@@ -815,7 +815,7 @@ EOS;
 		      	}
 		      	usort($alldata, 'cmp');
 			}
-			$this->render('serial', array('alldata'=>$alldata, 'whcode'=>$whcodeparam, 'itemname'=>$itemnameparam));
+			$this->render('serialscan', array('alldata'=>$alldata, 'whcode'=>$whcodeparam, 'itemname'=>$itemnameparam));
 		} else {
 	      	throw new CHttpException(404,'You have no authorization for this operation.');
 		};
