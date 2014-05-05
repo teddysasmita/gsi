@@ -30,18 +30,25 @@ $supplierScript=<<<EOS
 	
    	$('#myButton').click(
    		function(evt) {
-   			$.getJSON('index.php?r=LookUp/checkItemSerial', { iditem: $('#Detailstockexits_iditem').val(), 
-   			serialnum: $('#Detailstockexits_serialnum').val(), idwh:$('#idwh').val() }, 
-   			function(data) {
-   				if (data=='0') {
-            		$('#Detailstockexits_serialnum_em_').html('Data tidak ditemukan');
-					$('#Detailstockexits_serialnum_em_').prop('style', 'display:block');
-				} else {
-					$('#Detailstockexits_serialnum_em_').html('');
-					$('#Detailstockexits_serialnum_em_').prop('style', 'display:none');
-   					$('#detailstockexits-form').submit();
-   				};
-   			});
+   			var myserialnum = $('#Detailstockexits_serialnum').val();
+   			if (myserialnum !== 'Belum Diterima') {
+	   			$.getJSON('index.php?r=LookUp/checkItemSerial', { iditem: $('#Detailstockexits_iditem').val(), 
+	   			serialnum: $('#Detailstockexits_serialnum').val(), idwh:$('#idwh').val() }, 
+	   			function(data) {
+	   				if (data=='0') {
+	            		$('#Detailstockexits_serialnum_em_').html('Data tidak ditemukan');
+						$('#Detailstockexits_serialnum_em_').prop('style', 'display:block');
+					} else {
+						$('#Detailstockexits_serialnum_em_').html('');
+						$('#Detailstockexits_serialnum_em_').prop('style', 'display:none');
+	   					$('#detailstockexits-form').submit();
+	   				};
+	   			});
+   			} else {
+   				$('#Detailstockexits_serialnum_em_').html('');
+				$('#Detailstockexits_serialnum_em_').prop('style', 'display:none');
+   				$('#detailstockexits-form').submit();
+   			}
    	});
    		
 EOS;

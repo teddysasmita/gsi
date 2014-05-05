@@ -558,6 +558,7 @@ class DefaultController extends Controller
 
      protected function beforePost(& $model)
      {
+     	
          $idmaker=new idmaker();
 
          $model->userlog=Yii::app()->user->id;
@@ -566,12 +567,12 @@ class DefaultController extends Controller
          	$model->regnum=$idmaker->getRegNum($this->formid);
          
          if ($this->state == 'update') {
-         
+         	
          	$details = $this->loadDetails($model->id);
          	foreach($details as $detail) {
-         		Action::entryItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
+         		Action::entryItemToWarehouse($model->idwarehouse, $detail['iddetail'],
+         			$detail['iditem'], $detail['serialnum']);
          	};
-         
          	if ($model->transname == 'AC16') {
          		$data = Yii::app()->db->createCommand()
          		->select()->from('requestdisplays')
@@ -579,6 +580,7 @@ class DefaultController extends Controller
          		->queryRow();
          		$this->removeEntryDisplay($data['regnum'], $model->idwarehouse);
          	}
+         	echo "before";
          	/*if ($model->transname == 'AC16') {
          		$data = Yii::app()->db->createCommand()
          		->select()->from('requestdisplays')
