@@ -122,8 +122,9 @@ class DefaultController extends Controller
 EOS;
 				$iditemparam = $_GET['iditem'];
 				$whcodeparam = $_GET['whcode'];
-				$idwh = lookup::WarehouseIDFromCode($whcodeparam);
-				if ($idwh == FALSE)
+				if ($whcodeparam !== "")
+					$idwh = lookup::WarehouseIDFromCode($whcodeparam);
+				else
 					$idwh = '%';
 				$command = Yii::app()->db->createCommand($sql);
 				$command->bindParam(':p_b_iditem', $iditemparam, PDO::PARAM_STR);
