@@ -806,7 +806,7 @@ EOS;
       				->select("a.regnum, a.idatetime, a.iditem, b.name, c.serialnum, concat('${wh['code']}') as code")
       				->from("acquisitions a")
       				->join("detailacquisitions c", "c.id = a.id")
-      				->join('items b', 'b.id = c.iditem')
+      				->join('items b', 'b.id = a.iditem')
       				->where("b.name like :p_name and a.idwarehouse = '${wh['id']}'", 
       					array(':p_name'=>"%$itemnameparam%"))
       				->order('b.name')
