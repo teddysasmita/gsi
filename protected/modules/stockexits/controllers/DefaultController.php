@@ -539,6 +539,20 @@ class DefaultController extends Controller
 	         		->queryRow();
 	         	$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
 	         }
+         } else if ($this->state == 'update') {
+        
+         	$details = $this->loadDetails($model->id);
+	         foreach($details as $detail) {
+	         	Action::exitItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
+	         };
+	         
+	         if ($model->transname == 'AC16') {
+	         	$data = Yii::app()->db->createCommand()
+	         		->select()->from('requestdisplays')
+	         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
+	         		->queryRow();
+	         	$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
+	         }
          }
      }
 
@@ -550,6 +564,29 @@ class DefaultController extends Controller
          $model->datetimelog=$idmaker->getDateTime();
          if ($this->state == 'create')
          	$model->regnum=$idmaker->getRegNum($this->formid);
+         
+         if ($this->state == 'update') {
+         
+         	$details = $this->loadDetails($model->id);
+         	foreach($details as $detail) {
+         		Action::entryItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
+         	};
+         
+         	if ($model->transname == 'AC16') {
+         		$data = Yii::app()->db->createCommand()
+         		->select()->from('requestdisplays')
+         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
+         		->queryRow();
+         		$this->removeEntryDisplay($data['regnum'], $model->idwarehouse);
+         	}
+         	/*if ($model->transname == 'AC16') {
+         		$data = Yii::app()->db->createCommand()
+         		->select()->from('requestdisplays')
+         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
+         		->queryRow();
+         		$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
+         	}*/
+         }
      }
 
      protected function beforeDelete(& $model)
