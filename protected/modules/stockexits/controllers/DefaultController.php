@@ -570,8 +570,12 @@ class DefaultController extends Controller
          	
          	$details = $this->loadDetails($model->id);
          	foreach($details as $detail) {
-         		Action::entryItemToWarehouse($model->idwarehouse, $detail['iddetail'],
-         			$detail['iditem'], $detail['serialnum']);
+         		if ($detail['serialnum'] != 'Belum Diterima') {
+         			if (Action::checkItemToWarehouse($model->idwarehouse, $detail['iddetail'],
+         				$detail['iditem'], $detail['serialnum']) == 0)
+         				Action::entryItemToWarehouse($model->idwarehouse, $detail['iddetail'],
+         					$detail['iditem'], $detail['serialnum']);
+         		}
          	};
          	if ($model->transname == 'AC16') {
          		$data = Yii::app()->db->createCommand()

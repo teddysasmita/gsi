@@ -610,6 +610,18 @@ class Action extends CComponent {
    		};
    }
    
+   public static function checkItemToWarehouse($idwh, $iddetail, $iditem, $serialnum)
+   {
+   	if (!Yii::app()->user->isGuest) {
+   		return Yii::app()->db->createCommand()
+   		->select("count(*) as total")->from('wh'.$idwh)->where("iditem = :p_iditem and serialnum = :p_serialnum", 
+   			array( ':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))
+   		->queryScalar();
+   	} else {
+   		throw new CHttpException(405,'You have no authorization for this operation.');
+   	};
+   }
+   
    public static function exitItemFromWarehouse($idwh, $serialnum)
    {
 	   	if (!Yii::app()->user->isGuest) {
