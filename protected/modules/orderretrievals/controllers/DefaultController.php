@@ -255,7 +255,7 @@ class DefaultController extends Controller
 
             $detailmodels=Detailorderretrievals2::model()->findAll('id=:id',array(':id'=>$id));
             foreach($detailmodels as $dm) {
-               $this->tracker->delete('detailorderretrievals', array('iddetail'=>$dm->iddetail));
+               $this->tracker->delete('detailorderretrievals2', array('iddetail'=>$dm->iddetail));
                $dm->delete();
             }
 
