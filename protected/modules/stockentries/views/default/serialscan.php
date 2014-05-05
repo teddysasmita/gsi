@@ -4,7 +4,7 @@
 $this->breadcrumbs=array(
 		'Proses'=>array('/site/proses'),
 		'Daftar'=>array('default/index'),
-		'Barang Masuk Berdasarkan Nomor Seri dan Lokasi'
+		'Nomor seri Barang hasil scan dgn Laptop'
 );
 ?>
 
