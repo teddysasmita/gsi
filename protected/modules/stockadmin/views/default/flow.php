@@ -82,6 +82,7 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 					array(
 							'header'=>'Gudang',
 							'name'=>'code',
+							'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
 					),
 			),
 	));
