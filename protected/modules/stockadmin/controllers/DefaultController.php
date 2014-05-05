@@ -109,27 +109,26 @@ class DefaultController extends Controller
 				
 			if (isset($_GET['go'])) {
 				$sql=<<<EOS
-	select a.regnum, a.transid, a.idatetime, count(b.*) as total, b.iditem from stockentries a 
+	select b.iddetail, a.regnum, a.transid, a.idatetime, count(*) as total, b.iditem from stockentries a 
 	join detailstockentries b on b.id = a.id
-	where b.iditem = :p_b_iditem and a.idwarehouse like :p_a_idwh
+	where b.iditem = :p_b_iditem and a.idwarehouse = :p_a_idwh
 	union
-	select b.regnum, c.transid, c.idatetime, - (count(d.*)) as total, d.iditem from stockexits c 
+	select d.iddetail, c.regnum, c.transid, c.idatetime, - (count(*)) as total, d.iditem from stockexits c 
 	join detailstockexits d on d.id = c.id
-	where d.iditem = :p_d_iditem and c.idwarehouse like :p_c_idwh
+	where d.iditem = :p_d_iditem and c.idwarehouse = :p_c_idwh
 	order by idatetime							
 EOS;
 				$iditemparam = $_GET['iditem'];
 				$whcodeparam = $_GET['whcode'];
 				$idwh = lookup::WarehouseIDFromCode($whcodeparam);
 				if ($idwh == FALSE)
-					$idwh = '';
+					$idwh = '%';
 				$command = Yii::app()->db->createCommand($sql);
 				$command->bindParam(':p_b_iditem', $iditemparam, PDO::PARAM_STR);
 				$command->bindParam(':p_d_iditem', $iditemparam, PDO::PARAM_STR);
-				$command->bindParam(':p_a_idwh', $idwh.'%', PDO::PARAM_STR);
-				$command->bindParam(':p_c_idwh', $idwh.'%', PDO::PARAM_STR);
+				$command->bindParam(':p_a_idwh', $idwh, PDO::PARAM_STR);
+				$command->bindParam(':p_c_idwh', $idwh, PDO::PARAM_STR);
 				$alldata = $command->queryAll();
-				print_r($alldata);
 				usort($alldata, 'cmp2');
 			}
 			$this->render('flow', array('alldata'=>$alldata, 'iditem'=>$iditemparam, 'whcode'=>$whcodeparam));
