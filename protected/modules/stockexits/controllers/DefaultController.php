@@ -160,7 +160,7 @@ class DefaultController extends Controller
              $this->performAjaxValidation($model);
 
              if(isset($_POST)) {
-                 if(isset($_POST['yt1'])) {
+                 if(isset($_POST['yt0'])) {
                      $model->attributes=$_POST['Stockexits'];
                      $this->beforePost($model);
                      $this->tracker->modify('stockexits', $id);
@@ -192,6 +192,8 @@ class DefaultController extends Controller
                          Yii::app()->session->remove('Detailstockexits');
                          Yii::app()->session->remove('Deletedetailstockexits');
                          $this->redirect(array('view','id'=>$model->id));
+                     } else {
+                    	throw new CHttpException(404,'There is an error in detail deletion');
                      }
                  }
              }
