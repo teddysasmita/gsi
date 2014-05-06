@@ -741,13 +741,14 @@ EOS;
     	select count(*) as received from stockexits a
 		join detailstockexits b on b.id = a.id
 		where a.transid = :p_transid and b.iditem = :p_iditem and
-        b.serialnum <> 'Belum Diterima'
+        b.serialnum <> 'Belum Diterima' and a.idwarehouse = :p_idwarehouse
 EOS;
       	$mycommand=Yii::app()->db->createCommand($sql);
       	
       	foreach($dataLPB as $row) {
       		$mycommand->bindParam(':p_transid', $nolpb, PDO::PARAM_STR);
       		$mycommand->bindParam(':p_iditem', $row['iditem'], PDO::PARAM_STR);
+      		$mycommand->bindParam(':p_idwarehouse', $idwh);
 			$accepted=$mycommand->queryScalar();
 			for ($index = 0; $index < $row['qty'] - $accepted; $index++) {
 				$detail['iddetail']=idmaker::getCurrentID2();
