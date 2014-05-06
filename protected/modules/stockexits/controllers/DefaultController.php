@@ -82,8 +82,10 @@ class DefaultController extends Controller
                       if ($respond) {
                          $respond=$model->save();
                          if(!$respond) {
-                         	if (count($model->errors)>0)
+                         	if (count($model->errors)>1)
                          		$myerror = implode(", ", $model->getErrors());
+                         	else
+                         		$myerror = $model->getErrors();
                              throw new CHttpException(404,'There is an error in master posting: '. $myerror);
                          }
 
