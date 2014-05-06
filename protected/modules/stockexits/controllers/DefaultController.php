@@ -86,7 +86,7 @@ class DefaultController extends Controller
                          		$myerror = implode(", ", $model->getErrors());
                          	else
                          		$myerror = $model->getErrors();
-                             throw new CHttpException(404,'There is an error in master posting: '. $myerror);
+                             throw new CHttpException(404,'There is an error in master posting: '. $myerror[0]);
                          }
 
                          if(isset(Yii::app()->session['Detailstockexits']) ) {
