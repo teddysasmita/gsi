@@ -33,7 +33,7 @@ class Warehouses extends CActiveRecord
 			array('id, userlog', 'length', 'max'=>21),
 			array('code', 'length', 'max'=>50),
 			array('remark', 'length', 'max'=>255),
-			array('ipaddr', 'length', 'max'=>15),
+			array('ipaddr', 'length', 'max'=>255),
 			array('datetimelog', 'length', 'max'=>19),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
