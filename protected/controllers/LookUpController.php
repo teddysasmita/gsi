@@ -526,7 +526,7 @@ EOS;
 					/*->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum',
 				 		array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))*/
 						->queryScalar();
-				//$data = 1;
+				$data = 1;
 			} 
 			echo json_encode($data);
 		} else {
