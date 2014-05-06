@@ -530,13 +530,13 @@ class DefaultController extends Controller
 	         	Action::exitItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
 	         };
 	         
-	         if ($model->transname == 'AC16') {
+	         /*if ($model->transname == 'AC16') {
 	         	$data = Yii::app()->db->createCommand()
 	         		->select()->from('requestdisplays')
 	         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
 	         		->queryRow();
 	         	$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
-	         }
+	         }*/
          } else if ($this->state == 'update') {
         
          	$details = $this->loadDetails($model->id);
@@ -544,13 +544,13 @@ class DefaultController extends Controller
 	         	Action::exitItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
 	         };
 	         
-	         if ($model->transname == 'AC16') {
+	         /*if ($model->transname == 'AC16') {
 	         	$data = Yii::app()->db->createCommand()
 	         		->select()->from('requestdisplays')
 	         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
 	         		->queryRow();
 	         	$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
-	         }
+	         }*/
          }
      }
 
@@ -575,14 +575,13 @@ class DefaultController extends Controller
          					$detail['iditem'], $detail['serialnum']);
          		}
          	};
-         	if ($model->transname == 'AC16') {
+         	/*if ($model->transname == 'AC16') {
          		$data = Yii::app()->db->createCommand()
          		->select()->from('requestdisplays')
          		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
          		->queryRow();
          		$this->removeEntryDisplay($data['regnum'], $model->idwarehouse);
-         	}
-         	echo "before";
+         	}*/
          	/*if ($model->transname == 'AC16') {
          		$data = Yii::app()->db->createCommand()
          		->select()->from('requestdisplays')
