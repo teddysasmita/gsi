@@ -786,6 +786,7 @@ EOS;
                   break;
             };
          }   
+         $respond = true;
          return $respond;
       }
       
