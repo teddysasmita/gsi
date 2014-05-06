@@ -49,8 +49,9 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 ?>
 </div> <!-- form -->
 
-<?php 
 
+<h2><?php echo lookup::ItemNameFromItemID($iditem). " - $iditem" ?></h2>
+<?php 
 //if (isset($alldata)) {
 	$mydp = new CArrayDataProvider($alldata, array(
 			'keyField'=>'iddetail',
