@@ -39,7 +39,7 @@
       
       <div class="row">
 		<?php echo $form->labelEx($model,'ipaddr'); ?>
-		<?php echo $form->textField($model,'ipaddr',array('size'=>15,'maxlength'=>15)); ?>
+		<?php echo $form->textField($model,'ipaddr',array('size'=>50,'maxlength'=>255)); ?>
 		<?php echo $form->error($model,'ipaddr'); ?>
 	</div>
 
