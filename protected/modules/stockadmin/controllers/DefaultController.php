@@ -140,6 +140,47 @@ EOS;
 		};
 	}
 	
+	public function actionIndexError()
+	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+				Yii::app()->user->id))  {
+			$this->trackActivity('v');
+			
+			$dataProvider=new CActiveDataProvider('Errors',
+                  array(
+                     'criteria'=>array(
+                        'order'=>'id desc'
+                     )
+                  )
+               );
+			
+			$this->render('indexerror', array('dataProvider'=>$dataProvider));
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+	
+	public function actionViewError($id)
+	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+				Yii::app()->user->id))  {
+			$this->trackActivity('v');
+			$this->render('viewerror',array(
+				'model'=>$this->loadError($id),
+			));
+		} else {
+        	throw new CHttpException(404,'You have no authorization for this operation.');
+        };
+	}
+	
+	public function loadError($id)
+	{
+		$model=Errors::model()->findByPk($id);
+		if($model===null)
+			throw new CHttpException(404,'The requested page does not exist.');
+		return $model;
+	}
+	
 	protected function trackActivity($action)
 	{
 		$this->tracker=new Tracker();
