@@ -58,12 +58,14 @@ $this->menu=array(
             array(
               'header'=>'Serial Number',
               'name'=>'serialnum ',
-              'value'=>"\$data['serialnum']"
             ),
          	array(
-				'header'=>'Catatan',
-				'name'=>'remark',
-				'type'=>"ntext"
+				'header'=>'Gudang',
+				'name'=>'wh',
+         	),
+         	array(
+         		'header'=>'Transaksi',
+         		'name'=>'regnum',
          	),
          	/*
             array(
