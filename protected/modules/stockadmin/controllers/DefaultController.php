@@ -208,9 +208,9 @@ EOS;
 					->setCellValueByColumnAndRow($i,1, $headersname[$i]);
 			}			
 			
-			for( $i=0; $i<count($data); $i++){
+			for( $i=0; $i<count($newdatas); $i++){
 				for( $j=0; $j<count($headersfield); $j++ ) {
-					$cellvalue = $data[$i][$headersfield[$j]];
+					$cellvalue = $newdatas[$i][$headersfield[$j]];
 					$xl->setActiveSheetindex(0)
 						->setCellValueByColumnAndRow($j,$i+2, $cellvalue);
 				}
