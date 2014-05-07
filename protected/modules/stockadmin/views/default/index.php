@@ -5,6 +5,10 @@ $this->breadcrumbs=array(
 		'Proses'=>array('/site/proses'),
 		'Daftar',
 );
+
+$this->menu=array(
+		array('label'=>'Export XL', 'url'=>array('errorExcel')),
+);
 ?>
 
 <h1><?php echo "Administrasi Persediaan (Stok)" ?></h1>

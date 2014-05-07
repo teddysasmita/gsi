@@ -9,7 +9,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	
+   array('label'=>'Export XL', 'url'=>array('errorExcel', 'id'=>$model->id))
 );
 ?>
 
@@ -39,7 +39,7 @@ $this->menu=array(
    		$newdata['iditem'] = $data['iditem'];
    		$newdata['serialnum'] = $data['serialnum'];
    		$temp = explode('-', $data['remark']);
-		$newdata['wh'] = lookup::WarehouseNameFromWarehouseID(trim($temp[2]));
+   		$newdata['wh'] = lookup::WarehouseNameFromWarehouseID(trim($temp[2]));
 		$newdata['regnum'] = trim($temp[0]);
    		$newdatas[] = $newdata;
    }

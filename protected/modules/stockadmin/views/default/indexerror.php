@@ -4,13 +4,11 @@
 
 $this->breadcrumbs=array(
    'Proses'=>array('/site/proses'),
-	'Daftar',
+	'Daftar'=>array('index'),
+	'Daftar Error'
 );
 
-$this->menu=array(
-   array('label'=>'Export XL', 'url'=>array('errorExcel')),
-);
-echo 'boom';
+
 ?>
 
 <h1>Error Stok</h1>
