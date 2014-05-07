@@ -173,6 +173,61 @@ EOS;
         };
 	}
 	
+	public function actionErrorExcel($id)
+	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
+				Yii::app()->user->id))  {
+			$this->trackActivity('v');
+			
+			$xl = new PHPExcel();
+			$xl->getProperties()->setCreator("Program GSI Malang")
+				->setLastModifiedBy("Program GSI Malang")
+				->setTitle("Laporan Penjualan")
+				->setSubject("Laporan Penjualan")
+				->setDescription("Laporan Penjualan Bulanan")
+				->setKeywords("Laporan Penjualan")
+				->setCategory("Laporan");	
+			$enddate=$enddate.' 23:59:59';
+			$datas=Yii::app()->db->createCommand()
+				->select()->from('detailerrors a')
+				->where('id = :p_id', array(':p_id'=>$id))
+				->queryAll();
+			foreach ($datas as $data) {
+				$newdata['iditem'] = $data['iditem'];
+				$newdata['itemname'] = lookup::ItemNameFromItemID($data['iditem']);
+				$newdata['serialnum'] = $data['serialnum'];
+				$temp = explode('-', $data['remark']);
+				$newdata['wh'] = lookup::WarehouseNameFromWarehouseID(trim($temp[2]));
+				$newdata['regnum'] = trim($temp[0]);
+				$newdatas[] = $newdata;
+			}
+			$headersname = array( 'ID Barang', 'Nama Barang', 'Nomor Serial', 'Gudang', 'Nomor Urut');
+			$headersfield = array('iditem', 'itemname', 'serialnum', 'wj', 'regnum');
+			for( $i=0;$i<count($headersname); $i++ ) {
+				$xl->setActiveSheetIndex(0)
+					->setCellValueByColumnAndRow($i,1, $headersname[$i]);
+			}			
+			
+			for( $i=0; $i<count($data); $i++){
+				for( $j=0; $j<count($headersfield); $j++ ) {
+					$cellvalue = $data[$i][$headersfield[$j]];
+					$xl->setActiveSheetindex(0)
+						->setCellValueByColumnAndRow($j,$i+2, $cellvalue);
+				}
+			}
+			
+			$xl->getActiveSheet()->setTitle('Laporan Error');
+			$xl->setActiveSheetIndex(0);
+			header('Content-Type: application/pdf');
+			header('Content-Disposition: attachment;filename="stock-error-report-'.idmaker::getDateTime().'.xlsx"');
+			header('Cache-Control: max-age=0');
+			$xlWriter = PHPExcel_IOFactory::createWriter($xl, 'Excel2007');
+			$xlWriter->save('php://output');
+		} else {
+            throw new CHttpException(404,'You have no authorization for this operation.');
+         };
+	}
+	
 	public function loadError($id)
 	{
 		$model=Errors::model()->findByPk($id);

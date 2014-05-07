@@ -8,7 +8,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-   
+   array('label'=>'Export XL', 'url'=>array('errorExcel')),
 );
 ?>
 
