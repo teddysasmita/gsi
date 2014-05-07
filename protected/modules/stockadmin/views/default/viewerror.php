@@ -33,8 +33,18 @@ $this->menu=array(
    $count=Yii::app()->db->createCommand("select count(*) from detailerrors where id='$model->id'")
       ->queryScalar();
    $sql="select * from detailerrors where id='$model->id'";
+   $datas = Yii::app()->db->createCommand($sql)->queryAll();
+   foreach ($datas as $data) {
+   		$newdata['iddetail'] = $data['iddetail'];
+   		$newdata['iditem'] = $data['iditem'];
+   		$newdata['serialnum'] = $data['serialnum'];
+   		$temp = explode('-', $data['remark']);
+		$newdata['wh'] = lookup::WarehouseNameFromWarehouseID(trim($temp[2]));
+		$newdata['regnum'] = trim($temp[0]);
+   		$newdatas[] = $newdata;
+   }
 
-   $dataProvider=new CSqlDataProvider($sql,array(
+   $dataProvider=new CArrayDataProvider($newdatas,array(
           'totalItemCount'=>$count,
           ));
    $this->widget('zii.widgets.grid.CGridView', array(
