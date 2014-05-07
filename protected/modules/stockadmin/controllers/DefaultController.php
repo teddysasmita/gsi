@@ -188,7 +188,6 @@ EOS;
 				->setDescription("Laporan Penjualan Bulanan")
 				->setKeywords("Laporan Penjualan")
 				->setCategory("Laporan");	
-			$enddate=$enddate.' 23:59:59';
 			$datas=Yii::app()->db->createCommand()
 				->select()->from('detailerrors a')
 				->where('id = :p_id', array(':p_id'=>$id))
