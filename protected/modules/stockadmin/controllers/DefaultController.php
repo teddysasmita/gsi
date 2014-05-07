@@ -202,7 +202,7 @@ EOS;
 				$newdatas[] = $newdata;
 			}
 			$headersname = array( 'ID Barang', 'Nama Barang', 'Nomor Serial', 'Gudang', 'Nomor Urut');
-			$headersfield = array('iditem', 'itemname', 'serialnum', 'wj', 'regnum');
+			$headersfield = array('iditem', 'itemname', 'serialnum', 'wh', 'regnum');
 			for( $i=0;$i<count($headersname); $i++ ) {
 				$xl->setActiveSheetIndex(0)
 					->setCellValueByColumnAndRow($i,1, $headersname[$i]);
