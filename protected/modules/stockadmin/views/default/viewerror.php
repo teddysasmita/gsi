@@ -58,7 +58,7 @@ $this->menu=array(
             ),
             array(
               'header'=>'Serial Number',
-              'name'=>'serialnum ',
+              'name'=>'serialnum',
             ),
          	array(
 				'header'=>'Gudang',
