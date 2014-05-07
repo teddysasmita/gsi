@@ -10,6 +10,7 @@ $this->breadcrumbs=array(
 $this->menu=array(
    array('label'=>'Export XL', 'url'=>array('errorExcel')),
 );
+echo 'boom';
 ?>
 
 <h1>Error Stok</h1>
