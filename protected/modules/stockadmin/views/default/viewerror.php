@@ -46,7 +46,8 @@ $this->menu=array(
 
    $dataProvider=new CArrayDataProvider($newdatas,array(
           'totalItemCount'=>$count,
-          ));
+   			'keyField'=>'iddetail',
+   ));
    $this->widget('zii.widgets.grid.CGridView', array(
          'dataProvider'=>$dataProvider,
          'columns'=>array(
