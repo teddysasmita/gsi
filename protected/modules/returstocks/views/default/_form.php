@@ -139,7 +139,7 @@ EOS;
 				array(
 					'header'=>'Gudang',
 					'name'=>'idwarehouse',
-					'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['iditem'])"
+					'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
 				),
               array(
                   'class'=>'CButtonColumn',
