@@ -16,6 +16,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Perubahan Penjualan</h1>
+<h1>Ganti Barang Penjualan</h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model, 'command'=>'update')); ?>

@@ -17,7 +17,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>Perubahan Penjualan</h1>
+<h1>Ganti Barang Penjualan</h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,

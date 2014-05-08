@@ -14,7 +14,7 @@ $this->menu=array(
 
 ?>
 
-<h1>Pembatalan Penjualan</h1>
+<h1>Ganti Barang Penjualan</h1>
 
 <?php 
     $data=Yii::app()->tracker->createCommand()
