@@ -17,7 +17,7 @@ $this->pageTitle=Yii::app()->name;
 <h2>Bagian Penjualan</h2>
 <h3><?php echo CHtml::link('Penentuan Harga Jual', Yii::app()->createUrl('sellingprice'))?></h3>
 <h3><?php echo CHtml::link('Pembatalan Penjualan', Yii::app()->createUrl('salescancel'))?></h3>
-<h3><?php echo CHtml::link('Perubahan Penjualan', Yii::app()->createUrl('salesreplace'))?></h3>
+<h3><?php echo CHtml::link('Ganti Barang Penjualan', Yii::app()->createUrl('salesreplace'))?></h3>
 <h3><?php echo CHtml::link('Laporan Penjualan', Yii::app()->createUrl('salespos/salesposreport/create'))?></h3>
 
 <h2>Bagian CS</h2>
