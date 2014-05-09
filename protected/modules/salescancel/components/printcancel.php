@@ -39,9 +39,9 @@ class MYPDF extends TCPDF {
 		$fill = 0;
 		$counter=0;
 		$iditem='';
-		$this->SetXY(1, 42);
-		if (count($this->detaildata) <= 12)
-			$maxrows = 12;
+		$this->SetXY(1, 47);
+		if (count($this->detaildata) <= 11)
+			$maxrows = 11;
 		else
 			$maxrows = count($this->detaildata);		
 		for($i=0;$i<$maxrows;$i++) {
@@ -63,7 +63,7 @@ class MYPDF extends TCPDF {
 				//$this->Cell($this->headerwidths[5], 6, ' ', 'LR', 1, 'L', $fill);
 				//$this->ln();
 			}
-			if (($i > 0) && ($i % 11 == 0))
+			if (($i > 0) && ($i % 10 == 0))
 				//$this->checkPageBreak(6, '');
 				$this->Cell(array_sum($this->headerwidths), 0, '', 'T', 1);
 		}
@@ -124,6 +124,9 @@ class MYPDF extends TCPDF {
 		//$this->setXY(100, 27);
 		$this->Cell(20, 5, 'No. Faktur', 'LTR', 0, 'C');
 		$this->Cell(28, 5, $this->data->invnum, 'LTR', 1);
+		$this->setXY(91, 25);
+		$this->Cell(22, 5, 'No. Batal', 'LT', 0, 'C');
+		$this->Cell(83, 5, $this->data->regnum, 'LTR', 1, 'C');
 		
 		$this->SetFont('Helvetica', 'B');
 		$this->Cell(20, 10, 'Alasan', 'LTRB', 0,'C');
@@ -178,7 +181,7 @@ function execute($model, $detailmodel) {
 	$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 	
 	//set margins
-	$pdf->SetMargins(1, 71, PDF_MARGIN_RIGHT);
+	$pdf->SetMargins(1, 76, PDF_MARGIN_RIGHT);
 	$pdf->SetHeaderMargin(0);
 	$pdf->SetFooterMargin(0);
 	
