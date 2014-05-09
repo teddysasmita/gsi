@@ -683,10 +683,7 @@ EOS;
 EOS;
 	      	$mycommand=Yii::app()->db->createCommand($sql);
 	      	foreach($dataLPB as $row) {
-	      		if ($mode == 'normal')
-	      			$mycommand->bindParam(':p_transid', $nolpb, PDO::PARAM_STR);
-	      		else if ($mode == 'retur')
-	      			$mycommand->bindParam(':p_transid', $invnum, PDO::PARAM_STR);
+	      		$mycommand->bindParam(':p_transid', $nolpb, PDO::PARAM_STR);
 	      		$mycommand->bindParam(':p_iditem', $row['iditem'], PDO::PARAM_STR);
 				$accepted=$mycommand->queryScalar();
 				for ($index = 0; $index < $row['qty'] - $accepted; $index++) {
