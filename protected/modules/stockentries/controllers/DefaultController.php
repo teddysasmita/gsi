@@ -527,15 +527,17 @@ class DefaultController extends Controller
          
          	$details = $this->loadDetails($model->id);
          	foreach($details as $detail) {
-         		Action::entryItemToWarehouse($model->idwarehouse, $detail['iddetail'], 
-         			$detail['iditem'], $detail['serialnum']);
+         		if ($detail['serialnum'] !==  'Belum Diterima')
+         			Action::entryItemToWarehouse($model->idwarehouse, $detail['iddetail'], 
+         				$detail['iditem'], $detail['serialnum']);
          	};
          } else if ($this->state == 'update') {
          	$details = $this->loadDetails($model->id);
          	foreach($details as $detail) {
          		Action::deleteItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
-         		Action::entryItemToWarehouse($model->idwarehouse, $detail['iddetail'], 
-         			$detail['iditem'], $detail['serialnum']);
+         		if ($detail['serialnum'] !==  'Belum Diterima')
+         			Action::entryItemToWarehouse($model->idwarehouse, $detail['iddetail'], 
+         				$detail['iditem'], $detail['serialnum']);
          	};
          } 
          $this->setStatusPO($model->transid,
