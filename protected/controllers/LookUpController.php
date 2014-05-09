@@ -460,6 +460,32 @@ EOS;
 				$data=$command->queryAll();
 			}
 			
+			if ($data == FALSE) {
+				$sql=<<<EOS
+				select a.id, a.regnum, a.invnum,
+				concat( 'Pembatalan Faktur - ',a.invnum,' - ', a.idatetime) as transinfo,
+				'AC23' as transname
+				from salescancel a
+				where a.regnum=:p_regnum
+EOS;
+				$command=Yii::app()->db->createCommand($sql);
+				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
+				$data=$command->queryAll();
+			}
+			
+			if ($data == FALSE) {
+				$sql=<<<EOS
+				select a.id, a.regnum, a.invnum,
+				concat( 'Ganti Barang Faktur - ',a.invnum,' - ', a.idatetime) as transinfo,
+				'AC24' as transname
+				from salesreplace a
+				where a.regnum=:p_regnum
+EOS;
+				$command=Yii::app()->db->createCommand($sql);
+				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
+				$data=$command->queryAll();
+			}
+			
 			if ($data !== FALSE)
 				echo json_encode($data);
 			else 
