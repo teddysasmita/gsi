@@ -622,7 +622,6 @@ EOS;
       private function loadLPB($nolpb, $id)
       {
       	$details=array();
-      	$mode = 'normal';
       
       	$dataLPB=Yii::app()->db->createCommand()
       		->select('a.id, b.*')
@@ -670,7 +669,6 @@ EOS;
       				->queryAll();
       		
       		$dataLPB = array_merge($dataPB, $dataSJ);
-      		$mode = 'retur';
       	}
       	
       	Yii::app()->session->remove('Detailstockentries');
