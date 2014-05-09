@@ -734,8 +734,8 @@ EOS;
       				array(':p_regnum'=>$nolpb) )
 			->queryAll();
       	}
-      	
       		
+      	
       	$sql=<<<EOS
     	select count(*) as received from stockexits a
 		join detailstockexits b on b.id = a.id

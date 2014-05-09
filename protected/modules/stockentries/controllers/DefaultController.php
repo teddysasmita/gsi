@@ -622,6 +622,7 @@ EOS;
       private function loadLPB($nolpb, $id)
       {
       	$details=array();
+      	$mode = 'normal';
       
       	$dataLPB=Yii::app()->db->createCommand()
       		->select('a.id, b.*')
@@ -646,15 +647,32 @@ EOS;
       		->queryAll();
       	}
       	
-      	/*if ($dataLPB == FALSE) {
-      		$dataLPB=Yii::app()->db->createCommand()
-      		->select('a.id, b.*')
-      		->from('salescancel a')
-      		->join('salespos b', 'b.regnum=a.invnum')
-      		->join('')
-      		->where('a.regnum = :p_regnum', array(':p_regnum'=>$nolpb) )
-      		->queryAll();
-      	}*/
+      	if ($dataLPB == FALSE ) {
+      		$invnum = Yii::app()->db->createCommand()
+      		->select()->from('salescancel')
+      		->where('regnum = :p_regnum', array(':p_regnum'=>$nolpb))
+      		->queryScalar();
+      		$dataSJ=Yii::app()->db->createCommand()
+      		->select('a.id, b.*, c.id as iditem')
+      		->from('deliveryorders a')
+      		->join('detaildeliveryorders b', 'b.id=a.id')
+      		->join('items c', 'c.id = b.iditem')
+      		->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse',
+      				array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh) )
+      				->queryAll();
+      		$dataPB=Yii::app()->db->createCommand()
+      		->select('a.id, b.*, c.id as iditem')
+      		->from('orderretrievals a')
+      		->join('detailorderretrievals b', 'b.id=a.id')
+      		->join('items c', 'c.id = b.iditem')
+      		->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse',
+      				array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh) )
+      				->queryAll();
+      		
+      		$dataLPB = array_merge($dataPB, $dataSJ);
+      		$mode = 'retur';
+      	}
+      	
       	Yii::app()->session->remove('Detailstockentries');
       	if ($dataLPB !== FALSE) {
 	      	$sql=<<<EOS
@@ -665,7 +683,10 @@ EOS;
 EOS;
 	      	$mycommand=Yii::app()->db->createCommand($sql);
 	      	foreach($dataLPB as $row) {
-	      		$mycommand->bindParam(':p_transid', $nolpb, PDO::PARAM_STR);
+	      		if ($mode == 'normal')
+	      			$mycommand->bindParam(':p_transid', $nolpb, PDO::PARAM_STR);
+	      		else if ($mode == 'retur')
+	      			$mycommand->bindParam(':p_transid', $invnum, PDO::PARAM_STR);
 	      		$mycommand->bindParam(':p_iditem', $row['iditem'], PDO::PARAM_STR);
 				$accepted=$mycommand->queryScalar();
 				for ($index = 0; $index < $row['qty'] - $accepted; $index++) {
