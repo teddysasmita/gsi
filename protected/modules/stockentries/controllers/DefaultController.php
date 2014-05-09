@@ -649,7 +649,7 @@ EOS;
       	
       	if ($dataLPB == FALSE ) {
       		$invnum = Yii::app()->db->createCommand()
-      		->select()->from('salescancel')
+      		->select('invnum')->from('salescancel')
       		->where('regnum = :p_regnum', array(':p_regnum'=>$nolpb))
       		->queryScalar();
       		$dataSJ=Yii::app()->db->createCommand()
