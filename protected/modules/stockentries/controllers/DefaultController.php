@@ -115,7 +115,7 @@ class DefaultController extends Controller
                       } else if ($_POST['command']=='getPO') {
                          $model->attributes=$_POST['Stockentries'];
                          Yii::app()->session['Stockentries']=$_POST['Stockentries'];
-                         $this->loadLPB($model->transid, $model->id);
+                         $this->loadLPB($model->transid, $model->id, $model->idwarehouse);
                       } else if ($_POST['command']=='updateDetail') {
                          $model->attributes=$_POST['Stockentries'];
                          Yii::app()->session['Stockentries']=$_POST['Stockentries'];
@@ -619,7 +619,7 @@ EOS;
         Yii::app()->session['Detailstockentries']=$details;
       }
      
-      private function loadLPB($nolpb, $id)
+      private function loadLPB($nolpb, $id, $idwh)
       {
       	$details=array();
       
