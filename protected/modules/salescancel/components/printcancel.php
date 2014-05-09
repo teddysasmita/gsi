@@ -39,7 +39,7 @@ class MYPDF extends TCPDF {
 		$fill = 0;
 		$counter=0;
 		$iditem='';
-		$this->SetXY(1, 47);
+		$this->SetXY(1, 48);
 		if (count($this->detaildata) <= 11)
 			$maxrows = 11;
 		else
