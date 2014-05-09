@@ -124,7 +124,7 @@ class MYPDF extends TCPDF {
 		//$this->setXY(100, 27);
 		$this->Cell(20, 5, 'No. Faktur', 'LTR', 0, 'C');
 		$this->Cell(28, 5, $this->data->invnum, 'LTR', 1);
-		$this->setXY(91, 25);
+		$this->setXY(91, 26);
 		$this->Cell(22, 5, 'No. Batal', 'LT', 0, 'C');
 		$this->Cell(83, 5, $this->data->regnum, 'LTR', 1, 'C');
 		
