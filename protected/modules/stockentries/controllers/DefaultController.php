@@ -162,7 +162,7 @@ class DefaultController extends Controller
              $this->performAjaxValidation($model);
 
              if(isset($_POST)) {
-                 if(isset($_POST['yt1'])) {
+                 if(isset($_POST['yt0'])) {
                      $model->attributes=$_POST['Stockentries'];
                      $this->beforePost($model);
                      $this->tracker->modify('stockentries', $id);
@@ -172,7 +172,7 @@ class DefaultController extends Controller
                      } else {
                      	throw new CHttpException(404,'There is an error in master posting ');
                      }
-
+					
                      if(isset(Yii::app()->session['Detailstockentries'])) {
                          $details=Yii::app()->session['Detailstockentries'];
                          $respond=$respond&&$this->saveDetails($details);
@@ -180,6 +180,7 @@ class DefaultController extends Controller
                            throw new CHttpException(404,'There is an error in detail posting');
                          }
                      };
+                     echo "here";
                      
                      if(isset(Yii::app()->session['Deletedetailstockentries'])) {
                          $deletedetails=Yii::app()->session['Deletedetailstockentries'];
