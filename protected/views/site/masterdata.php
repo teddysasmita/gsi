@@ -20,3 +20,4 @@ $this->pageTitle=Yii::app()->name;
 <h3><?php echo CHtml::link('Kartu Kredit dan Debit', Yii::app()->createUrl('salespos'))?></h3>
 <h3><?php echo CHtml::link('Akun Transfer', Yii::app()->createUrl('salespos/salespostransfers'))?></h3>
 <h3><?php echo CHtml::link('Cicilan', Yii::app()->createUrl('salespos/salesposloans'))?></h3>
+<h3><?php echo CHtml::link('Service Center', Yii::app()->createUrl('servicecenter'))?></h3>

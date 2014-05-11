@@ -62,6 +62,7 @@ return array(
             'orderretrievals',
             'returstocks',
             'stockadmin',
+            'servicecenter',
         ),
 
         

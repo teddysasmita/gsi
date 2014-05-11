@@ -692,6 +692,7 @@ EOS;
 EOS;
 	      	$mycommand=Yii::app()->db->createCommand($sql);
 	      	foreach($dataLPB as $row) {
+	 
 	      		$mycommand->bindParam(':p_transid', $nolpb, PDO::PARAM_STR);
 	      		$mycommand->bindParam(':p_iditem', $row['iditem'], PDO::PARAM_STR);
 				$accepted=$mycommand->queryScalar();
