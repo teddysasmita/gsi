@@ -85,6 +85,10 @@ echo CHtml::dropDownList('status', $status, array('Semua', 'Tersedia', 'Rusak'),
 							'header'=>'Gudang',
 							'name'=>'code',
 					),
+					array(
+							'header'=>'Status',
+							'name'=>'avail',
+					),
 			),
 	));
 //}
