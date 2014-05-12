@@ -17,7 +17,6 @@ $this->breadcrumbs=array(
 	
 <div class="row">
 <?php
-echo $status;
 echo CHtml::label('Nama Barang','itemname');
 $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 		'name'=>'itemname',
