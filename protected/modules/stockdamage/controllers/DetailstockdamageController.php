@@ -1,13 +1,13 @@
 <?php
 
-class DetailstockexitsController extends Controller
+class DetailstockdamageController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $formid='AC3a';
+	public $formid='AC26a';
 	public $tracker;
 	public $state;
 
@@ -32,8 +32,8 @@ class DetailstockexitsController extends Controller
 				Yii::app()->user->id))  {
             $this->trackActivity('v');
             $model=$this->loadModel($iddetail);
-            if(($model==NULL)&&isset(Yii::app()->session['Detailstockexits'])) {
-                $model=new Detailstockexits;
+            if(($model==NULL)&&isset(Yii::app()->session['Detailstockdamage'])) {
+                $model=new Detailstockdamage;
                 $model->attributes=$this->loadSession($iddetail);
             }  
             $this->render('view',array(
@@ -48,38 +48,38 @@ class DetailstockexitsController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate($id)
+	public function actionCreate($id, $idwh)
 	{
              if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
                     Yii::app()->user->id))  {   
                 $this->state='c';
                 $this->trackActivity('c');    
                     
-                $model=new Detailstockexits;
+                $model=new Detailstockdamage;
                 $this->afterInsert($id, $model);
                 
                 $master=Yii::app()->session['master'];
                                 
 				// Uncomment the following line if AJAX validation is needed
 				$this->performAjaxValidation($model);
-                
-                if(isset($_POST['DetailStockExits'])) {
-                    $temp=Yii::app()->session['Detailstockexits'];
-                    $model->attributes=$_POST['Detailstockexits'];
+                print_r($_POST);
+                if(isset($_POST['yt0'])) {
+                    $temp=Yii::app()->session['Detailstockdamage'];
+                    $model->attributes=$_POST['Detailstockdamage'];
                     //posting into session
-                    $temp[]=$_POST['Detailstockexits'];
+                    $temp[]=$_POST['Detailstockdamage'];
                     
                     if ($model->validate()) {
-                        Yii::app()->session['Detailstockexits']=$temp;
+                        Yii::app()->session['Detailstockdamage']=$temp;
                         if ($master=='create')
                             $this->redirect(array('default/createdetail'));
                         else if($master=='update')
                             $this->redirect(array('default/updatedetail'));
-                    }    
+                    }
+                    die('here');    
                 }                
-
                 $this->render('create',array(
-                    'model'=>$model, 'master'=>$master
+                    'model'=>$model, 'master'=>$master, 'idwh'=>$idwh
                 ));
                 
              } else {
@@ -103,8 +103,8 @@ class DetailstockexitsController extends Controller
                 $master=Yii::app()->session['master'];
                 
                 $model=$this->loadModel($iddetail);
-                if(isset(Yii::app()->session['Detailstockexits'])) {
-                    $model=new Detailstockexits;
+                if(isset(Yii::app()->session['Detailstockdamage'])) {
+                    $model=new Detailstockdamage;
                     $model->attributes=$this->loadSession($iddetail);
                 }
                 $this->afterEdit($model);
@@ -113,17 +113,17 @@ class DetailstockexitsController extends Controller
                 $this->performAjaxValidation($model);
                 
                if(isset($_POST['yt0'])) {
-                  $temp=Yii::app()->session['Detailstockexits'];
-                  $model->attributes=$_POST['Detailstockexits'];
+                  $temp=Yii::app()->session['Detailstockdamage'];
+                  $model->attributes=$_POST['Detailstockdamage'];
                   foreach ($temp as $tk=>$tv) {
-                     if($tv['iddetail']==$_POST['Detailstockexits']['iddetail']) {
-                         $temp[$tk]=$_POST['Detailstockexits'];
+                     if($tv['iddetail']==$_POST['Detailstockdamage']['iddetail']) {
+                         $temp[$tk]=$_POST['Detailstockdamage'];
                          break;
                      }
                   }
                     //posting into session
                   if($model->validate()) {
-                     Yii::app()->session['Detailstockexits']=$temp;
+                     Yii::app()->session['Detailstockdamage']=$temp;
 
                      if ($master=='create')
                            $this->redirect(array('default/createdetail'));
@@ -152,20 +152,20 @@ class DetailstockexitsController extends Controller
                 
                 $this->trackActivity('d');
                 
-                $details=Yii::app()->session['Detailstockexits'];
+                $details=Yii::app()->session['Detailstockdamage'];
                 foreach ($details as $ik => $iv) {
                    if($iv['iddetail']==$iddetail) {
-                      if(isset(Yii::app()->session['Deletedetailstockexits']))
-                         $deletelist=Yii::app()->session['Deletedetailstockexits'];
+                      if(isset(Yii::app()->session['Deletedetailstockdamage']))
+                         $deletelist=Yii::app()->session['Deletedetailstockdamage'];
                       $deletelist[]=$iv;
-                      Yii::app()->session['Deletedetailstockexits']=$deletelist;
+                      Yii::app()->session['Deletedetailstockdamage']=$deletelist;
                       unset($details[$ik]);
                       break;
                    }
                 }
                 
                             
-                Yii::app()->session['Detailstockexits']=$details;
+                Yii::app()->session['Detailstockdamage']=$details;
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
@@ -205,9 +205,9 @@ class DetailstockexitsController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
                 $this->trackActivity('r');
-                $this->tracker->restore('detailstockexits', $idtrack);
+                $this->tracker->restore('detailstockdamage', $idtrack);
                 
-                $dataProvider=new CActiveDataProvider('Detailstockexits');
+                $dataProvider=new CActiveDataProvider('Detailstockdamage');
                 $this->render('index',array(
                     'dataProvider'=>$dataProvider,
                 ));
@@ -221,9 +221,9 @@ class DetailstockexitsController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
                 $this->trackActivity('n');
-                $this->tracker->restoreDeleted('detailstockexits', $idtrack);
+                $this->tracker->restoreDeleted('detailstockdamage', $idtrack);
                 
-                $dataProvider=new CActiveDataProvider('Detailstockexits');
+                $dataProvider=new CActiveDataProvider('Detailstockdamage');
                 $this->render('index',array(
                     'dataProvider'=>$dataProvider,
                 ));
@@ -236,12 +236,12 @@ class DetailstockexitsController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Detailstockexits the loaded model
+	 * @return Detailstockdamage the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Detailstockexits::model()->findByPk($id);
+		$model=Detailstockdamage::model()->findByPk($id);
 		/*if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		*/
@@ -250,11 +250,11 @@ class DetailstockexitsController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Detailstockexits $model the model to be validated
+	 * @param Detailstockdamage $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='detailstockexits-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='detailstockdamage-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
@@ -263,7 +263,7 @@ class DetailstockexitsController extends Controller
         
         protected function loadSession($iddetail)
         {
-            $details=Yii::app()->session['Detailstockexits'];
+            $details=Yii::app()->session['Detailstockdamage'];
             foreach ($details as $row) {
                 if($row['iddetail']==$iddetail)
                     return $row;

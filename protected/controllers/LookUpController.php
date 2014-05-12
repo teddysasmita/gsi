@@ -574,4 +574,25 @@ EOS;
 		};
 	
 	}
+	
+	public function actionCheckSerial($serialnum, $idwh)
+	{
+		$idwh=rawurldecode($idwh);
+		$serialnum=rawurldecode($serialnum);
+	
+		if (!Yii::app()->user->isGuest) {
+			$data=Yii::app()->db->createCommand()
+				->select('iditem')
+				->from('wh'.$idwh.' a')
+				->where('a.serialnum = :p_serialnum',
+						array(':p_serialnum'=>$serialnum))
+						/*->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum',
+						 array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))*/
+				->queryScalar();
+			echo json_encode($data);
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	
+	}
 }

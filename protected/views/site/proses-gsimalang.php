@@ -35,6 +35,7 @@ $this->pageTitle=Yii::app()->name;
 <h3><?php echo CHtml::link('Input Stok Opname', Yii::app()->createUrl('inputinventorytaking'))?></h3>
 <h3><?php echo CHtml::link('Cetak Barcode', Yii::app()->createUrl('barcodeprint'))?></h3>
 <h3><?php echo CHtml::link('Administrasi Persediaan (Stok)', Yii::app()->createUrl('stockadmin'))?></h3>
+<h3><?php echo CHtml::link('Barang Rusak', Yii::app()->createUrl('stockdamage'))?></h3>
 
 <h2>Bagian Keuangan</h2>
 <h3><?php echo CHtml::link('Penentuan Harga Pokok Opname', Yii::app()->createUrl('inventorycosting'))?></h3>
