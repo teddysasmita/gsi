@@ -63,7 +63,8 @@ class DefaultController extends Controller
 				}
 				usort($alldata, 'cmp');
 			}
-			$this->render('quantity', array('alldata'=>$alldata, 'whcode'=>$whcodeparam, 'itemname'=>$itemnameparam));
+			$this->render('quantity', array('alldata'=>$alldata, 'status'=>$statusparam, 
+					'whcode'=>$whcodeparam, 'itemname'=>$itemnameparam));
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		};
@@ -104,7 +105,8 @@ class DefaultController extends Controller
 				}
 				usort($alldata, 'cmp');
 			}
-			$this->render('serial', array('alldata'=>$alldata, 'whcode'=>$whcodeparam, 'itemname'=>$itemnameparam));
+			$this->render('serial', array('alldata'=>$alldata, 'status'=>$statusparam,
+				'whcode'=>$whcodeparam, 'itemname'=>$itemnameparam));
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		};
