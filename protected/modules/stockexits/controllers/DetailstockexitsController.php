@@ -63,7 +63,7 @@ class DetailstockexitsController extends Controller
 				// Uncomment the following line if AJAX validation is needed
 				$this->performAjaxValidation($model);
                 
-                if(isset($_POST['DetailStockExits'])) {
+                if(isset($_POST['Detailstockexits'])) {
                     $temp=Yii::app()->session['Detailstockexits'];
                     $model->attributes=$_POST['Detailstockexits'];
                     //posting into session
