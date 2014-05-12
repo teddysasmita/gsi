@@ -14,7 +14,6 @@ $this->breadcrumbs=array(
 <?php 
 	echo CHtml::beginForm("index.php?r=stockadmin/default/quantity", 'get');	
 ?>
-</div>
 	
 <div class="row">
 <?php
