@@ -43,7 +43,7 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 <div class="row">
 <?php
 echo CHtml::label('status', 'status');
-echo CHtml::dropDownList('status', $status, array('Semua', 'Tersedia', 'Rusak'),
+echo CHtml::dropDownList('status', $status, array('Semua'=>'Semua', '1'=>'Tersedia', '2'=>'Rusak'),
 	array('empty'=>'Harap Pilih'));
 ?>
 </div>
