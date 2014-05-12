@@ -48,7 +48,7 @@ class DefaultController extends Controller
 	{
              if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
                     Yii::app()->user->id))  {   
-                $this->state='c';
+                $this->state='create';
                 $this->trackActivity('c');    
                 $error = '';
                     
@@ -136,7 +136,7 @@ class DefaultController extends Controller
           if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                  Yii::app()->user->id))  {
 
-             $this->state='u';
+             $this->state='update';
              $this->trackActivity('u');
 
              $model=$this->loadModel($id);
@@ -520,7 +520,9 @@ class DefaultController extends Controller
         protected function afterPost(& $model)
         {
             $idmaker=new idmaker();
-            	$idmaker->saveRegNum($this->formid, substr($model->regnum, 2));    
+            if ($this->state == 'create') {
+            	$idmaker->saveRegNum($this->formid, substr($model->regnum, 2));  
+            }
         }
         
         protected function beforePost(& $model)
@@ -529,6 +531,7 @@ class DefaultController extends Controller
             
             $model->userlog=Yii::app()->user->id;
             $model->datetimelog=$idmaker->getDateTime();
+            if ($this->state == 'create')	
             	$model->regnum='TB'.$idmaker->getRegNum($this->formid);
         }
         
@@ -602,5 +605,18 @@ class DefaultController extends Controller
         		throw new CHttpException(404,'You have no authorization for this operation.');
         	}
         }    
+        
+        public function moveItem($iddetail, $iditem, $serialnum, $idwhsource, $idwhdest)
+        {
+        	$existinsource = Action::checkItemToWarehouse($idwhsource, $iditem, $serialnum) > 0;
+        	if ($existinsource) {
+        		$existindest = Action::checkItemToWarehouse($idwhdest, $iditem, $serialnum, '%') > 0;
+        		Action::exitItemFromWarehouse($idwhsource, $serialnum);
+        		if (!$existindest) {
+        			Action::addItemToWarehouse($idwhdest, $iddetail, $iditem, $serialnum);
+        		} else
+        			Action::setItemStatusinWarehouse($idwhdest, $serialnum, '1');        	
+      		}
+        }
 	
 }

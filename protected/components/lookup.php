@@ -232,6 +232,13 @@ class lookup extends CComponent {
       return 'NA';
    }
    
+   public static function CompanyNameFromServiceCenterID($id)
+   {
+   	$sql="select companyname from servicecenters where id = '$id'";
+   	$name=Yii::app()->db->createCommand($sql)->queryScalar();
+   	return $name;
+   }
+   
    public static function WarehouseIDFromCode($code)
    {
    	$sql="select id from warehouses where code='$code'";

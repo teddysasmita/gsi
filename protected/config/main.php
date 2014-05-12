@@ -63,6 +63,7 @@ return array(
             'returstocks',
             'stockadmin',
             'servicecenter',
+            'sendrepair',
         ),
 
         

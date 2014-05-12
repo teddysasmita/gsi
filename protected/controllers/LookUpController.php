@@ -135,6 +135,21 @@ class LookUpController extends Controller {
 		};
 	}
 	
+	public function actionGetServiceCenter($brandname)
+	{
+		if (!Yii::app()->user->isGuest) {
+			//print_r($name);
+			$brandname=rawurldecode($brandname);
+			$data=Yii::app()->db->createCommand()->select('id')->from('servicecenters')
+			->where("brandname = :p_brandname",
+					array(':p_brandname'=> $brandname))
+					->queryScalar();
+			echo $data;
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+	
 	
 	public function actionGetWareHouse($term)
 	{

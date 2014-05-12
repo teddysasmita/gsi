@@ -528,17 +528,41 @@ class DefaultController extends Controller
          
          	$details = $this->loadDetails($model->id);
          	foreach($details as $detail) {
-         		if ($detail['serialnum'] !==  'Belum Diterima')
-         			Action::entryItemToWarehouse($model->idwarehouse, $detail['iddetail'], 
-         				$detail['iditem'], $detail['serialnum']);
+         		if ($detail['serialnum'] !==  'Belum Diterima') {
+         			if ($model->transname == 'AC18') {
+         				$idwhsource = Yii::app()->db->createCommand()->select('idwhsource')
+         				->from('itemtransfers')->where('regnum = :p_regnum',
+         						array(':p_regnum'=>$model->transid))->queryScalar();
+         				$status = Action::checkItemStatusInWarehouse($idwhsource, $detail['serialnum']);
+         			} else 
+         				$status = '1';
+  
+         			$exist = Action::checkItemToWarehouse($model->idwarehouse, $detail['iditem'], 
+	         			$detail['serialnum'], '%') > 0;
+	         		if (!$exist)	
+	         			Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'], 
+	         				$detail['iditem'], $detail['serialnum']);
+	         		else 
+	         			Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
+         		}
          	};
          } else if ($this->state == 'update') {
          	$details = $this->loadDetails($model->id);
          	foreach($details as $detail) {
-         		Action::deleteItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
-         		if ($detail['serialnum'] !==  'Belum Diterima')
-         			Action::entryItemToWarehouse($model->idwarehouse, $detail['iddetail'], 
-         				$detail['iditem'], $detail['serialnum']);
+         		if ($detail['serialnum'] !==  'Belum Diterima') {
+         			if ($model->transname == 'AC18') {
+         				$idwhsource = Yii::app()->db->createCommand()->select('idwhsource')
+         				->from('itemtransfers')->where('regnum = :p_regnum',
+         						array(':p_regnum'=>$model->transid))->queryScalar();
+         				$status = Action::checkItemStatusInWarehouse($idwhsource, $detail['serialnum']);
+         			} else
+         				$status = '1';
+         			
+         			$exist = Action::checkItemToWarehouse($model->idwarehouse, $detail['iditem'],
+         				$detail['serialnum'], '%') > 0;
+         			if ($exist)
+         				Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
+         		};
          	};
          } 
          $this->setStatusPO($model->transid,
