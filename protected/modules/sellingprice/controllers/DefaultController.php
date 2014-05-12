@@ -56,7 +56,7 @@ class DefaultController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
 
-		if(isset($_POST['Sellingprices']))
+		if(isset($_POST['yt0']))
 		{
 			$model->attributes=$_POST['Sellingprices'];
                         $this->beforePost($model);
@@ -64,7 +64,7 @@ class DefaultController extends Controller
                             $this->afterPost($model);
                             $this->redirect(array('view','id'=>$model->id));                 
                         }    
-                }
+        }
 
 		$this->render('create',array(
 			'model'=>$model,

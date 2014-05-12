@@ -63,7 +63,7 @@ class DetailitemtransfersController extends Controller
 		// Uncomment the following line if AJAX validation is needed
                $this->performAjaxValidation($model);
                 
-                if(isset($_POST['Detailitemtransfers'])) {
+                if(isset($_POST['yt0'])) {
                     $temp=Yii::app()->session['Detailitemtransfers'];
                     $model->attributes=$_POST['Detailitemtransfers'];
                     //posting into session
@@ -112,7 +112,7 @@ class DetailitemtransfersController extends Controller
                 // Uncomment the following line if AJAX validation is needed
                 $this->performAjaxValidation($model);
                 
-                if(isset($_POST['Detailitemtransfers']))
+                if(isset($_POST['yt0']))
                {
                     $temp=Yii::app()->session['Detailitemtransfers'];
                     $model->attributes=$_POST['Detailitemtransfers'];

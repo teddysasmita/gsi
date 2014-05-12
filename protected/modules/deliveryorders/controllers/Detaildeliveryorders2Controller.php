@@ -63,7 +63,7 @@ class Detaildeliveryorders2Controller extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
                 
-                if(isset($_POST['Detaildeliveryorders2'])) {
+                if(isset($_POST['yt0'])) {
                     $temp=Yii::app()->session['Detaildeliveryorders2'];
                     $model->attributes=$_POST['Detaildeliveryorders2'];
                     //posting into session

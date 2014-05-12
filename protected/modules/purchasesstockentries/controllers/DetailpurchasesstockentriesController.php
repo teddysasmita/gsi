@@ -63,7 +63,7 @@ class DetailpurchasesstockentriesController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
                 
-                if(isset($_POST['Detailpurchasesstockentries'])) {
+                if(isset($_POST['yt0'])) {
                     $temp=Yii::app()->session['Detailpurchasesstockentries'];
                     $model->attributes=$_POST['Detailpurchasesstockentries'];
                     //posting into session
@@ -113,7 +113,7 @@ class DetailpurchasesstockentriesController extends Controller
                 $this->performAjaxValidation($model);
                 
                 
-			if(isset($_POST['Detailpurchasesstockentries'])) {
+			if(isset($_POST['yt0'])) {
 				$temp=Yii::app()->session['Detailpurchasesstockentries'];
 				$model->attributes=$_POST['Detailpurchasesstockentries'];
                   foreach ($temp as $tk=>$tv) {
