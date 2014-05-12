@@ -36,21 +36,27 @@ class DefaultController extends Controller
 			$alldata = array();
 			$whcodeparam = '';
 			$itemnameparam = '';
+			$statusparam = '';
 				
 			if (isset($_GET['go'])) {
 				$whcodeparam = $_GET['whcode'];
 				$itemnameparam = $_GET['itemname'];
+				$statusparam = $_GET['status'];
 				$whs = Yii::app()->db->createCommand()
 					->select("id, code")->from('warehouses')->where('code like :p_code', 
 						array(':p_code'=>'%'.$whcodeparam.'%'))
 					->queryAll();	
 				foreach($whs as $wh) {
-					$data = Yii::app()->db->createCommand()
+					$command = Yii::app()->db->createCommand()
 						->select("count(*) as total, a.iddetail, a.iditem, b.name, '${wh['code']}' as code")
 						->from("wh${wh['id']} a")
 						->join('items b', 'b.id = a.iditem')
-						->where("b.name like :p_name and a.avail = '1'", array(':p_name'=>"%$itemnameparam%"))	
-						->group(array('iditem'))
+						->where("b.name like :p_name", array(':p_name'=>"%$itemnameparam%"));	
+						if ($statusparam === 'Semua')
+							$command->andWhere("a.avail <> :p_avail ", array(':p_avail'=>"0"));
+						else
+							$command->andWhere("a.avail = :p_avail ", array(':p_avail'=>$statusparam));
+					$data = $command->group(array('iditem'))
 						->order('iditem')
 						->queryAll();
 					$alldata = array_merge($alldata, $data);
@@ -72,22 +78,28 @@ class DefaultController extends Controller
 			$alldata = array();
 			$whcodeparam = '';
 			$itemnameparam = '';
+			$statusparam = '';
 			
 			if (isset($_GET['go'])) {
 				$whcodeparam = $_GET['whcode'];
 				$itemnameparam = $_GET['itemname'];
+				$statusparam = $_GET['status'];
 				$whs = Yii::app()->db->createCommand()
 				->select("id, code")->from('warehouses')->where('code like :p_code',
 						array(':p_code'=>'%'.$whcodeparam.'%'))
 						->queryAll();
 				foreach($whs as $wh) {
-					$data = Yii::app()->db->createCommand()
-					->select("a.iddetail, a.iditem, b.name, a.serialnum, concat('${wh['code']}') as code")
-					->from("wh${wh['id']} a")
-					->join('items b', 'b.id = a.iditem')
-					->where("b.name like :p_name and a.avail = '1'", array(':p_name'=>"%$itemnameparam%"))
-					->order('b.name')
-					->queryAll();
+					$command = Yii::app()->db->createCommand()
+						->select("a.iddetail, a.iditem, b.name, a.serialnum, concat('${wh['code']}') as code")
+						->from("wh${wh['id']} a")
+						->join('items b', 'b.id = a.iditem')
+						->where("b.name like :p_name", array(':p_name'=>"%$itemnameparam%"));
+						
+					if ($statusparam === 'Semua')
+						$command->andWhere("a.avail <> :p_avail ", array(':p_avail'=>"0"));
+					else
+						$command->andWhere("a.avail = :p_avail ", array(':p_avail'=>$statusparam));
+					$data = $command->order('b.name')->queryAll();
 					$alldata = array_merge($alldata, $data);
 				}
 				usort($alldata, 'cmp');
