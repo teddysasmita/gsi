@@ -99,7 +99,7 @@ class DefaultController extends Controller
                          } 
                          
                       } else {
-                        throw new CHttpException(707,'Nomor Serial telah terdaftar.');
+                        throw new CHttpException(707,'Maaf, ada nomor serial yang tidak terdaftar dalam gudang ini.');
                      }     
                    } else if (isset($_POST['command'])){
                       // save the current master data before going to the detail page
@@ -447,7 +447,6 @@ class DefaultController extends Controller
              if (!$respond) {
                 break;
              }
-             Action::exitItemFromWarehouse($idwh, $row['serialnum']);
          }
          return $respond;
      }
@@ -527,7 +526,7 @@ class DefaultController extends Controller
         
          	$details = $this->loadDetails($model->id);
 	         foreach($details as $detail) {
-	         	Action::exitItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
+	         	Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], '0');
 	         };
 	         
 	         /*if ($model->transname == 'AC16') {
@@ -541,7 +540,7 @@ class DefaultController extends Controller
         
          	$details = $this->loadDetails($model->id);
 	         foreach($details as $detail) {
-	         	Action::exitItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
+	         	Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], '0');
 	         };
 	         
 	         /*if ($model->transname == 'AC16') {
@@ -571,7 +570,7 @@ class DefaultController extends Controller
          		if ($detail['serialnum'] != 'Belum Diterima') {
          			if (Action::checkItemToWarehouse($model->idwarehouse, $detail['iddetail'],
          				$detail['iditem'], $detail['serialnum']) == 0)
-         				Action::entryItemToWarehouse($model->idwarehouse, $detail['iddetail'],
+         				Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'],
          					$detail['iditem'], $detail['serialnum']);
          		}
          	};
@@ -596,16 +595,16 @@ class DefaultController extends Controller
      {
      	$details = $this->loadDetails($model->id);
      	foreach($details as $detail) {
-     		Action::deleteItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
+     		Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $detail['avail']);
      	};
      	
-     	if ($model->transname == 'AC16') {
+     	/*if ($model->transname == 'AC16') {
      		$data = Yii::app()->db->createCommand()
      		->select()->from('requestdisplays')
      		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
      		->queryRow();
      		$this->removeEntryDisplay($data['regnum'], $model->idwarehouse);
-     	}
+     	}*/
      }
 
      protected function afterDelete(& $model)
@@ -756,6 +755,7 @@ EOS;
 				$detail['userlog']=Yii::app()->user->id;
 				$detail['datetimelog']=idmaker::getDateTime();
 				$detail['serialnum']='Belum Diterima';
+				$detail['avail']=0;
       			$details[]=$detail;
 			}
 		}
@@ -777,9 +777,9 @@ EOS;
 				$count=Yii::app()->db->createCommand()
 					->select('count(*)')->from('wh'.$model->idwarehouse)
 					->where("serialnum = :p_serialnum and avail = :p_avail",
-      					array(':p_serialnum'=>$detail['serialnum'], ':p_avail'=>'0'))
+      					array(':p_serialnum'=>$detail['serialnum'], ':p_avail'=>'1'))
       				->queryScalar();
-               $respond=$count==0;
+               $respond=$count > 0;
                if(!$respond)
                   break;
             };

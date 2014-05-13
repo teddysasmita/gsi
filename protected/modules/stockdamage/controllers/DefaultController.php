@@ -69,7 +69,7 @@ class DefaultController extends Controller
                 
                // Uncomment the following line if AJAX validation is needed
                $this->performAjaxValidation($model);
-				
+				;
                 if (isset($_POST)){
                    if(isset($_POST['yt0'])) {
                       //The user pressed the button;
@@ -102,6 +102,7 @@ class DefaultController extends Controller
                         throw new CHttpException(707,'Nomor Serial telah terdaftar.');
                      }     
                    } else if (isset($_POST['command'])){
+                   	
                       // save the current master data before going to the detail page
                       if($_POST['command']=='adddetail') {
                          $model->attributes=$_POST['Stockdamage'];
@@ -112,9 +113,9 @@ class DefaultController extends Controller
                          $model->attributes=$_POST['Stockdamage'];
                          Yii::app()->session['Stockdamage']=$_POST['Stockdamage'];
                          $this->loadLPB($model->transid, $model->id, $model->idwarehouse);
-                      } else if ($_POST['command']=='updateDetail') {
+                      } else if ($_POST['command']=='updatedetail') {
                          $model->attributes=$_POST['Stockdamage'];
-                         Yii::app()->session['Stockdamage']=$_POST['Stockdamage'];
+                         Yii::app()->session['Stockdamage']=$_POST['Stockdamage'];   
                       }
                    }
                 }
@@ -447,7 +448,6 @@ class DefaultController extends Controller
              if (!$respond) {
                 break;
              }
-             Action::exitItemFromWarehouse($idwh, $row['serialnum']);
          }
          return $respond;
      }
@@ -523,35 +523,13 @@ class DefaultController extends Controller
          $idmaker=new idmaker();
          if ($this->state == 'create') {
          	$idmaker->saveRegNum($this->formid, $model->regnum);
-         
+         };	   
         
-         	$details = $this->loadDetails($model->id);
-	         foreach($details as $detail) {
-	         	Action::exitItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
-	         };
-	         
-	         /*if ($model->transname == 'AC16') {
-	         	$data = Yii::app()->db->createCommand()
-	         		->select()->from('requestdisplays')
-	         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-	         		->queryRow();
-	         	$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
-	         }*/
-         } else if ($this->state == 'update') {
-        
-         	$details = $this->loadDetails($model->id);
-	         foreach($details as $detail) {
-	         	Action::exitItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
-	         };
-	         
-	         /*if ($model->transname == 'AC16') {
-	         	$data = Yii::app()->db->createCommand()
-	         		->select()->from('requestdisplays')
-	         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-	         		->queryRow();
-	         	$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
-	         }*/
-         }
+         	
+         $details = $this->loadDetails($model->id);
+		 foreach($details as $detail) {
+			Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], '2');
+	     };
      }
 
      protected function beforePost(& $model)
@@ -568,27 +546,8 @@ class DefaultController extends Controller
          	
          	$details = $this->loadDetails($model->id);
          	foreach($details as $detail) {
-         		if ($detail['serialnum'] != 'Belum Diterima') {
-         			if (Action::checkItemToWarehouse($model->idwarehouse, $detail['iddetail'],
-         				$detail['iditem'], $detail['serialnum']) == 0)
-         				Action::entryItemToWarehouse($model->idwarehouse, $detail['iddetail'],
-         					$detail['iditem'], $detail['serialnum']);
-         		}
+         		Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
          	};
-         	/*if ($model->transname == 'AC16') {
-         		$data = Yii::app()->db->createCommand()
-         		->select()->from('requestdisplays')
-         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-         		->queryRow();
-         		$this->removeEntryDisplay($data['regnum'], $model->idwarehouse);
-         	}*/
-         	/*if ($model->transname == 'AC16') {
-         		$data = Yii::app()->db->createCommand()
-         		->select()->from('requestdisplays')
-         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-         		->queryRow();
-         		$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
-         	}*/
          }
      }
 
@@ -596,16 +555,8 @@ class DefaultController extends Controller
      {
      	$details = $this->loadDetails($model->id);
      	foreach($details as $detail) {
-     		Action::deleteItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
-     	};
-     	
-     	if ($model->transname == 'AC16') {
-     		$data = Yii::app()->db->createCommand()
-     		->select()->from('requestdisplays')
-     		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-     		->queryRow();
-     		$this->removeEntryDisplay($data['regnum'], $model->idwarehouse);
-     	}
+     		Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
+     	};     	
      }
 
      protected function afterDelete(& $model)

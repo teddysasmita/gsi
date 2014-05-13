@@ -32,10 +32,19 @@ $supplierScript=<<<EOS
    					if (data == false) {
    						$('#Detailstockdamage_serialnum_em_').html('Data tidak ditemukan');
 						$('#Detailstockdamage_serialnum_em_').prop('style', 'display:block');
+   						$('#itemname').removeClass('money');
+   						$('#itemname').addClass('error');
+   						$('#itemname').html('Barang tidak ditemukan');
    					} else {
    						$('#Detailstockdamage_serialnum_em_').html('');
 						$('#Detailstockdamage_serialnum_em_').prop('style', 'display:none');
 						$('#Detailstockdamage_iditem').val(data);
+   						$.getJSON('index.php?r=LookUp/getItemName2', { id: $('#Detailstockdamage_iditem').val() },
+   							function(data2) {
+   								$('#itemname').removeClass('error');
+   								$('#itemname').addClass('money');
+   								$('#itemname').html(data2);
+   							});
 	   				};
    				});
 		}
@@ -85,11 +94,7 @@ EOS;
 	<div class="row">
 		<?php echo $form->labelEx($model,'iditem'); ?>
 		<?php 
-			if (!is_null($model->iditem))
-               echo CHtml::label(lookup::ItemNameFromItemID($model->iditem), 
-               		false, array('id'=>'itemname', 'class'=>'shit'));
-        	else 
-        		echo CHtml::label('Silahkan Masukkan Nomor Seri', false);
+        	echo CHtml::tag('span', array('id'=>'itemname', 'class'=>'error'), false, true);
 		?>	
 		<?php echo $form->error($model,'iditem'); ?>
 	</div>

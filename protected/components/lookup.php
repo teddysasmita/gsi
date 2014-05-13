@@ -261,6 +261,18 @@ class lookup extends CComponent {
       } 
    }
    
+   public static function ConditionName($type)
+   {
+   	switch ($type) {
+   		case 1:
+   			return 'Tersedia';
+   		case 2:
+   			return 'Rusak';
+   		case 0:
+   			return 'Tidak ada';
+   	}
+   }
+   
    public static function BankNameFromID($id)
    {
    	$sql="select name from salesposbanks where id='$id'";

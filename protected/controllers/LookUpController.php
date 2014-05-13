@@ -96,6 +96,18 @@ class LookUpController extends Controller {
 		};
 	}
 	
+	public function actionGetItemName2($id)
+	{
+		if (!Yii::app()->user->isGuest) {
+			$data=Yii::app()->db->createCommand()->selectDistinct('name')->from('items')
+			->where('id = :p_id', array(':p_id'=>$id))
+			->queryScalar();
+			echo json_encode($data);
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+	
 	public function actionGetSalesName($term)
 	{
 		if (!Yii::app()->user->isGuest) {
@@ -582,13 +594,13 @@ EOS;
 	
 		if (!Yii::app()->user->isGuest) {
 			$data=Yii::app()->db->createCommand()
-				->select('iditem')
+				->select('iditem, avail')
 				->from('wh'.$idwh.' a')
 				->where('a.serialnum = :p_serialnum',
 						array(':p_serialnum'=>$serialnum))
 						/*->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum',
 						 array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))*/
-				->queryScalar();
+				->queryRow();
 			echo json_encode($data);
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');

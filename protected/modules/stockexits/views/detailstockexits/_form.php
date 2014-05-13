@@ -24,8 +24,29 @@ $supplierScript=<<<EOS
    		
 	$('#Detailstockexits_serialnum').change(function() {
    		var myserialnum = $('#Detailstockexits_serialnum').val();
-   		if (myserialnum !== 'Belum Diterima')
+   		if (myserialnum !== 'Belum Diterima') {
    			$('#isAccepted').prop('checked', false);
+   			$.getJSON('index.php?r=LookUp/checkSerial', { serialnum: $('#Detailstockexits_serialnum').val(), 
+   				idwh:$('#idwh').val() },
+   				function(data) {
+   				if (data == false) {
+   					$('#avail').removeClass('money');
+   					$('#avail').addClass('error');
+   					$('#avail').html('Tidak ditemukan');
+   				} else {
+   					$('#Detailstockexits_avail').val(data.avail);
+   					if (data.avail = '1') {
+   						$('#avail').removeClass('error');
+   						$('#avail').addClass('money');
+   						$('#avail').html('Tersedia');
+   					} else if (data.avail = '2') {
+   						$('#avail').removeClass('error');
+   						$('#avail').addClass('money');
+   						$('#avail').html('Rusak');
+   					}
+   				}
+   			});
+		};
 	});
 	
    	$('#myButton').click(
@@ -66,14 +87,15 @@ EOS;
          echo $form->hiddenField($model,'userlog');
          echo $form->hiddenField($model,'datetimelog');
          echo $form->hiddenField($model,'iditem');
+         echo $form->hiddenField($model,'avail');
          echo CHtml::hiddenField('idwh',$idwh);
         ?>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'iditem'); ?>
 		<?php 
-               echo CHtml::label(lookup::ItemNameFromItemID($model->iditem), false);
-            ?>
+			echo CHtml::tag('span', array('id'=>'itemname'), lookup::ItemNameFromItemID($model->iditem), true);
+        ?>
 		<?php echo $form->error($model,'iditem'); ?>
 	</div>
 
@@ -90,6 +112,14 @@ EOS;
 		?>
 	</div>
         
+    <div class="row">
+		<?php echo $form->labelEx($model,'avail'); ?>
+		<?php 
+			echo CHtml::tag('span', array('id'=>'avail', 'class'=>'error'), false, true);
+		?>		
+		<?php echo $form->error($model,'avail'); ?>
+	</div>
+	
 	<div class="row buttons">
 		<?php echo CHtml::Button($mode, array('id'=>'myButton')); ?>
 	</div>

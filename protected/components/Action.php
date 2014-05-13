@@ -630,11 +630,13 @@ class Action extends CComponent {
    public static function checkItemToWarehouse($idwh, $iditem, $serialnum, $avail = '1')
    {
    	if (!Yii::app()->user->isGuest) {
-   		return Yii::app()->db->createCommand()
+   		$data =  Yii::app()->db->createCommand()
    		->select("count(*) as total")->from('wh'.$idwh)
    		->where("iditem = :p_iditem and serialnum = :p_serialnum and avail like :p_avail", 
    			array( ':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum, ':p_avail'=>$avail))
    		->queryScalar();
+   		print_r($data);
+   		return $data;
    	} else {
    		throw new CHttpException(405,'You have no authorization for this operation.');
    	};

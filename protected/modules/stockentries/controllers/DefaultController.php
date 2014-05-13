@@ -82,11 +82,8 @@ class DefaultController extends Controller
                       if ($respond) {
                          $respond=$model->save();
                          if(!$respond) {
-                         	print_r($model->regnum);
-                         	print_r($model->errors);
-                         	
-                         	//die;
-                             throw new CHttpException(5000,'There is an error in master posting'. ' '. $model->getErrors());
+                             throw new CHttpException(5000,'There is an error in master posting'. ' '. 
+                             	print_r($model->getErrors()));
                          }
 
                          if(isset(Yii::app()->session['Detailstockentries']) ) {
@@ -449,7 +446,6 @@ class DefaultController extends Controller
              if (!$respond) {
                 break;
              }
-             Action::entryItemToWarehouse($idwh, $row['iddetail'], $row['iditem'], $row['serialnum']);
          }
          return $respond;
      }
@@ -536,7 +532,7 @@ class DefaultController extends Controller
          				$status = Action::checkItemStatusInWarehouse($idwhsource, $detail['serialnum']);
          			} else 
          				$status = '1';
-  
+  					echo "here1";
          			$exist = Action::checkItemToWarehouse($model->idwarehouse, $detail['iditem'], 
 	         			$detail['serialnum'], '%') > 0;
 	         		if (!$exist)	
