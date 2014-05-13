@@ -540,7 +540,7 @@ class DefaultController extends Controller
          $model->userlog=Yii::app()->user->id;
          $model->datetimelog=$idmaker->getDateTime();
          if ($this->state == 'create')
-         	$model->regnum=$idmaker->getRegNum($this->formid);
+         	$model->regnum='DR'.$idmaker->getRegNum($this->formid);
          
          if ($this->state == 'update') {
          	
