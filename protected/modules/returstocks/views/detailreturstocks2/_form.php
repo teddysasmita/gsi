@@ -16,23 +16,6 @@
 $supplierScript=<<<EOS
 	$('input,select').keypress(function(event) { return event.keyCode != 13; });
 
-      $('#isAccepted').click(function() {
-   		if ($('#isAccepted').prop('checked')) {
-   			$('#Detailreturstocks2_serialnum').val('Belum Diterima');
-   		}
-      });
-   		
-	$('#Detailreturstocks2_serialnum').change(function() {
-   		var myserialnum = $('#Detailreturstocks2_serialnum').val();
-   		if (myserialnum !== 'Belum Diterima')
-   			$('#isAccepted').prop('checked', false);
-	});
-	
-   	$('#myButton').click(
-   		function(evt) {
-   			$('#detailreturstocks2-form').submit();
-   	});
-   		
 EOS;
    Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);
    
