@@ -77,7 +77,7 @@ EOS;
 	</div>
 	
 	<div class="row buttons">
-		<?php echo CHtml::Button($mode, array('id'=>'myButton')); ?>
+		<?php echo CHTML::submitButton($mode, array('id'=>'myButton')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
