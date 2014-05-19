@@ -126,9 +126,9 @@ class Detailreturstocks2Controller extends Controller
                      Yii::app()->session['Detailreturstocks2']=$temp;
 
                      if ($master=='create')
-                           $this->redirect(array('default/createdetail'));
+                           $this->redirect(array('default/createdetail2'));
                      else if($master=='update')
-                           $this->redirect(array('default/updatedetail'));
+                           $this->redirect(array('default/updatedetail2'));
                   }	
                 }
                

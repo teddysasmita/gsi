@@ -733,7 +733,16 @@ EOS;
       				array(':p_regnum'=>$nolpb) )
 			->queryAll();
       	}
-      		
+      	if ($dataLPB == FALSE ) {
+      		$dataLPB=Yii::app()->db->createCommand()
+      		->select('a.id, b.*, c.id as iditem')
+      		->from('sendrepairs a')
+      		->join('detailsendrepairs b', 'b.id=a.id')
+      		->join('wh'.$idwh.' c', 'c.iditem = b.iditem')
+      		->where('a.regnum = :p_regnum and c.avail = :p_avail',
+      				array(':p_regnum'=>$nolpb, ':p_avail'=>'2') )
+      		->queryAll();
+      	}	
       	
       	$sql=<<<EOS
     	select count(*) as received from stockexits a

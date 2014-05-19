@@ -423,7 +423,44 @@ class DefaultController extends Controller
          } 
       }
       
+      public function actionCreateDetail2()
+      {
+      	//this action continues the process from the detail page
+      	if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
+      			Yii::app()->user->id))  {
+      		$model=new Returstocks;
+      		$model->attributes=Yii::app()->session['Returstocks'];
+      
+      		$details=Yii::app()->session['Detailreturstocks2'];
+      		$this->afterInsertDetail($model, $details);
+      
+      		$this->render('create',array(
+      				'model'=>$model,
+      		));
+      	} else {
+      		throw new CHttpException(404,'You have no authorization for this operation.');
+      	}
+      }
       public function actionUpdateDetail()
+      {
+      	if(Yii::app()->authManager->checkAccess($this->formid.'-Update',
+      			Yii::app()->user->id))  {
+      
+      		$model=new Returstocks;
+      		$model->attributes=Yii::app()->session['Returstocks'];
+      
+      		$details=Yii::app()->session['Detailreturstocks'];
+      		$this->afterUpdateDetail($model, $details);
+      
+      		$this->render('update',array(
+      				'model'=>$model,
+      		));
+      	} else {
+      		throw new CHttpException(404,'You have no authorization for this operation.');
+      	}
+      }
+      
+      public function actionUpdateDetail2()
       {
          if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                  Yii::app()->user->id))  {
@@ -431,7 +468,7 @@ class DefaultController extends Controller
              $model=new Returstocks;
              $model->attributes=Yii::app()->session['Returstocks'];
 
-             $details=Yii::app()->session['Detailreturstocks'];
+             $details=Yii::app()->session['Detailreturstocks2'];
              $this->afterUpdateDetail($model, $details);
 
              $this->render('update',array(
@@ -441,6 +478,8 @@ class DefaultController extends Controller
              throw new CHttpException(404,'You have no authorization for this operation.');
          }
       }
+      
+      
       
       public function actionDeleteDetail()
       {

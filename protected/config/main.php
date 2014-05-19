@@ -65,6 +65,7 @@ return array(
             'servicecenter',
             'sendrepair',
             'stockdamage',
+            'acquisition',
         ),
 
         
