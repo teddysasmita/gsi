@@ -111,7 +111,6 @@ class Detailreturstocks2Controller extends Controller
                     
                 // Uncomment the following line if AJAX validation is needed
                 $this->performAjaxValidation($model);
-                print_r($_POST);
                if(isset($_POST['yt0'])) {
                   $temp=Yii::app()->session['Detailreturstocks2'];
                   $model->attributes=$_POST['Detailreturstocks2'];
