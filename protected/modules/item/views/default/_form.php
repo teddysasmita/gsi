@@ -52,7 +52,7 @@ Yii::app()->clientScript->registerScript('myscript', $namescript, CClientScript:
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'code'); ?>
-		<?php echo $form->textField($model,'code',array('size'=>12,'maxlength'=>12)); ?>
+		<?php echo $form->textField($model,'code',array('size'=>30,'maxlength'=>50)); ?>
 		<?php echo $form->error($model,'code'); ?>
 	</div>
 

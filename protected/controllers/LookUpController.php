@@ -555,7 +555,7 @@ EOS;
 	
 	}
 	
-	public function actionCheckItemSerial($iditem, $serialnum, $idwh)
+	public function actionCheckItemSerial($iditem, $serialnum, $idwh, $avail = '1')
 	{
 		$iditem=rawurldecode($iditem);
 		$serialnum=rawurldecode($serialnum);
@@ -574,8 +574,8 @@ EOS;
 				$data=Yii::app()->db->createCommand()
 					->select('count(*) as total')
 					->from('wh'.$idwh.' a')
-					->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum',
-						array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))
+					->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum and a.avail = :p_avail',
+						array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum, ':p_avail'=>$avail))
 					/*->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum',
 				 		array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))*/
 						->queryScalar();
@@ -587,7 +587,7 @@ EOS;
 	
 	}
 	
-	public function actionCheckSerial($serialnum, $idwh)
+	public function actionCheckSerial($serialnum, $idwh, $avail = '1')
 	{
 		$idwh=rawurldecode($idwh);
 		$serialnum=rawurldecode($serialnum);
@@ -596,8 +596,8 @@ EOS;
 			$data=Yii::app()->db->createCommand()
 				->select('iditem, avail')
 				->from('wh'.$idwh.' a')
-				->where('a.serialnum = :p_serialnum',
-						array(':p_serialnum'=>$serialnum))
+				->where('a.serialnum = :p_serialnum and a.avail = :p_avail',
+						array(':p_serialnum'=>$serialnum, ':p_avail'=>$avail))
 						/*->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum',
 						 array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))*/
 				->queryRow();

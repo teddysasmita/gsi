@@ -22,8 +22,14 @@ $supplierScript=<<<EOS
       });
 	$('#Detailstockentries_serialnum').change(function() {
    		var myserialnum = $('#Detailstockentries_serialnum').val();
-   		if (myserialnum !== 'Belum Diterima')
+   		if (myserialnum !== 'Belum Diterima') {
    			$('#isAccepted').prop('checked', false);
+   			$.getJSON('index.php?r=LookUp/checkSerial', {'serialnum': myserialnum, 'idwh' : $('#idwh')},
+   				function(data) {
+   					
+   				};
+			});
+		}
 	});
 EOS;
    Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);
@@ -40,6 +46,7 @@ EOS;
          echo $form->hiddenField($model,'userlog');
          echo $form->hiddenField($model,'datetimelog');
          echo $form->hiddenField($model,'iditem');
+         echo CHtml::hiddenField('idwh', $idwh);
         ?>
 
 	<div class="row">

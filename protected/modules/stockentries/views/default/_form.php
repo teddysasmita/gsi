@@ -164,7 +164,7 @@ EOS;
                      )
                   ),
 				'updateButtonOptions'=>array("class"=>'updateButton'),
-                  'updateButtonUrl'=>"Action::decodeUpdateDetailStockEntryUrl(\$data)",
+                  'updateButtonUrl'=>"Action::decodeUpdateDetailStockEntryUrl(\$data, '$model->idwarehouse')",
               )
           ),
     ));
