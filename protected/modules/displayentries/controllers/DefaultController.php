@@ -360,7 +360,7 @@ class DefaultController extends Controller
 		$exist = Action::checkItemToWarehouse($model->idwarehouse, $model->iditem,
 				$model->serialnum, '%') > 0;
 		if (!$exist)
-			Action::addItemToWarehouse($model->idwarehouse, $model->iddetail,
+			Action::addItemToWarehouse($model->idwarehouse, $model->id,
 					$model->iditem, $model->serialnum);
 		else
 			Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, $model->avail);
