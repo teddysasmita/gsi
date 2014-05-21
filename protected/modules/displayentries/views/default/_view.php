@@ -18,7 +18,7 @@
 	<br />
 	
     <b><?php echo CHtml::encode($data->getAttributeLabel('iditem')); ?>:</b>
-	<?php echo CHtml::encode(lookup::ItemNameFromItemID($id)($data->iditem)); ?>
+	<?php echo CHtml::encode(lookup::ItemNameFromItemID($data->iditem)); ?>
 	<br />
 
       <b><?php echo CHtml::encode($data->getAttributeLabel('userlog')); ?>:</b>
