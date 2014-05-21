@@ -8,6 +8,7 @@
  * @property string $id
  * @property string $iditem
  * @property string $serialnum
+ * @property string $avail
  * @property string $userlog
  * @property string $datetimelog
  */
@@ -29,13 +30,14 @@ class Detailstockentries extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('iddetail, id, iditem, serialnum, userlog, datetimelog', 'required'),
+			array('iddetail, id, avail, iditem, serialnum, userlog, datetimelog', 'required'),
 			array('iddetail, id, iditem, userlog', 'length', 'max'=>21),
 			array('serialnum', 'length', 'max'=>40),
 			array('datetimelog', 'length', 'max'=>19),
+			array('avail', 'length', 'max'=>1),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('iddetail, id, iditem, serialnum, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('iddetail, id, iditem, avail, serialnum, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,6 +62,7 @@ class Detailstockentries extends CActiveRecord
 			'id' => 'ID',
 			'iditem' => 'Nama Barang',
 			'serialnum' => 'Nomor Serial',
+			'avail' => 'Kondisi',	
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
 		);
@@ -87,6 +90,7 @@ class Detailstockentries extends CActiveRecord
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('iditem',$this->iditem,true);
 		$criteria->compare('serialnum',$this->serialnum,true);
+		$criteria->compare('avail',$this->avail,true);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);
 
