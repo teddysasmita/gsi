@@ -74,10 +74,19 @@ class DefaultController extends Controller
 				// The user pressed the button;
 				$model->attributes = $_POST ['Displayentries'];
 				
-				$info = $this->checkSerial($model->serialnum, $model->idwarehouse);
-				if ($info === FALSE) {
+				$dataexit = $this->checkSerial($model->serialnum, $model->idwarehouse);
+				if ($dataexit === FALSE) {
 					$info = 'Barang tidak ditemukan';
 				} else {
+					$info = 'Permintaan Barang Keluar no. ' .$dataexit['regnum']. ' - '. $dataexit['idatetime']. ' - '.
+						lookup::SalesNameFromID($dataexit['idsales']). ' - '.
+						lookup::ItemNameFromItemID($dataexit['iditem']). ' - '.
+						'Keluar Gudang no. '. $dataexit['stocknum']. ' - '. $dataexit['stocktime'].' - '.
+						lookup::WarehouseNameFromWarehouseID($dataexit['idwarehouse']);
+					$model->iditem = $dataexit['iditem'];
+					$model->avail = $dataexit['avail'];
+					$model->idwarehouse = $dataexit['idwarehouse'];
+					$model->transid = $dataexit['regnum'];
 					$this->beforePost ( $model );
 					$respond = $model->save();
 					if (! $respond)
@@ -494,11 +503,7 @@ class DefaultController extends Controller
 				->join('detailstockexits c', 'c.id = b.id')
 				->where('c.serialnum = :p_serialnum', array(':p_serialnum'=>$serialnum))
 				->queryRow();
-			return 'Permintaan Barang Keluar no. ' .$dataexit['regnum']. ' - '. $dataexit['idatetime']. ' - '.
-					lookup::SalesNameFromID($dataexit['idsales']). ' - '. 
-					lookup::ItemNameFromItemID($dataexit['iditem']). ' - '.
-					'Keluar Gudang no. '. $dataexit['stocknum']. ' - '. $dataexit['stocktime'].' - '. 
-					lookup::WarehouseNameFromWarehouseID($dataexit['idwarehouse']);
+			return $dataexit;
 		} else 
 			return FALSE;
 	}
