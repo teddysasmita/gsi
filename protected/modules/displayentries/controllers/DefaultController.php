@@ -75,7 +75,6 @@ class DefaultController extends Controller
 				$model->attributes = $_POST ['Displayentries'];
 				
 				$dataexit = $this->checkSerial($model->serialnum, $model->idwarehouse);
-				print_r($dataexit);
 				if ($dataexit === FALSE) {
 					$info = 'Barang tidak ditemukan';
 					die('wrong');
@@ -358,6 +357,13 @@ class DefaultController extends Controller
 			$detailstockentries->save();
 		else
 			throw new CHttpException(101,'Error in Detail Stock Entry.');
+		$exist = Action::checkItemToWarehouse($model->idwarehouse, $model->iditem,
+				$model->serialnum, '%') > 0;
+		if (!$exist)
+			Action::addItemToWarehouse($model->idwarehouse, $model->iddetail,
+					$model->iditem, $model->serialnum);
+		else
+			Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, $model->avail);
 	}
 	
 	protected function beforePost(& $model) {
@@ -370,7 +376,7 @@ class DefaultController extends Controller
 	}
 	
 	protected function beforeDelete(& $model) {
-
+		Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, 0);
 	}
 	
 	protected function afterDelete(& $model) {

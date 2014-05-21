@@ -532,7 +532,6 @@ class DefaultController extends Controller
          				$status = Action::checkItemStatusInWarehouse($idwhsource, $detail['serialnum']);
          			} else 
          				$status = '1';
-  					echo "here1";
          			$exist = Action::checkItemToWarehouse($model->idwarehouse, $detail['iditem'], 
 	         			$detail['serialnum'], '%') > 0;
 	         		if (!$exist)	
