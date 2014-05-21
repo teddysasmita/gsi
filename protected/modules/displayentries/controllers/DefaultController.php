@@ -75,8 +75,10 @@ class DefaultController extends Controller
 				$model->attributes = $_POST ['Displayentries'];
 				
 				$dataexit = $this->checkSerial($model->serialnum, $model->idwarehouse);
+				print_r($dataexit);
 				if ($dataexit === FALSE) {
 					$info = 'Barang tidak ditemukan';
+					die('wrong');
 				} else {
 					$info = 'Permintaan Barang Keluar no. ' .$dataexit['regnum']. ' - '. $dataexit['idatetime']. ' - '.
 						lookup::SalesNameFromID($dataexit['idsales']). ' - '.
@@ -495,7 +497,7 @@ class DefaultController extends Controller
 			->where('serialnum = :p_serialnum and avail = :p_avail', 
 				array(':p_serialnum'=>$serialnum, ':p_avail'=>'1'))
 			->queryScalar();
-		if ($indisplay === 0) {
+		if ($indisplay == 0) {
 			$dataexit = Yii::app()->db->createCommand()
 				->select('a.regnum, a.idatetime, a.idsales, b.regnum as stocknum, b.idatetime as stocktime, b.idwarehouse, c.iditem, c.avail')
 				->from('requestdisplays a')->join('stockexits b', 'b.transid = a.regnum')
