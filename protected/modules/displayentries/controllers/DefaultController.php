@@ -379,7 +379,7 @@ class DefaultController extends Controller
 		$tempid = substr($tempid, 0, 20).'D';
 		Yii::import('application.modules.stockentries.models.*');
 		
-		$stockentries = Stockentries::findByPk($tempid);
+		$stockentries = Stockentries::model()->findByPk($tempid);
 		if (! is_null($stockentries))
 			$stockentries->delete();
 		$detailstockentries = Detailstockentries::model()->findAllByAttributes('id', $tempid);
