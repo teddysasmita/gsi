@@ -77,7 +77,6 @@ class DefaultController extends Controller
 				$dataexit = $this->checkSerial($model->serialnum, $model->idwarehouse);
 				if ($dataexit === FALSE) {
 					$info = 'Barang tidak ditemukan';
-					die('wrong');
 				} else {
 					$info = 'Permintaan Barang Keluar no. ' .$dataexit['regnum']. ' - '. $dataexit['idatetime']. ' - '.
 						lookup::SalesNameFromID($dataexit['idsales']). ' - '.
@@ -376,6 +375,16 @@ class DefaultController extends Controller
 	}
 	
 	protected function beforeDelete(& $model) {
+		$tempid = $model->id;
+		$tempid = substr($tempid, 0, 20).'D';
+		$stockentries = Stockentries::findByPk($tempid);
+		if (! is_null($stockentries))
+			$stockentries->delete();
+		$detailstockentries = Detailstockentries::model()->findAllByAttributes('id', $tempid);
+		if (count($detailstockentries) > 0)
+		foreach($detailstockentries as $dse) {
+			$dse->delete();
+		};
 		Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, 0);
 	}
 	
