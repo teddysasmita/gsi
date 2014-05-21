@@ -153,6 +153,11 @@ EOS;
                   'header'=>'Nomor Seri',
                   'name'=>'serialnum',
               ),
+				array(
+					'header'=>'Kondisi',
+					'name'=>'avail',
+					'value'=>"lookup::ConditionName(\$data['avail'])",
+				),
               array(
                   'class'=>'CButtonColumn',
                   'buttons'=> array(

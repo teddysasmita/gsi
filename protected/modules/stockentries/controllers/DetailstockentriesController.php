@@ -279,6 +279,7 @@ class DetailstockentriesController extends Controller
             $model->iddetail=$idmaker->getCurrentID2();
             $model->userlog=Yii::app()->user->id;
             $model->datetimelog=$idmaker->getDateTime();
+            $model->avail = '1';
         }
         
         protected function afterPost(& $model)
