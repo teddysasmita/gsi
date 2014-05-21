@@ -62,8 +62,18 @@ EOS;
         echo $form->hiddenField($model, 'datetimelog');
         echo $form->hiddenField($model, 'regnum');
         echo $form->hiddenField($model, 'transid');
-      ?>
+        echo $form->hiddenField($model, 'idwarehouse');
         
+      ?>
+     
+    <div class="row">
+		<?php echo $form->labelEx($model,'idwarehouse'); ?>
+        <?php 
+           echo CHtml::label(lookup::WarehouseNameFromWarehouseID($model->idwarehouse),false); 
+        ?>
+        <?php echo $form->error($model,'idwarehouse');?> 
+	</div>
+	
 	<div class="row">
 		<?php echo $form->labelEx($model,'serialnum'); ?>
         <?php 

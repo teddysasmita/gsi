@@ -85,7 +85,6 @@ class DefaultController extends Controller
 						lookup::WarehouseNameFromWarehouseID($dataexit['idwarehouse']);
 					$model->iditem = $dataexit['iditem'];
 					$model->avail = $dataexit['avail'];
-					$model->idwarehouse = $dataexit['idwarehouse'];
 					$model->transid = $dataexit['regnum'];
 					$this->beforePost ( $model );
 					$respond = $model->save();
