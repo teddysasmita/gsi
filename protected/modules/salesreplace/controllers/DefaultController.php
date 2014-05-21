@@ -565,7 +565,7 @@ class DefaultController extends Controller
         	foreach ($details as $row) {
         		$old=$row['price']*$row['qty'];
         		if ($row['deleted']=='1')
-        			$new=$row['pricenew']*$row['qtynew'];
+        			$new=($row['pricenew']-$row['discountnew'])*$row['qtynew'];
         		else if ($row['deleted']=='0')
         			$new=$old;
         		else if ($row['deleted']=='2')
