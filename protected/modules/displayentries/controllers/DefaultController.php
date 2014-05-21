@@ -337,7 +337,7 @@ class DefaultController extends Controller
 		$stockentries->idwarehouse = $model->idwarehouse;
 		$stockentries->donum = $model->regnum;
 		$stockentries->idatetime = $model->idatetime;
-		$stockentries->regnum = idmaker::getRegNum('AC3') + 1;
+		$stockentries->regnum = idmaker::getRegNum('AC3');
 		idmaker::saveRegNum('AC3', $stockentries->regnum);
 		if ($stockentries->validate())
 			$stockentries->save();
@@ -377,6 +377,8 @@ class DefaultController extends Controller
 	protected function beforeDelete(& $model) {
 		$tempid = $model->id;
 		$tempid = substr($tempid, 0, 20).'D';
+		Yii::import('application.modules.stockentries.models.*');
+		
 		$stockentries = Stockentries::findByPk($tempid);
 		if (! is_null($stockentries))
 			$stockentries->delete();
