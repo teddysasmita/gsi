@@ -722,6 +722,7 @@ EOS;
 					$detail['userlog']=Yii::app()->user->id;
 					$detail['datetimelog']=idmaker::getDateTime();
 					$detail['serialnum']='Belum Diterima';
+					$detail['avail'] = '1';
 	      			$details[]=$detail;
 				}
 			}

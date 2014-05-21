@@ -24,11 +24,18 @@ $supplierScript=<<<EOS
    		var myserialnum = $('#Detailstockentries_serialnum').val();
    		if (myserialnum !== 'Belum Diterima') {
    			$('#isAccepted').prop('checked', false);
-   			$.getJSON('index.php?r=LookUp/checkSerial', {'serialnum': myserialnum, 'idwh' : $('#idwh')},
+   			$.getJSON('index.php?r=LookUp/checkSerial', {'serialnum': myserialnum, 'idwh' : $('#idwh').val()},
    				function(data) {
-   					
-   				};
-			});
+   					if (data !== false) {
+   						$('#itemstatus').addClass('errorMessage');
+   						$('#itemstatus').removeClass('money');
+   						$('#itemstatus').html('Nomor seri telah terdaftar');
+   					} else {
+   						$('#itemstatus').addClass('money');
+   						$('#itemstatus').removeClass('errorMessage');
+   						$('#itemstatus').html('Item bisa diterima');
+   					}
+   				});
 		}
 	});
 EOS;
@@ -67,6 +74,13 @@ EOS;
 		<?php echo CHtml::label('Belum Diterima', false); ?>
 		<?php 
 			echo CHtml::checkBox('isAccepted', $model->serialnum == 'Belum Diterima'); 
+		?>
+	</div>
+	
+	<div class="row">
+		<?php echo CHtml::label('Status', false); ?>
+		<?php 
+			echo CHtml::tag('span', array('id'=>'itemstatus'), ''); 
 		?>
 	</div>
         
