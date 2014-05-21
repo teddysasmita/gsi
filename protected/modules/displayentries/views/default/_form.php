@@ -69,7 +69,8 @@ EOS;
     <div class="row">
 		<?php echo $form->labelEx($model,'idwarehouse'); ?>
         <?php 
-           echo CHtml::label(lookup::WarehouseNameFromWarehouseID($model->idwarehouse),false); 
+           echo CHtml::tag('span',array('class'=>'money'),
+			lookup::WarehouseNameFromWarehouseID($model->idwarehouse)); 
         ?>
         <?php echo $form->error($model,'idwarehouse');?> 
 	</div>
