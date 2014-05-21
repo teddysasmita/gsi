@@ -68,7 +68,7 @@ class Displayentries extends CActiveRecord
 			'iditem' => 'Nama Barang',
 			'serialnum' => 'Nomor Seri',
 			'avail' => 'Kondisi',
-			'transid' => 'Nomor MD',
+			'transid' => 'Info MD',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
 			'idwarehouse' => 'Gudang',
