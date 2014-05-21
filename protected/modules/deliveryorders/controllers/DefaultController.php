@@ -753,10 +753,18 @@ class DefaultController extends Controller
         
         private function loadInvoice($invnum, $id)
         {
-        	$master=Yii::app()->db->createCommand()
-        		->select()->from('salespos')->where('regnum = :p_regnum', 
-        		array(':p_regnum'=>$invnum))->queryRow(); 
-        	
+			$ganti = substr($invnum, 0, 1) == 'G'; 
+        	if ($ganti === true) {
+        		$tempnum = substr($invnum, 1);
+        		$tempnum = str_pad($tempnum, 12, '0', STR_PAD_LEFT);
+        		$master=Yii::app()->db->createCommand()
+        		->select()->from('salesreplace')->where('regnum = :p_regnum',
+        				array(':p_regnum'=>$tempnum))->queryRow();
+        	} else {
+        		$master=Yii::app()->db->createCommand()
+        			->select()->from('salespos')->where('regnum = :p_regnum', 
+        			array(':p_regnum'=>$invnum))->queryRow(); 
+        	}
         	$masterdata=Yii::app()->session['Deliveryorders'];
         	if ($master['idreceiver'] <> '') {
         		$receiver=Yii::app()->db->createCommand()
@@ -778,29 +786,42 @@ class DefaultController extends Controller
         		$masterdata['receiverphone']=$master['payer_phone'];
         	}
         	Yii::app()->session['Deliveryorders']=$masterdata;
-        	$details=Yii::app()->db->createCommand()
-        		->select('b.*')->from('salespos a')->join('detailsalespos b', 'b.id = a.id')
-        		->where('a.regnum = :p_regnum',
-				array(':p_regnum'=>$invnum))->queryAll();
+        	if ($ganti === true) {
+        		$details=Yii::app()->db->createCommand()
+        		->select('b.*')->from('salesreplace a')->join('detailsalesreplace b', 'b.id = a.id')
+        		->where('a.regnum = :p_regnum and deleted = :p_deleted',
+        				array(':p_regnum'=>$tempnum, ':p_deleted'=>'1'))->queryAll();
+        	} else {
+        		$details=Yii::app()->db->createCommand()
+        			->select('b.*')->from('salespos a')->join('detailsalespos b', 'b.id = a.id')
+        			->where('a.regnum = :p_regnum',
+					array(':p_regnum'=>$invnum))->queryAll();
+        	}
         	$detailsdone=Yii::app()->db->createCommand()
         		->select('b.iditem, sum(b.qty) as sentqty')->from('deliveryorders a')->join('detaildeliveryorders b', 'b.id = a.id')
         		->where('a.invnum = :p_regnum',
         			array(':p_regnum'=>$invnum))
-        		->group('b.iditem')
-        		->queryAll();
+        		->group('b.iditem')->queryAll();
         	$detailsdone2=Yii::app()->db->createCommand()
-        	->select('b.iditem, sum(b.qty) as sentqty')->from('orderretrievals a')
-        	->join('detailorderretrievals b', 'b.id = a.id')
-        	->where('a.invnum = :p_regnum',
+	        	->select('b.iditem, sum(b.qty) as sentqty')->from('orderretrievals a')
+	        	->join('detailorderretrievals b', 'b.id = a.id')
+	        	->where('a.invnum = :p_regnum',
         			array(':p_regnum'=>$invnum))
-        			->group('b.iditem')->queryAll();
+        		->group('b.iditem')->queryAll();
         	foreach($details as $detail ) {
         		$detaildata['id']=$id;
         		$detaildata['iddetail']=idmaker::getCurrentID2();
-        		$detaildata['iditem']=$detail['iditem'];
-        		$detaildata['invqty']=$detail['qty'];
+        		
+        		if ($ganti === true) {
+        			$detaildata['invqty']=$detail['qtynew'];
+        			$detaildata['iditem']=$detail['iditemnew'];
+        			$detaildata['leftqty']=$detail['qtynew'];
+        		} else {
+        			$detaildata['invqty']=$detail['qty'];
+        			$detaildata['iditem']=$detail['iditem'];
+        			$detaildata['leftqty']=$detail['qty'];
+        		}
         		$detaildata['qty']=0;
-        		$detaildata['leftqty']=$detail['qty'];
         		$detaildata['userlog']=Yii::app()->user->id;
 				$detaildata['datetimelog']=idmaker::getDateTime();
         		$doneqty = 0;
