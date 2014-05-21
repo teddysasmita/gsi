@@ -565,7 +565,7 @@ class DefaultController extends Controller
          } else if ($this->state == 'update') {
          	$tempid = $model->id;
          	$tempid = substr($tempid, 0, 20).'C';
-         	$stockentries = Stockentries::findByPk('id');
+         	$stockentries = Stockentries::findByPk($tempid);
          	if (! is_null($stockentries))
          		$stockentries->delete();
          	$detailstockentries = Detailstockentries::model()->findAllByAttributes('id', $tempid);
