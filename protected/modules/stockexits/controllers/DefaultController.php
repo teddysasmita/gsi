@@ -735,7 +735,7 @@ EOS;
       	}
       	if ($dataLPB == FALSE ) {
       		$dataLPB=Yii::app()->db->createCommand()
-      		->select('a.id, b.*, c.id as iditem')
+      		->select('a.id, b.*')
       		->from('sendrepairs a')
       		->join('detailsendrepairs b', 'b.id=a.id')
       		->join('wh'.$idwh.' c', 'c.iditem = b.iditem')
