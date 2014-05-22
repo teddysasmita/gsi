@@ -57,11 +57,6 @@ EOS;
       <?php 
         echo CHtml::hiddenField('command', '', array('id'=>'command'));
         echo CHtml::hiddenField('detailcommand', '', array('id'=>'detailcommand'));
-        echo $form->hiddenField($model, 'id');
-        echo $form->hiddenField($model, 'userlog');
-        echo $form->hiddenField($model, 'datetimelog');
-        echo $form->hiddenField($model, 'regnum');
-        echo $form->hiddenField($model, 'transid');
         echo $form->hiddenField($model, 'idwarehouse');
         
       ?>
