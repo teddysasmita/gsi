@@ -1,6 +1,6 @@
    <?php
-/* @var $this StockentriesController */
-/* @var $model Stockentries */
+/* @var $this DisplayentriesController */
+/* @var $model Displayentries */
 /* @var $form CActiveForm */
 ?>
 
@@ -8,22 +8,22 @@
 
 <?php
    $transScript=<<<EOS
-		$('#Stockentries_transid').change(
+		$('#Displayentries_transid').change(
 		function() {
-			$.getJSON('index.php?r=LookUp/getTrans',{ id: $('#Stockentries_transid').val() },
+			$.getJSON('index.php?r=LookUp/getTrans',{ id: $('#Displayentries_transid').val() },
             function(data) {
 				if (data[0].id !== 'NA') {
-					$('#Stockentries_transname').val(data[0].transname);
+					$('#Displayentries_transname').val(data[0].transname);
 					$('#transinfo').html(data[0].transinfo);
-            		$('#Stockentries_transinfo').val(data[0].transinfo);
+            		$('#Displayentries_transinfo').val(data[0].transinfo);
             		$('#command').val('getPO');
-					$('#Stockentries_transinfo_em_').prop('style', 'display:none')
-					$('#stockentries-form').submit();
+					$('#Displayentries_transinfo_em_').prop('style', 'display:none')
+					$('#displayentries-form').submit();
 				} else {
-					$('#Stockentries_transname').val();
+					$('#Displayentries_transname').val();
 					$('#transinfo').html('');
-            		$('#Stockentries_transinfo_em_').html('Data tidak ditemukan');
-					$('#Stockentries_transinfo_em_').prop('style', 'display:block')
+            		$('#Displayentries_transinfo_em_').html('Data tidak ditemukan');
+					$('#Displayentries_transinfo_em_').prop('style', 'display:block')
 				}
 			})
 		});
@@ -31,20 +31,20 @@
 		function(evt) {
 			$('#command').val('updateDetail');
 			$('#detailcommand').val(this.href);
-			$('#stockentries-form').submit();
+			$('#displayentries-form').submit();
 		});   
 EOS;
    Yii::app()->clientScript->registerScript("transScript", $transScript, CClientscript::POS_READY);
 
    if($command=='create') 
       $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'stockentries-form',
+	'id'=>'displayentries-form',
 	'enableAjaxValidation'=>true,
       'action'=>Yii::app()->createUrl("/displayentries/default/create")
       ));
    else if($command=='update')
       $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'stockentries-form',
+	'id'=>'displayentries-form',
 	'enableAjaxValidation'=>true,
       'action'=>Yii::app()->createUrl("/displayentries/default/update", array('id'=>$model->id))
       ));
