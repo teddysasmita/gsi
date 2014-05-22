@@ -86,7 +86,7 @@ EOS;
 	<div class="row">
 		<?php echo $form->labelEx($model,'transid'); ?>
         <?php 
-        	if ($info == 'Barang tidak ditemukan')
+        	if ($info == 'Data Permintaan Barang tidak ditemukan')
            		echo CHtml::tag('div', array('id'=>'mdinfo', 'class'=>'errorMessage'), $info); 
         	else 
         		echo CHtml::tag('div', array('id'=>'mdinfo', 'class'=>'money'), $info);

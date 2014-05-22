@@ -58,15 +58,6 @@ class DefaultController extends Controller
 			$model = new Displayentries ();
 			$this->afterInsert ( $model );
 			
-			Yii::app ()->session ['master'] = 'create';
-			// as the operator enter for the first time, we load the default value to the session
-			if (! isset ( Yii::app ()->session ['Displayentries'] )) {
-				Yii::app ()->session ['Displayentries'] = $model->attributes;
-			} else {
-				// use the session to fill the model
-				$model->attributes = Yii::app ()->session ['Displayentries'];
-			}
-			
 			// Uncomment the following line if AJAX validation is needed
 			$this->performAjaxValidation ( $model );
 			$info = '';
@@ -76,11 +67,11 @@ class DefaultController extends Controller
 				
 				$dataexit = $this->checkSerial($model->serialnum, $model->idwarehouse);
 				if ($dataexit === FALSE) {
-					$info = 'Barang tidak ditemukan';
+					$info = 'Data Permintaan Barang tidak ditemukan';
 				} else {
 					$info = 'Permintaan Barang Keluar no. ' .$dataexit['regnum']. ' - '. $dataexit['idatetime']. ' - '.
-						lookup::SalesNameFromID($dataexit['idsales']). ' - '.
-						lookup::ItemNameFromItemID($dataexit['iditem']). ' - '.
+						lookup::SalesNameFromID($dataexit['idsales']). '<br>'.
+						lookup::ItemNameFromItemID($dataexit['iditem']). '<br>'.
 						'Keluar Gudang no. '. $dataexit['stocknum']. ' - '. $dataexit['stocktime'].' - '.
 						lookup::WarehouseNameFromWarehouseID($dataexit['idwarehouse']);
 					$model->iditem = $dataexit['iditem'];
