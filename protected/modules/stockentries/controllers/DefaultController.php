@@ -658,14 +658,14 @@ EOS;
       		->join('detailpurchasesstockentries b', 'b.id=a.id')
       		->where('a.regnum = :p_regnum', array(':p_regnum'=>$nolpb) )
       		->queryAll();
-      	if ($dataLPB == FALSE) {
+      	/*if ($dataLPB == FALSE) {
       		$dataLPB=Yii::app()->db->createCommand()
       			->select('a.id, b.*')
       			->from('requestdisplays a')
       			->join('detailrequestdisplays b', 'b.id=a.id')
       			->where('a.regnum = :p_regnum', array(':p_regnum'=>$nolpb) )
       			->queryAll();
-      	}
+      	}*/
       	if ($dataLPB == FALSE) {
       		$dataLPB=Yii::app()->db->createCommand()
       		->select('a.id, b.*')

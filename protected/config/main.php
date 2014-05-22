@@ -67,6 +67,7 @@ return array(
             'stockdamage',
             'acquisition',
             'displayentries',
+            'retrievalreplaces',
         ),
 
         
