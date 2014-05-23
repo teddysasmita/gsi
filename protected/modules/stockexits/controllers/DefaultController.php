@@ -744,6 +744,15 @@ EOS;
       		->queryAll();
       	}	
       	
+      	if ($dataLPB == FALSE ) {
+      		$dataLPB=Yii::app()->db->createCommand()
+      		->select('a.*')
+      		->from('retrievalreplaces a')
+      		->where('a.regnum = :p_regnum and a.idwhsource = :p_idwhsource',
+      				array(':p_regnum'=>$nolpb, ':p_idwhsource'=>$idwh) )
+      				->queryAll();
+      	}
+      	
       	$sql=<<<EOS
     	select count(*) as received from stockexits a
 		join detailstockexits b on b.id = a.id

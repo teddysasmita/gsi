@@ -105,26 +105,30 @@ class DefaultController extends Controller
 			
 			Yii::app ()->session ['master'] = 'update';
 			
-			if (! isset ( Yii::app ()->session ['Retrievalreplaces'] ))
-				Yii::app ()->session ['Retrievalreplaces'] = $model->attributes;
-			else
-				$model->attributes = Yii::app ()->session ['Retrievalreplaces'];
-				
 				// Uncomment the following line if AJAX validation is needed
 			$this->performAjaxValidation ( $model );
 			if (isset ( $_POST ['yt0'] )) {
 				$model->attributes = $_POST ['Retrievalreplaces'];
-				$this->beforePost ( $model );
-				$this->tracker->modify ( 'retrievalreplaces', $id );
-				$respond = $model->save ();
-				if (!$respond) 
-					throw new CHttpException ( 404, 'Data tidak lengkap' );
-				$this->afterPost ( $model );
-				Yii::app ()->session->remove ( 'Retrievalreplaces' );
-				$this->redirect ( array (
-						'view',
-						'id' => $model->id 
-				) );
+				
+
+				if ($_POST['validData'] === 'false') {
+					$info = 'Proses tidak dapat dilakukan';
+				} else if ($_POST['validData'] === 'true') {
+					$info = 'Proses berhasil dilakukan';
+					$this->beforePost ( $model );
+					$this->tracker->modify ( 'retrievalreplaces', $id );
+					$respond = $model->save();
+					if (! $respond) {
+						throw new CHttpException ( 404, 'Data tidak lengkap.'.print_r($_POST) );
+					} else {
+						$this->afterPost ( $model );
+						Yii::app ()->session->remove ( 'Retrievalreplaces' );
+						$this->redirect ( array (
+							'view',
+							'id' => $model->id 
+						) );
+					};
+				}
 			}
 			$this->render ( 'update', array (
 					'model' => $model 
@@ -300,7 +304,56 @@ class DefaultController extends Controller
 			$idmaker->saveRegNum ( $this->formid, substr($model->regnum, 2) );
 			
 		} else if ($this->state == 'update') {
+			$tempid = $model->id;
+			$tempid = substr($tempid, 0, 20).'E';
+			$stockentries = Stockentries::findByPk($tempid);
+			if (! is_null($stockentries))
+				$stockentries->delete();
+			$detailstockentries = Detailstockentries::model()->findAllByAttributes('id', $tempid);
+			if (count($detailstockentries) > 0)
+			foreach($detailstockentries as $dse) {
+				$dse->delete();
+			};
 		}
+		$stockentries = new Stockentries();
+		$tempid = $model->id;
+		$tempid = substr($tempid, 0, 20).'E';
+		$stockentries->id = $tempid;
+		$stockentries->userlog = $model->userlog;
+		$stockentries->datetimelog = idmaker::getDateTime();
+		$stockentries->transid = $model->regnum;
+		$stockentries->transname = 'AC29';
+		$stockentries->transinfo = 'Barang Masuk Display - ' + $model->regnum + ' - ' +
+		$model->idatetime;
+		$stockentries->idwarehouse = $model->idwarehouse;
+		$stockentries->donum = $model->regnum;
+		$stockentries->idatetime = $model->idatetime;
+		$stockentries->regnum = idmaker::getRegNum('AC3');
+		idmaker::saveRegNum('AC3', $stockentries->regnum);
+		if ($stockentries->validate())
+			$stockentries->save();
+		else
+			throw new CHttpException(101,'Error in Stock Entry.');
+		Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, '1');
+		
+		$detailstockentries = new Detailstockentries();
+		$detailstockentries->id = $stockentries->id;
+		$detailstockentries->iddetail = idmaker::getCurrentID2();
+		$detailstockentries->iditem = $model->iditem;
+		$detailstockentries->serialnum = $model->serialnum;
+		$detailstockentries->userlog = $model->userlog;
+		$detailstockentries->datetimelog = idmaker::getDateTime();
+		if ($detailstockentries->validate())
+			$detailstockentries->save();
+		else
+			throw new CHttpException(101,'Error in Detail Stock Entry.');
+		$exist = Action::checkItemToWarehouse($model->idwarehouse, $model->iditem,
+				$model->serialnum, '%') > 0;
+		if (!$exist)
+			Action::addItemToWarehouse($model->idwarehouse, $model->id,
+					$model->iditem, $model->serialnum);
+		else
+			Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, $model->avail);
 	}
 	
 	protected function beforePost(& $model) {
@@ -314,7 +367,7 @@ class DefaultController extends Controller
 	
 	protected function beforeDelete(& $model) {
 		$tempid = $model->id;
-		$tempid = substr($tempid, 0, 20).'D';
+		$tempid = substr($tempid, 0, 20).'E';
 		Yii::import('application.modules.stockentries.models.*');
 		
 		$stockentries = Stockentries::model()->findByPk($tempid);
