@@ -29,7 +29,10 @@ $this->menu=array(
 		//'id',
 		'regnum',
 		'idatetime',
-		'transid',
+		array(
+			'name'=>'iditem',
+			'value'=>lookup::ItemNameFromItemID($model->iditem),
+		),
 		'serialnum',
 		array(
 			'label'=>'Userlog',

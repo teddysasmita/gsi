@@ -607,4 +607,35 @@ EOS;
 		};
 	
 	}
+	
+	public function actionCheckRetrieval($invnum, $serialnum)
+	{
+		$invnum = rawurldecode($invnum);
+		$serialnum = rawurldecode($serialnum);
+		
+		if (!Yii::app()->user->isGuest) {
+			$orderretrievals=Yii::app()->db->createCommand()
+				->select('b.regnum')
+				->from('salespos a')
+				->join('orderretrievals b', 'b.invnum = a.regnum')
+				->where('b.invnum = :p_invnum',	array(':p_invnum'=>$invnum))
+				->queryAll();
+			$command=Yii::app()->db->createCommand()
+				->select('b.serialnum, b.iditem')
+				->from('stockexits a')
+				->join('detailstockexits b', 'b.id = a.id')
+				->where('a.transid = :p_transid and b.serialnum = :p_serialnum');
+			$data = array();
+			foreach($orderretrievals as $or) {
+				$command->bindParam(':p_transid', $or['regnum'], PDO::PARAM_STR);
+				$command->bindParam(':p_serialnum', $serialnum, PDO::PARAM_STR);
+				$data = $command->queryAll();	
+				if (count($data)>0)
+					break;
+			}
+			echo json_encode($data);
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
 }

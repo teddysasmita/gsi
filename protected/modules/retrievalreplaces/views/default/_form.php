@@ -8,31 +8,25 @@
 
 <?php
    $transScript=<<<EOS
-		$('#Retrievalreplaces_transid').change(
+		$('#Retrievalreplaces_serialnum').change(
 		function() {
-			$.getJSON('index.php?r=LookUp/getTrans',{ id: $('#Retrievalreplaces_transid').val() },
+			$.getJSON('index.php?r=LookUp/checkRetrieval',{ invnum: $('#Retrievalreplaces_invnum').val(),
+				serialnum: $('#Retrievalreplaces_serialnum').val() },
             function(data) {
-				if (data[0].id !== 'NA') {
-					$('#Retrievalreplaces_transname').val(data[0].transname);
-					$('#transinfo').html(data[0].transinfo);
-            		$('#Retrievalreplaces_transinfo').val(data[0].transinfo);
-            		$('#command').val('getPO');
-					$('#Retrievalreplaces_transinfo_em_').prop('style', 'display:none')
-					$('#retrievalreplaces-form').submit();
+				if (data.length > 0 ) {
+					$('#validData').val('true');
+					$('#Retrievalreplaces_iditem').val(data[0].iditem);
+					$('#mdinfo').addClass('money');
+					$('#mdinfo').removeClass('errorMessage');
+					$('#mdinfo').html('Nomor Faktur dan Nomor seri valid');
 				} else {
-					$('#Retrievalreplaces_transname').val();
-					$('#transinfo').html('');
-            		$('#Retrievalreplaces_transinfo_em_').html('Data tidak ditemukan');
-					$('#Retrievalreplaces_transinfo_em_').prop('style', 'display:block')
+					$('#validData').val('false');
+					$('#mdinfo').addClass('errorMessage');
+					$('#mdinfo').removeClass('money');
+					$('#mdinfo').html('Nomor Faktur dan/atau Nomor seri TIDAK valid');
 				}
 			})
 		});
-		$('.updateButton').click(
-		function(evt) {
-			$('#command').val('updateDetail');
-			$('#detailcommand').val(this.href);
-			$('#retrievalreplaces-form').submit();
-		});   
 EOS;
    Yii::app()->clientScript->registerScript("transScript", $transScript, CClientscript::POS_READY);
 
@@ -57,8 +51,14 @@ EOS;
       <?php 
         echo CHtml::hiddenField('command', '', array('id'=>'command'));
         echo CHtml::hiddenField('detailcommand', '', array('id'=>'detailcommand'));
+        echo CHtml::hiddenField('validData', 'false');
         echo $form->hiddenField($model, 'idwarehouse');
-        
+        echo $form->hiddenField($model, 'regnum');
+        echo $form->hiddenField($model, 'idatetime');
+        echo $form->hiddenField($model, 'userlog');
+        echo $form->hiddenField($model, 'datetimelog');
+        echo $form->hiddenField($model, 'iditem');
+        echo $form->hiddenField($model, 'id');
       ?>
      
     <div class="row">
@@ -68,6 +68,14 @@ EOS;
 			lookup::WarehouseNameFromWarehouseID($model->idwarehouse)); 
         ?>
         <?php echo $form->error($model,'idwarehouse');?> 
+	</div>
+	 
+    <div class="row">
+		<?php echo $form->labelEx($model,'invnum'); ?>
+        <?php 
+           echo $form->textField($model, 'invnum', array('maxlength'=>12)); 
+        ?>
+        <?php echo $form->error($model,'invnum');?> 
 	</div>
 	
 	<div class="row">
@@ -79,14 +87,10 @@ EOS;
 	</div>
 	
 	<div class="row">
-		<?php echo $form->labelEx($model,'transid'); ?>
+		<?php echo CHtml::label('Status',false); ?>
         <?php 
-        	if ($info == 'Data Pengambilan Barang tidak ditemukan')
-           		echo CHtml::tag('div', array('id'=>'mdinfo', 'class'=>'errorMessage'), $info); 
-        	else 
-        		echo CHtml::tag('div', array('id'=>'mdinfo', 'class'=>'money'), $info);
+           	echo CHtml::tag('span', array('id'=>'mdinfo'), $info); 
         ?>
-        <?php echo $form->error($model,'transid');?> 
 	</div>
 	
 	<div class="row">
@@ -97,6 +101,10 @@ EOS;
 			echo $form->dropDownList($model, 'idwhsource', $data, array('empty'=>'Harap Pilih')); 
 		?>
 		<?php echo $form->error($model,'idwhsource'); ?>
+	</div>
+	
+	<div class="row">
+		<?php echo CHtml::submitButton(ucfirst($command)); ?>
 	</div>
       
 <?php $this->endWidget(); ?>

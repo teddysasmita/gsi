@@ -13,14 +13,18 @@
 	<?php echo CHtml::encode($data->idatetime); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('transid')); ?>:</b>
-	<?php echo CHtml::encode($data->transid); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('invnum')); ?>:</b>
+	<?php echo CHtml::encode($data->invnum); ?>
 	<br />
 	
     <b><?php echo CHtml::encode($data->getAttributeLabel('iditem')); ?>:</b>
 	<?php echo CHtml::encode(lookup::ItemNameFromItemID($data->iditem)); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('serialnum')); ?>:</b>
+	<?php echo CHtml::encode($data->serialnum); ?>
+	<br />
+	
       <b><?php echo CHtml::encode($data->getAttributeLabel('userlog')); ?>:</b>
 	<?php echo CHtml::encode(lookup::UserNameFromUserID($data->userlog)); ?>
 	<br />

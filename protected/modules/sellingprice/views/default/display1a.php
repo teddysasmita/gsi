@@ -50,6 +50,7 @@ $('.search-form form').submit(function(){
 			array(
 				'header'=>'Nama Barang',
 				'name'=>'name',
+				'type'=>'ntext',
 			),
 			array(
 				'header'=>'Harga Jual',
@@ -61,7 +62,12 @@ $('.search-form form').submit(function(){
 				'name'=>'minprice',
 				'type'=>'number'
 			),
-			'approvalby'
+			'approvalby',
+			array(
+				'header'=>'Userlog',
+				'name'=>'userlog',
+				'value'=>"lookup::UserNameFromUserID(\$data['userlog'])",
+			),
 			//'userlog',
 			//'datetimelog',
 			/*array(

@@ -61,28 +61,25 @@ class DefaultController extends Controller
 			// Uncomment the following line if AJAX validation is needed
 			$this->performAjaxValidation ( $model );
 			$info = '';
-			if (isset ( $_POST ['Retrievalreplaces'] )) {
+			if (isset ( $_POST ['yt0'] )) {
 				// The user pressed the button;
 				$model->attributes = $_POST ['Retrievalreplaces'];
 				
-				$dataexit = $this->checkSerial($model->serialnum, $model->idwarehouse);
-				if ($dataexit === FALSE) {
-					$info = 'Data Permintaan Barang tidak ditemukan';
-				} else {
-					$info = 'Permintaan Barang Keluar no. ' .$dataexit['regnum']. ' - '. $dataexit['idatetime']. ' - '.
-						lookup::SalesNameFromID($dataexit['idsales']). '<br>'.
-						lookup::ItemNameFromItemID($dataexit['iditem']). '<br>'.
-						'Keluar Gudang no. '. $dataexit['stocknum']. ' - '. $dataexit['stocktime'].' - '.
-						lookup::WarehouseNameFromWarehouseID($dataexit['idwarehouse']);
-					$model->iditem = $dataexit['iditem'];
-					$model->avail = $dataexit['avail'];
-					$model->transid = $dataexit['regnum'];
+				if ($_POST['validData'] === 'false') {
+					$info = 'Proses tidak dapat dilakukan';
+				} else if ($_POST['validData'] === 'true') {
+					$info = 'Proses berhasil dilakukan';
 					$this->beforePost ( $model );
 					$respond = $model->save();
-					if (! $respond)
-						throw new CHttpException ( 404, 'Data tidak lengkap.' );
-					$this->afterPost ( $model );
-					Yii::app ()->session->remove ( 'Retrievalreplaces' );
+					if (! $respond) {
+						throw new CHttpException ( 404, 'Data tidak lengkap.'.print_r($_POST) );
+					} else {
+						$this->afterPost ( $model );
+						Yii::app ()->session->remove ( 'Retrievalreplaces' );
+						$this->redirect ( array (
+							'index',
+						) );
+					};
 				}
 			}
 			$this->render ( 'create', array ('model' => $model, 'info' => $info));
@@ -299,61 +296,11 @@ class DefaultController extends Controller
 	
 	protected function afterPost(& $model) {
 		$idmaker = new idmaker ();
-		Yii::import('application.modules.stockentries.models.*');
 		if ($this->state == 'create') {
 			$idmaker->saveRegNum ( $this->formid, substr($model->regnum, 2) );
 			
 		} else if ($this->state == 'update') {
-			$tempid = $model->id;
-			$tempid = substr($tempid, 0, 20).'D';
-			$stockentries = Stockentries::findByPk($tempid);
-			if (! is_null($stockentries))
-				$stockentries->delete();
-			$detailstockentries = Detailstockentries::model()->findAllByAttributes('id', $tempid);
-			if (count($detailstockentries) > 0)
-			foreach($detailstockentries as $dse) {
-				$dse->delete();
-			};
 		}
-		$stockentries = new Stockentries();
-		$tempid = $model->id;
-		$tempid = substr($tempid, 0, 20).'D';
-		$stockentries->id = $tempid;
-		$stockentries->userlog = $model->userlog;
-		$stockentries->datetimelog = idmaker::getDateTime();
-		$stockentries->transid = $model->regnum;
-		$stockentries->transname = 'AC28';
-		$stockentries->transinfo = 'Barang Masuk Display - ' + $model->regnum + ' - ' +
-		$model->idatetime;
-		$stockentries->idwarehouse = $model->idwarehouse;
-		$stockentries->donum = $model->regnum;
-		$stockentries->idatetime = $model->idatetime;
-		$stockentries->regnum = idmaker::getRegNum('AC3');
-		idmaker::saveRegNum('AC3', $stockentries->regnum);
-		if ($stockentries->validate())
-			$stockentries->save();
-		else
-			throw new CHttpException(101,'Error in Stock Entry.');
-		Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, '1');
-		
-		$detailstockentries = new Detailstockentries();
-		$detailstockentries->id = $stockentries->id;
-		$detailstockentries->iddetail = idmaker::getCurrentID2();
-		$detailstockentries->iditem = $model->iditem;
-		$detailstockentries->serialnum = $model->serialnum;
-		$detailstockentries->userlog = $model->userlog;
-		$detailstockentries->datetimelog = idmaker::getDateTime();
-		if ($detailstockentries->validate())
-			$detailstockentries->save();
-		else
-			throw new CHttpException(101,'Error in Detail Stock Entry.');
-		$exist = Action::checkItemToWarehouse($model->idwarehouse, $model->iditem,
-				$model->serialnum, '%') > 0;
-		if (!$exist)
-			Action::addItemToWarehouse($model->idwarehouse, $model->id,
-					$model->iditem, $model->serialnum);
-		else
-			Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, $model->avail);
 	}
 	
 	protected function beforePost(& $model) {
@@ -362,7 +309,7 @@ class DefaultController extends Controller
 		$model->userlog = Yii::app ()->user->id;
 		$model->datetimelog = $idmaker->getDateTime ();
 		if ($this->state == 'create')
-			$model->regnum = 'DE'.$idmaker->getRegNum ( $this->formid );
+			$model->regnum = 'RE'.$idmaker->getRegNum ( $this->formid );
 	}
 	
 	protected function beforeDelete(& $model) {
