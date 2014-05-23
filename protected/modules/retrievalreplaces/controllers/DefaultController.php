@@ -343,6 +343,7 @@ class DefaultController extends Controller
 		$detailstockentries->serialnum = $model->serialnum;
 		$detailstockentries->userlog = $model->userlog;
 		$detailstockentries->datetimelog = idmaker::getDateTime();
+		$detailstockentries->avail = '2';
 		if ($detailstockentries->validate())
 			$detailstockentries->save();
 		else
