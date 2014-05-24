@@ -33,16 +33,19 @@ $supplierScript=<<<EOS
    					$('#avail').removeClass('money');
    					$('#avail').addClass('error');
    					$('#avail').html('Tidak ditemukan');
+   					$('#Detailstockexits_avail').val('0');
    				} else {
    					$('#Detailstockexits_avail').val(data.avail);
    					if (data.avail = '1') {
    						$('#avail').removeClass('error');
    						$('#avail').addClass('money');
    						$('#avail').html('Tersedia');
+   						$('#Detailstockexits_avail').val('0');
    					} else if (data.avail = '2') {
    						$('#avail').removeClass('error');
    						$('#avail').addClass('money');
    						$('#avail').html('Rusak');
+   						$('#Detailstockexits_avail').val('2');
    					}
    				}
    			});

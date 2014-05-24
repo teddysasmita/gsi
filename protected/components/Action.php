@@ -678,7 +678,7 @@ class Action extends CComponent {
 	   		return Yii::app()->db->createCommand()
 	   			->select("avail")->from('wh'.$idwh)
 	   			->where("serialnum = :p_serialnum",
-	   				array( ":p_serialnum'=>$serialnum"))
+	   				array( ':p_serialnum'=>$serialnum))
 	   			->queryScalar();
 	   	} else {
 	   		throw new CHttpException(405,'You have no authorization for this operation.');

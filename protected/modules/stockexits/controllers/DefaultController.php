@@ -160,21 +160,24 @@ class DefaultController extends Controller
                      $model->attributes=$_POST['Stockexits'];
                      $this->beforePost($model);
                      $this->tracker->modify('stockexits', $id);
-                     $respond=$model->save();
-                     if($respond) {
-                       $this->afterPost($model);
-                     } else {
-                     	throw new CHttpException(404,'There is an error in master posting ');
-                     }
+					 $respond=$this->checkWarehouse($model->idwarehouse);
+                      if (!$respond)
+                      	throw new CHttpException(404,'Lokasi Tidak Terdaftar');
+                      $respond = $this->checkSerialNum(Yii::app()->session['Detailstockexits'], $model);
+                      if ($respond !== true)
+                      	throw new CHttpException(404,'Nomor Seri ada yang salah '.$respond);
+                      $respond=$model->save();
+                      if(!$respond) {
+						throw new CHttpException(404,'There is an error in master posting: '. print_r($model->errors));
+                      }
 
-                     if(isset(Yii::app()->session['Detailstockexits'])) {
+                      if(isset(Yii::app()->session['Detailstockexits']) ) {
                          $details=Yii::app()->session['Detailstockexits'];
-                         $respond=$respond&&$this->saveDetails($details);
-                         if(!$respond) {
-                           throw new CHttpException(404,'There is an error in detail posting');
-                         }
-                     };
-                     
+                         $respond=$respond&&$this->saveNewDetails($details, $model->idwarehouse);
+                      } 
+
+						$this->afterPost($model);
+                                          
                      if(isset(Yii::app()->session['Deletedetailstockexits'])) {
                          $deletedetails=Yii::app()->session['Deletedetailstockexits'];
                          $respond=$respond&&$this->deleteDetails($deletedetails);
