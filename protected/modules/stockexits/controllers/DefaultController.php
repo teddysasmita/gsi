@@ -78,30 +78,27 @@ class DefaultController extends Controller
                       
                       $this->beforePost($model);
                       $respond=$this->checkWarehouse($model->idwarehouse);
-                      $respond=$respond && 
-                      	$this->checkSerialNum(Yii::app()->session['Detailstockexits'], $model);
-                      if ($respond) {
-                         $respond=$model->save();
-                         if(!$respond) {
-                             throw new CHttpException(404,'There is an error in master posting: '. print_r($model->errors));
-                         }
+                      if (!$respond)
+                      	throw new CHttpException(404,'Lokasi Tidak Terdaftar');
+                      $respond = $this->checkSerialNum(Yii::app()->session['Detailstockexits'], $model);
+                      if ($respond !== true)
+                      	throw new CHttpException(404,'Nomor Seri ada yang salah '.$respond);
+                      $respond=$model->save();
+                      if(!$respond) {
+						throw new CHttpException(404,'There is an error in master posting: '. print_r($model->errors));
+                      }
 
-                         if(isset(Yii::app()->session['Detailstockexits']) ) {
-                           $details=Yii::app()->session['Detailstockexits'];
-                           $respond=$respond&&$this->saveNewDetails($details, $model->idwarehouse);
-                         } 
+                      if(isset(Yii::app()->session['Detailstockexits']) ) {
+                         $details=Yii::app()->session['Detailstockexits'];
+                         $respond=$respond&&$this->saveNewDetails($details, $model->idwarehouse);
+                      } 
 
-                         if($respond) {
-                            $this->afterPost($model);
-                            Yii::app()->session->remove('Stockexits');
-                            Yii::app()->session->remove('Detailstockexits');
-                            Yii::app()->session->remove('Deletedetailstockexits');
-                            $this->redirect(array('view','id'=>$model->id));
-                         } 
-                         
-                      } else {
-                        throw new CHttpException(707,'Maaf, ada nomor serial yang tidak terdaftar dalam gudang ini.');
-                     }     
+						$this->afterPost($model);
+                        Yii::app()->session->remove('Stockexits');
+                        Yii::app()->session->remove('Detailstockexits');
+                        Yii::app()->session->remove('Deletedetailstockexits');
+                        $this->redirect(array('view','id'=>$model->id));
+                   
                    } else if (isset($_POST['command'])){
                       // save the current master data before going to the detail page
                       if($_POST['command']=='adddetail') {
@@ -799,8 +796,10 @@ EOS;
       					array(':p_serialnum'=>$detail['serialnum'], ':p_avail'=>'1'))
       				->queryScalar();
                $respond=$count > 0;
-               if(!$respond)
-                  break;
+               if(!$respond) {
+                  $respond = $detail['serialnum'];
+				  break;
+               }
             };
          }   
          return $respond;
