@@ -29,7 +29,7 @@ $supplierScript=<<<EOS
    			$.getJSON('index.php?r=LookUp/checkSerial', { serialnum: $('#Detailstockexits_serialnum').val(), 
    				idwh:$('#idwh').val() },
    				function(data) {
-   				if (data == null) {
+   				if (data == false) {
    					$('#avail').removeClass('money');
    					$('#avail').addClass('error');
    					$('#avail').html('Tidak ditemukan');
