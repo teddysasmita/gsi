@@ -169,6 +169,7 @@ class DefaultController extends Controller
 					if (!$respond)
 						throw new CHttpException(5000,'Lokasi anda tidak terdaftar');
 					$respond = $this->checkSerialNum(Yii::app()->session['Detailstockentries'], $model->idwarehouse);
+					if (!$respond)
 						throw new CHttpException(5001,'Nomor Seri yg anda daftarkan ada yg sdh terdaftar: '. $respond);
 	                      
 					$respond=$model->save();
