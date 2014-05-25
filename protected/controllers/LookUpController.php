@@ -541,6 +541,7 @@ EOS;
 	public function actionGetBankID($name)
 	{
 		$name=rawurldecode($name);
+		
 		if (!Yii::app()->user->isGuest) {
 			$data=Yii::app()->db->createCommand()
 			->select('id')
@@ -557,8 +558,8 @@ EOS;
 	
 	public function actionCheckItemSerial($iditem, $serialnum, $idwh, $avail = '1')
 	{
-		$iditem=rawurldecode($iditem);
-		$serialnum=rawurldecode($serialnum);
+		//$iditem=rawurldecode($iditem);
+		//$serialnum=rawurldecode($serialnum);
 		
 		if (!Yii::app()->user->isGuest) {
 			$data=Yii::app()->db->createCommand()
@@ -589,9 +590,8 @@ EOS;
 	
 	public function actionCheckSerial($serialnum, $idwh, $avail = '1')
 	{
-		$idwh=rawurldecode($idwh);
-		$serialnum=rawurldecode($serialnum);
-		echo $serialnum;
+		//$idwh=rawurldecode($idwh);
+		//$serialnum=rawurldecode($serialnum);
 		
 		if (!Yii::app()->user->isGuest) {
 			$data=Yii::app()->db->createCommand()
@@ -611,8 +611,8 @@ EOS;
 	
 	public function actionCheckRetrieval($invnum, $serialnum)
 	{
-		$invnum = rawurldecode($invnum);
-		$serialnum = rawurldecode($serialnum);
+		//$invnum = rawurldecode($invnum);
+		//$serialnum = rawurldecode($serialnum);
 		
 		if (!Yii::app()->user->isGuest) {
 			$orderretrievals=Yii::app()->db->createCommand()
