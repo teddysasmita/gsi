@@ -207,43 +207,19 @@ class DefaultController extends Controller
                       	}
 					}
 				}
-             	if(isset($_POST['yt0'])) {
-                     $model->attributes=$_POST['Stockentries'];
-                     $this->beforePost($model);
-                     $this->tracker->modify('stockentries', $id);
-                     
-                     $respond=$model->save();
-                     if($respond) {
-                       $this->afterPost($model);
-                     } else {
-                     	throw new CHttpException(404,'There is an error in master posting ');
-                     }
-					
-                     if(isset(Yii::app()->session['Detailstockentries'])) {
-                         $details=Yii::app()->session['Detailstockentries'];
-                         $respond=$respond&&$this->saveDetails($details);
-                         if(!$respond) {
-                           throw new CHttpException(404,'There is an error in detail posting');
-                         }
-                     };
-                     echo "here";
-                     
-                     if(isset(Yii::app()->session['Deletedetailstockentries'])) {
-                         $deletedetails=Yii::app()->session['Deletedetailstockentries'];
-                         $respond=$respond&&$this->deleteDetails($deletedetails);
-                         if(!$respond) {
-                           throw new CHttpException(404,'There is an error in detail deletion');
-                         }
-                     };
+				
+				if(isset(Yii::app()->session['Deletedetailstockentries'])) {
+					$deletedetails=Yii::app()->session['Deletedetailstockentries'];
+					$respond=$respond&&$this->deleteDetails($deletedetails);
+					if(!$respond) {
+						throw new CHttpException(404,'There is an error in detail deletion');
+					}
+				};
                     
-                     if($respond) {
-                         Yii::app()->session->remove('Stockentries');
-                         Yii::app()->session->remove('Detailstockentries');
-                         Yii::app()->session->remove('Deletedetailstockentries');
-                         $this->redirect(array('view','id'=>$model->id));
-                     }
-                 }
-             }
+				Yii::app()->session->remove('Stockentries');
+				Yii::app()->session->remove('Detailstockentries');
+				Yii::app()->session->remove('Deletedetailstockentries');
+				$this->redirect(array('view','id'=>$model->id));
 
              $this->render('update',array(
                      'model'=>$model,
