@@ -80,6 +80,7 @@ class DefaultController extends Controller
 						if (!$respond)
 	                      	throw new CHttpException(5000,'Lokasi anda tidak terdaftar');
 						$respond = $this->checkSerialNum(Yii::app()->session['Detailstockentries'], $model->idwarehouse);
+	                    if (!$respond)
 	                      	throw new CHttpException(5001,'Nomor Seri yg anda daftarkan ada yg sdh terdaftar: '. $respond);
 	                      
 						$respond=$model->save();
@@ -759,6 +760,7 @@ EOS;
       {
          $respond=true;
          
+         print_r($details);
          foreach($details as $detail) {
             if ($detail['serialnum'] !== 'Belum Diterima') {
                $count=Yii::app()->db->createCommand()
@@ -766,8 +768,8 @@ EOS;
                   ->from("wh$idwh")
                   ->where("serialnum = :serialnum and avail = '1'", array(':serialnum'=>$detail['serialnum']))
                   ->queryScalar();
-               $respond=$count==0;
-               if(!$respond) {
+               $respond = $count==0;
+               if($respond === false) {
                   	$respond = $detail['serialnum'];
                		break;
                }
