@@ -12,7 +12,7 @@ class DefaultController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $formid='AC28';
+	public $formid='AC30';
 	public $tracker;
 	public $state;
 
@@ -55,19 +55,19 @@ class DefaultController extends Controller
 			$this->state = 'create';
 			$this->trackActivity ( 'c' );
 			
-			$model = new Displayentries ();
+			$model = new Displayexits ();
 			$this->afterInsert ( $model );
 			
 			// Uncomment the following line if AJAX validation is needed
 			$this->performAjaxValidation ( $model );
 			$info = '';
-			if (isset ( $_POST ['Displayentries'] )) {
+			if (isset ( $_POST ['Displayexits'] )) {
 				// The user pressed the button;
-				$model->attributes = $_POST ['Displayentries'];
+				$model->attributes = $_POST ['Displayexits'];
 				
 				$dataexit = $this->checkSerial($model->serialnum, $model->idwarehouse);
 				if ($dataexit === FALSE) {
-					$info = 'Data Permintaan Barang tidak ditemukan';
+					$info = 'Data Barang tidak ditemukan';
 				} else {
 					$info = 'Permintaan Barang Keluar no. ' .$dataexit['regnum']. ' - '. $dataexit['idatetime']. ' - '.
 						lookup::SalesNameFromID($dataexit['idsales']). '<br>'.
@@ -82,7 +82,7 @@ class DefaultController extends Controller
 					if (! $respond)
 						throw new CHttpException ( 404, 'Data tidak lengkap.' );
 					$this->afterPost ( $model );
-					Yii::app ()->session->remove ( 'Displayentries' );
+					Yii::app ()->session->remove ( 'Displayexits' );
 				}
 			}
 			$this->render ( 'create', array ('model' => $model, 'info' => $info));
@@ -108,22 +108,22 @@ class DefaultController extends Controller
 			
 			Yii::app ()->session ['master'] = 'update';
 			
-			if (! isset ( Yii::app ()->session ['Displayentries'] ))
-				Yii::app ()->session ['Displayentries'] = $model->attributes;
+			if (! isset ( Yii::app ()->session ['Displayexits'] ))
+				Yii::app ()->session ['Displayexits'] = $model->attributes;
 			else
-				$model->attributes = Yii::app ()->session ['Displayentries'];
+				$model->attributes = Yii::app ()->session ['Displayexits'];
 				
 				// Uncomment the following line if AJAX validation is needed
 			$this->performAjaxValidation ( $model );
 			if (isset ( $_POST ['yt0'] )) {
-				$model->attributes = $_POST ['Displayentries'];
+				$model->attributes = $_POST ['Displayexits'];
 				$this->beforePost ( $model );
-				$this->tracker->modify ( 'displayentries', $id );
+				$this->tracker->modify ( 'displayexits', $id );
 				$respond = $model->save ();
 				if (!$respond) 
 					throw new CHttpException ( 404, 'Data tidak lengkap' );
 				$this->afterPost ( $model );
-				Yii::app ()->session->remove ( 'Displayentries' );
+				Yii::app ()->session->remove ( 'Displayexits' );
 				$this->redirect ( array (
 						'view',
 						'id' => $model->id 
@@ -150,7 +150,7 @@ class DefaultController extends Controller
             $model=$this->loadModel($id);
             $this->trackActivity('d');
             $this->beforeDelete($model);
-            $this->tracker->delete('displayentries', $id);
+            $this->tracker->delete('displayexits', $id);
 
             $model->delete();
             $this->afterDelete($model);
@@ -172,8 +172,8 @@ class DefaultController extends Controller
                 Yii::app()->user->id)) {
                $this->trackActivity('l');
 
-               Yii::app()->session->remove('Displayentries');
-               $dataProvider=new CActiveDataProvider('Displayentries',
+               Yii::app()->session->remove('Displayexits');
+               $dataProvider=new CActiveDataProvider('Displayexits',
                   array(
                      'criteria'=>array(
                         'order'=>'id desc'
@@ -196,10 +196,10 @@ class DefaultController extends Controller
 		if (Yii::app ()->authManager->checkAccess ( $this->formid . '-List', Yii::app ()->user->id )) {
 			$this->trackActivity ( 's' );
 			
-			$model = new Displayentries ( 'search' );
+			$model = new Displayexits ( 'search' );
 			$model->unsetAttributes (); // clear any default values
-			if (isset ( $_GET ['Displayentries'] ))
-				$model->attributes = $_GET ['Displayentries'];
+			if (isset ( $_GET ['Displayexits'] ))
+				$model->attributes = $_GET ['Displayexits'];
 			
 			$this->render ( 'admin', array (
 					'model' => $model 
@@ -231,9 +231,9 @@ class DefaultController extends Controller
 	public function actionRestore($idtrack) {
 		if (Yii::app ()->authManager->checkAccess ( $this->formid . '-Update', Yii::app ()->user->id )) {
 			$this->trackActivity ( 'r' );
-			$this->tracker->restore ( 'displayentries', $idtrack );
+			$this->tracker->restore ( 'displayexits', $idtrack );
 			
-			$dataProvider = new CActiveDataProvider ( 'Displayentries' );
+			$dataProvider = new CActiveDataProvider ( 'Displayexits' );
 			$this->render ( 'index', array (
 					'dataProvider' => $dataProvider 
 			) );
@@ -244,13 +244,13 @@ class DefaultController extends Controller
 	public function actionRestoreDeleted($idtrack) {
 		if (Yii::app ()->authManager->checkAccess ( $this->formid . '-Update', Yii::app ()->user->id )) {
 			$this->trackActivity ( 'n' );
-			$id = Yii::app ()->tracker->createCommand ()->select ( 'id' )->from ( 'displayentries' )->where ( 'idtrack = :p_idtrack', array (
+			$id = Yii::app ()->tracker->createCommand ()->select ( 'id' )->from ( 'displayexits' )->where ( 'idtrack = :p_idtrack', array (
 					':p_idtrack' => $idtrack 
 			) )->queryScalar ();
-			$this->tracker->restoreDeleted ( 'detaildisplayentries', "id", $id );
-			$this->tracker->restoreDeleted ( 'displayentries', "idtrack", $idtrack );
+			$this->tracker->restoreDeleted ( 'detaildisplayexits', "id", $id );
+			$this->tracker->restoreDeleted ( 'displayexits', "idtrack", $idtrack );
 			
-			$dataProvider = new CActiveDataProvider ( 'Displayentries' );
+			$dataProvider = new CActiveDataProvider ( 'Displayexits' );
 			$this->render ( 'index', array (
 					'dataProvider' => $dataProvider 
 			) );
@@ -263,12 +263,12 @@ class DefaultController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Displayentries the loaded model
+	 * @return Displayexits the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Displayentries::model()->findByPk($id);
+		$model=Displayexits::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -276,11 +276,11 @@ class DefaultController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Displayentries $model the model to be validated
+	 * @param Displayexits $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='displayentries-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='displayexits-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
@@ -299,55 +299,55 @@ class DefaultController extends Controller
 	
 	protected function afterPost(& $model) {
 		$idmaker = new idmaker ();
-		Yii::import('application.modules.stockentries.models.*');
+		Yii::import('application.modules.stockexits.models.*');
 		if ($this->state == 'create') {
 			$idmaker->saveRegNum ( $this->formid, substr($model->regnum, 2) );
 			
 		} else if ($this->state == 'update') {
 			$tempid = $model->id;
-			$tempid = substr($tempid, 0, 20).'D';
-			$stockentries = Stockentries::findByPk($tempid);
-			if (! is_null($stockentries))
-				$stockentries->delete();
-			$detailstockentries = Detailstockentries::model()->findAllByAttributes('id', $tempid);
-			if (count($detailstockentries) > 0)
-			foreach($detailstockentries as $dse) {
+			$tempid = substr($tempid, 0, 20).'E';
+			$stockexits = Stockexits::findByPk($tempid);
+			if (! is_null($stockexits))
+				$stockexits->delete();
+			$detailstockexits = Detailstockexits::model()->findAllByAttributes('id', $tempid);
+			if (count($detailstockexits) > 0)
+			foreach($detailstockexits as $dse) {
 				$dse->delete();
 			};
 		}
-		$stockentries = new Stockentries();
+		$stockexits = new Stockexits();
 		$tempid = $model->id;
-		$tempid = substr($tempid, 0, 20).'D';
-		$stockentries->id = $tempid;
-		$stockentries->userlog = $model->userlog;
-		$stockentries->datetimelog = idmaker::getDateTime();
-		$stockentries->transid = $model->regnum;
-		$stockentries->transname = 'AC28';
-		$stockentries->transinfo = 'Barang Masuk Display - ' + $model->regnum + ' - ' +
+		$tempid = substr($tempid, 0, 20).'E';
+		$stockexits->id = $tempid;
+		$stockexits->userlog = $model->userlog;
+		$stockexits->datetimelog = idmaker::getDateTime();
+		$stockexits->transid = $model->regnum;
+		$stockexits->transname = 'AC31';
+		$stockexits->transinfo = 'Barang Keluar Display - ' + $model->regnum + ' - ' +
 		$model->idatetime;
-		$stockentries->idwarehouse = $model->idwarehouse;
-		$stockentries->donum = $model->regnum;
-		$stockentries->idatetime = $model->idatetime;
-		$stockentries->regnum = idmaker::getRegNum('AC3');
-		idmaker::saveRegNum('AC3', $stockentries->regnum);
-		if ($stockentries->validate())
-			$stockentries->save();
+		$stockexits->idwarehouse = $model->idwarehouse;
+		$stockexits->donum = $model->regnum;
+		$stockexits->idatetime = $model->idatetime;
+		$stockexits->regnum = idmaker::getRegNum('AC3');
+		idmaker::saveRegNum('AC3', $stockexits->regnum);
+		if ($stockexits->validate())
+			$stockexits->save();
 		else
-			throw new CHttpException(101,'Error in Stock Entry.');
+			throw new CHttpException(101,'Error in Stock Exit.');
 		Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, '1');
 		
-		$detailstockentries = new Detailstockentries();
-		$detailstockentries->id = $stockentries->id;
-		$detailstockentries->iddetail = idmaker::getCurrentID2();
-		$detailstockentries->iditem = $model->iditem;
-		$detailstockentries->serialnum = $model->serialnum;
-		$detailstockentries->avail = '1';
-		$detailstockentries->userlog = $model->userlog;
-		$detailstockentries->datetimelog = idmaker::getDateTime();
-		if ($detailstockentries->validate())
-			$detailstockentries->save();
+		$detailstockexits = new Detailstockexits();
+		$detailstockexits->id = $stockexits->id;
+		$detailstockexits->iddetail = idmaker::getCurrentID2();
+		$detailstockexits->iditem = $model->iditem;
+		$detailstockexits->serialnum = $model->serialnum;
+		$detailstockexits->avail = '1';
+		$detailstockexits->userlog = $model->userlog;
+		$detailstockexits->datetimelog = idmaker::getDateTime();
+		if ($detailstockexits->validate())
+			$detailstockexits->save();
 		else
-			throw new CHttpException(101,'Error in Detail Stock Entry.');
+			throw new CHttpException(101,'Error in Detail Stock Exit.');
 		$exist = Action::checkItemToWarehouse($model->idwarehouse, $model->iditem,
 				$model->serialnum, '%') > 0;
 		if (!$exist)
@@ -363,20 +363,20 @@ class DefaultController extends Controller
 		$model->userlog = Yii::app ()->user->id;
 		$model->datetimelog = $idmaker->getDateTime ();
 		if ($this->state == 'create')
-			$model->regnum = 'DE'.$idmaker->getRegNum ( $this->formid );
+			$model->regnum = 'DX'.$idmaker->getRegNum ( $this->formid );
 	}
 	
 	protected function beforeDelete(& $model) {
 		$tempid = $model->id;
 		$tempid = substr($tempid, 0, 20).'D';
-		Yii::import('application.modules.stockentries.models.*');
+		Yii::import('application.modules.stockexits.models.*');
 		
-		$stockentries = Stockentries::model()->findByPk($tempid);
-		if (! is_null($stockentries))
-			$stockentries->delete();
-		$detailstockentries = Detailstockentries::model()->findAllByAttributes(array('id'=>$tempid));
-		if (count($detailstockentries) > 0)
-		foreach($detailstockentries as $dse) {
+		$stockexits = Stockexits::model()->findByPk($tempid);
+		if (! is_null($stockexits))
+			$stockexits->delete();
+		$detailstockexits = Detailstockexits::model()->findAllByAttributes(array('id'=>$tempid));
+		if (count($detailstockexits) > 0)
+		foreach($detailstockexits as $dse) {
 			$dse->delete();
 		};
 		Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, 0);
@@ -446,8 +446,8 @@ class DefaultController extends Controller
       			foreach($whs as $wh) {
       				$data = Yii::app()->db->createCommand()
       				->select("c.iddetail, a.transid, c.iditem, b.name, c.serialnum, concat('${wh['code']}') as code")
-      				->from("displayentries a")
-      				->join("detaildisplayentries c", "c.id = a.id")
+      				->from("displayexits a")
+      				->join("detaildisplayexits c", "c.id = a.id")
       				->join('items b', 'b.id = c.iditem')
       				->where("b.name like :p_name and a.idwarehouse = '${wh['id']}' and c.serialnum <> 'Belum Diterima'", array(':p_name'=>"%$itemnameparam%"))
       				->order('b.name')
@@ -508,11 +508,20 @@ class DefaultController extends Controller
 			->queryScalar();
 		if ($indisplay == 0) {
 			$dataexit = Yii::app()->db->createCommand()
-				->select("a.regnum, a.idatetime, 'AC16' as transname, a.idsales, b.regnum as stocknum, b.idatetime as stocktime, b.idwarehouse, c.iditem, c.avail")
-				->from('requestdisplays a')->join('stockexits b', 'b.transid = a.regnum')
+				->select("a.regnum, a.idatetime, 'AC19' as transname, c.iditem, c.avail")
+				->from('orderretrievals a')->join('stockexits b', 'b.transid = a.regnum')
 				->join('detailstockexits c', 'c.id = b.id')
 				->where('c.serialnum = :p_serialnum', array(':p_serialnum'=>$serialnum))
 				->queryRow();
+			if (!$dataexit) {
+				$dataexit = Yii::app()->db->createCommand()
+				->select("a.regnum, a.idatetime, 'AC13' as transname, b.regnum as stocknum, b.idatetime as stocktime, b.idwarehouse, c.iditem, c.avail")
+				->from('deliveryorders a')->join('detaildeliveryorders b', 'b.id = a.id')
+				->where('c.serialnum = :p_serialnum', array(':p_serialnum'=>$serialnum))
+				->queryRow();
+			}
+			
+			
 			return $dataexit;
 		} else 
 			return FALSE;
