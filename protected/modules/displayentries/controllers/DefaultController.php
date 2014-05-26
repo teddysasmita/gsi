@@ -508,7 +508,7 @@ class DefaultController extends Controller
 			->queryScalar();
 		if ($indisplay == 0) {
 			$dataexit = Yii::app()->db->createCommand()
-				->select("a.regnum, a.idatetime, 'AC16' as transname, a.idsales, b.regnum as stocknum, b.idatetime as stocktime, b.idwarehouse, c.iditem, c.avail")
+				->select("a.regnum, a.idatetime, concat('AC16') as transname, a.idsales, b.regnum as stocknum, b.idatetime as stocktime, b.idwarehouse, c.iditem, c.avail")
 				->from('requestdisplays a')->join('stockexits b', 'b.transid = a.regnum')
 				->join('detailstockexits c', 'c.id = b.id')
 				->where('c.serialnum = :p_serialnum', array(':p_serialnum'=>$serialnum))
