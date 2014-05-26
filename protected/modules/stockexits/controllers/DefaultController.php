@@ -799,7 +799,7 @@ EOS;
       					array(':p_serialnum'=>$detail['serialnum'], ':p_avail'=>'1'))
       				->queryScalar();
                $respond=$count > 0;
-               if(!$respond) {
+               if($respond === false) {
                   $respond = $detail['serialnum'];
 				  break;
                }
