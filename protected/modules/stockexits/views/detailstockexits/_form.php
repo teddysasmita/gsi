@@ -29,19 +29,19 @@ $supplierScript=<<<EOS
    			$.getJSON('index.php?r=LookUp/checkSerial', { serialnum: escape($('#Detailstockexits_serialnum').val()), 
    				idwh:$('#idwh').val() },
    				function(data) {
-   				if (data == false) {
+   				if ((data === false) || (data.avail == '0')) {
    					$('#avail').removeClass('money');
    					$('#avail').addClass('error');
    					$('#avail').html('Tidak ditemukan');
    					$('#Detailstockexits_avail').val('0');
    				} else {
    					$('#Detailstockexits_avail').val(data.avail);
-   					if (data.avail = '1') {
+   					if (data.avail == '1') {
    						$('#avail').removeClass('error');
    						$('#avail').addClass('money');
    						$('#avail').html('Tersedia');
    						$('#Detailstockexits_avail').val('0');
-   					} else if (data.avail = '2') {
+   					} else if (data.avail == '2') {
    						$('#avail').removeClass('error');
    						$('#avail').addClass('money');
    						$('#avail').html('Rusak');
