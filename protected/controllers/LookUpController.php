@@ -592,6 +592,7 @@ EOS;
 	{
 		//$idwh=rawurldecode($idwh);
 		//$serialnum=rawurldecode($serialnum);
+		echo $serialnum;
 		
 		if (!Yii::app()->user->isGuest) {
 			$data=Yii::app()->db->createCommand()
