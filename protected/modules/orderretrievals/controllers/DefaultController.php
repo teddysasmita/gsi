@@ -198,16 +198,16 @@ class DefaultController extends Controller
                          }
                      };
 
-                     if(isset(Yii::app()->session['DeleteDetailorderretrievals'])) {
-                         $deletedetails=Yii::app()->session['DeleteDetailorderretrievals'];
+                     if(isset(Yii::app()->session['Deletedetailorderretrievals'])) {
+                         $deletedetails=Yii::app()->session['Deletedetailorderretrievals'];
                          $respond=$respond&&$this->deleteDetails($deletedetails);
                          if(!$respond) {
                            throw new CHttpException(404,'There is an error in detail deletion');
                          }
                      };
                      
-                     if(isset(Yii::app()->session['DeleteDetailorderretrievals2'])) {
-                         $deletedetails=Yii::app()->session['DeleteDetailorderretrievals2'];
+                     if(isset(Yii::app()->session['Deletedetailorderretrievals2'])) {
+                         $deletedetails=Yii::app()->session['Deletedetailorderretrievals2'];
                          $respond=$respond&&$this->deleteDetails2($deletedetails);
                          if(!$respond) {
                            throw new CHttpException(404,'There is an error in detail2 deletion');
