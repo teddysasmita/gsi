@@ -12,6 +12,8 @@ class DefaultController extends Controller
 	public $state;
 	private $recapdetails = array();
 	private $invdetails = array();
+	private $detailid = 'AC13a';
+	private $detailid2 = 'AC13b';
 	
 	/**
 	 * @return array action filters
@@ -615,7 +617,7 @@ class DefaultController extends Controller
                 $detailmodel=Detaildeliveryorders::model()->findByPk($row['iddetail']);
                 if($detailmodel) {
                     $this->tracker->init();
-                    $this->trackActivity('d', $this->__DETAILFORMID);
+                    $this->trackActivity('d', $this->detailid);
                     $this->tracker->delete('detaildeliveryorders', $detailmodel->iddetail);
                     $respond=$detailmodel->delete();
                     if (!$respond) {
@@ -633,7 +635,7 @@ class DefaultController extends Controller
                 $detailmodel=Detaildeliveryorders2::model()->findByPk($row['iddetail']);
                 if($detailmodel) {
                     $this->tracker->init();
-                    $this->trackActivity('d', $this->__DETAILFORMID);
+                    $this->trackActivity('d', $this->detailid2);
                     $this->tracker->delete('detaildeliveryorders2', $detailmodel->iddetail);
                     $respond=$detailmodel->delete();
                     if (!$respond) {
