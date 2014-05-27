@@ -653,7 +653,6 @@ class Action extends CComponent {
    		->where("iditem = :p_iditem and serialnum = :p_serialnum and avail like :p_avail", 
    			array( ':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum, ':p_avail'=>$avail))
    		->queryScalar();
-   		print_r($data);
    		return $data;
    	} else {
    		throw new CHttpException(405,'You have no authorization for this operation.');
