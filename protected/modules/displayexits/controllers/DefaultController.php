@@ -507,15 +507,21 @@ class DefaultController extends Controller
 				array(':p_serialnum'=>$serialnum, ':p_avail'=>'1'))
 			->queryScalar();
 		if ($indisplay == 0) {
+			$iditem = Yii::app()->db->createCommand()
+				->select('iditem')->from('wh'.$idwh)
+				->where('serialnum = :p_serialnum and avail = :p_avail', 
+				array(':p_serialnum'=>$serialnum, ':p_avail'=>'1'))
+			->queryScalar();
+			
 			$dataexit = Yii::app()->db->createCommand()
-				->select("a.regnum, a.idatetime, 'AC19' as transname, c.iditem, c.avail")
+				->select("a.regnum, a.idatetime, concat('AC19') as transname, c.iditem, c.avail")
 				->from('orderretrievals a')->join('stockexits b', 'b.transid = a.regnum')
 				->join('detailstockexits c', 'c.id = b.id')
 				->where('c.serialnum = :p_serialnum', array(':p_serialnum'=>$serialnum))
 				->queryRow();
 			if (!$dataexit) {
 				$dataexit = Yii::app()->db->createCommand()
-				->select("a.regnum, a.idatetime, 'AC13' as transname, b.regnum as stocknum, b.idatetime as stocktime, b.idwarehouse, c.iditem, c.avail")
+				->select("a.regnum, a.idatetime, concat('AC13') as transname, b.regnum as stocknum, b.idatetime as stocktime, b.idwarehouse, c.iditem, c.avail")
 				->from('deliveryorders a')->join('detaildeliveryorders b', 'b.id = a.id')
 				->where('c.serialnum = :p_serialnum', array(':p_serialnum'=>$serialnum))
 				->queryRow();

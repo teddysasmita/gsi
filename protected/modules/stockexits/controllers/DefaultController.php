@@ -173,7 +173,7 @@ class DefaultController extends Controller
 
                       if(isset(Yii::app()->session['Detailstockexits']) ) {
                          $details=Yii::app()->session['Detailstockexits'];
-                         $respond=$respond&&$this->saveNewDetails($details, $model->idwarehouse);
+                         $respond=$respond&&$this->saveDetails($details, $model->idwarehouse);
                       } 
 
 						$this->afterPost($model);
