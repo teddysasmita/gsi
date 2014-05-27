@@ -570,7 +570,7 @@ class DefaultController extends Controller
          	foreach($details as $detail) {
          		if ($detail['serialnum'] != 'Belum Diterima') {
          			if (Action::checkItemToWarehouse($model->idwarehouse, $detail['iddetail'],
-         				$detail['iditem'], $detail['serialnum']) === 0)
+         				$detail['iditem'], $detail['serialnum']. '%') === 0)
          				Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'],
          					$detail['iditem'], $detail['serialnum']);
          		}
