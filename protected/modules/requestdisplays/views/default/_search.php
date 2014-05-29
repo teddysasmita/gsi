@@ -17,23 +17,18 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->label($model,'regnum'); ?>
+		<?php echo $form->textField($model,'regnum',array('size'=>12,'maxlength'=>12)); ?>
+	</div>
+	
+	<div class="row">
 		<?php echo $form->label($model,'idatetime'); ?>
 		<?php echo $form->textField($model,'idatetime',array('size'=>19,'maxlength'=>19)); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'receivername'); ?>
-		<?php echo $form->textField($model,'receivername',array('size'=>50,'maxlength'=>100)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'receiveraddress'); ?>
-		<?php echo $form->textField($model,'receiveraddress', array('size'=>50,'maxlength'=>200)); ?>
-	</div>
-	
-	<div class="row">
-		<?php echo $form->label($model,'receiverphone'); ?>
-		<?php echo $form->textField($model,'receiverphone', array('size'=>50,'maxlength'=>50)); ?>
+		<?php echo $form->label($model,'idsales'); ?>
+		<?php echo $form->textField($model,'idsales',array('size'=>50,'maxlength'=>100)); ?>
 	</div>
 
 	<div class="row buttons">

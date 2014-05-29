@@ -26,26 +26,11 @@
 		<?php echo $form->textField($model,'idatetime',array('size'=>19,'maxlength'=>19)); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->label($model,'transname'); ?>
-		<?php echo $form->textField($model,'transname',array('size'=>21,'maxlength'=>21)); ?>
-	</div>
-   
     <div class="row">
 		<?php echo $form->label($model,'transid'); ?>
 		<?php echo $form->textField($model,'transid',array('size'=>21,'maxlength'=>21)); ?>
 	</div>
    
-   <div class="row">
-		<?php echo $form->label($model,'donum'); ?>
-		<?php echo $form->textField($model,'donum',array('size'=>21,'maxlength'=>21)); ?>
-	</div>
-   
-      <div class="row">
-		<?php echo $form->label($model,'idwarehouse'); ?>
-		<?php echo $form->textField($model,'idwarehouse',array('size'=>21,'maxlength'=>21)); ?>
-	</div>
-
 	<div class="row">
 		<?php echo $form->label($model,'userlog'); ?>
 		<?php echo $form->textField($model,'userlog',array('size'=>21,'maxlength'=>21)); ?>
