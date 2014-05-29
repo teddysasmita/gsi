@@ -49,6 +49,10 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'idatetime',
 		'regnum',
 		array(
+			'name'=>'idsales',
+			'value'=>lookup::SalesNameFromID($model->idsales),
+		),
+		array(
 			'class'=>'CButtonColumn',
 		),
 	),
