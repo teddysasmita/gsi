@@ -39,6 +39,19 @@ class DefaultController extends Controller
         };
 	}
 
+	public function actionViewRegnum($regnum)
+	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+				Yii::app()->user->id))  {
+			$this->trackActivity('v');
+			$this->render('view',array(
+					'model'=>$this->loadModelRegnum($regnum),
+			));
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+	
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
@@ -312,6 +325,13 @@ class DefaultController extends Controller
 		return $model;
 	}
 
+	public function loadModelRegnum($regnum)
+	{
+		$model=Requestdisplays::model()->findByAttributes(array('regnum'=>$regnum));
+		if($model===null)
+			throw new CHttpException(404,'The requested page does not exist.');
+		return $model;
+	}
 	/**
 	 * Performs the AJAX validation.
 	 * @param requestdisplays $model the model to be validated
