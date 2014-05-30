@@ -77,11 +77,11 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 							'name'=>'transid',
 							//'value'=>"lookup::getTrans(\$data)",
 					),
-					array(
+					/*array(
 						'class'=>'CLinkColumn',
 						'label'=>"boom",
 						'url'=>"index.php",
-					),
+					),*/
 					array(
 							'header'=>'Total',
 							'name'=>'total',
