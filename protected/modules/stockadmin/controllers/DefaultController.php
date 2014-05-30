@@ -127,12 +127,12 @@ class DefaultController extends Controller
 	select b.iddetail, a.idwarehouse, a.regnum, a.transid, a.idatetime, count(*) as total, b.iditem from stockentries a 
 	join detailstockentries b on b.id = a.id
 	where b.iditem = :p_b_iditem and a.idwarehouse like :p_a_idwh
-	group by a.transid
+	group by a.regnum
 	union
 	select d.iddetail, c.idwarehouse, c.regnum, c.transid, c.idatetime, - (count(*)) as total, d.iditem from stockexits c 
 	join detailstockexits d on d.id = c.id
 	where d.iditem = :p_d_iditem and c.idwarehouse like :p_c_idwh
-	group by c.transid
+	group by c.regnum
 	order by idatetime							
 EOS;
 				$iditemparam = $_GET['iditem'];
