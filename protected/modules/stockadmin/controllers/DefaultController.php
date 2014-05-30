@@ -149,7 +149,7 @@ EOS;
 				$alldata = $command->queryAll();
 				usort($alldata, 'cmp2');
 				foreach ($alldata as & $data) {
-					$data['serialnums'] = $this->getSerials($data['regnum'], $data['transid'],$data['qty']);
+					$data['serialnums'] = $this->getSerials($data['regnum'], $data['transid'],$data['total']);
 				}
 			}
 			$this->render('flow', array('alldata'=>$alldata, 'iditem'=>$iditemparam, 'whcode'=>$whcodeparam));
