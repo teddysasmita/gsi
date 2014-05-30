@@ -335,22 +335,22 @@ class lookup extends CComponent {
    		switch($data['transname']) {
    			case 'AC16':
    				return Yii::app()->createUrl("requestdisplays/default/viewRegnum", 
-   					array('regnum'=>$data['regnum']));
+   					array('regnum'=>$data['transid']));
    			case 'AC13':
    				return Yii::app()->createUrl("deliveryorders/default/viewRegnum",
-   					array('regnum'=>$data['regnum']));
+   					array('regnum'=>$data['transid']));
    			case 'AC19':
    				return Yii::app()->createUrl("orderretrievals/default/viewRegnum",
-   					array('regnum'=>$data['regnum']));
+   					array('regnum'=>$data['transid']));
    			case 'AC18':
    				return Yii::app()->createUrl("itemtransfers/default/viewRegnum",
-   					array('regnum'=>$data['regnum']));
+   					array('regnum'=>$data['transid']));
    			case 'AC12':
    				return Yii::app()->createUrl("purchasesstockentries/default/viewRegnum",
-   					array('regnum'=>$data['regnum']));
+   					array('regnum'=>$data['transid']));
    			case 'AC50':
    				return Yii::app()->createUrl("returstocks/default/viewRegnum",
-   					array('regnum'=>$data['regnum']));
+   					array('regnum'=>$data['transid']));
    				
    		};
    }
