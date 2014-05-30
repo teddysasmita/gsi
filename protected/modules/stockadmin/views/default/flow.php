@@ -79,7 +79,7 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 					),
 					array(
 						'class'=>'CLinkColumn',
-						'labelExpression'=>"\$data['transid']",
+						'label'=>"boom",
 						'url'=>"index.php",
 					),
 					array(
