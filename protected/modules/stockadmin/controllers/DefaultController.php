@@ -274,6 +274,9 @@ EOS;
 			->where('a.regnum = :p_regnum and a.transid = :p_transid',
 				array(':p_regnum'=>$regnum, ':p_transid'=>$transid))
 			->queryAll();	
-		return implode(', ', $data);
+		if (is_array($data))
+			return implode(', ', $data);
+		else 
+			return $data;
 	}
 }
