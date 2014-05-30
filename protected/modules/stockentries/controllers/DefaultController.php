@@ -599,6 +599,11 @@ class DefaultController extends Controller
          $model->datetimelog=$idmaker->getDateTime();
          if ($this->state == 'create')
          	$model->regnum=$idmaker->getRegNum($this->formid);
+         else if ($this->state == 'update') {
+         	
+         	
+         	
+         }
      }
 
      protected function    beforeDelete(& $model)
