@@ -271,7 +271,7 @@ EOS;
 		}
 		$data = Yii::app()->db->createCommand()
 			->select('b.serialnum')->from($master)->join($detail, 'b.id = a.id')
-			->where('a.regnum = :p_regnum and a.iditem = :p_iditem',
+			->where('a.regnum = :p_regnum and b.iditem = :p_iditem',
 				array(':p_regnum'=>$regnum, ':p_iditem'=>$iditem))
 			->queryColumn();	
 		if (is_array($data)) {
