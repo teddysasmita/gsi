@@ -149,7 +149,7 @@ EOS;
 				$alldata = $command->queryAll();
 				usort($alldata, 'cmp2');
 				foreach ($alldata as & $data) {
-					$data['serialnums'] = $this->getSerials($data['regnum'], $data['transid'],$data['total']);
+					$data['serialnums'] = $this->getSerials($data['regnum'], $data['total']);
 				}
 			}
 			$this->render('flow', array('alldata'=>$alldata, 'iditem'=>$iditemparam, 'whcode'=>$whcodeparam));
@@ -260,7 +260,7 @@ EOS;
 		$this->tracker->logActivity($this->formid, $action);
 	}
 	
-	private function getSerials($regnum, $transid, $qty)
+	private function getSerials($regnum, $qty)
 	{
 		if ($qty < 0) {
 			$master = 'stockexits a';
@@ -271,8 +271,8 @@ EOS;
 		}
 		$data = Yii::app()->db->createCommand()
 			->select('b.serialnum')->from($master)->join($detail, 'b.id = a.id')
-			->where('a.regnum = :p_regnum and a.transid = :p_transid',
-				array(':p_regnum'=>$regnum, ':p_transid'=>$transid))
+			->where('a.regnum = :p_regnum',
+				array(':p_regnum'=>$regnum))
 			->queryColumn();	
 		if (is_array($data)) {
 			//print_r($data);
