@@ -73,14 +73,9 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 							'name'=>'regnum',
 					),
 					array(
-							'header'=>'Transaksi',
-							'name'=>'transid',
-							//'value'=>"lookup::getTrans(\$data)",
-					),
-					array(
+						'header'=>'Transaksi',
 						'class'=>'CLinkColumn',
-						'label'=>"boom",
-						'url'=>"index.php",
+						'urlExpression'=>"lookup::getTrans(\$data)",
 					),
 					array(
 							'header'=>'Total',

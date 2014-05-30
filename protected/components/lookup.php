@@ -334,7 +334,24 @@ class lookup extends CComponent {
    {
    		switch($data['transname']) {
    			case 'AC16':
-   				return "boom";
+   				return Yii::app()->createUrl("requestdisplays/default/view", 
+   					array('regnum'=>$data['regnum']));
+   			case 'AC13':
+   				return Yii::app()->createUrl("deliveryorders/default/view",
+   					array('regnum'=>$data['regnum']));
+   			case 'AC19':
+   				return Yii::app()->createUrl("orderretrievals/default/view",
+   					array('regnum'=>$data['regnum']));
+   			case 'AC18':
+   				return Yii::app()->createUrl("itemtransfers/default/view",
+   					array('regnum'=>$data['regnum']));
+   			case 'AC12':
+   				return Yii::app()->createUrl("purchasesstockentries/default/view",
+   					array('regnum'=>$data['regnum']));
+   			case 'AC50':
+   				return Yii::app()->createUrl("returstocks/default/view",
+   					array('regnum'=>$data['regnum']));
+   				
    		};
    }
 }

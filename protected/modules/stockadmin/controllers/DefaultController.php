@@ -126,12 +126,12 @@ class DefaultController extends Controller
 				$sql=<<<EOS
 	select b.iddetail, a.idwarehouse, a.regnum, a.transname, a.transid, a.idatetime, count(*) as total, b.iditem from stockentries a 
 	join detailstockentries b on b.id = a.id
-	where b.iditem = :p_b_iditem and a.idwarehouse like :p_a_idwh
+	where b.iditem = :p_b_iditem and a.idwarehouse like :p_a_idwh and b.serialnum <> 'Belum Diterima'
 	group by a.regnum
 	union
 	select d.iddetail, c.idwarehouse, c.regnum, c.transname, c.transid, c.idatetime, - (count(*)) as total, d.iditem from stockexits c 
 	join detailstockexits d on d.id = c.id
-	where d.iditem = :p_d_iditem and c.idwarehouse like :p_c_idwh
+	where d.iditem = :p_d_iditem and c.idwarehouse like :p_c_idwh and d.serialnum <> 'Belum Diterima'
 	group by c.regnum
 	order by idatetime							
 EOS;
