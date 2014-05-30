@@ -106,6 +106,6 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 		$mytotal += $data['total'];
 	};
 	
-	echo "Jumlah = ".$mytotal; 
+	echo "Jumlah = ".$mytotal." unit."; 
 ?>
 </h2>
