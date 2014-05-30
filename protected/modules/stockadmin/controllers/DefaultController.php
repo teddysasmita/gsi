@@ -273,10 +273,10 @@ EOS;
 			->select('b.serialnum')->from($master)->join($detail, 'b.id = a.id')
 			->where('a.regnum = :p_regnum and a.transid = :p_transid',
 				array(':p_regnum'=>$regnum, ':p_transid'=>$transid))
-			->queryAll();	
+			->queryColumn();	
 		if (is_array($data)) {
-			print_r($data);
-			die;
+			//print_r($data);
+			//die;
 			return implode(', ', $data);
 		} else 
 			return $data;
