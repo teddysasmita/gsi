@@ -365,6 +365,13 @@ class DefaultController extends Controller
 		return $model;
 	}
 
+	public function loadModel($id)
+	{
+		$model=Purchasesstockentries::model()->findByPk($id);
+		if($model===null)
+			throw new CHttpException(405,'The requested page does not exist.');
+		return $model;
+	}
 	/**
 	 * Performs the AJAX validation.
 	 * @param Purchasesstockentries $model the model to be validated
