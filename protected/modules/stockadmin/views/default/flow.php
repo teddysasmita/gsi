@@ -52,6 +52,7 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 
 <h2><?php echo lookup::ItemNameFromItemID($iditem). " - $iditem" ?></h2>
 <?php 
+	
 //if (isset($alldata)) {
 	$mydp = new CArrayDataProvider($alldata, array(
 			'keyField'=>'iddetail',
@@ -96,5 +97,15 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 	));
 //}
 
-
 ?>
+
+<h2>
+<?php 
+	$mytotal = 0;
+	foreach($alldata as $data) {
+		$mytotal += $data['total'];
+	};
+	
+	echo "Jumlah = ".$mytotal; 
+?>
+</h2>
