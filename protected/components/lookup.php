@@ -329,6 +329,16 @@ class lookup extends CComponent {
    			return 'Ibu Vera T';
    	}
    }
+   
+   public static function getTrans($data)
+   {
+   		switch($data['transname']) {
+   			case 'AC16':
+   				return ""
+   			
+   		}
+   			   			
+   }
 }
 
 
