@@ -334,10 +334,8 @@ class lookup extends CComponent {
    {
    		switch($data['transname']) {
    			case 'AC16':
-   				return ""
-   			
-   		}
-   			   			
+   				return "boom";
+   		};
    }
 }
 
