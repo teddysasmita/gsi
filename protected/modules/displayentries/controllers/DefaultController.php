@@ -43,6 +43,19 @@ class DefaultController extends Controller
         	throw new CHttpException(404,'You have no authorization for this operation.');
         };	
 	}
+	
+	public function actionViewRegnum($regnum)
+	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+				Yii::app()->user->id))  {
+			$this->trackActivity('v');
+			$this->render('view',array(
+					'model'=>$this->loadModelRegnum($regnum),
+			));
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
 
 	/**
 	 * Creates a new model.
@@ -269,6 +282,14 @@ class DefaultController extends Controller
 	public function loadModel($id)
 	{
 		$model=Displayentries::model()->findByPk($id);
+		if($model===null)
+			throw new CHttpException(404,'The requested page does not exist.');
+		return $model;
+	}
+	
+	public function loadModelRegnum($regnum)
+	{
+		$model=Displayentries::model()->findByAttributes(array('regnum'=>$regnum));
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
