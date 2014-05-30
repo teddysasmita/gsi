@@ -361,7 +361,7 @@ class DefaultController extends Controller
 	{
 		$model=Purchasesstockentries::model()->findByAttributes(array('regnum'=>$regnum));
 		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
+			throw new CHttpException(405,'The requested page does not exist.');
 		return $model;
 	}
 
