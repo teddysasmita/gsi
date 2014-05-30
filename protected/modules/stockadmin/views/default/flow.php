@@ -75,6 +75,7 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 					array(
 						'header'=>'Transaksi',
 						'class'=>'CLinkColumn',
+						'labelExpression'=>"\$data['transid']",
 						'urlExpression'=>"lookup::getTrans(\$data)",
 					),
 					array(
