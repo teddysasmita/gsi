@@ -21,7 +21,7 @@ class MYPDF extends TCPDF {
 		// Read file lines
 		$this->data = $data;
 		$this->detaildata = $detaildata;
-		$this->headernames = array('No', 'Nama Barang', 'Jmlh','Harga', 'Operasi');
+		$this->headernames = array('No', 'Nama Barang', 'Jmlh','Harga Net', 'Operasi');
 		$this->headerwidths = array(10, 120, 15, 25, 25);
 	}
 
@@ -70,7 +70,7 @@ class MYPDF extends TCPDF {
 						'LR', 'L', false, 0);
 					//$this->Cell($this->headerwidths[1], 6, lookup::ItemNameFromItemID($row['iditem']), 'LR', 0, 'L', $fill);
 					$this->Cell($this->headerwidths[2], 6, $row['qtynew'], 'LR', 0, 'R', $fill);
-					$this->Cell($this->headerwidths[3], 6, number_format($row['pricenew']), 'LR', 0, 'R', $fill);
+					$this->Cell($this->headerwidths[3], 6, number_format($row['pricenew']-$row['discountnew']), 'LR', 0, 'R', $fill);
 					$this->Cell($this->headerwidths[4], 6, '', 'LR', 1, 'R', $fill);
 					//$counter+=1;	
 				} else {
