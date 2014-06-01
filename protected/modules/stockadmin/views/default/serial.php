@@ -86,8 +86,12 @@ echo CHtml::dropDownList('status', $status, array('Semua'=>'Semua', '1'=>'Tersed
 							'name'=>'code',
 					),
 					array(
-							'header'=>'Status',
+							'header'=>'Sedia',
 							'name'=>'avail',
+					),
+					array(
+						'header'=>'Status',
+						'name'=>'status',
 					),
 			),
 	));
