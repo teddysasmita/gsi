@@ -564,9 +564,11 @@ class DefaultController extends Controller
 	         		if (!$exist)	
 	         			Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'], 
 	         				$detail['iditem'], $detail['serialnum']);
-	         		else 
+	         		else {
+	         			Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
 	         			Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
-         		}
+	         		}
+	         	}
          	};
          } else if ($this->state == 'update') {
          	$details = $this->loadDetails($model->id);
@@ -582,8 +584,10 @@ class DefaultController extends Controller
          			
          			$exist = Action::checkItemToWarehouse($model->idwarehouse, $detail['iditem'],
          				$detail['serialnum'], '%') > 0;
-         			if ($exist)
+         			if ($exist) {
+         				Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
          				Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
+         			}
          		};
          	};
          } 

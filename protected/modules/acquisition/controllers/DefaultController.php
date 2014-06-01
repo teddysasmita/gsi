@@ -540,7 +540,7 @@ class DefaultController extends Controller
          	else
          		throw new CHttpException(101,'Error in Stock Entry.');
 	         foreach($details as $detail) {
-	         	Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], '0');
+	         	Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
 	        
 	         	$detailstockentries = new Detailstockentries();
 	         	$detailstockentries->id = $stockentries->id;
@@ -594,7 +594,7 @@ class DefaultController extends Controller
          	$details = $this->loadDetails($model->id);
          	
 	         foreach($details as $detail) {
-	         	Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], '0');
+	         	Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
 	         	
 	         	$detailstockentries = new Detailstockentries();
 	         	$detailstockentries->id = $stockentries->id;

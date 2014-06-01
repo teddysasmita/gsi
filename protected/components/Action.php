@@ -638,7 +638,8 @@ class Action extends CComponent {
 					'iddetail'=>$iddetail,
 					'iditem'=>$iditem,
 					'serialnum'=>$serialnum,
-					'avail'=>'1'
+					'avail'=>'1',
+					'status'=>'1'
 				));
    		} else {
    			throw new CHttpException(405,'You have no authorization for this operation.');
@@ -659,7 +660,7 @@ class Action extends CComponent {
    	};
    }
    
-   public static function setItemStatusinWarehouse($idwh, $serialnum, $avail)
+   public static function setItemAvailinWarehouse($idwh, $serialnum, $avail)
    {
 	   	if (!Yii::app()->user->isGuest) {
 	   		Yii::app()->db->createCommand()
@@ -671,11 +672,23 @@ class Action extends CComponent {
 	   	};
    }
    
+   public static function setItemStatusinWarehouse($idwh, $serialnum, $status)
+   {
+   	if (!Yii::app()->user->isGuest) {
+   		Yii::app()->db->createCommand()
+   		->update('wh'.$idwh, array('status'=>$status), 'serialnum = :p_serialnum', array(
+   		':p_serialnum'=>$serialnum
+   		));
+   	} else {
+   		throw new CHttpException(404,'You have no authorization for this operation.');
+   	};
+   }
+   
    public static function checkItemStatusInWarehouse($idwh, $serialnum )
    {
 	   	if (!Yii::app()->user->isGuest) {
 	   		return Yii::app()->db->createCommand()
-	   			->select("avail")->from('wh'.$idwh)
+	   			->select("status")->from('wh'.$idwh)
 	   			->where("serialnum = :p_serialnum",
 	   				array( ':p_serialnum'=>$serialnum))
 	   			->queryScalar();
@@ -683,6 +696,7 @@ class Action extends CComponent {
 	   		throw new CHttpException(405,'You have no authorization for this operation.');
 	   	};
    }
+   
    
    public static function deleteItemFromWarehouse($idwh, $serialnum)
    {
