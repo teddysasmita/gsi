@@ -158,9 +158,9 @@ EOS;
                   'name'=>'serialnum',
               ),
 				array(
-					'header'=>'Kondisi',
+					'header'=>'Tersedia',
 					'name'=>'avail',
-					'value'=>"lookup::ConditionName(\$data['avail'])",
+					'value'=>"lookup::StockAvailName(\$data['avail'])",
 				),
               array(
                   'class'=>'CButtonColumn',
