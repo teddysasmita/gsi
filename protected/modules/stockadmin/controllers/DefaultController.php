@@ -52,10 +52,8 @@ class DefaultController extends Controller
 						->from("wh${wh['id']} a")
 						->join('items b', 'b.id = a.iditem')
 						->where("b.name like :p_name", array(':p_name'=>"%$itemnameparam%"));	
-						if ($statusparam === 'Semua')
-							$command->andWhere("a.avail <> :p_avail ", array(':p_avail'=>"0"));
-						else
-							$command->andWhere("a.avail = :p_avail ", array(':p_avail'=>$statusparam));
+						if ($statusparam !== 'Semua')
+							$command->andWhere("a.status = :p_status", array(':p_status'=>$statusparam));
 					$data = $command->group(array('iditem', 'avail'))
 						->order('iditem')
 						->queryAll();
@@ -96,10 +94,8 @@ class DefaultController extends Controller
 						->join('items b', 'b.id = a.iditem')
 						->where("b.name like :p_name", array(':p_name'=>"%$itemnameparam%"));
 						
-					if ($statusparam === 'Semua')
-						$command->andWhere("a.avail <> :p_avail ", array(':p_avail'=>"0"));
-					else
-						$command->andWhere("a.avail = :p_avail ", array(':p_avail'=>$statusparam));
+					if ($statusparam !== 'Semua')
+						$command->andWhere("a.status = :p_status", array(':p_status'=>$statusparam));
 					$data = $command->order('b.name')->queryAll();
 					$alldata = array_merge($alldata, $data);
 				}

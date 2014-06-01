@@ -261,15 +261,27 @@ class lookup extends CComponent {
       } 
    }
    
-   public static function ConditionName($type)
+   public static function StockAvailName($type)
    {
    	switch ($type) {
    		case 1:
-   			return 'Tersedia';
-   		case 2:
-   			return 'Rusak';
+   			return 'Ada';
    		case 0:
-   			return 'Tidak ada';
+   			return 'Keluar';
+   	}
+   }
+   
+   public static function StockStatusName($type)
+   {
+   	switch ($type) {
+   		case 3:
+   			return 'Retur';
+   		case 2:
+   			return 'Servis';
+   		case 1:
+   			return 'Bagus';
+   		case 0:
+   			return 'Rusak';
    	}
    }
    

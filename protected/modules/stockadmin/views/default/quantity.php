@@ -42,7 +42,8 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 <div class="row">
 <?php
 echo CHtml::label('Kondisi', 'status');
-echo CHtml::dropDownList('status', $status, array('Semua'=>'Semua', '1'=>'Tersedia', '2'=>'Rusak'),
+echo CHtml::dropDownList('status', $status, array('Semua'=>'Semua', '1'=>'Tersedia', '0'=>'Rusak', 
+	'2'=>'Servis', '3'=>'Retur'),
 	array('empty'=>'Harap Pilih'));
 ?>
 </div>
@@ -86,8 +87,9 @@ echo CHtml::dropDownList('status', $status, array('Semua'=>'Semua', '1'=>'Tersed
 							'name'=>'code',
 					),
 					array(
-							'header'=>'Status',
-							'name'=>'avail',
+							'header'=>'Kondisi',
+							'name'=>'status',
+							'value'=>"lookup::StockStatusName(\$data['status'])"
 					),
 			),
 	));
