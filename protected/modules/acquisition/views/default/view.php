@@ -59,7 +59,7 @@ $this->menu=array(
 			array(
 				'header'=>'Kondisi',
 				'name'=>'avail',
-				'value'=>"lookup::ConditionName(\$data['avail'])"
+				'value'=>"lookup::StockAvailName(\$data['avail'])"
 			),
             /*array(
                   'class'=>'CButtonColumn',
