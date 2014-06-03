@@ -520,38 +520,15 @@ class DefaultController extends Controller
 
      protected function afterPost(& $model)
      {
-         $idmaker=new idmaker();
-         if ($this->state == 'create') {
+		$idmaker=new idmaker();
+        if ($this->state == 'create') {
          	$idmaker->saveRegNum($this->formid, $model->regnum);
-         
+        };
         
-         	$details = $this->loadDetails($model->id);
-	         foreach($details as $detail) {
-	         	Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '0');
-	         };
-	         
-	         /*if ($model->transname == 'AC16') {
-	         	$data = Yii::app()->db->createCommand()
-	         		->select()->from('requestdisplays')
-	         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-	         		->queryRow();
-	         	$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
-	         }*/
-         } else if ($this->state == 'update') {
-        
-         	$details = $this->loadDetails($model->id);
-	         foreach($details as $detail) {
-	         	Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '0');
-	         };
-	         
-	         /*if ($model->transname == 'AC16') {
-	         	$data = Yii::app()->db->createCommand()
-	         		->select()->from('requestdisplays')
-	         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-	         		->queryRow();
-	         	$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
-	         }*/
-         }
+        $details = $this->loadDetails($model->id);
+		foreach($details as $detail) {
+	         Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '0');
+		};
      }
 
      protected function beforePost(& $model)
@@ -563,32 +540,13 @@ class DefaultController extends Controller
          $model->datetimelog=$idmaker->getDateTime();
          if ($this->state == 'create')
          	$model->regnum=$idmaker->getRegNum($this->formid);
-         
-         if ($this->state == 'update') {
-         	
+         else if ($this->state == 'update') {
          	$details = $this->loadDetails($model->id);
          	foreach($details as $detail) {
          		if ($detail['serialnum'] != 'Belum Diterima') {
-         			if (Action::checkItemToWarehouse($model->idwarehouse, $detail['iddetail'],
-         				$detail['iditem'], $detail['serialnum']. '%') === 0)
-         				Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'],
-         					$detail['iditem'], $detail['serialnum']);
+					Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
          		}
          	};
-         	/*if ($model->transname == 'AC16') {
-         		$data = Yii::app()->db->createCommand()
-         		->select()->from('requestdisplays')
-         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-         		->queryRow();
-         		$this->removeEntryDisplay($data['regnum'], $model->idwarehouse);
-         	}*/
-         	/*if ($model->transname == 'AC16') {
-         		$data = Yii::app()->db->createCommand()
-         		->select()->from('requestdisplays')
-         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-         		->queryRow();
-         		$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
-         	}*/
          }
      }
 
@@ -596,16 +554,8 @@ class DefaultController extends Controller
      {
      	$details = $this->loadDetails($model->id);
      	foreach($details as $detail) {
-     		Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $detail['avail']);
+     		Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
      	};
-     	
-     	/*if ($model->transname == 'AC16') {
-     		$data = Yii::app()->db->createCommand()
-     		->select()->from('requestdisplays')
-     		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-     		->queryRow();
-     		$this->removeEntryDisplay($data['regnum'], $model->idwarehouse);
-     	}*/
      }
 
      protected function afterDelete(& $model)

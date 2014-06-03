@@ -548,49 +548,29 @@ class DefaultController extends Controller
          $idmaker=new idmaker();
          if ($this->state == 'create') {
          	$idmaker->saveRegNum($this->formid, $model->regnum);
-         
-         	$details = $this->loadDetails($model->id);
-         	foreach($details as $detail) {
-         		if ($detail['serialnum'] !==  'Belum Diterima') {
-         			if ($model->transname == 'AC18') {
-         				$idwhsource = Yii::app()->db->createCommand()->select('idwhsource')
-         				->from('itemtransfers')->where('regnum = :p_regnum',
-         						array(':p_regnum'=>$model->transid))->queryScalar();
-         				$status = Action::checkItemStatusInWarehouse($idwhsource, $detail['serialnum']);
-         			} else 
-         				$status = '1';
-         			$exist = Action::checkItemToWarehouse($model->idwarehouse, $detail['iditem'], 
-	         			$detail['serialnum'], '%') > 0;
-	         		if (!$exist)	
-	         			Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'], 
-	         				$detail['iditem'], $detail['serialnum']);
-	         		else {
-	         			Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
-	         			Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
-	         		}
-	         	}
-         	};
-         } else if ($this->state == 'update') {
-         	$details = $this->loadDetails($model->id);
-         	foreach($details as $detail) {
-         		if ($detail['serialnum'] !==  'Belum Diterima') {
-         			if ($model->transname == 'AC18') {
-         				$idwhsource = Yii::app()->db->createCommand()->select('idwhsource')
-         				->from('itemtransfers')->where('regnum = :p_regnum',
-         						array(':p_regnum'=>$model->transid))->queryScalar();
-         				$status = Action::checkItemStatusInWarehouse($idwhsource, $detail['serialnum']);
-         			} else
-         				$status = '1';
-         			
-         			$exist = Action::checkItemToWarehouse($model->idwarehouse, $detail['iditem'],
-         				$detail['serialnum'], '%') > 0;
-         			if ($exist) {
-         				Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
-         				Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
-         			}
-         		};
-         	};
          } 
+         $details = $this->loadDetails($model->id);
+         foreach($details as $detail) {
+         	if ($detail['serialnum'] !==  'Belum Diterima') {
+         		if ($model->transname == 'AC18') {
+         			$idwhsource = Yii::app()->db->createCommand()->select('idwhsource')
+         				->from('itemtransfers')->where('regnum = :p_regnum',
+         					array(':p_regnum'=>$model->transid))->queryScalar();
+         			$status = Action::checkItemStatusInWarehouse($idwhsource, $detail['serialnum']);
+         		} else 
+         			$status = '1';
+         		$exist = Action::checkItemToWarehouse($model->idwarehouse, $detail['iditem'], 
+	         		$detail['serialnum'], '%') > 0;
+	         	if (!$exist)	
+	         		Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'], 
+	         			$detail['iditem'], $detail['serialnum']);
+	         	else {
+	         		Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
+	         		Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
+				}
+	         }
+         };
+          
          $this->setStatusPO($model->transid,
             Yii::app()->session['Detailstockentries']);
      }
@@ -604,9 +584,12 @@ class DefaultController extends Controller
          if ($this->state == 'create')
          	$model->regnum=$idmaker->getRegNum($this->formid);
          else if ($this->state == 'update') {
-         	
-         	
-         	
+         	$details = $this->loadDetails($model->id);
+         	foreach($details as $detail) {
+         		if ($detail['serialnum'] !==  'Belum Diterima') {
+         			Action::deleteItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
+         		}
+         	};
          }
      }
 
