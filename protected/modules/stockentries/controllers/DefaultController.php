@@ -186,13 +186,14 @@ class DefaultController extends Controller
 						$respond=$respond&&$this->saveNewDetails($details, $model->idwarehouse	);
 					} 
 	
-						$this->afterPost($model);
-						Yii::app()->session->remove('Stockentries');
-						Yii::app()->session->remove('Detailstockentries');
-						Yii::app()->session->remove('Deletedetailstockentries');
-						$this->redirect(array('view','id'=>$model->id));
+					$this->afterPost($model);
+					Yii::app()->session->remove('Stockentries');
+					Yii::app()->session->remove('Detailstockentries');
+					Yii::app()->session->remove('Deletedetailstockentries');
+					
+					$this->redirect(array('view','id'=>$model->id));
 
-					} else if (isset($_POST['command'])){
+				} else if (isset($_POST['command'])){
                       // save the current master data before going to the detail page
 						if($_POST['command']=='adddetail') {
 							$model->attributes=$_POST['Stockentries'];
@@ -210,19 +211,6 @@ class DefaultController extends Controller
 					}
 				}
 				
-				if(isset(Yii::app()->session['Deletedetailstockentries'])) {
-					$deletedetails=Yii::app()->session['Deletedetailstockentries'];
-					$respond=$respond&&$this->deleteDetails($deletedetails);
-					if(!$respond) {
-						throw new CHttpException(404,'There is an error in detail deletion');
-					}
-				};
-                    
-				Yii::app()->session->remove('Stockentries');
-				Yii::app()->session->remove('Detailstockentries');
-				Yii::app()->session->remove('Deletedetailstockentries');
-				$this->redirect(array('view','id'=>$model->id));
-
              $this->render('update',array(
                      'model'=>$model,
              ));
