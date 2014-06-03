@@ -30,11 +30,15 @@ $this->menu=array(
 		'regnum',
 		'idatetime',
 		array(
-			'label'=>'Nama Gudang',
+			'name'=>'iditem',
+			'value'=>lookup::ItemNameFromItemID($model->iditem)
+		),
+		array(
+			'name'=>'idwarehouse',
 			'value'=>lookup::WarehouseNameFromWarehouseID($model->idwarehouse)
 		),
 		array(
-			'label'=>'Userlog',
+			'name'=>'userlog',
 			'value'=>lookup::UserNameFromUserID($model->userlog),
 		),
 		'datetimelog',
