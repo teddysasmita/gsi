@@ -540,8 +540,6 @@ class DefaultController extends Controller
          	else
          		throw new CHttpException(101,'Error in Stock Entry.');
 	         foreach($details as $detail) {
-	         	Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
-	        
 	         	$detailstockentries = new Detailstockentries();
 	         	$detailstockentries->id = $stockentries->id;
 	         	$detailstockentries->iddetail = idmaker::getCurrentID2();
@@ -549,9 +547,19 @@ class DefaultController extends Controller
 	         	$detailstockentries->serialnum = $detail['serialnum'];
 	         	$detailstockentries->userlog = $model->userlog;
 	         	$detailstockentries->datetimelog = idmaker::getDateTime();
-	         	if ($detailstockentries->validate())
+	         	if ($detailstockentries->validate()) {
 	         		$detailstockentries->save();
-	         	else
+	         		$status = '1';
+	         		$exist = Action::checkItemToWarehouse($model->idwarehouse, $detail['iditem'],
+	         				$detail['serialnum'], '%') > 0;
+	         		if (!$exist)
+	         			Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'],
+	         					$detail['iditem'], $detail['serialnum']);
+	         		else {
+	         			Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
+	         			Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
+	         		}
+	         	} else
 	         		throw new CHttpException(101,'Error in Detail Stock Entry.');
 	         };
 	         
@@ -594,8 +602,6 @@ class DefaultController extends Controller
          	$details = $this->loadDetails($model->id);
          	
 	         foreach($details as $detail) {
-	         	Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
-	         	
 	         	$detailstockentries = new Detailstockentries();
 	         	$detailstockentries->id = $stockentries->id;
 	         	$detailstockentries->iddetail = idmaker::getCurrentID2();
@@ -603,9 +609,19 @@ class DefaultController extends Controller
 	         	$detailstockentries->serialnum = $detail['serialnum'];
 	         	$detailstockentries->userlog = $model->userlog;
 	         	$detailstockentries->datetimelog = idmaker::getDateTime();
-	         	if ($detailstockentries->validate())
+	         	if ($detailstockentries->validate()) {
 	         		$detailstockentries->save();
-	         	else
+	         		$status = '1';
+	         		$exist = Action::checkItemToWarehouse($model->idwarehouse, $detail['iditem'],
+	         				$detail['serialnum'], '%') > 0;
+	         		if (!$exist)
+	         			Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'],
+	         					$detail['iditem'], $detail['serialnum']);
+	         		else {
+	         			Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
+	         			Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
+	         		}
+	         	} else
 	         		throw new CHttpException(101,'Error in Detail Stock Entry.');
 	         };
 	         
@@ -634,11 +650,7 @@ class DefaultController extends Controller
          	$details = $this->loadDetails($model->id);
          	foreach($details as $detail) {
          		if ($detail['serialnum'] != 'Belum Diterima') {
-         			if (Action::checkItemToWarehouse($model->idwarehouse, $detail['iddetail'],
-         				$detail['iditem'], $detail['serialnum']) == 0)
-         				Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'],
-         					$detail['iditem'], $detail['serialnum']);
-         		}
+         			Action::deleteItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
          	};
          	/*if ($model->transname == 'AC16') {
          		$data = Yii::app()->db->createCommand()
