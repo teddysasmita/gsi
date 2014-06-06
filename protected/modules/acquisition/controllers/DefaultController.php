@@ -649,7 +649,7 @@ class DefaultController extends Controller
          	
          	$details = $this->loadDetails($model->id);
          	foreach($details as $detail) {
-         		if ($detail['serialnum'] != 'Belum Diterima') {
+         		if ($detail['serialnum'] != 'Belum Diterima')
          			Action::deleteItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
          	};
          	/*if ($model->transname == 'AC16') {
