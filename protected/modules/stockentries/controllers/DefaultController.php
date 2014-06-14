@@ -526,7 +526,7 @@ class DefaultController extends Controller
          $model->id=$idmaker->getCurrentID2();
          $model->idatetime=$idmaker->getDateTime();
          $model->regnum=$idmaker->getRegNum($this->formid);
-         $model->idwarehouse=lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
+         //$model->idwarehouse=lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
          $model->userlog=Yii::app()->user->id;
          $model->datetimelog=$idmaker->getDateTime();
      }

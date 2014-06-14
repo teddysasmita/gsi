@@ -62,7 +62,6 @@ EOS;
         echo $form->hiddenField($model, 'transname');
         echo $form->hiddenField($model, 'userlog');
         echo $form->hiddenField($model, 'datetimelog');
-        echo $form->hiddenField($model, 'idwarehouse');
         echo $form->hiddenField($model, 'regnum');
         echo $form->hiddenField($model, 'transinfo');
         echo $form->hiddenField($model, 'donum');
@@ -109,8 +108,15 @@ EOS;
 	<div class="row">
 		<?php echo $form->labelEx($model,'idwarehouse'); ?>
          <?php 
-            echo CHtml::label(lookup::WarehouseNameFromWarehouseID($model->idwarehouse),'false', 
-              array('class'=>'money')); 
+			$warehouses = lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
+         	if (count($warehouses) > 1) {
+				$data = CHtml::listData($warehouses, 'id', 'code');
+         		echo CHtml::dropDownList('Stockexits[idwarehouse]', '', $data, 
+					array('empty'=>'Harap Pilih'));
+         	} else {
+				echo CHtml::hiddenField('Stockexits[idwarehouse]', $warehouses[0]['id']);
+				echo CHtml::label($warehouses[0]['code'],'false', array('class'=>'money')); 
+			}
          ?>
 	</div>
 		

@@ -221,15 +221,19 @@ class lookup extends CComponent {
    
    public static function WarehouseNameFromIpAddr($ipaddr)
    {
-      $sql="select id, ipaddr from warehouses";
-      $names=Yii::app()->db->createCommand($sql)->queryAll();
-      foreach( $names as $name ) {
-		$ipaddrs = explode(';', $name['ipaddr'] );
-      	$key = array_search($ipaddr, $ipaddrs);
-      	if ($key !== FALSE)
-      		return $name['id'];
-      }
-      return 'NA';
+   		$found = array();
+   		
+      	$sql="select id, code, ipaddr from warehouses";
+      	$names=Yii::app()->db->createCommand($sql)->queryAll();
+		foreach( $names as $name ) {
+			$ipaddrs = explode(';', $name['ipaddr'] );
+			$key = array_search($ipaddr, $ipaddrs);
+			if ($key !== FALSE) {
+				$found[] = array('id'=>$name['id'], 'code'=>$name['code']);
+			}
+      	}
+		
+      	return $found;
    }
    
    public static function CompanyNameFromServiceCenterID($id)
