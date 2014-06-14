@@ -68,7 +68,7 @@ class DetaildeliveryordersController extends Controller
 				$temp=Yii::app()->session['Detaildeliveryorders'];
 				$model->attributes=$_POST['Detaildeliveryorders'];
                     //posting into session
-                if ($this->checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
+                if (Action::checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
 					$temp[]=$_POST['Detaildeliveryorders'];
                     
 					if ($model->validate()) {
@@ -122,7 +122,7 @@ class DetaildeliveryordersController extends Controller
 				{
                     $temp=Yii::app()->session['Detaildeliveryorders'];
                     $model->attributes=$_POST['Detaildeliveryorders'];
-                    if($this->checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
+                    if(Action::checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
                     	foreach ($temp as $tk=>$tv) {
                         	if($tv['iddetail']==$_POST['Detaildeliveryorders']['iddetail']) {
                             	$temp[$tk]=$_POST['Detaildeliveryorders'];
@@ -327,14 +327,5 @@ class DetaildeliveryordersController extends Controller
             $this->tracker->init();
             $this->tracker->logActivity($this->formid, $action);
         }
-        
-        private function checkItemQty($iditem, $idwh)
-        {
-        	$qty = Yii::app()->db->createCommand()->select('count(*)')
-        		->from('wh'.$idwh)->where('iditem = :p_iditem and avail = :p_avail', 
-                	array(':p_iditem'=>$iditem, ':p_avail'=>'1'))
-                ->queryScalar();	
-
-        	return $qty;
-        }
+    
 }

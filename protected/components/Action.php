@@ -709,6 +709,16 @@ class Action extends CComponent {
    		throw new CHttpException(404,'You have no authorization for this operation.');
    	};
    }
+   
+   public static function checkItemQty($iditem, $idwh)
+   {
+		$qty = Yii::app()->db->createCommand()->select('count(*)')
+	   		->from('wh'.$idwh)->where('iditem = :p_iditem and avail = :p_avail',
+	   			array(':p_iditem'=>$iditem, ':p_avail'=>'1'))
+	   		->queryScalar();
+	   
+	   	return $qty;
+   }
 }
 
 ?>
