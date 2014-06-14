@@ -50,24 +50,26 @@ class DetailrequestdisplaysController extends Controller
 	 */
 	public function actionCreate($id)
 	{
-            if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
-                    Yii::app()->user->id))  {            
-                $this->state='c';
-                $this->trackActivity('c');
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
+			Yii::app()->user->id))  {            
+			$this->state='c';
+			$this->trackActivity('c');
 
-                $model=new Detailrequestdisplays;
-                $this->afterInsert($id, $model);
+			$model=new Detailrequestdisplays;
+			$this->afterInsert($id, $model);
 
-                $master=Yii::app()->session['master'];
-
+			$master=Yii::app()->session['master'];
+			$error = '';
                 // Uncomment the following line if AJAX validation is needed
-                $this->performAjaxValidation($model);
+			$this->performAjaxValidation($model);
 
-                if(isset($_POST['Detailrequestdisplays'])) {
-                    $temp=Yii::app()->session['Detailrequestdisplays'];
-                    $model->attributes=$_POST['Detailrequestdisplays'];
+			if(isset($_POST['yt0'])) {
+				$temp=Yii::app()->session['Detailrequestdisplays'];
+				$model->attributes=$_POST['Detailrequestdisplays'];
                     //posting into session
-                    $temp[]=$_POST['Detailrequestdisplays'];
+				
+				if(Action::checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
+					$temp[]=$_POST['Detailrequestdisplays'];
                     
                     if ($model->validate()) {
                         Yii::app()->session['Detailrequestdisplays']=$temp;
@@ -76,13 +78,16 @@ class DetailrequestdisplaysController extends Controller
                         else if($master=='update')
                             $this->redirect(array('default/updatedetail'));
                     }    
+                } else {
+                	$error = 'Jumlah barang tidak cukup di gudang tersebut';
                 }
                 $this->render('create',array(
-                    'model'=>$model,'master'=>$master
+                    'model'=>$model,'master'=>$master, 'error'=>$error
                 ));
-            } else {
-                throw new CHttpException(404,'You have no authorization for this operation.');
-            }
+			}
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		}
 	}
 
 	/**
@@ -92,28 +97,31 @@ class DetailrequestdisplaysController extends Controller
 	 */
 	public function actionUpdate($iddetail)
 	{
-            if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
-                    Yii::app()->user->id))  {
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
+			Yii::app()->user->id))  {
                 
-                $this->state='u';
-                $this->trackActivity('u');
+			$this->state='u';
+			$this->trackActivity('u');
                 
-                $master=Yii::app()->session['master'];
+			$master=Yii::app()->session['master'];
+			$error = '';
                 
-                $model=$this->loadModel($iddetail);
-                if(isset(Yii::app()->session['Detailrequestdisplays'])) {
+			$model=$this->loadModel($iddetail);
+			
+			if(isset(Yii::app()->session['Detailrequestdisplays'])) {
                    //die("here");
-                    $model=new Detailrequestdisplays;
-                    $model->attributes=$this->loadSession($iddetail);
-                }
-                $this->afterEdit($model);
+				$model=new Detailrequestdisplays;
+				$model->attributes=$this->loadSession($iddetail);
+			}
+			$this->afterEdit($model);
                 // Uncomment the following line if AJAX validation is needed
-               $this->performAjaxValidation($model);
+			$this->performAjaxValidation($model);
 
-               if(isset($_POST['Detailrequestdisplays']))
-               {
-                    $temp=Yii::app()->session['Detailrequestdisplays'];
-                    $model->attributes=$_POST['Detailrequestdisplays'];
+			if(isset($_POST['yt0'])) {
+				$temp=Yii::app()->session['Detailrequestdisplays'];
+				$model->attributes=$_POST['Detailrequestdisplays'];
+                    
+				if(Action::checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
                     foreach ($temp as $tk=>$tv) {
                         if($tv['iddetail']==$_POST['Detailrequestdisplays']['iddetail']) {
                             $temp[$tk]=$_POST['Detailrequestdisplays'];
@@ -121,22 +129,25 @@ class DetailrequestdisplaysController extends Controller
                         }
                     }
                     //posting into session
-		    if($model->validate()) {
+		    		if($model->validate()) {
                     	Yii::app()->session['Detailrequestdisplays']=$temp;
 			
                     	if ($master=='create')
                         	$this->redirect(array('default/createdetail'));
                     	else if($master=='update')
                         	$this->redirect(array('default/updatedetail'));
-		    }	
+		    		}	
+                } else {
+                	$error = 'Jumlah barang tidak cukup di gudang tersebut';
                 }
+			}
 
-		$this->render('update',array(
-			'model'=>$model,'master'=>$master
-		));
-            } else {
-                throw new CHttpException(404,'You have no authorization for this operation.');
-            }
+			$this->render('update',array(
+				'model'=>$model,'master'=>$master, 'error'=>$error
+			));
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		}
 	}
 
 	/**
