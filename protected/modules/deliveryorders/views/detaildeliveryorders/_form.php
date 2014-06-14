@@ -132,7 +132,7 @@ EOS;
 	<div class="row">
 		<?php 
 			if(strlen($error))
-				echo CHtml::tag('span', array('class'=>'errormessage'), $error)
+				echo CHtml::tag('span', array('class'=>'errorMessage'), $error)
 		?>
 	</div>
         

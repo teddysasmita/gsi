@@ -50,41 +50,46 @@ class DetaildeliveryordersController extends Controller
 	 */
 	public function actionCreate($id)
 	{
-             if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
-                    Yii::app()->user->id))  {   
-                $this->state='c';
-                $this->trackActivity('c');    
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
+			Yii::app()->user->id))  {   
+			$this->state='c';
+			$this->trackActivity('c');    
                     
-                $model=new Detaildeliveryorders;
-                $this->afterInsert($id, $model);
+ 			$model=new Detaildeliveryorders;
+			$this->afterInsert($id, $model);
                 
-                $master=Yii::app()->session['master'];
+			$master=Yii::app()->session['master'];
+			$error = '';
                                 
 		// Uncomment the following line if AJAX validation is needed
-               $this->performAjaxValidation($model);
+			$this->performAjaxValidation($model);
                 
-                if(isset($_POST['Detaildeliveryorders'])) {
-                    $temp=Yii::app()->session['Detaildeliveryorders'];
-                    $model->attributes=$_POST['Detaildeliveryorders'];
+			if(isset($_POST['yt0'])) {
+				$temp=Yii::app()->session['Detaildeliveryorders'];
+				$model->attributes=$_POST['Detaildeliveryorders'];
                     //posting into session
-                    $temp[]=$_POST['yt0'];
+                if ($this->checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
+					$temp[]=$_POST['Detaildeliveryorders'];
                     
-                    if ($model->validate()) {
+					if ($model->validate()) {
                         Yii::app()->session['Detaildeliveryorders']=$temp;
                         if ($master=='create')
                             $this->redirect(array('default/createdetail'));
                         else if($master=='update')
                             $this->redirect(array('default/updatedetail'));
                     }    
-                }                
-
-                $this->render('create',array(
-                    'model'=>$model, 'master'=>$master,
-                ));
+                } else {
+                	$error = 'Jumlah barang tidak cukup di gudang tersebut';
+                }            
+			}
+			
+			$this->render('create',array(
+				'model'=>$model, 'master'=>$master, 'error'=>$error
+			));
                 
-             } else {
-                throw new CHttpException(404,'You have no authorization for this operation.');
-             }
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		}
 	}
 
 	/**
