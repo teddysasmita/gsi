@@ -632,29 +632,32 @@ EOS;
       	$details=array();
       
       	$dataLPB=Yii::app()->db->createCommand()
-	      	->select('a.id, b.*')
+	      	->select('a.id, b.iditem, sum(b.qty) as qty')
 	      	->from('deliveryorders a')
 	      	->join('detaildeliveryorders b', 'b.id=a.id')
 	      	->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse', 
 	      		array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
+	      	->group('b.iditem')
 	      	->queryAll();
       	if ($dataLPB == FALSE ) {
       		$dataLPB=Yii::app()->db->createCommand()
-      			->select('a.id, b.*')
+      			->select('a.id, b.iditem, sum(b.qty) as qty')
       			->from('requestdisplays a')
       			->join('detailrequestdisplays b', 'b.id=a.id')
       			->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
       				array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
-      				->queryAll();
+      			->group('b.iditem')
+      			->queryAll();
       	}
       	if ($dataLPB == FALSE ) {
       		$dataLPB=Yii::app()->db->createCommand()
-      		->select('a.id, b.*')
-      		->from('orderretrievals a')
-      		->join('detailorderretrievals b', 'b.id=a.id')
-      		->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
-      				array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
-      				->queryAll();
+	      		->select('a.id, b.iditem, sum(b.qty) as qty')
+	      		->from('orderretrievals a')
+	      		->join('detailorderretrievals b', 'b.id=a.id')
+	      		->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
+	      				array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
+	      		->group('b.iditem')
+	      		->queryAll();
       	}
       	if ($dataLPB == FALSE ) {
       		$dataLPB=Yii::app()->db->createCommand()
