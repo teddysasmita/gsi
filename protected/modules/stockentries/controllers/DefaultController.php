@@ -660,10 +660,11 @@ EOS;
       	$details=array();
       
       	$dataLPB=Yii::app()->db->createCommand()
-      		->select('a.id, b.*')
+      		->select('a.id, b.iditem, sum(b.qty) as qty')
       		->from('purchasesstockentries a')
       		->join('detailpurchasesstockentries b', 'b.id=a.id')
       		->where('a.regnum = :p_regnum', array(':p_regnum'=>$nolpb) )
+      		->group('b.iditem')
       		->queryAll();
       	/*if ($dataLPB == FALSE) {
       		$dataLPB=Yii::app()->db->createCommand()
@@ -675,10 +676,12 @@ EOS;
       	}*/
       	if ($dataLPB == FALSE) {
       		$dataLPB=Yii::app()->db->createCommand()
-      		->select('a.id, b.*')
+      		->select('a.id, b.iditem, sum(b.qty) as qty')
       		->from('itemtransfers a')
       		->join('detailitemtransfers b', 'b.id=a.id')
-      		->where('a.regnum = :p_regnum', array(':p_regnum'=>$nolpb) )
+      		->where('a.regnum = :p_regnum and a.idwhdest = :p_idwhdest', 
+      				array(':p_regnum'=>$nolpb, ':p_idwhdest'=>$idwh) )
+      		->group('b.iditem')
       		->queryAll();
       	}
       	
@@ -689,21 +692,21 @@ EOS;
       		->queryScalar();
       		
       		$dataSJ=Yii::app()->db->createCommand()
-      		->select('a.id, b.*, c.id as iditem')
-      		->from('deliveryorders a')
-      		->join('detaildeliveryorders b', 'b.id=a.id')
-      		->join('items c', 'c.id = b.iditem')
-      		->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse',
-      				array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh) )
-      				->queryAll();
+	      		->select('a.id, b.iditem, sum(b.qty) as qty')
+	      		->from('deliveryorders a')
+	      		->join('detaildeliveryorders b', 'b.id=a.id')
+	      		->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse',
+	      				array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh) )
+				->group('b.iditem')
+	      		->queryAll();
       		$dataPB=Yii::app()->db->createCommand()
-      		->select('a.id, b.*, c.id as iditem')
-      		->from('orderretrievals a')
-      		->join('detailorderretrievals b', 'b.id=a.id')
-      		->join('items c', 'c.id = b.iditem')
-      		->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse',
-      				array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh) )
-      				->queryAll();
+	      		->select('a.id, b.iditem, sum(b.qty) as qty')
+	      		->from('orderretrievals a')
+	      		->join('detailorderretrievals b', 'b.id=a.id')
+	      		->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse',
+	      				array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh) )
+				->group('b.iditem')
+				->queryAll();
       		
       		$dataLPB = array_merge($dataPB, $dataSJ);
       	}
