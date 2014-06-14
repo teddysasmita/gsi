@@ -63,93 +63,92 @@ class DefaultController extends Controller
 	 */
 	public function actionCreate()
 	{
-             if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
-                    Yii::app()->user->id))  {   
-                $this->state='create';
-                $this->trackActivity('c');    
-                $error = '';
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
+			Yii::app()->user->id))  {   
+			$this->state='create';
+			$this->trackActivity('c');    
+			$error = '';
                     
-                $model=new Deliveryorders;
-                $this->afterInsert($model);
+			$model=new Deliveryorders;
+			$this->afterInsert($model);
                 
-                Yii::app()->session['master']='create';
+			Yii::app()->session['master']='create';
                 //as the operator enter for the first time, we load the default value to the session
-                if (!isset(Yii::app()->session['Deliveryorders'])) {
-                   Yii::app()->session['Deliveryorders']=$model->attributes;
-                } else {
+			if (!isset(Yii::app()->session['Deliveryorders'])) {
+				Yii::app()->session['Deliveryorders']=$model->attributes;
+			} else {
                 // use the session to fill the model
-                    $model->attributes=Yii::app()->session['Deliveryorders'];
-                }
+				$model->attributes=Yii::app()->session['Deliveryorders'];
+			}
                 
-                // Uncomment the following line if AJAX validation is needed
-                $this->performAjaxValidation($model);
+			// Uncomment the following line if AJAX validation is needed
+			$this->performAjaxValidation($model);
                
 
-                if (isset($_POST)){
-                   if(isset($_POST['yt0'])) {
-                      //The user pressed the button;
-                      $model->attributes=$_POST['Deliveryorders'];
+			if (isset($_POST)){
+				if(isset($_POST['yt0'])) {
+					//The user pressed the button;
+					$model->attributes=$_POST['Deliveryorders'];
                       
-                      $this->beforePost($model);
-                      
-                      if ($this->checkDetailsItemQty()) {
-	                      $respond=$model->save();
-	                      if($respond) {
-	                          $this->afterPost($model);
-	                      } else {
-	                          throw new CHttpException(404,'There is an error in master posting');
-	                      }
+					$this->beforePost($model);
+                    if (!$this->checkDetailsItemQty())
+                    	throw new CHttpException(405,'Data tidak sesuai dengan faktur');
+					
+                    $respond=$model->save();
+	                if(!$respond) 
+						throw new CHttpException(404,'There is an error in master posting');
+					
+	                $this->afterPost($model);
 	                      
-	                      if(isset(Yii::app()->session['Detaildeliveryorders']) ) {
-	                        $details=Yii::app()->session['Detaildeliveryorders'];
-	                        $respond=$respond&&$this->saveNewDetails($details);
-	                      } 
+					if(isset(Yii::app()->session['Detaildeliveryorders']) ) {
+						$details=Yii::app()->session['Detaildeliveryorders'];
+						$respond=$respond&&$this->saveNewDetails($details);
+					} 
 	                      
-	                      if(isset(Yii::app()->session['Detaildeliveryorders2']) ) {
-	                        $details=Yii::app()->session['Detaildeliveryorders2'];
-	                        $respond=$respond&&$this->saveNewDetails2($details);
-	                      }
-	                      
-	                      if($respond) {
-	                         Yii::app()->session->remove('Deliveryorders');
-	                         Yii::app()->session->remove('Detaildeliveryorders');
-	                         $this->redirect(array('view','id'=>$model->id));
-	                      }
-                      } else {
-                      	$error = 'Ada kesalahan dalam detil pengiriman';
-                      }
-                   } else if (isset($_POST['command'])){
+					if(isset(Yii::app()->session['Detaildeliveryorders2']) ) {
+						$details2=Yii::app()->session['Detaildeliveryorders2'];
+						$respond=$respond&&$this->saveNewDetails2($details2);
+					}
+					if(!$respond) 
+						throw new CHttpException(404,'There is an error in detail posting');
+							
+					
+					Yii::app()->session->remove('Deliveryorders');
+					Yii::app()->session->remove('Detaildeliveryorders');
+					Yii::app()->session->remove('Detaildeliveryorders2');
+					$this->redirect(array('view','id'=>$model->id));
+	           
+				} else if (isset($_POST['command'])){
                    	
                       // save the current master data before going to the detail page
-                      if($_POST['command']=='adddetail') {
-                         $model->attributes=$_POST['Deliveryorders'];
-                         Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
-                         $this->redirect(array('detaildeliveryorders/create',
+					if($_POST['command']=='adddetail') {
+						$model->attributes=$_POST['Deliveryorders'];
+						Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
+                        $this->redirect(array('detaildeliveryorders/create',
                             'id'=>$model->id, 'regnum'=>$model->regnum));
-                      } else if($_POST['command']=='adddetail2') {
-                         $model->attributes=$_POST['Deliveryorders'];
-                         Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
-                         $this->redirect(array('detaildeliveryorders2/create',
+                    } else if($_POST['command']=='adddetail2') {
+                        $model->attributes=$_POST['Deliveryorders'];
+                        Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
+                        $this->redirect(array('detaildeliveryorders2/create',
                             'id'=>$model->id, 'regnum'=>$model->regnum ));                          
-                      } else if($_POST['command']=='loadInvoice') {
+                    } else if($_POST['command']=='loadInvoice') {
 						$model->attributes=$_POST['Deliveryorders'];
 						Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
 						$this->loadInvoice($model->invnum, $model->id);
 						$model->attributes=Yii::app()->session['Deliveryorders'];
-                      } else if ($_POST['command']=='updateDetail') {
-                         $model->attributes=$_POST['Deliveryorders'];
-                         Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
-                      }
-                   }
+                    } else if ($_POST['command']=='updateDetail') {
+                        $model->attributes=$_POST['Deliveryorders'];
+                        Yii::app()->session['Deliveryorders']=$_POST['Deliveryorders'];
+                    }
                 }
 
                 $this->render('create',array(
                     'model'=>$model, 'form_error'=>$error
                 ));
-                
-             } else {
-                throw new CHttpException(404,'You have no authorization for this operation.');
-             }
+			}    
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		}
 	}
 
 	/**
@@ -159,82 +158,77 @@ class DefaultController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-          if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
-                 Yii::app()->user->id))  {
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
+			Yii::app()->user->id))  {
 
-             $this->state='update';
-             $this->trackActivity('u');
+			$this->state='update';
+            $this->trackActivity('u');
 
-             $model=$this->loadModel($id);
-             $this->afterEdit($model);
+            $model=$this->loadModel($id);
+            $this->afterEdit($model);
              
-             Yii::app()->session['master']='update';
+            Yii::app()->session['master']='update';
 
-             if(!isset(Yii::app()->session['Deliveryorders']))
-                Yii::app()->session['Deliveryorders']=$model->attributes;
-             else
-                $model->attributes=Yii::app()->session['Deliveryorders'];
+            if(!isset(Yii::app()->session['Deliveryorders']))
+               Yii::app()->session['Deliveryorders']=$model->attributes;
+            else
+               $model->attributes=Yii::app()->session['Deliveryorders'];
 
-             if(!isset(Yii::app()->session['Detaildeliveryorders'])) 
+            if(!isset(Yii::app()->session['Detaildeliveryorders'])) 
                Yii::app()->session['Detaildeliveryorders']=$this->loadDetails($id);
              
-             if(!isset(Yii::app()->session['Detaildeliveryorders2'])) 
+            if(!isset(Yii::app()->session['Detaildeliveryorders2'])) 
                Yii::app()->session['Detaildeliveryorders2']=$this->loadDetails2($id);
              
             
 
-             if(isset($_POST)) {
-                 if(isset($_POST['yt0'])) {
-                     $model->attributes=$_POST['Deliveryorders'];
+            if(isset($_POST)) {
+				if(isset($_POST['yt0'])) {
+					$model->attributes=$_POST['Deliveryorders'];
                      // Uncomment the following line if AJAX validation is needed
-                     $this->performAjaxValidation($model);
-                     $this->beforePost($model);
-                     $this->tracker->modify('deliveryorders', $id);
-                     $respond=$model->save();
-                     if($respond) {
-                       $this->afterPost($model);
-                     } else {
+                    $this->performAjaxValidation($model);
+                    $this->beforePost($model);
+                    $this->tracker->modify('deliveryorders', $id);
+                    
+                    $respond=$model->save();
+                    if(!$respond)
                        throw new CHttpException(404,'There is an error in master posting');
-                     }
+                
+                    $this->afterPost($model);
 
-                     if(isset(Yii::app()->session['Detaildeliveryorders'])) {
-                         $details=Yii::app()->session['Detaildeliveryorders'];
-                         $respond=$respond&&$this->saveDetails($details);
-                         if(!$respond) {
-                           throw new CHttpException(404,'There is an error in detail posting');
-                         }
-                     };
+                    if(isset(Yii::app()->session['Detaildeliveryorders'])) {
+						$details=Yii::app()->session['Detaildeliveryorders'];
+                        $respond=$respond&&$this->saveDetails($details);
+                    }
+                    if(!$respond)
+						throw new CHttpException(404,'There is an error in detail posting');
                      
-                     if(isset(Yii::app()->session['Detaildeliveryorders2'])) {
-                         $details=Yii::app()->session['Detaildeliveryorders2'];
-                         $respond=$respond&&$this->saveDetails2($details);
-                         if(!$respond) {
-                           throw new CHttpException(404,'There is an error in detail2 posting');
-                         }
-                     };
+                    if(isset(Yii::app()->session['Detaildeliveryorders2'])) {
+						$details=Yii::app()->session['Detaildeliveryorders2'];
+                        $respond=$respond&&$this->saveDetails2($details);
+                    }
+                    if(!$respond)
+                        throw new CHttpException(404,'There is an error in detail2 posting');
+                   
 
-                     if(isset(Yii::app()->session['DeleteDetaildeliveryorders'])) {
+                    if(isset(Yii::app()->session['DeleteDetaildeliveryorders'])) {
                          $deletedetails=Yii::app()->session['DeleteDetaildeliveryorders'];
                          $respond=$respond&&$this->deleteDetails($deletedetails);
-                         if(!$respond) {
-                           throw new CHttpException(404,'There is an error in detail deletion');
-                         }
-                     };
+                    }
+					if(!$respond) 
+                        throw new CHttpException(404,'There is an error in detail deletion');
                      
-                     if(isset(Yii::app()->session['DeleteDetaildeliveryorders2'])) {
-                         $deletedetails=Yii::app()->session['DeleteDetaildeliveryorders2'];
-                         $respond=$respond&&$this->deleteDetails2($deletedetails);
-                         if(!$respond) {
-                           throw new CHttpException(404,'There is an error in detail2 deletion');
-                         }
-                     };
+                    if(isset(Yii::app()->session['DeleteDetaildeliveryorders2'])) {
+						$deletedetails=Yii::app()->session['DeleteDetaildeliveryorders2'];
+                        $respond=$respond&&$this->deleteDetails2($deletedetails);
+                    }
+					if(!$respond) 
+                        throw new CHttpException(404,'There is an error in detail2 deletion');
 
-                     if($respond) {
-                         Yii::app()->session->remove('Deliveryorders');
-                         Yii::app()->session->remove('Detaildeliveryorders');
-                         Yii::app()->session->remove('DeleteDetaildeliveryorders');
-                         $this->redirect(array('view','id'=>$model->id));
-                     }
+					Yii::app()->session->remove('Deliveryorders');
+					Yii::app()->session->remove('Detaildeliveryorders');
+					Yii::app()->session->remove('DeleteDetaildeliveryorders');
+					$this->redirect(array('view','id'=>$model->id));
                  }
              }
 

@@ -26,6 +26,7 @@ $itemScript=<<<EOS
       $('#Detaildeliveryorders_itemname').focus(function(){
          $('#ItemDialog').dialog('open');
       });
+		
       $('#dialog-item-name').change(
          function(){
             $.getJSON('index.php?r=LookUp/getItem',{ name: $('#dialog-item-name').val() },
@@ -41,6 +42,7 @@ $itemScript=<<<EOS
                })
          }
       );
+		
       $('#dialog-item-select').click(
          function(){
            $('#dialog-item-name').val(unescape($('#dialog-item-select').val()));
@@ -125,6 +127,13 @@ EOS;
 			echo $form->dropDownList($model, 'idwarehouse', $data, array('empty'=>'Harap Pilih')); 
 		?>
 		<?php echo $form->error($model,'idwarehouse'); ?>
+	</div>
+	
+	<div class="row">
+		<?php 
+			if(strlen($error))
+				echo CHtml::tag('span', array('class'=>'errormessage'), $error)
+		?>
 	</div>
         
 	<div class="row buttons">

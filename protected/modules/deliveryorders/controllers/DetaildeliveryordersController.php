@@ -101,6 +101,7 @@ class DetaildeliveryordersController extends Controller
                 $this->trackActivity('u');
                 
                 $master=Yii::app()->session['master'];
+                $error = '';
                 
                 $model=$this->loadModel($iddetail);
                 if(isset(Yii::app()->session['Detaildeliveryorders'])) {
@@ -113,28 +114,32 @@ class DetaildeliveryordersController extends Controller
                 $this->performAjaxValidation($model);
                 
                 if(isset($_POST['yt0']))
-               {
+				{
                     $temp=Yii::app()->session['Detaildeliveryorders'];
                     $model->attributes=$_POST['Detaildeliveryorders'];
-                    foreach ($temp as $tk=>$tv) {
-                        if($tv['iddetail']==$_POST['Detaildeliveryorders']['iddetail']) {
-                            $temp[$tk]=$_POST['Detaildeliveryorders'];
-                            break;
-                        }
-                    }
+                    if($this->checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
+                    	foreach ($temp as $tk=>$tv) {
+                        	if($tv['iddetail']==$_POST['Detaildeliveryorders']['iddetail']) {
+                            	$temp[$tk]=$_POST['Detaildeliveryorders'];
+                            	break;
+                        	}
+                    	}
                     //posting into session
-		    		if($model->validate()) {
-                    	Yii::app()->session['Detaildeliveryorders']=$temp;
+		    			if($model->validate()) {
+                    		Yii::app()->session['Detaildeliveryorders']=$temp;
 			
-                    	if ($master=='create')
-                        	$this->redirect(array('default/createdetail'));
-                    	else if($master=='update')
-                        	$this->redirect(array('default/updatedetail'));
-		    		}	
+                    		if ($master=='create')
+                        		$this->redirect(array('default/createdetail'));
+                    		else if($master=='update')
+                        		$this->redirect(array('default/updatedetail'));
+		    			}
+                    } else {
+                    	$error = 'Jumlah barang tidak cukup di gudang tersebut';
+                    }	
                 }
                
                 $this->render('update',array(
-                        'model'=>$model,'master'=>$master
+                        'model'=>$model,'master'=>$master, 'error'=>$error
                 ));
             }  else {
                 throw new CHttpException(404,'You have no authorization for this operation.');
@@ -316,5 +321,15 @@ class DetaildeliveryordersController extends Controller
             $this->tracker=new Tracker();
             $this->tracker->init();
             $this->tracker->logActivity($this->formid, $action);
+        }
+        
+        private function checkItemQty($iditem, $idwh)
+        {
+        	$qty = Yii::app()->db->createCommand()->select('count(*)')
+        		->from('wh'.$idwh)->where('iditem = :p_iditem and avail = :p_avail', 
+                	array(':p_iditem'=>$iditem, ':p_avail'=>'1'))
+                ->queryScalar();	
+
+        	return $qty;
         }
 }
