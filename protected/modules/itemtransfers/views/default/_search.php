@@ -44,11 +44,6 @@
 		?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->label($model,'status'); ?>
-		<?php echo $form->textField($model,'status',array('size'=>10,'maxlength'=>10)); ?>
-	</div>
-
 
 	<div class="row">
 		<?php echo $form->label($model,'userlog'); ?>
