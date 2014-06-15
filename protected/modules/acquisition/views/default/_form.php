@@ -99,9 +99,15 @@ EOS;
 	<div class="row">
 		<?php echo $form->labelEx($model,'idwarehouse'); ?>
 		<?php
-			$data=Yii::app()->db->createCommand()->select('id,code')->from('warehouses')->queryAll();
-			$data=CHtml::listData($data, 'id', 'code'); 
-			echo $form->dropDownList($model, 'idwarehouse', $data, array('empty'=>'Harap Pilih')); 
+			$warehouses = lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
+         	if (count($warehouses) > 1) {
+				$data = CHtml::listData($warehouses, 'id', 'code');
+         		echo CHtml::dropDownList('Acquisitions[idwarehouse]', '', $data, 
+					array('empty'=>'Harap Pilih'));
+         	} else {
+				echo CHtml::hiddenField('Acquisitions[idwarehouse]', $warehouses[0]['id']);
+				echo CHtml::label($warehouses[0]['code'],'false', array('class'=>'money')); 
+			}
 		?>
 		<?php echo $form->error($model,'idwarehouse'); ?>
 	</div>
