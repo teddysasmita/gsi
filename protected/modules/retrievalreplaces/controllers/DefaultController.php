@@ -57,32 +57,30 @@ class DefaultController extends Controller
 			
 			$model = new Retrievalreplaces ();
 			$this->afterInsert ( $model );
-			
 			// Uncomment the following line if AJAX validation is needed
 			$this->performAjaxValidation ( $model );
-			$info = '';
+			$error = '';
 			if (isset ( $_POST ['yt0'] )) {
 				// The user pressed the button;
 				$model->attributes = $_POST ['Retrievalreplaces'];
 				
-				if ($_POST['validData'] === 'false') {
-					$info = 'Proses tidak dapat dilakukan';
-				} else if ($_POST['validData'] === 'true') {
-					$info = 'Proses berhasil dilakukan';
+				$validdata = $this->checkRetrieval($model->invnum, $model->serialnum) &&
+					($_POST['validdata'] == 'true');
+				if (!$validdata) {
+					$error = 'Proses tidak dapat dilakukan krn ada kesalahan data';
+				} else {
 					$this->beforePost ( $model );
 					$respond = $model->save();
-					if (! $respond) {
+					if (! $respond) 
 						throw new CHttpException ( 404, 'Data tidak lengkap.'.print_r($_POST) );
-					} else {
-						$this->afterPost ( $model );
-						Yii::app ()->session->remove ( 'Retrievalreplaces' );
-						$this->redirect ( array (
+					$this->afterPost ( $model );
+					Yii::app ()->session->remove ( 'Retrievalreplaces' );
+					$this->redirect ( array (
 							'index',
 						) );
-					};
 				}
 			}
-			$this->render ( 'create', array ('model' => $model, 'info' => $info));
+			$this->render ( 'create', array ('model' => $model, 'error' => $error));
 		} else {
 			throw new CHttpException ( 404, 'You have no authorization for this operation.' );
 		}           
@@ -104,30 +102,30 @@ class DefaultController extends Controller
 			$this->afterEdit ( $model );
 			
 			Yii::app ()->session ['master'] = 'update';
+			$error = '';
 			
 				// Uncomment the following line if AJAX validation is needed
 			$this->performAjaxValidation ( $model );
 			if (isset ( $_POST ['yt0'] )) {
 				$model->attributes = $_POST ['Retrievalreplaces'];
-				
+				$validdata = $this->checkRetrieval($model->invnum, $model->serialnum) &&
+					($_POST['validdata'] == 'true');
 
-				if ($_POST['validData'] === 'false') {
+				if (!$validdata) {
 					$info = 'Proses tidak dapat dilakukan';
-				} else if ($_POST['validData'] === 'true') {
-					$info = 'Proses berhasil dilakukan';
+				} else {
 					$this->beforePost ( $model );
 					$this->tracker->modify ( 'retrievalreplaces', $id );
 					$respond = $model->save();
-					if (! $respond) {
+					if (! $respond) 
 						throw new CHttpException ( 404, 'Data tidak lengkap.'.print_r($_POST) );
-					} else {
-						$this->afterPost ( $model );
-						Yii::app ()->session->remove ( 'Retrievalreplaces' );
-						$this->redirect ( array (
-							'view',
-							'id' => $model->id 
-						) );
-					};
+					
+					$this->afterPost ( $model );
+					Yii::app ()->session->remove ( 'Retrievalreplaces' );
+					$this->redirect ( array (
+						'view',
+						'id' => $model->id 
+					));
 				}
 			}
 			$this->render ( 'update', array (
@@ -295,7 +293,7 @@ class DefaultController extends Controller
 		$model->regnum = $idmaker->getRegNum ( $this->formid );
 		$model->userlog = Yii::app ()->user->id;
 		$model->datetimelog = $idmaker->getDateTime ();
-		$model->idwarehouse=lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
+		//$model->idwarehouse=lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
 	}
 	
 	protected function afterPost(& $model) {
@@ -499,22 +497,28 @@ class DefaultController extends Controller
 		};
 	}
 	
-	private function checkSerial($serialnum, $idwh)
+	private function checkRetrieval($invnum, $serialnum)
 	{
-		$indisplay = Yii::app()->db->createCommand()
-			->select('count(*) as total')->from('wh'.$idwh)
-			->where('serialnum = :p_serialnum and avail = :p_avail', 
-				array(':p_serialnum'=>$serialnum, ':p_avail'=>'1'))
-			->queryScalar();
-		if ($indisplay == 0) {
-			$dataexit = Yii::app()->db->createCommand()
-				->select('a.regnum, a.idatetime, a.idsales, b.regnum as stocknum, b.idatetime as stocktime, b.idwarehouse, c.iditem, c.avail')
-				->from('requestdisplays a')->join('stockexits b', 'b.transid = a.regnum')
-				->join('detailstockexits c', 'c.id = b.id')
-				->where('c.serialnum = :p_serialnum', array(':p_serialnum'=>$serialnum))
-				->queryRow();
-			return $dataexit;
-		} else 
-			return FALSE;
+		$orderretrievals=Yii::app()->db->createCommand()
+			->select('b.regnum')
+			->from('salespos a')
+			->join('orderretrievals b', 'b.invnum = a.regnum')
+			->where('b.invnum = :p_invnum',	array(':p_invnum'=>$invnum))
+			->queryAll();
+		$command=Yii::app()->db->createCommand()
+			->select('b.serialnum, b.iditem')
+			->from('stockexits a')
+			->join('detailstockexits b', 'b.id = a.id')
+			->where('a.transid = :p_transid and b.serialnum = :p_serialnum');
+		$data = array();
+		foreach($orderretrievals as $or) {
+			$command->bindParam(':p_transid', $or['regnum'], PDO::PARAM_STR);
+			$command->bindParam(':p_serialnum', $serialnum, PDO::PARAM_STR);
+			$data = $command->queryAll();
+			if (count($data)>0) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

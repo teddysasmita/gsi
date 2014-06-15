@@ -609,31 +609,38 @@ EOS;
 	
 	}
 	
-	public function actionCheckRetrieval($invnum, $serialnum)
+	public function actionGetExitedItemFromSerial($serialnum)
 	{
 		//$invnum = rawurldecode($invnum);
 		//$serialnum = rawurldecode($serialnum);
 		
 		if (!Yii::app()->user->isGuest) {
-			$orderretrievals=Yii::app()->db->createCommand()
-				->select('b.regnum')
-				->from('salespos a')
-				->join('orderretrievals b', 'b.invnum = a.regnum')
-				->where('b.invnum = :p_invnum',	array(':p_invnum'=>$invnum))
-				->queryAll();
-			$command=Yii::app()->db->createCommand()
-				->select('b.serialnum, b.iditem')
+			$data=Yii::app()->db->createCommand()
+				->select('b.iditem, c.name')
 				->from('stockexits a')
 				->join('detailstockexits b', 'b.id = a.id')
-				->where('a.transid = :p_transid and b.serialnum = :p_serialnum');
-			$data = array();
-			foreach($orderretrievals as $or) {
-				$command->bindParam(':p_transid', $or['regnum'], PDO::PARAM_STR);
-				$command->bindParam(':p_serialnum', $serialnum, PDO::PARAM_STR);
-				$data = $command->queryAll();	
-				if (count($data)>0)
-					break;
-			}
+				->join('items c', 'c.id = b.iditem')
+				->where('b.serialnum = :p_serialnum',
+						array(':p_serialnum'=>$serialnum))
+				->queryRow();
+			echo json_encode($data);
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+	
+	public function actionCheckItemQty($iditem, $idwh)
+	{
+		//$invnum = rawurldecode($invnum);
+		//$serialnum = rawurldecode($serialnum);
+	
+		if (!Yii::app()->user->isGuest) {
+			$data=Yii::app()->db->createCommand()
+				->select('count(*)')
+				->from('wh'.$idwh)
+				->where('iditem = :p_iditem and avail = :p_avail and status = :p_status',
+					array(':p_iditem'=>$iditem, 'p_avail'=>'1', 'p_status'=>'1'))
+				->queryScalar();
 			echo json_encode($data);
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');

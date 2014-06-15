@@ -10,20 +10,36 @@
    $transScript=<<<EOS
 		$('#Retrievalreplaces_serialnum').change(
 		function() {
-			$.getJSON('index.php?r=LookUp/checkRetrieval',{ invnum: $('#Retrievalreplaces_invnum').val(),
-				serialnum: $('#Retrievalreplaces_serialnum').val() },
+			$.getJSON('index.php?r=LookUp/getExitedItemFromSerial',
+				{serialnum: $('#Retrievalreplaces_serialnum').val() },
             function(data) {
-				if (data.length > 0 ) {
-					$('#validData').val('true');
-					$('#Retrievalreplaces_iditem').val(data[0].iditem);
-					$('#mdinfo').addClass('money');
-					$('#mdinfo').removeClass('errorMessage');
-					$('#mdinfo').html('Nomor Faktur dan Nomor seri valid');
-				} else {
-					$('#validData').val('false');
+				if (data == false ) {
 					$('#mdinfo').addClass('errorMessage');
 					$('#mdinfo').removeClass('money');
 					$('#mdinfo').html('Nomor Faktur dan/atau Nomor seri TIDAK valid');
+				} else {
+					$('#Retrievalreplaces_iditem').val(data.iditem);
+					$('#mdinfo').addClass('money');
+					$('#mdinfo').removeClass('errorMessage');
+					$('#mdinfo').html(data.name);
+				}
+			})
+		});
+   
+		$('#Retrievalreplaces_idwhsource').change(
+		function() {
+			$.getJSON('index.php?r=LookUp/checkItemQty',
+				{iditem: $('#Retrievalreplaces_iditem').val(),
+				 idwh: $('#Retrievalreplaces_idwhsource').val()},
+            function(data) {
+				if (data == 0 ) {
+					$('#validdata').val('false');
+					$('#mdqty').addClass('errorMessage');
+					$('#mdqty').removeClass('money');
+					$('#mdqty').html('Jumlah barang tidak cukup pada gudang tersebut.');
+				} else {
+					$('#validdata').val('true');
+					$('#mdqty').html('');
 				}
 			})
 		});
@@ -51,8 +67,7 @@ EOS;
       <?php 
         echo CHtml::hiddenField('command', '', array('id'=>'command'));
         echo CHtml::hiddenField('detailcommand', '', array('id'=>'detailcommand'));
-        echo CHtml::hiddenField('validData', 'false');
-        echo $form->hiddenField($model, 'idwarehouse');
+        echo CHtml::hiddenField('validdata', '', array('id'=>'validdata'));
         echo $form->hiddenField($model, 'regnum');
         echo $form->hiddenField($model, 'idatetime');
         echo $form->hiddenField($model, 'userlog');
@@ -64,9 +79,16 @@ EOS;
     <div class="row">
 		<?php echo $form->labelEx($model,'idwarehouse'); ?>
         <?php 
-           echo CHtml::tag('span',array('class'=>'money'),
-			lookup::WarehouseNameFromWarehouseID($model->idwarehouse)); 
-        ?>
+        	$warehouses = lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
+        	if (count($warehouses) > 1) {
+				$data = CHtml::listData($warehouses, 'id', 'code');
+				echo CHtml::dropDownList('Retrievalreplaces[idwarehouse]', 
+					'', $data, array('empty'=>'Harap Pilih'));
+			} else {
+           		echo CHtml::hiddenField('Retrievalreplaces[idwarehouse]', $warehouses[0]['id']);
+				echo CHtml::tag('span',array('class'=>'money'), $warehouses[0]['code']); 
+        	}
+		?>
         <?php echo $form->error($model,'idwarehouse');?> 
 	</div>
 	 
@@ -87,11 +109,11 @@ EOS;
 	</div>
 	
 	<div class="row">
-		<?php echo CHtml::label('Status',false); ?>
-        <?php 
-           	echo CHtml::tag('span', array('id'=>'mdinfo'), $info); 
-        ?>
+		<?php 
+			echo CHtml::tag('span', array('id'=>'mdinfo', 'class'=>'errorMessage'));
+		?>
 	</div>
+	
 	
 	<div class="row">
 		<?php echo $form->labelEx($model,'idwhsource'); ?>
@@ -101,6 +123,19 @@ EOS;
 			echo $form->dropDownList($model, 'idwhsource', $data, array('empty'=>'Harap Pilih')); 
 		?>
 		<?php echo $form->error($model,'idwhsource'); ?>
+	</div>
+	
+	<div class="row">
+        <?php 
+        	echo CHtml::tag('span', array('id'=>'mdqty', 'class'=>'errorMessage')); 
+        ?>
+	</div>
+	
+	<div class="row">
+        <?php 
+           	if (strlen($error) > 0)
+        		echo CHtml::tag('span', array('class'=>'errorMessage'), $error); 
+        ?>
 	</div>
 	
 	<div class="row">
