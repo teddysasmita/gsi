@@ -133,67 +133,62 @@ class DefaultController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-          if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                  Yii::app()->user->id))  {
 
-             $this->state='update';
-             $this->trackActivity('u');
+			$this->state='update';
+			$this->trackActivity('u');
 
-             $model=$this->loadModel($id);
-             $this->afterEdit($model);
+			$model=$this->loadModel($id);
+			$this->afterEdit($model);
              
-             Yii::app()->session['master']='update';
+			Yii::app()->session['master']='update';
 
-             if(!isset(Yii::app()->session['Stockexits']))
-                Yii::app()->session['Stockexits']=$model->attributes;
-             else
+			if(!isset(Yii::app()->session['Stockexits']))
+				Yii::app()->session['Stockexits']=$model->attributes;
+			else
                 $model->attributes=Yii::app()->session['Stockexits'];
 
-             if(!isset(Yii::app()->session['Detailstockexits'])) 
-               Yii::app()->session['Detailstockexits']=$this->loadDetails($id);
+			if(!isset(Yii::app()->session['Detailstockexits'])) 
+				Yii::app()->session['Detailstockexits']=$this->loadDetails($id);
              
              // Uncomment the following line if AJAX validation is needed
-             $this->performAjaxValidation($model);
+			$this->performAjaxValidation($model);
 
-             if(isset($_POST)) {
-                 if(isset($_POST['yt0'])) {
-                     $model->attributes=$_POST['Stockexits'];
-                     $this->beforePost($model);
-                     $this->tracker->modify('stockexits', $id);
-					 $respond=$this->checkWarehouse($model->idwarehouse);
-                      if (!$respond)
-                      	throw new CHttpException(404,'Lokasi Tidak Terdaftar');
-                      $respond = $this->checkSerialNum(Yii::app()->session['Detailstockexits'], $model);
-                      if ($respond !== true)
+			if(isset($_POST)) {
+				if(isset($_POST['yt0'])) {
+					$model->attributes=$_POST['Stockexits'];
+					$this->beforePost($model);
+					$this->tracker->modify('stockexits', $id);
+					$respond=$this->checkWarehouse($model->idwarehouse);
+					if (!$respond)
+						throw new CHttpException(404,'Lokasi Tidak Terdaftar');
+					$respond = $this->checkSerialNum(Yii::app()->session['Detailstockexits'], $model);
+					if (!$respond)
                       	throw new CHttpException(404,'Nomor Seri ada yang salah '.$respond);
-                      $respond=$model->save();
-                      if(!$respond) {
+					$respond=$model->save();
+					if(!$respond) 
 						throw new CHttpException(404,'There is an error in master posting: '. print_r($model->errors));
-                      }
 
-                      if(isset(Yii::app()->session['Detailstockexits']) ) {
-                         $details=Yii::app()->session['Detailstockexits'];
-                         $respond=$respond&&$this->saveDetails($details, $model->idwarehouse);
-                      } 
 
-						$this->afterPost($model);
+					if(isset(Yii::app()->session['Detailstockexits']) ) {
+						$details=Yii::app()->session['Detailstockexits'];
+                        $respond=$respond&&$this->saveDetails($details, $model->idwarehouse);
+					} 
+
+					$this->afterPost($model);
                                           
-                     if(isset(Yii::app()->session['Deletedetailstockexits'])) {
-                         $deletedetails=Yii::app()->session['Deletedetailstockexits'];
-                         $respond=$respond&&$this->deleteDetails($deletedetails);
-                         if(!$respond) {
-                           throw new CHttpException(404,'There is an error in detail deletion');
-                         }
-                     };
-                    
-                     if($respond) {
-                         Yii::app()->session->remove('Stockexits');
-                         Yii::app()->session->remove('Detailstockexits');
-                         Yii::app()->session->remove('Deletedetailstockexits');
-                         $this->redirect(array('view','id'=>$model->id));
-                     } else {
-                    	throw new CHttpException(404,'There is an error in detail deletion');
-                     }
+			 		if(isset(Yii::app()->session['Deletedetailstockexits'])) {
+						$deletedetails=Yii::app()->session['Deletedetailstockexits'];
+						$respond=$respond&&$this->deleteDetails($deletedetails);
+						if(!$respond) 
+							throw new CHttpException(404,'There is an error in detail deletion');
+					}
+					
+					Yii::app()->session->remove('Stockexits');
+					Yii::app()->session->remove('Detailstockexits');
+					Yii::app()->session->remove('Deletedetailstockexits');
+					$this->redirect(array('view','id'=>$model->id));
                  }
              }
 

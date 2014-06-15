@@ -341,6 +341,29 @@ class Action extends CComponent {
    		return Yii::app()->createUrl('/stockexits/default/restoreDeleted', array('idtrack'=>$data['idtrack']));
    }
    
+   public static function decodeDeleteDetailStockDamageUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('/stockdamage/detailstockdamage/delete', array('iddetail'=>$data['iddetail']));
+   }
+   
+   public static function decodeUpdateDetailStockDamageUrl($data, $idwh)
+   {
+   	//return Yii::app()->createUrl('/stockdamage/detailstockdamage/update', array('idwh'=>$idwh));
+   	return Yii::app()->createUrl('/stockdamage/detailstockdamage/update', array('iddetail'=>$data['iddetail'], 'idwh'=>$idwh));
+   }
+   
+   public static function decodeViewDetailStockDamageUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('/stockdamage/detailstockdamage/view', array('iddetail'=>$data['iddetail']));
+   }
+    
+   public static function decodeRestoreDeletedStockDamageUrl($data)
+   {
+   	return Yii::app()->createUrl('/stockdamage/default/restoreDeleted', array('idtrack'=>$data['idtrack']));
+   }
+   
    public static function decodeDeleteDetailPaymentUrl($data)
    {
       //return print_r($data);

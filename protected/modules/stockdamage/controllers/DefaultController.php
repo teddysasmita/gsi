@@ -50,83 +50,80 @@ class DefaultController extends Controller
 	 */
 	public function actionCreate()
 	{
-             if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
                     Yii::app()->user->id))  {   
-                $this->state='create';
-                $this->trackActivity('c');    
+			$this->state='create';
+			$this->trackActivity('c');    
                     
-                $model=new Stockdamage;
-                $this->afterInsert($model);
+			$model=new Stockdamage;
+			$this->afterInsert($model);
                 
-                Yii::app()->session['master']='create';
+			Yii::app()->session['master']='create';
                 //as the operator enter for the first time, we load the default value to the session
-                if (!isset(Yii::app()->session['Stockdamage'])) {
-                   Yii::app()->session['Stockdamage']=$model->attributes;
-                } else {
+			if (!isset(Yii::app()->session['Stockdamage'])) {
+				Yii::app()->session['Stockdamage']=$model->attributes;
+			} else {
                 // use the session to fill the model
-                    $model->attributes=Yii::app()->session['Stockdamage'];
-                }
+				$model->attributes=Yii::app()->session['Stockdamage'];
+			}
                 
                // Uncomment the following line if AJAX validation is needed
-               $this->performAjaxValidation($model);
-				;
-                if (isset($_POST)){
-                   if(isset($_POST['yt0'])) {
+			$this->performAjaxValidation($model);
+			if (isset($_POST)){
+				if(isset($_POST['yt0'])) {
                       //The user pressed the button;
-                      $model->attributes=$_POST['Stockdamage'];
+					$model->attributes=$_POST['Stockdamage'];
+                    $this->beforePost($model);
+                    
+					$respond=$this->checkWarehouse($model->idwarehouse) && 
+                      	$this->checkSerialNum(Yii::app()->session['Detailstockdamage'], $model);
                       
-                      
-                      $this->beforePost($model);
-                      $respond=$this->checkWarehouse($model->idwarehouse);
-                      $respond=$respond && $this->checkSerialNum(Yii::app()->session['Detailstockdamage'], $model);
-                      if ($respond) {
-                         $respond=$model->save();
-                         if(!$respond) {
-                             throw new CHttpException(404,'There is an error in master posting: '. print_r($model->errors));
-                         }
+					if (!$respond) 
+						throw new CHttpException(707,'Nomor Serial telah terdaftar.');
+					
+					$respond=$model->save();
+					if (!$respond)
+						throw new CHttpException(404,'There is an error in detail posting: '. 
+							print_r($model->errors));
+						
+					if(isset(Yii::app()->session['Detailstockdamage']) ) {
+						$details=Yii::app()->session['Detailstockdamage'];
+						$respond=$respond&&$this->saveNewDetails($details, $model->idwarehouse);
+					} 
 
-                         if(isset(Yii::app()->session['Detailstockdamage']) ) {
-                           $details=Yii::app()->session['Detailstockdamage'];
-                           $respond=$respond&&$this->saveNewDetails($details, $model->idwarehouse);
-                         } 
-
-                         if($respond) {
-                            $this->afterPost($model);
-                            Yii::app()->session->remove('Stockdamage');
-                            Yii::app()->session->remove('Detailstockdamage');
-                            Yii::app()->session->remove('Deletedetailstockdamage');
-                            $this->redirect(array('view','id'=>$model->id));
-                         } 
+					if(!$respond)
+						throw new CHttpException(404,'There is an error in detail posting: '. print_r($model->errors));
+						
+					$this->afterPost($model);
+					Yii::app()->session->remove('Stockdamage');
+					Yii::app()->session->remove('Detailstockdamage');
+					Yii::app()->session->remove('Deletedetailstockdamage');
+					$this->redirect(array('view','id'=>$model->id));
                          
-                      } else {
-                        throw new CHttpException(707,'Nomor Serial telah terdaftar.');
-                     }     
-                   } else if (isset($_POST['command'])){
-                   	
+				} else if (isset($_POST['command'])){
                       // save the current master data before going to the detail page
-                      if($_POST['command']=='adddetail') {
-                         $model->attributes=$_POST['Stockdamage'];
-                         Yii::app()->session['Stockdamage']=$_POST['Stockdamage'];
-                         $this->redirect(array('detailstockdamage/create',
+					if($_POST['command']=='adddetail') {
+						$model->attributes=$_POST['Stockdamage'];
+                        Yii::app()->session['Stockdamage']=$_POST['Stockdamage'];
+                        $this->redirect(array('detailstockdamage/create',
                             'id'=>$model->id, 'idwh'=>$model->idwarehouse));
-                      } else if ($_POST['command']=='getPO') {
-                         $model->attributes=$_POST['Stockdamage'];
-                         Yii::app()->session['Stockdamage']=$_POST['Stockdamage'];
-                         $this->loadLPB($model->transid, $model->id, $model->idwarehouse);
-                      } else if ($_POST['command']=='updatedetail') {
-                         $model->attributes=$_POST['Stockdamage'];
-                         Yii::app()->session['Stockdamage']=$_POST['Stockdamage'];   
-                      }
-                   }
-                }
-
-                $this->render('create',array(
+                    } else if ($_POST['command']=='getPO') {
+                        $model->attributes=$_POST['Stockdamage'];
+                        Yii::app()->session['Stockdamage']=$_POST['Stockdamage'];
+                        $this->loadLPB($model->transid, $model->id, $model->idwarehouse);
+                    } else if ($_POST['command']=='updatedetail') {
+                        $model->attributes=$_POST['Stockdamage'];
+                        Yii::app()->session['Stockdamage']=$_POST['Stockdamage'];   
+                    }
+				}
+			}
+			$this->render('create',array(
                     'model'=>$model,
                 ));
                 
-             } else {
-                throw new CHttpException(404,'You have no authorization for this operation.');
-             }
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		}
 	}
 
 	/**
@@ -136,70 +133,77 @@ class DefaultController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-          if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                  Yii::app()->user->id))  {
 
-             $this->state='update';
-             $this->trackActivity('u');
+			$this->state='update';
+            $this->trackActivity('u');
 
-             $model=$this->loadModel($id);
-             $this->afterEdit($model);
+            $model=$this->loadModel($id);
+            $this->afterEdit($model);
              
-             Yii::app()->session['master']='update';
+			Yii::app()->session['master']='update';
 
-             if(!isset(Yii::app()->session['Stockdamage']))
+            if(!isset(Yii::app()->session['Stockdamage']))
                 Yii::app()->session['Stockdamage']=$model->attributes;
-             else
-                $model->attributes=Yii::app()->session['Stockdamage'];
+            else
+				$model->attributes=Yii::app()->session['Stockdamage'];
 
-             if(!isset(Yii::app()->session['Detailstockdamage'])) 
-               Yii::app()->session['Detailstockdamage']=$this->loadDetails($id);
+            if(!isset(Yii::app()->session['Detailstockdamage'])) 
+               	Yii::app()->session['Detailstockdamage']=$this->loadDetails($id);
              
              // Uncomment the following line if AJAX validation is needed
-             $this->performAjaxValidation($model);
+            $this->performAjaxValidation($model);
 
-             if(isset($_POST)) {
-                 if(isset($_POST['yt0'])) {
-                     $model->attributes=$_POST['Stockdamage'];
-                     $this->beforePost($model);
-                     $this->tracker->modify('stockdamage', $id);
-                     $respond=$model->save();
-                     if($respond) {
-                       $this->afterPost($model);
-                     } else {
-                     	throw new CHttpException(404,'There is an error in master posting ');
-                     }
+            if(isset($_POST)) {
+				if(isset($_POST['yt0'])) {
+					$model->attributes=$_POST['Stockdamage'];
+                    $this->beforePost($model);
+                    $this->tracker->modify('stockdamage', $id);
+                    $respond=$model->save();
+                    if(!$respond) 
+                    	throw new CHttpException(404,'There is an error in master posting ');
+					$this->afterPost($model);
 
-                     if(isset(Yii::app()->session['Detailstockdamage'])) {
-                         $details=Yii::app()->session['Detailstockdamage'];
-                         $respond=$respond&&$this->saveDetails($details);
-                         if(!$respond) {
-                           throw new CHttpException(404,'There is an error in detail posting');
-                         }
-                     };
+                   	if(isset(Yii::app()->session['Detailstockdamage'])) {
+						$details=Yii::app()->session['Detailstockdamage'];
+						$respond=$respond&&$this->saveDetails($details);
+						if(!$respond) 
+							throw new CHttpException(404,'There is an error in detail posting');
+                    };
                      
-                     if(isset(Yii::app()->session['Deletedetailstockdamage'])) {
-                         $deletedetails=Yii::app()->session['Deletedetailstockdamage'];
-                         $respond=$respond&&$this->deleteDetails($deletedetails);
-                         if(!$respond) {
-                           throw new CHttpException(404,'There is an error in detail deletion');
-                         }
-                     };
+                    if(isset(Yii::app()->session['Deletedetailstockdamage'])) {
+                        $deletedetails=Yii::app()->session['Deletedetailstockdamage'];
+                        $respond=$respond&&$this->deleteDetails($deletedetails);
+                        if(!$respond) 
+                           	throw new CHttpException(404,'There is an error in detail deletion');
+                    };
                     
-                     if($respond) {
-                         Yii::app()->session->remove('Stockdamage');
-                         Yii::app()->session->remove('Detailstockdamage');
-                         Yii::app()->session->remove('Deletedetailstockdamage');
-                         $this->redirect(array('view','id'=>$model->id));
-                     } else {
-                    	throw new CHttpException(404,'There is an error in detail deletion');
-                     }
+					Yii::app()->session->remove('Stockdamage');
+					Yii::app()->session->remove('Detailstockdamage');
+					Yii::app()->session->remove('Deletedetailstockdamage');
+					$this->redirect(array('view','id'=>$model->id));
                  }
-             }
+			} else if (isset($_POST['command'])){
+                      // save the current master data before going to the detail page
+				if($_POST['command']=='adddetail') {
+					$model->attributes=$_POST['Stockdamage'];
+					Yii::app()->session['Stockdamage']=$_POST['Stockdamage'];
+   					$this->redirect(array('detailstockdamage/create',
+						'id'=>$model->id, 'idwh'=>$model->idwarehouse));
+				} else if ($_POST['command']=='getPO') {
+					$model->attributes=$_POST['Stockdamage'];
+					Yii::app()->session['Stockdamage']=$_POST['Stockdamage'];
+					$this->loadLPB($model->transid, $model->id, $model->idwarehouse);
+				} else if ($_POST['command']=='updatedetail') {
+					$model->attributes=$_POST['Stockdamage'];
+					Yii::app()->session['Stockdamage']=$_POST['Stockdamage'];   
+				}
+			}
 
-             $this->render('update',array(
+			$this->render('update',array(
                      'model'=>$model,
-             ));
+            ));
          }  else {
              throw new CHttpException(404,'You have no authorization for this operation.');
          }
@@ -513,7 +517,7 @@ class DefaultController extends Controller
          $model->id=$idmaker->getCurrentID2();
          $model->idatetime=$idmaker->getDateTime();
          $model->regnum=$idmaker->getRegNum($this->formid);
-         $model->idwarehouse=lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
+         //$model->idwarehouse=lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
          $model->userlog=Yii::app()->user->id;
          $model->datetimelog=$idmaker->getDateTime();
      }

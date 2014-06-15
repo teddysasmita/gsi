@@ -42,7 +42,6 @@ EOS;
         echo $form->hiddenField($model, 'userlog');
         echo $form->hiddenField($model, 'datetimelog');
         echo $form->hiddenField($model, 'regnum');
-        echo $form->hiddenField($model, 'idwarehouse');
       ?>
         
 	<div class="row">
@@ -68,8 +67,15 @@ EOS;
 	<div class="row">
 		<?php echo $form->labelEx($model,'idwarehouse'); ?>
          <?php 
-            echo CHtml::label(lookup::WarehouseNameFromWarehouseID($model->idwarehouse),'false', 
-              array('class'=>'money')); 
+			$warehouses = lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
+         	if (count($warehouses) > 1) {
+				$data = CHtml::listData($warehouses, 'id', 'code');
+         		echo CHtml::dropDownList('Stockdamage[idwarehouse]', $model->idwarehouse, $data, 
+					array('empty'=>'Harap Pilih'));
+         	} else {
+				echo CHtml::hiddenField('Stockdamage[idwarehouse]', $warehouses[0]['id']);
+				echo CHtml::label($warehouses[0]['code'],'false', array('class'=>'money')); 
+			}
          ?>
 	</div>
 		
@@ -86,8 +92,7 @@ EOS;
           'totalItemCount'=>$count,
 		  'keyField'=>'iddetail',
     ));
-	$boom='biim';
-    $this->widget('zii.widgets.grid.CGridView', array(
+	$this->widget('zii.widgets.grid.CGridView', array(
             'dataProvider'=>$dataProvider,
             'columns'=>array(
                array(
@@ -115,7 +120,7 @@ EOS;
                      )
                   ),
 				'updateButtonOptions'=>array("class"=>'updateButton'),
-                  'updateButtonUrl'=>"Action::decodeUpdateDetailStockExitUrl(\$data, \"$model->idwarehouse\")",
+				'updateButtonUrl'=>"Action::decodeUpdateDetailStockDamageUrl(\$data, \"$model->idwarehouse\")",
               )
           ),
     ));
