@@ -81,10 +81,11 @@ class DetailrequestdisplaysController extends Controller
                 } else {
                 	$error = 'Jumlah barang tidak cukup di gudang tersebut';
                 }
-                $this->render('create',array(
-                    'model'=>$model,'master'=>$master, 'error'=>$error
-                ));
+                
 			}
+			$this->render('create',array(
+					'model'=>$model,'master'=>$master, 'error'=>$error
+			));
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		}
