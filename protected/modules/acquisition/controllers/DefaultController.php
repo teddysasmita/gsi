@@ -151,40 +151,32 @@ class DefaultController extends Controller
 
              if(isset($_POST)) {
                  if(isset($_POST['yt0'])) {
-                     $model->attributes=$_POST['Acquisitions'];
-                     $this->beforePost($model);
-                     $this->tracker->modify('acquisitions', $id);
-                     $respond=$model->save();
-                     if($respond) {
-                       $this->afterPost($model);
-                     } else {
-                     	throw new CHttpException(404,'There is an error in master posting ');
-                     }
+					$model->attributes=$_POST['Acquisitions'];
+					$this->beforePost($model);
+					$this->tracker->modify('acquisitions', $id);
+					$respond=$model->save();
+					if( !$respond) 
+						throw new CHttpException(404,'There is an error in master posting ');
+					$this->afterPost($model);
 
-                     if(isset(Yii::app()->session['Detailacquisitions'])) {
-                         $details=Yii::app()->session['Detailacquisitions'];
-                         $respond=$respond&&$this->saveDetails($details);
-                         if(!$respond) {
+					if(isset(Yii::app()->session['Detailacquisitions'])) {
+						$details=Yii::app()->session['Detailacquisitions'];
+                        $respond=$respond&&$this->saveDetails($details);
+                        if(!$respond) 
                            throw new CHttpException(404,'There is an error in detail posting');
-                         }
-                     };
+                    };
                      
-                     if(isset(Yii::app()->session['Deletedetailacquisitions'])) {
-                         $deletedetails=Yii::app()->session['Deletedetailacquisitions'];
-                         $respond=$respond&&$this->deleteDetails($deletedetails);
-                         if(!$respond) {
+                    if(isset(Yii::app()->session['Deletedetailacquisitions'])) {
+                        $deletedetails=Yii::app()->session['Deletedetailacquisitions'];
+                        $respond=$respond&&$this->deleteDetails($deletedetails);
+                        if(!$respond)
                            throw new CHttpException(404,'There is an error in detail deletion');
-                         }
-                     };
+                    };
                     
-                     if($respond) {
-                         Yii::app()->session->remove('Acquisitions');
-                         Yii::app()->session->remove('Detailacquisitions');
-                         Yii::app()->session->remove('Deletedetailacquisitions');
-                         $this->redirect(array('view','id'=>$model->id));
-                     } else {
-                    	throw new CHttpException(404,'There is an error in detail deletion');
-                     }
+					Yii::app()->session->remove('Acquisitions');
+					Yii::app()->session->remove('Detailacquisitions');
+					Yii::app()->session->remove('Deletedetailacquisitions');
+					$this->redirect(array('view','id'=>$model->id));
                  }
              }
 
