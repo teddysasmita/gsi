@@ -85,6 +85,20 @@ EOS;
 		<?php echo $form->error($model,'idatetime'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'idwarehouse'); ?>
+         <?php 
+         	$warehouses = lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
+         	if (count($warehouses) > 1) {
+				$data = CHtml::listData($warehouses, 'id', 'code');
+         		echo CHtml::dropDownList('Stockentries[idwarehouse]', '', $data, 
+					array('empty'=>'Harap Pilih'));
+         	} else {
+				echo CHtml::hiddenField('Stockentries[idwarehouse]', $warehouses[0]['id']);
+				echo CHtml::label($warehouses[0]['code'],'false', array('class'=>'money')); 
+			}
+         ?>
+	</div>
 	
 	<div class="row">
 		<?php echo $form->labelEx($model,'transid'); ?>
@@ -103,20 +117,7 @@ EOS;
 		<?php echo $form->error($model,'transinfo'); ?>
 	</div>
 	  
-	<div class="row">
-		<?php echo $form->labelEx($model,'idwarehouse'); ?>
-         <?php 
-         	$warehouses = lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
-         	if (count($warehouses) > 1) {
-				$data = CHtml::listData($warehouses, 'id', 'code');
-         		echo CHtml::dropDownList('Stockentries[idwarehouse]', '', $data, 
-					array('empty'=>'Harap Pilih'));
-         	} else {
-				echo CHtml::hiddenField('Stockentries[idwarehouse]', $warehouses[0]['id']);
-				echo CHtml::label($warehouses[0]['code'],'false', array('class'=>'money')); 
-			}
-         ?>
-	</div>
+	
 		
 	<div class="row">
 		<?php echo $form->labelEx($model,'donum'); ?>
