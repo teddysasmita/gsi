@@ -57,15 +57,22 @@ EOS;
       <?php 
         echo CHtml::hiddenField('command', '', array('id'=>'command'));
         echo CHtml::hiddenField('detailcommand', '', array('id'=>'detailcommand'));
-        echo $form->hiddenField($model, 'idwarehouse');
+       //echo $form->hiddenField($model, 'idwarehouse');
         
       ?>
      
     <div class="row">
 		<?php echo $form->labelEx($model,'idwarehouse'); ?>
         <?php 
-           echo CHtml::tag('span',array('class'=>'money'),
-			lookup::WarehouseNameFromWarehouseID($model->idwarehouse)); 
+			$warehouses = lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
+         	if (count($warehouses) > 1) {
+				$data = CHtml::listData($warehouses, 'id', 'code');
+         		echo CHtml::dropDownList('Displayentries[idwarehouse]', '', $data, 
+					array('empty'=>'Harap Pilih'));
+         	} else {
+				echo CHtml::hiddenField('Displayentries[idwarehouse]', $warehouses[0]['id']);
+				echo CHtml::label($warehouses[0]['code'],'false', array('class'=>'money')); 
+			}
         ?>
         <?php echo $form->error($model,'idwarehouse');?> 
 	</div>

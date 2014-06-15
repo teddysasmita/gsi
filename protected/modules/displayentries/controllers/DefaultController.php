@@ -315,7 +315,7 @@ class DefaultController extends Controller
 		$model->regnum = $idmaker->getRegNum ( $this->formid );
 		$model->userlog = Yii::app ()->user->id;
 		$model->datetimelog = $idmaker->getDateTime ();
-		$model->idwarehouse=lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
+		//$model->idwarehouse=lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
 	}
 	
 	protected function afterPost(& $model) {
