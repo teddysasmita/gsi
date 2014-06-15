@@ -50,77 +50,74 @@ class DefaultController extends Controller
 	 */
 	public function actionCreate()
 	{
-             if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
-                    Yii::app()->user->id))  {   
-                $this->state='create';
-                $this->trackActivity('c');    
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
+			Yii::app()->user->id))  {   
+			$this->state='create';
+			$this->trackActivity('c');    
                     
-                $model=new Acquisitions;
-                $this->afterInsert($model);
+			$model=new Acquisitions;
+			$this->afterInsert($model);
                 
-                Yii::app()->session['master']='create';
+			Yii::app()->session['master']='create';
                 //as the operator enter for the first time, we load the default value to the session
-                if (!isset(Yii::app()->session['Acquisitions'])) {
-                   Yii::app()->session['Acquisitions']=$model->attributes;
-                } else {
+			if (!isset(Yii::app()->session['Acquisitions'])) {
+				Yii::app()->session['Acquisitions']=$model->attributes;
+			} else {
                 // use the session to fill the model
-                    $model->attributes=Yii::app()->session['Acquisitions'];
-                }
+				$model->attributes=Yii::app()->session['Acquisitions'];
+			}
                 
                // Uncomment the following line if AJAX validation is needed
-               $this->performAjaxValidation($model);
+            $this->performAjaxValidation($model);
 				
-                if (isset($_POST)){
-                   if(isset($_POST['yt0'])) {
+			if (isset($_POST)){
+				if(isset($_POST['yt0'])) {
                       //The user pressed the button;
-                      $model->attributes=$_POST['Acquisitions'];
+					$model->attributes=$_POST['Acquisitions'];
                       
                       
-                      $this->beforePost($model);
-                      $respond=$this->checkWarehouse($model->idwarehouse);
-                      $respond=$respond && $this->checkSerialNum(Yii::app()->session['Detailacquisitions'], $model);
-                      if ($respond) {
-                         $respond=$model->save();
-                         if(!$respond) {
-                             throw new CHttpException(404,'There is an error in master posting: '. print_r($model->errors));
-                         }
+					$this->beforePost($model);
+					$respond=$this->checkWarehouse($model->idwarehouse);
+					$respond=$respond && $this->checkSerialNum(Yii::app()->session['Detailacquisitions'], $model);
+					if (!$respond)
+						throw new CHttpException(707,'Maaf, ada nomor serial yang sudah terdaftar dalam gudang ini.');
+					$respond=$model->save();
+					if(!$respond) 
+						throw new CHttpException(404,'There is an error in master posting: '. print_r($model->errors));
 
-                         if(isset(Yii::app()->session['Detailacquisitions']) ) {
-                           $details=Yii::app()->session['Detailacquisitions'];
-                           $respond=$respond&&$this->saveNewDetails($details, $model->idwarehouse);
-                         } 
-
-                         if($respond) {
-                            $this->afterPost($model);
-                            Yii::app()->session->remove('Acquisitions');
-                            Yii::app()->session->remove('Detailacquisitions');
-                            Yii::app()->session->remove('Deletedetailacquisitions');
-                            $this->redirect(array('view','id'=>$model->id));
-                         } 
+					if(isset(Yii::app()->session['Detailacquisitions']) ) {
+						$details=Yii::app()->session['Detailacquisitions'];
+						$respond=$respond&&$this->saveNewDetails($details, $model->idwarehouse);
+					} 
+					if(!$respond)
+						throw new CHttpException(404,'There is an error in detail posting: '. print_r($model->errors));
+						
+					$this->afterPost($model);
+					Yii::app()->session->remove('Acquisitions');
+					Yii::app()->session->remove('Detailacquisitions');
+					Yii::app()->session->remove('Deletedetailacquisitions');
+					$this->redirect(array('view','id'=>$model->id));
                          
-                      } else {
-                        throw new CHttpException(707,'Maaf, ada nomor serial yang tidak terdaftar dalam gudang ini.');
-                     }     
-                   } else if (isset($_POST['command'])){
+				} else if (isset($_POST['command'])){
                       // save the current master data before going to the detail page
                    	$model->attributes=$_POST['Acquisitions'];
                    	Yii::app()->session['Acquisitions']=$_POST['Acquisitions'];
                    	if($_POST['command']=='adddetail') {
                          $this->redirect(array('detailacquisitions/create',
                             'id'=>$model->id));
-                      } else if ($_POST['command']=='setQty') {
+					} else if ($_POST['command']=='setQty') {
                          $this->loadQty($model);
-                      }
-                   }
-                }
+					}
+				}
+			}
 
-                $this->render('create',array(
+			$this->render('create',array(
                     'model'=>$model,
-                ));
+			));
                 
-             } else {
-                throw new CHttpException(404,'You have no authorization for this operation.');
-             }
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		}
 	}
 
 	/**
@@ -247,7 +244,7 @@ class DefaultController extends Controller
                $dataProvider=new CActiveDataProvider('Acquisitions',
                   array(
                      'criteria'=>array(
-                        'order'=>'id desc'
+                        'order'=>'idatetime desc'
                      )
                   )
                );
@@ -550,11 +547,11 @@ class DefaultController extends Controller
 	         	if ($detailstockentries->validate()) {
 	         		$detailstockentries->save();
 	         		$status = '1';
-	         		$exist = Action::checkItemToWarehouse($model->idwarehouse, $detail['iditem'],
+	         		$exist = Action::checkItemToWarehouse($model->idwarehouse, $model->iditem,
 	         				$detail['serialnum'], '%') > 0;
 	         		if (!$exist)
 	         			Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'],
-	         					$detail['iditem'], $detail['serialnum']);
+	         					$model->iditem, $detail['serialnum']);
 	         		else {
 	         			Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
 	         			Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
