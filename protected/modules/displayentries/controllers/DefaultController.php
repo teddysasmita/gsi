@@ -88,7 +88,7 @@ class DefaultController extends Controller
 						'Keluar Gudang no. '. $dataexit['stocknum']. ' - '. $dataexit['stocktime'].' - '.
 						lookup::WarehouseNameFromWarehouseID($dataexit['idwarehouse']);
 					$model->iditem = $dataexit['iditem'];
-					$model->avail = $dataexit['avail'];
+					$model->avail = '1';
 					$model->transid = $dataexit['regnum'];
 					$this->beforePost ( $model );
 					$respond = $model->save();
@@ -529,7 +529,7 @@ class DefaultController extends Controller
 			->queryScalar();
 		if ($indisplay == 0) {
 			$dataexit = Yii::app()->db->createCommand()
-				->select("a.regnum, a.idatetime, concat('AC16') as transname, a.idsales, b.regnum as stocknum, b.idatetime as stocktime, b.idwarehouse, c.iditem, c.avail")
+				->select("a.regnum, a.idatetime, concat('AC16') as transname, a.idsales, b.regnum as stocknum, b.idatetime as stocktime, b.idwarehouse, c.iditem")
 				->from('requestdisplays a')->join('stockexits b', 'b.transid = a.regnum')
 				->join('detailstockexits c', 'c.id = b.id')
 				->where('c.serialnum = :p_serialnum', array(':p_serialnum'=>$serialnum))
