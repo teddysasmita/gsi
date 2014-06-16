@@ -88,7 +88,8 @@ class DefaultController extends Controller
 						'Keluar Gudang no. '. $dataexit['stocknum']. ' - '. $dataexit['stocktime'].' - '.
 						lookup::WarehouseNameFromWarehouseID($dataexit['idwarehouse']);
 					$model->iditem = $dataexit['iditem'];
-					$model->avail = '1';
+					//this avail is actually status. Wrong use of name
+					$model->avail = Action::checkItemStatusInWarehouse($dataexit['idwarehouse'], $model->serialnum);
 					$model->transid = $dataexit['regnum'];
 					$this->beforePost ( $model );
 					$respond = $model->save();
@@ -355,7 +356,7 @@ class DefaultController extends Controller
 			$stockentries->save();
 		else
 			throw new CHttpException(101,'Error in Stock Entry.');
-		Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, '1');
+		//Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, '1');
 		
 		$detailstockentries = new Detailstockentries();
 		$detailstockentries->id = $stockentries->id;
@@ -374,8 +375,9 @@ class DefaultController extends Controller
 		if (!$exist)
 			Action::addItemToWarehouse($model->idwarehouse, $model->id,
 					$model->iditem, $model->serialnum);
-		else
+		else {
 			Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, $model->avail);
+		}
 	}
 	
 	protected function beforePost(& $model) {
