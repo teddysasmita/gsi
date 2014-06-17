@@ -695,7 +695,7 @@ EOS;
       	
       	if ($dataLPB == FALSE ) {
       		$dataLPB=Yii::app()->db->createCommand()
-      		->select('a.*, 1 as qty')
+      		->select('a.*, 1 as `qty`')
       		->from('retrievalreplaces a')
       		->where('a.regnum = :p_regnum and a.idwhsource = :p_idwhsource',
       				array(':p_regnum'=>$nolpb, ':p_idwhsource'=>$idwh) )
