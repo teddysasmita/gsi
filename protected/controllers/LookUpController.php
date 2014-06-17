@@ -513,6 +513,19 @@ EOS;
 				$data=$command->queryAll();
 			}
 			
+			if ($data == FALSE) {
+				$sql=<<<EOS
+				select a.id, a.regnum, a.invnum,
+				concat( 'Penukaran Pengambilan Barang - ',a.invnum,' - ', a.idatetime) as transinfo,
+				'AC29' as transname
+				from retrievalreplaces a
+				where a.regnum=:p_regnum
+EOS;
+				$command=Yii::app()->db->createCommand($sql);
+				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
+				$data=$command->queryAll();
+			}
+			
 			if ($data !== FALSE)
 				echo json_encode($data);
 			else 
