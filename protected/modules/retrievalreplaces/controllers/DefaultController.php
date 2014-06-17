@@ -304,6 +304,7 @@ class DefaultController extends Controller
 		} else if ($this->state == 'update') {
 			$tempid = $model->id;
 			$tempid = substr($tempid, 0, 20).'E';
+			Yii::import('application.modules.stockentries.models.*');
 			$stockentries = Stockentries::findByPk($tempid);
 			if (! is_null($stockentries))
 				$stockentries->delete();
@@ -313,6 +314,7 @@ class DefaultController extends Controller
 				$dse->delete();
 			};
 		}
+		Yii::import('application.modules.stockentries.models.*');
 		$stockentries = new Stockentries();
 		$tempid = $model->id;
 		$tempid = substr($tempid, 0, 20).'E';
