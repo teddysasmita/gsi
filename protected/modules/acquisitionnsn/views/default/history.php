@@ -1,6 +1,6 @@
 <?php
-/* @var $this AcquisitionsController */
-/* @var $model Acquisitions */
+/* @var $this AcquisitionsnsnController */
+/* @var $model Acquisitionsnsn */
 
 $this->breadcrumbs=array(
       'Proses'=>array('/site/proses'),
@@ -15,15 +15,15 @@ $this->menu=array(
 
 ?>
 
-<h1>Akuisisi Barang dan Nomor Seri</h1>
+<h1>Akuisisi Barang TANPA Nomor Seri</h1>
 
 <?php    $data=Yii::app()->tracker->createCommand()->
-       select()->from('acquisitions')->where('id=:id',array(':id'=>$model->id))->queryAll();
+       select()->from('acquisitionsnsn')->where('id=:id',array(':id'=>$model->id))->queryAll();
     $ap=new CArrayDataProvider($data);
  ?> 
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'acquisitions-grid',
+	'id'=>'acquisitionsnsn-grid',
 	'dataProvider'=>$ap,
 	'columns'=>array(
 		'id',
@@ -46,7 +46,7 @@ $this->menu=array(
                           'visible'=>'false',
                         ),
                     ),
-                   'updateButtonUrl'=>"Action::decodeRestoreHistoryAcquisitionsUrl(\$data)",
+                   'updateButtonUrl'=>"Action::decodeRestoreHistoryAcquisitionsnsnUrl(\$data)",
 		),
 	),
 )); ?>

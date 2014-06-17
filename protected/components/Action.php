@@ -66,6 +66,24 @@ class Action extends CComponent {
    	return Yii::app()->createUrl('acquisition/detailacquisitions/view', array('iddetail'=>$data['iddetail']));
    }
    
+   public static function decodeDeleteDetailAcquisitionsnsnUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('acquisition/detailacquisitionsnsn/delete', array('iddetail'=>$data['iddetail']));
+   }
+   
+   public static function decodeUpdateDetailAcquisitionsnsnUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('acquisition/detailacquisitionsnsn/update', array('iddetail'=>$data['iddetail']))  ;
+   }
+   
+   public static function decodeViewDetailAcquisitionsnsnUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('acquisition/detailacquisitionsnsn/view', array('iddetail'=>$data['iddetail']));
+   }
+   
    public static function decodePrintStockCard2($data)
    {
    		return $data['iditem'].'-'.$data['idwarehouse'];

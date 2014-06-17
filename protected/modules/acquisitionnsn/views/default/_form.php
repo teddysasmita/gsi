@@ -1,6 +1,6 @@
    <?php
-/* @var $this AcquisitionsController */
-/* @var $model Acquisitions */
+/* @var $this AcquisitionsnsnController */
+/* @var $model Acquisitionsnsn */
 /* @var $form CActiveForm */
 ?>
 
@@ -12,10 +12,10 @@
 		function(evt) {
 			$('#command').val('updateDetail');
 			$('#detailcommand').val(this.href);
-			$('#acquisitions-form').submit();
+			$('#acquisitionsnsn-form').submit();
 		});  
 
-		$('#Acquisitions_itemname').focus(function(){
+		$('#Acquisitionsnsn_itemname').focus(function(){
 			$('#ItemDialog').dialog('open');
       	});
       
@@ -39,26 +39,20 @@
 				$('#dialog-item-name').val(unescape($('#dialog-item-select').val()));
 			}
 		);
-   
-		$('#Acquisitions_qty').change(
-   		function(event) {
-			$('#command').val('setQty');
-			$('#acquisitions-form').submit();
-		});
 EOS;
    Yii::app()->clientScript->registerScript("transScript", $transScript, CClientscript::POS_READY);
 
    if($command=='create') 
       $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'acquisitions-form',
+	'id'=>'acquisitionsnsn-form',
 	'enableAjaxValidation'=>true,
-      'action'=>Yii::app()->createUrl("/acquisition/default/create")
+      'action'=>Yii::app()->createUrl("/acquisitionnsn/default/create")
       ));
    else if($command=='update')
       $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'acquisitions-form',
+	'id'=>'acquisitionsnsn-form',
 	'enableAjaxValidation'=>true,
-      'action'=>Yii::app()->createUrl("/acquisition/default/update", array('id'=>$model->id))
+      'action'=>Yii::app()->createUrl("/acquisitionnsn/default/update", array('id'=>$model->id))
       ));
   ?>
 
@@ -80,7 +74,7 @@ EOS;
 		<?php echo $form->labelEx($model,'idatetime'); ?>
             <?php
                $this->widget('zii.widgets.jui.CJuiDatePicker',array(
-                  'name'=>'Acquisitions[idatetime]',
+                  'name'=>'Acquisitionsnsn[idatetime]',
                      // additional javascript options for the date picker plugin
                   'options'=>array(
                      'showAnim'=>'fold',
@@ -102,10 +96,10 @@ EOS;
 			$warehouses = lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
          	if (count($warehouses) > 1) {
 				$data = CHtml::listData($warehouses, 'id', 'code');
-         		echo CHtml::dropDownList('Acquisitions[idwarehouse]', '', $data, 
+         		echo CHtml::dropDownList('Acquisitionsnsn[idwarehouse]', '', $data, 
 					array('empty'=>'Harap Pilih'));
          	} else {
-				echo CHtml::hiddenField('Acquisitions[idwarehouse]', $warehouses[0]['id']);
+				echo CHtml::hiddenField('Acquisitionsnsn[idwarehouse]', $warehouses[0]['id']);
 				echo CHtml::label($warehouses[0]['code'],'false', array('class'=>'money')); 
 			}
 		?>
@@ -115,7 +109,7 @@ EOS;
 	<div class="row">
 		<?php echo $form->labelEx($model,'iditem'); ?>
 		<?php 
-               echo CHtml::textField('Acquisitions_itemname', lookup::ItemNameFromItemID($model->iditem) , array('size'=>50));   
+               echo CHtml::textField('Acquisitionsnsn_itemname', lookup::ItemNameFromItemID($model->iditem) , array('size'=>50));   
                $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
                   'id'=>'ItemDialog',
                   'options'=>array(
@@ -126,10 +120,10 @@ EOS;
                       'modal'=>true,
                       'buttons'=>array(
                           array('text'=>'Ok', 'click'=>'js:function(){
-                             $(\'#Acquisitions_itemname\').val($(\'#dialog-item-name\').val());
+                             $(\'#Acquisitionsnsn_itemname\').val($(\'#dialog-item-name\').val());
                              $.get(\'index.php?r=LookUp/getItemID\',{ name: encodeURI($(\'#dialog-item-name\').val()) },
                                  function(data) {
-                                    $(\'#Acquisitions_iditem\').val(data);
+                                    $(\'#Acquisitionsnsn_iditem\').val(data);
                                  })
                              $(this).dialog("close");
                            }'),
@@ -161,48 +155,6 @@ EOS;
 	</div>
 	
 	
-<?php 
-    if (isset(Yii::app()->session['Detailacquisitions'])) {
-       $rawdata=Yii::app()->session['Detailacquisitions'];
-       $count=count($rawdata);
-    } else {
-       $count=Yii::app()->db->createCommand("select count(*) from detailacquisitions where id='$model->id'")->queryScalar();
-       $sql="select * from detailacquisitions where id='$model->id'";
-       $rawdata=Yii::app()->db->createCommand($sql)->queryAll ();
-    }
-    $dataProvider=new CArrayDataProvider($rawdata, array(
-          'totalItemCount'=>$count,
-		  'keyField'=>'iddetail',
-    ));
-    $this->widget('zii.widgets.grid.CGridView', array(
-            'dataProvider'=>$dataProvider,
-            'columns'=>array(
-              array(
-                  'header'=>'Nomor Seri',
-                  'name'=>'serialnum',
-              ),
-				array(
-					'header'=>'Status',
-					'name'=>'avail',
-					'value'=>"lookup::StockAvailName(\$data['avail'])",
-				),
-              array(
-                  'class'=>'CButtonColumn',
-                  'buttons'=> array(
-                      'delete'=>array(
-                       'visible'=>'false'
-                      ),
-                     'view'=>array(
-                        'visible'=>'false'
-                     )
-                  ),
-				'updateButtonOptions'=>array("class"=>'updateButton'),
-                  'updateButtonUrl'=>"Action::decodeUpdateDetailAcquisitionsUrl(\$data)",
-              )
-          ),
-    ));
-?>
-
    <div class="row buttons">
       <?php echo CHtml::submitButton(ucfirst($command)); ?>
    </div>

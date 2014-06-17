@@ -178,7 +178,8 @@ class DefaultController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-List', 
                 Yii::app()->user->id)) {
                $this->trackActivity('l');
-
+				
+               
                Yii::app()->session->remove('Acquisitionsnsn');
                $dataProvider=new CActiveDataProvider('Acquisitionsnsn',
                   array(
@@ -370,7 +371,7 @@ class DefaultController extends Controller
          $model->datetimelog=$idmaker->getDateTime();
          if ($this->state == 'create')
          	$model->regnum='DA'.$idmaker->getRegNum($this->formid);
-         
+         else
          if ($this->state == 'update') {
          	Yii::import('application.modules.stockentries.models.*');
          	$stockentries = Stockentries::model()->findByPk($tempid);

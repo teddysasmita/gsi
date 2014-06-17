@@ -1,6 +1,6 @@
 <?php
-/* @var $this AcquisitionsController */
-/* @var $model Acquisitions */
+/* @var $this AcquisitionsnsnController */
+/* @var $model Acquisitionsnsn */
 /* @var $form CActiveForm */
 ?>
 

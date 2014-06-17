@@ -1,6 +1,6 @@
 <?php
-/* @var $this AcquisitionsController */
-/* @var $data Acquisitions */
+/* @var $this AcquisitionsnsnController */
+/* @var $data Acquisitionsnsn */
 ?>
 
 <div class="view">
