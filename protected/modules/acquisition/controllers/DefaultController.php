@@ -602,11 +602,11 @@ class DefaultController extends Controller
 	         	if ($detailstockentries->validate()) {
 	         		$detailstockentries->save();
 	         		$status = '1';
-	         		$exist = Action::checkItemToWarehouse($model->idwarehouse, $detail['iditem'],
+	         		$exist = Action::checkItemToWarehouse($model->idwarehouse, $model->iditem,
 	         				$detail['serialnum'], '%') > 0;
 	         		if (!$exist)
 	         			Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'],
-	         					$detail['iditem'], $detail['serialnum']);
+	         					$model->iditem, $detail['serialnum']);
 	         		else {
 	         			Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
 	         			Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
