@@ -354,7 +354,7 @@ class DefaultController extends Controller
 			Action::addItemToWarehouse($model->idwarehouse, $model->id,
 					$model->iditem, $model->serialnum);
 		else
-			Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, $model->avail);
+			Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, '1');
 	}
 	
 	protected function beforePost(& $model) {
