@@ -321,7 +321,7 @@ class DefaultController extends Controller
 		$stockentries->datetimelog = idmaker::getDateTime();
 		$stockentries->transid = $model->regnum;
 		$stockentries->transname = 'AC29';
-		$stockentries->transinfo = 'Barang Masuk Display - ' + $model->regnum + ' - ' +
+		$stockentries->transinfo = 'Penukaran Pengambilan Barang - ' + $model->regnum + ' - ' +
 		$model->idatetime;
 		$stockentries->idwarehouse = $model->idwarehouse;
 		$stockentries->donum = $model->regnum;

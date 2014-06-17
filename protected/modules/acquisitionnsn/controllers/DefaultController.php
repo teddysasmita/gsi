@@ -321,107 +321,44 @@ class DefaultController extends Controller
 
      protected function afterPost(& $model)
      {
-         $idmaker=new idmaker();
-         if ($this->state == 'create') {
-         	$idmaker->saveRegNum($this->formid, substr($model->regnum, 2));
-         
-        	Yii::import('application.modules.stockentries.models.*');
+		$idmaker=new idmaker();
+        if ($this->state == 'create') {
+			$idmaker->saveRegNum($this->formid, substr($model->regnum, 2));
+        }
+		Yii::import('application.modules.stockentries.models.*');
          	
-         	$stockentries = new Stockentries();
-         	$tempid = $model->id;
-         	$tempid = substr($tempid, 0, 20).'C';
-         	$stockentries->id = $tempid;
-         	$stockentries->userlog = $model->userlog;
-         	$stockentries->datetimelog = idmaker::getDateTime();
-         	$stockentries->transid = $model->regnum;
-         	$stockentries->transname = 'AC31';
-         	$stockentries->transinfo = 'Akuisisi Barang - ' + $model->regnum + ' - ' +
-         		$model->idatetime;
-         	$stockentries->idwarehouse = $model->idwarehouse;
-         	$stockentries->donum = $model->regnum;
-         	$stockentries->idatetime = $model->idatetime;
-         	$stockentries->regnum = idmaker::getRegNum('AC3') + 1;
-         	idmaker::saveRegNum('AC3', $stockentries->regnum);
-         	if ($stockentries->validate())
-         		$stockentries->save();
-         	else
-         		throw new CHttpException(101,'Error in Stock Entry.');
-         	$detailstockentries = new Detailstockentries();
-         	$detailstockentries->id = $stockentries->id;
-         	$detailstockentries->iddetail = idmaker::getCurrentID2();
-         	$detailstockentries->iditem = $model->iditem;
-         	$detailstockentries->serialnum = $detail['serialnum'];
-         	$detailstockentries->userlog = $model->userlog;
-         	$detailstockentries->datetimelog = idmaker::getDateTime();
-         	if ($detailstockentries->validate()) {
-         		$detailstockentries->save();
-         		$status = '1';
-         		$exist = Action::checkItemToWarehouse($model->idwarehouse, $model->iditem,
-         				$detail['serialnum'], '%') > 0;
-         		if (!$exist)
-         			Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'],
-         					$model->iditem, $detail['serialnum']);
-         		else {
-         			Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
-         			Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
-         		}
-         	} else
-         		throw new CHttpException(101,'Error in Detail Stock Entry.');
-	         
-	         /*if ($model->transname == 'AC16') {
-	         	$data = Yii::app()->db->createCommand()
-	         		->select()->from('requestdisplays')
-	         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-	         		->queryRow();
-	         	$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
-	         }*/
-         } else if ($this->state == 'update') {
-         	$tempid = $model->id;
-         	$tempid = substr($tempid, 0, 20).'C';
-         	$stockentries = Stockentries::model()->findByAttributes(array('transid'=>$tempid));
-         	$detailstockentries = Detailstockentries::model()->findAllByAttributes(array('id'=>$stockentries->id));
-         	
-         	$stockentries->userlog = $model->userlog;
-         	$stockentries->datetimelog = idmaker::getDateTime();
-         	$stockentries->transinfo = 'Akuisisi Barang - ' + $model->regnum + ' - ' +
-         		$model->idatetime;
-         	$stockentries->idwarehouse = $model->idwarehouse;
-         	$stockentries->idatetime = $model->idatetime;
-         	if ($stockentries->validate())
-         		$stockentries->save();
-         	else
-         		throw new CHttpException(101,'Error in Stock Entry.');
-         	$details = $this->loadDetails($model->id);
-         	
-         	
-         	$detailstockentries->iditem = $model->iditem;
-         	$detailstockentries->serialnum = $detail['serialnum'];
-         	$detailstockentries->userlog = $model->userlog;
-	         	$detailstockentries->datetimelog = idmaker::getDateTime();
-	         	if ($detailstockentries->validate()) {
-	         		$detailstockentries->save();
-	         		$status = '1';
-	         		$exist = Action::checkItemToWarehouse($model->idwarehouse, $detail['iditem'],
-	         				$detail['serialnum'], '%') > 0;
-	         		if (!$exist)
-	         			Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'],
-	         					$detail['iditem'], $detail['serialnum']);
-	         		else {
-	         			Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
-	         			Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
-	         		}
-	         	} else
-	         		throw new CHttpException(101,'Error in Detail Stock Entry.');
-	         };
-	         
-	         /*if ($model->transname == 'AC16') {
-	         	$data = Yii::app()->db->createCommand()
-	         		->select()->from('requestdisplays')
-	         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-	         		->queryRow();
-	         	$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
-	         }*/
-         }
+		$stockentries = new Stockentries();
+		$tempid = $model->id;
+		$tempid = substr($tempid, 0, 20).'C';
+		$stockentries->id = $tempid;
+		$stockentries->userlog = $model->userlog;
+		$stockentries->datetimelog = idmaker::getDateTime();
+		$stockentries->transid = $model->regnum;
+		$stockentries->transname = 'AC31';
+		$stockentries->transinfo = 'Akuisisi Barang - ' + $model->regnum + ' - ' +
+			$model->idatetime;
+		$stockentries->idwarehouse = $model->idwarehouse;
+		$stockentries->donum = $model->regnum;
+		$stockentries->idatetime = $model->idatetime;
+		$stockentries->regnum = idmaker::getRegNum('AC3') + 1;
+		idmaker::saveRegNum('AC3', $stockentries->regnum);
+		if ($stockentries->validate())
+			$stockentries->save();
+		else
+			throw new CHttpException(101,'Error in Stock Entry.');
+		for ($i=0; $i < $model->qty; $i++ ) {
+			$detailstockentries = new Detailstockentries();
+			$detailstockentries->id = $stockentries->id;
+			$detailstockentries->iddetail = idmaker::getCurrentID2();
+			$detailstockentries->iditem = $model->iditem;
+			$detailstockentries->serialnum = 'Akuisisi Barang';
+			$detailstockentries->userlog = $model->userlog;
+			$detailstockentries->datetimelog = idmaker::getDateTime();
+			if ($detailstockentries->validate()) {
+				$detailstockentries->save();
+			} else
+				throw new CHttpException(101,'Error in Detail Stock Entry.');
+		} 
      }
 
      protected function beforePost(& $model)
@@ -435,26 +372,16 @@ class DefaultController extends Controller
          	$model->regnum='DA'.$idmaker->getRegNum($this->formid);
          
          if ($this->state == 'update') {
-         	
-         	$details = $this->loadDetails($model->id);
-         	foreach($details as $detail) {
-         		if ($detail['serialnum'] != 'Belum Diterima')
-         			Action::deleteItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
+         	Yii::import('application.modules.stockentries.models.*');
+         	$stockentries = Stockentries::model()->findByPk($tempid);
+         	if (! is_null($stockentries))
+         		$stockentries->delete();
+         	$detailstockentries = Detailstockentries::model()->findAllByAttributes(array('id'=>$tempid));
+         	if (count($detailstockentries) > 0)
+         	foreach($detailstockentries as $dse) {
+         		$dse->delete();
          	};
-         	/*if ($model->transname == 'AC16') {
-         		$data = Yii::app()->db->createCommand()
-         		->select()->from('requestdisplays')
-         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-         		->queryRow();
-         		$this->removeEntryDisplay($data['regnum'], $model->idwarehouse);
-         	}*/
-         	/*if ($model->transname == 'AC16') {
-         		$data = Yii::app()->db->createCommand()
-         		->select()->from('requestdisplays')
-         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-         		->queryRow();
-         		$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
-         	}*/
+         	
          }
      }
 
@@ -471,19 +398,6 @@ class DefaultController extends Controller
      	foreach($detailstockentries as $dse) {
      		$dse->delete();
      	};
-     	
-     	$details = $this->loadDetails($model->id);
-     	foreach($details as $detail) {
-     		Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $detail['avail']);
-     	};
-     	
-     	/*if ($model->transname == 'AC16') {
-     		$data = Yii::app()->db->createCommand()
-     		->select()->from('requestdisplays')
-     		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-     		->queryRow();
-     		$this->removeEntryDisplay($data['regnum'], $model->idwarehouse);
-     	}*/
      }
 
      protected function afterDelete(& $model)
@@ -519,30 +433,6 @@ class DefaultController extends Controller
          $this->tracker->logActivity($this->formid, $action);
      }
      
-     
-      private function checkSerialNum(array $details, $model ) 
-      {
-         $respond=true;
-         
-         foreach($details as $detail) {
-            if ($detail['serialnum'] !== 'Belum Diterima') {
-               /*$count=Yii::app()->db->createCommand()
-                  ->select('count(*)')
-                  ->from('detailacquisitionsnsn')
-                  ->where("serialnum = :p_serialnum", array(':serialnum'=>$detail['serialnum']))
-                  ->queryScalar();*/
-				$count=Yii::app()->db->createCommand()
-					->select('count(*)')->from('wh'.$model->idwarehouse)
-					->where("serialnum = :p_serialnum and avail = :p_avail",
-      					array(':p_serialnum'=>$detail['serialnum'], ':p_avail'=>'1'))
-      				->queryScalar();
-               $respond=$count == 0;
-               if(!$respond)
-                  break;
-            };
-         }   
-         return $respond;
-      }
       
       private function setStatusPO($idpo, array $details)
       {
@@ -571,194 +461,5 @@ class DefaultController extends Controller
          else
             return $respond; 
       }
-      
-      public function actionSummary($id)
-      {
-      	$this->trackActivity('v');
-      	$this->render('summary',array(
-      			'model'=>$this->loadModel($id),
-      	));
-      
-      }
-      
-      public function actionPrintsummary($id)
-      {
-      	$this->trackActivity('v');
-      	Yii::import("application.vendors.tcpdf.*");
-      	require_once('tcpdf.php');
-      	$this->render('printsummary',array(
-      			'model'=>$this->loadModel($id),
-      	));
-      	
-      }
-      
-      public function actionAcquisitionsnsnreport()
-      {
-      	if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
-      			Yii::app()->user->id))  {
-      		$this->trackActivity('v');
-      
-      		$this->render('report1');
-      	} else {
-      		throw new CHttpException(404,'You have no authorization for this operation.');
-      	};
-      }
-      
-      public function actionGetexcel($startdate, $enddate, $brand, $objects)
-      {
-		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
-      			Yii::app()->user->id))  {
-      		$this->trackActivity('v');
-      			
-      		$xl = new PHPExcel();
-      		$xl->getProperties()->setCreator("Program GSI Malang")
-      		->setLastModifiedBy("Program GSI Malang")
-      		->setTitle("Laporan Penjualan")
-      		->setSubject("Laporan Penjualan")
-      		->setDescription("Laporan Penjualan Bulanan")
-      		->setKeywords("Laporan Penjualan")
-      		->setCategory("Laporan");
-      		$enddate=$enddate.' 23:59:59';
-      		$selectfields = <<<EOS
-			a.idatetime, a.regnum, a.transid, a.transinfo, a.userlog,
-			b.iditem, b.serialnum, c.code
-EOS;
-      		$selectwhere = <<<EOS
-			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime
-EOS;
-      		unset($selectparam);
-      		$selectparam['p_startidatetime'] = $startdate;
-      		$selectparam['p_endidatetime'] = $enddate;
-      
-      		if (isset($brand) && ($brand <> '')) {
-      			$selectwhere .= ' and d.brand = :p_brand';
-				$selectparam[':p_brand'] = $brand;
-      		}
-      		if (isset($objects) && ($objects <> '')) {
-      			$selectwhere .= ' and d.objects = :p_objects';
-				$selectparam[':p_objects'] = $objects;
-      		}
-      		$data=Yii::app()->db->createCommand()
-      			->select($selectfields)
-      			->from('acquisitionsnsn a')
-      			->join('detailacquisitionsnsn b', 'b.id = a.id')
-      			->join('warehouses c', 'c.id = a.idwarehouse')
-				->join('items d', 'd.id = b.iditem')
-      			->where($selectwhere, $selectparam)
-      				->order('a.idatetime, a.regnum')
-      				->queryAll();
-			$headersfield = array( 'idatetime', 'regnum', 'transid', 'transinfo', 'iditem', 'serialnum', 'code', 'userlog', 'suppliername');
-			$headersname = array('Tanggal', 'Nomor Urut', 'Jenis Transaksi', 'Info Transaksi', 'Nama Barang', 'Nomor Serial', 
-				'Gudang', 'Operator', 'Supplier');
-      		for( $i=0;$i<count($headersname); $i++ ) {
-      			$xl->setActiveSheetIndex(0)
-      				->setCellValueByColumnAndRow($i,1, $headersname[$i]);
-      		} 
-      							
-      		for( $i=0; $i<count($data); $i++){
-      			for( $j=0; $j<count($headersfield); $j++ ) {
-      				if ($j<count($headersfield)-1)
-      					$cellvalue = $data[$i][$headersfield[$j]];
-					if ($headersfield[$j] == 'iditem')
-      					$cellvalue = lookup::ItemNameFromItemID($data[$i]['iditem']);
-					else if ($headersfield[$j] == 'userlog')
-      					$cellvalue = lookup::UserNameFromUserID($data[$i]['userlog']);
-      				else if ($headersfield[$j] == 'suppliername')
-						$cellvalue = lookup::GetSupplierNameFromSerialnum($data[$i]['serialnum']);
-					$xl->setActiveSheetindex(0)
-      					->setCellValueByColumnAndRow($j,$i+2, $cellvalue);
-      			}
-			}
-      							
-      		$xl->getActiveSheet()->setTitle('Laporan Pengeluaran Barang');
-      		$xl->setActiveSheetIndex(0);
-			header('Content-Type: application/pdf');
-			header('Content-Disposition: attachment;filename="stockexit-report-'.idmaker::getDateTime().'.xls"');
-			header('Cache-Control: max-age=0');
-			$xlWriter = PHPExcel_IOFactory::createWriter($xl, 'Excel5');
-			$xlWriter->save('php://output');
-      	} else {
-      		throw new CHttpException(404,'You have no authorization for this operation.');
-      	};
-	}  
-	
-	private function autoEntryDisplay($itnum, $idwhsource)
-	{
-		$datamaster = Yii::app()->db->createCommand()
-			->select('a.*')->from("requestdisplays a")
-			->where("a.regnum = :p_regnum",
-				array(':p_regnum'=>$itnum))
-			->queryRow();
-		
-		$datadetails = Yii::app()->db->createCommand()
-			->select('c.iditem, c.serialnum')
-			->from("requestdisplays a")
-			->join("acquisitionsnsn b", "b.transid = a.regnum")
-			->join("detailacquisitionsnsn c", "c.id = b.id")	
-			->where("a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse",
-				array(':p_regnum'=>$itnum, ':p_idwarehouse'=>$idwhsource))
-			->queryAll();
-		
-		Yii::import('application.modules.stockentries.models.*');
-		$entrymodel = new Stockentries();
-		$entrymodel->id = idmaker::getCurrentID2();
-		$entrymodel->regnum = idmaker::getRegNum('AC16');
-		$entrymodel->idatetime = idmaker::getDateTime();
-		$entrymodel->userlog = Yii::app()->user->id;
-		$entrymodel->datetimelog = $entrymodel->idatetime;
-		$entrymodel->transid = $itnum;
-		$entrymodel->transinfo = 'Permintaan Barang Display - '.$datamaster['regnum']. ' - '.	
-			$entrymodel->idatetime;
-		$entrymodel->transname = 'AC16';
-		$entrymodel->donum = $itnum;
-		$entrymodel->idwarehouse = '14103215447754000';
-		$entrymodel->validate();
-		$respond = $entrymodel->save();
-		if ($respond) {
-			idmaker::saveRegNum('AC16', $entrymodel->regnum);
-		
-			foreach($datadetails as $detail) {
-				$detailentrymodel = new Detailstockentries();
-				$detailentrymodel->id = $entrymodel->id;
-				$detailentrymodel->iddetail = idmaker::getCurrentID2();
-				$detailentrymodel->userlog = Yii::app()->user->id;
-				$detailentrymodel->datetimelog = $entrymodel->idatetime;
-				$detailentrymodel->iditem = $detail['iditem'];
-				$detailentrymodel->serialnum = $detail['serialnum'];
-				
-				$detailentrymodel->save();
-				Action::entryItemToWarehouse('14103215447754000', $detailentrymodel->iddetail, 
-					$detailentrymodel->iditem, $detailentrymodel->serialnum);			
-			}
-		}
-	}
-	
-	private function removeEntryDisplay($itnum, $warehouse)
-	{
-		$stockEntry = Yii::app()->db->createCommand()
-			->select()->from('stockentries')->where('transid = :p_transid', 
-				array(':p_transid'=>$itnum))
-			->queryRow();
-		
-		Yii::app()->db->createCommand()->delete('detailstockentries', 'id = :p_id',
-			array(':p_id'=>$stockEntry['id']));
-		
-		Yii::app()->db->createCommand()->delete('stockentries', 'id = :p_id',
-			array(':p_id'=>$stockEntry['id']));
-	}
-	
-	private function loadQty($model)
-	{
-		for($i=0; $i<$model->qty; $i++) {
-			$detail['id'] = $model->id;
-			$detail['iddetail'] = idmaker::getCurrentID2();
-			$detail['serialnum'] = 'Masukkan Nomor Seri';
-			$detail['userlog'] = $model->userlog;
-			$detail['datetimelog'] = $model->datetimelog;	
-			$detail['avail'] = '1';
-			$details[] = $detail;
-		}
-		Yii::app()->session['Detailacquisitionsnsn'] = $details;
-	}
 	
 }
