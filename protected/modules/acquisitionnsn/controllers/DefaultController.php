@@ -1,10 +1,5 @@
 <?php
 
-function cmp($a, $b)
-{
-	return strcmp($a['iditem'], $b['iditem']);
-}
-
 class DefaultController extends Controller
 {
 	/**
@@ -12,7 +7,7 @@ class DefaultController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $formid='AC27';
+	public $formid='AC31';
 	public $tracker;
 	public $state;
 
@@ -55,16 +50,16 @@ class DefaultController extends Controller
 			$this->state='create';
 			$this->trackActivity('c');    
                     
-			$model=new Acquisitions;
+			$model=new Acquisitionsnsn;
 			$this->afterInsert($model);
                 
 			Yii::app()->session['master']='create';
                 //as the operator enter for the first time, we load the default value to the session
-			if (!isset(Yii::app()->session['Acquisitions'])) {
-				Yii::app()->session['Acquisitions']=$model->attributes;
+			if (!isset(Yii::app()->session['Acquisitionsnsn'])) {
+				Yii::app()->session['Acquisitionsnsn']=$model->attributes;
 			} else {
                 // use the session to fill the model
-				$model->attributes=Yii::app()->session['Acquisitions'];
+				$model->attributes=Yii::app()->session['Acquisitionsnsn'];
 			}
                 
                // Uncomment the following line if AJAX validation is needed
@@ -73,41 +68,21 @@ class DefaultController extends Controller
 			if (isset($_POST)){
 				if(isset($_POST['yt0'])) {
                       //The user pressed the button;
-					$model->attributes=$_POST['Acquisitions'];
+					$model->attributes=$_POST['Acquisitionsnsn'];
                       
                       
 					$this->beforePost($model);
 					$respond=$this->checkWarehouse($model->idwarehouse);
-					$respond=$respond && $this->checkSerialNum(Yii::app()->session['Detailacquisitions'], $model);
-					if (!$respond)
-						throw new CHttpException(707,'Maaf, ada nomor serial yang sudah terdaftar dalam gudang ini.');
+					
 					$respond=$model->save();
 					if(!$respond) 
 						throw new CHttpException(404,'There is an error in master posting: '. print_r($model->errors));
 
-					if(isset(Yii::app()->session['Detailacquisitions']) ) {
-						$details=Yii::app()->session['Detailacquisitions'];
-						$respond=$respond&&$this->saveNewDetails($details, $model->idwarehouse);
-					} 
-					if(!$respond)
-						throw new CHttpException(404,'There is an error in detail posting: '. print_r($model->errors));
 						
 					$this->afterPost($model);
-					Yii::app()->session->remove('Acquisitions');
-					Yii::app()->session->remove('Detailacquisitions');
-					Yii::app()->session->remove('Deletedetailacquisitions');
+					Yii::app()->session->remove('Acquisitionsnsn');
 					$this->redirect(array('view','id'=>$model->id));
                          
-				} else if (isset($_POST['command'])){
-                      // save the current master data before going to the detail page
-                   	$model->attributes=$_POST['Acquisitions'];
-                   	Yii::app()->session['Acquisitions']=$_POST['Acquisitions'];
-                   	if($_POST['command']=='adddetail') {
-                         $this->redirect(array('detailacquisitions/create',
-                            'id'=>$model->id));
-					} else if ($_POST['command']=='setQty') {
-                         $this->loadQty($model);
-					}
 				}
 			}
 
@@ -138,44 +113,25 @@ class DefaultController extends Controller
              
              Yii::app()->session['master']='update';
 
-             if(!isset(Yii::app()->session['Acquisitions']))
-                Yii::app()->session['Acquisitions']=$model->attributes;
+             if(!isset(Yii::app()->session['Acquisitionsnsn']))
+                Yii::app()->session['Acquisitionsnsn']=$model->attributes;
              else
-                $model->attributes=Yii::app()->session['Acquisitions'];
+                $model->attributes=Yii::app()->session['Acquisitionsnsn'];
 
-             if(!isset(Yii::app()->session['Detailacquisitions'])) 
-               Yii::app()->session['Detailacquisitions']=$this->loadDetails($id);
-             
              // Uncomment the following line if AJAX validation is needed
              $this->performAjaxValidation($model);
 
              if(isset($_POST)) {
                  if(isset($_POST['yt0'])) {
-					$model->attributes=$_POST['Acquisitions'];
+					$model->attributes=$_POST['Acquisitionsnsn'];
 					$this->beforePost($model);
-					$this->tracker->modify('acquisitions', $id);
+					$this->tracker->modify('acquisitionsnsn', $id);
 					$respond=$model->save();
 					if( !$respond) 
 						throw new CHttpException(404,'There is an error in master posting ');
 					$this->afterPost($model);
-
-					if(isset(Yii::app()->session['Detailacquisitions'])) {
-						$details=Yii::app()->session['Detailacquisitions'];
-                        $respond=$respond&&$this->saveDetails($details);
-                        if(!$respond) 
-                           throw new CHttpException(404,'There is an error in detail posting');
-                    };
-                     
-                    if(isset(Yii::app()->session['Deletedetailacquisitions'])) {
-                        $deletedetails=Yii::app()->session['Deletedetailacquisitions'];
-                        $respond=$respond&&$this->deleteDetails($deletedetails);
-                        if(!$respond)
-                           throw new CHttpException(404,'There is an error in detail deletion');
-                    };
                     
-					Yii::app()->session->remove('Acquisitions');
-					Yii::app()->session->remove('Detailacquisitions');
-					Yii::app()->session->remove('Deletedetailacquisitions');
+					Yii::app()->session->remove('Acquisitionsnsn');
 					$this->redirect(array('view','id'=>$model->id));
                  }
              }
@@ -201,14 +157,7 @@ class DefaultController extends Controller
             $model=$this->loadModel($id);
             $this->trackActivity('d');
             $this->beforeDelete($model);
-            $this->tracker->delete('acquisitions', $id);
-
-            $detailmodels=Detailacquisitions::model()->findAll('id=:id',array(':id'=>$id));
-            foreach($detailmodels as $dm) {
-               $this->tracker->init();
-               $this->tracker->delete('detailacquisitions', array('iddetail'=>$dm->iddetail));
-               $dm->delete();
-            }
+            $this->tracker->delete('acquisitionsnsn', $id);
 
             $model->delete();
             $this->afterDelete($model);
@@ -230,10 +179,8 @@ class DefaultController extends Controller
                 Yii::app()->user->id)) {
                $this->trackActivity('l');
 
-               Yii::app()->session->remove('Acquisitions');
-               Yii::app()->session->remove('Detailacquisitions');
-               Yii::app()->session->remove('Deletedetailacquisitions');
-               $dataProvider=new CActiveDataProvider('Acquisitions',
+               Yii::app()->session->remove('Acquisitionsnsn');
+               $dataProvider=new CActiveDataProvider('Acquisitionsnsn',
                   array(
                      'criteria'=>array(
                         'order'=>'idatetime desc'
@@ -257,10 +204,10 @@ class DefaultController extends Controller
                 Yii::app()->user->id)) {
                 $this->trackActivity('s');
                
-                $model=new Acquisitions('search');
+                $model=new Acquisitionsnsn('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Acquisitions']))
-			$model->attributes=$_GET['Acquisitions'];
+		if(isset($_GET['Acquisitionsnsn']))
+			$model->attributes=$_GET['Acquisitionsnsn'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -302,9 +249,9 @@ class DefaultController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
                 $this->trackActivity('r');
-                $this->tracker->restore('acquisitions', $idtrack);
+                $this->tracker->restore('acquisitionsnsn', $idtrack);
                 
-                $dataProvider=new CActiveDataProvider('Acquisitions');
+                $dataProvider=new CActiveDataProvider('Acquisitionsnsn');
                 $this->render('index',array(
                     'dataProvider'=>$dataProvider,
                 ));
@@ -318,14 +265,13 @@ class DefaultController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
                 $this->trackActivity('n');
-                $id = Yii::app()->tracker->createCommand()->select('id')->from('acquisitions')
+                $id = Yii::app()->tracker->createCommand()->select('id')->from('acquisitionsnsn')
                 	->where('idtrack = :p_idtrack', array(':p_idtrack'=>$idtrack))
                 	->queryScalar();
-                $this->tracker->restoreDeleted('detailacquisitions', "id", $id );
-                $this->tracker->restoreDeleted('acquisitions', "idtrack", $idtrack);
+                $this->tracker->restoreDeleted('acquisitionsnsn', "idtrack", $idtrack);
                 
                 
-                $dataProvider=new CActiveDataProvider('Acquisitions');
+                $dataProvider=new CActiveDataProvider('Acquisitionsnsn');
                 $this->render('index',array(
                     'dataProvider'=>$dataProvider,
                 ));
@@ -338,12 +284,12 @@ class DefaultController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Acquisitions the loaded model
+	 * @return Acquisitionsnsn the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Acquisitions::model()->findByPk($id);
+		$model=Acquisitionsnsn::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -351,145 +297,18 @@ class DefaultController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Acquisitions $model the model to be validated
+	 * @param Acquisitionsnsn $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='acquisitions-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='acquisitionsnsn-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
 	}
         
-      public function actionCreateDetail()
-      {
-      //this action continues the process from the detail page
-         if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
-                 Yii::app()->user->id))  {
-             $model=new Acquisitions;
-             $model->attributes=Yii::app()->session['Acquisitions'];
-
-             $details=Yii::app()->session['Detailacquisitions'];
-             $this->afterInsertDetail($model, $details);
-			 
-             
-             $this->render('create',array(
-                 'model'=>$model,
-             ));
-         } else {
-             throw new CHttpException(404,'You have no authorization for this operation.');
-         } 
-      }
       
-      public function actionUpdateDetail()
-      {
-         if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
-                 Yii::app()->user->id))  {
-
-             $model=new Acquisitions;
-             $model->attributes=Yii::app()->session['Acquisitions'];
-
-             $details=Yii::app()->session['Detailacquisitions'];
-             $this->afterUpdateDetail($model, $details);
-
-             $this->render('update',array(
-                 'model'=>$model,
-             ));
-         } else {
-             throw new CHttpException(404,'You have no authorization for this operation.');
-         }
-      }
-      
-      public function actionDeleteDetail()
-      {
-         if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
-                 Yii::app()->user->id))  {
-
-
-             $model=new Acquisitions;
-             $model->attributes=Yii::app()->session['Acquisitions'];
-
-             $details=Yii::app()->session['Detailacquisitions'];
-             $this->afterDeleteDetail($model, $details);
-
-             $this->render('update',array(
-                 'model'=>$model,
-             ));
-         } else {
-             throw new CHttpException(404,'You have no authorization for this operation.');
-         }
-      }
-      
-
-     protected function saveNewDetails(array $details, $idwh)
-     {                  
-         foreach ($details as $row) {
-             $detailmodel=new Detailacquisitions;
-             $detailmodel->attributes=$row;
-             $respond=$detailmodel->insert();
-             if (!$respond) {
-                break;
-             }
-         }
-         return $respond;
-     }
-     
-
-     protected function saveDetails(array $details)
-     {
-         $idmaker=new idmaker();
-
-         $respond=true;
-         foreach ($details as $row) {
-             $detailmodel=Detailacquisitions::model()->findByPk($row['iddetail']);
-             if($detailmodel==NULL) {
-                 $detailmodel=new Detailacquisitions;
-             } else {
-                 if(count(array_diff($detailmodel->attributes,$row))) {
-                     $this->tracker->init();
-                     $this->tracker->modify('detailacquisitions', array('iddetail'=>$detailmodel->iddetail));
-                 }    
-             }
-             $detailmodel->attributes=$row;
-             $detailmodel->userlog=Yii::app()->user->id;
-             $detailmodel->datetimelog=$idmaker->getDateTime();
-             $respond=$detailmodel->save();
-             if (!$respond) {
-               break;
-             }
-          }
-          return $respond;
-     }
-      
-     protected function deleteDetails(array $details)
-     {
-         $respond=true;
-         foreach ($details as $row) {
-             $detailmodel=Detailacquisitions::model()->findByPk($row['iddetail']);
-             if($detailmodel) {
-                 $this->tracker->init();
-                 $this->trackActivity('d', $this->__DETAILFORMID);
-                 $this->tracker->delete('detailacquisitions', $detailmodel->iddetail);
-                 $respond=$detailmodel->delete();
-                 if (!$respond) {
-                   break;
-                 }
-             }
-         }
-         return $respond;
-     }
-
-
-     protected function loadDetails($id)
-     {
-      $sql="select * from detailacquisitions where id='$id'";
-      $details=Yii::app()->db->createCommand($sql)->queryAll();
-
-      return $details;
-     }
-
-
      protected function afterInsert(& $model)
      {
          $idmaker=new idmaker();
@@ -507,7 +326,6 @@ class DefaultController extends Controller
          	$idmaker->saveRegNum($this->formid, substr($model->regnum, 2));
          
         	Yii::import('application.modules.stockentries.models.*');
-         	$details = $this->loadDetails($model->id);
          	
          	$stockentries = new Stockentries();
          	$tempid = $model->id;
@@ -516,8 +334,8 @@ class DefaultController extends Controller
          	$stockentries->userlog = $model->userlog;
          	$stockentries->datetimelog = idmaker::getDateTime();
          	$stockentries->transid = $model->regnum;
-         	$stockentries->transname = 'AC27';
-         	$stockentries->transinfo = 'Akuisisi Barang dan Nomor Seri - ' + $model->regnum + ' - ' +
+         	$stockentries->transname = 'AC31';
+         	$stockentries->transinfo = 'Akuisisi Barang - ' + $model->regnum + ' - ' +
          		$model->idatetime;
          	$stockentries->idwarehouse = $model->idwarehouse;
          	$stockentries->donum = $model->regnum;
@@ -528,29 +346,27 @@ class DefaultController extends Controller
          		$stockentries->save();
          	else
          		throw new CHttpException(101,'Error in Stock Entry.');
-	         foreach($details as $detail) {
-	         	$detailstockentries = new Detailstockentries();
-	         	$detailstockentries->id = $stockentries->id;
-	         	$detailstockentries->iddetail = idmaker::getCurrentID2();
-	         	$detailstockentries->iditem = $model->iditem;
-	         	$detailstockentries->serialnum = $detail['serialnum'];
-	         	$detailstockentries->userlog = $model->userlog;
-	         	$detailstockentries->datetimelog = idmaker::getDateTime();
-	         	if ($detailstockentries->validate()) {
-	         		$detailstockentries->save();
-	         		$status = '1';
-	         		$exist = Action::checkItemToWarehouse($model->idwarehouse, $model->iditem,
-	         				$detail['serialnum'], '%') > 0;
-	         		if (!$exist)
-	         			Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'],
-	         					$model->iditem, $detail['serialnum']);
-	         		else {
-	         			Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
-	         			Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
-	         		}
-	         	} else
-	         		throw new CHttpException(101,'Error in Detail Stock Entry.');
-	         };
+         	$detailstockentries = new Detailstockentries();
+         	$detailstockentries->id = $stockentries->id;
+         	$detailstockentries->iddetail = idmaker::getCurrentID2();
+         	$detailstockentries->iditem = $model->iditem;
+         	$detailstockentries->serialnum = $detail['serialnum'];
+         	$detailstockentries->userlog = $model->userlog;
+         	$detailstockentries->datetimelog = idmaker::getDateTime();
+         	if ($detailstockentries->validate()) {
+         		$detailstockentries->save();
+         		$status = '1';
+         		$exist = Action::checkItemToWarehouse($model->idwarehouse, $model->iditem,
+         				$detail['serialnum'], '%') > 0;
+         		if (!$exist)
+         			Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'],
+         					$model->iditem, $detail['serialnum']);
+         		else {
+         			Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
+         			Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
+         		}
+         	} else
+         		throw new CHttpException(101,'Error in Detail Stock Entry.');
 	         
 	         /*if ($model->transname == 'AC16') {
 	         	$data = Yii::app()->db->createCommand()
@@ -562,42 +378,25 @@ class DefaultController extends Controller
          } else if ($this->state == 'update') {
          	$tempid = $model->id;
          	$tempid = substr($tempid, 0, 20).'C';
-         	Yii::import('application.modules.stockentries.models.*');
-         	$stockentries = Stockentries::model()->findByPk($tempid);
-         	if (! is_null($stockentries))
-         		$stockentries->delete();
-         	$detailstockentries = Detailstockentries::model()->findAllByAttributes(array('id'=>$tempid));
-         	if (count($detailstockentries) > 0)
-         		foreach($detailstockentries as $dse) {
-         			$dse->delete();
-         		};
+         	$stockentries = Stockentries::model()->findByAttributes(array('transid'=>$tempid));
+         	$detailstockentries = Detailstockentries::model()->findAllByAttributes(array('id'=>$stockentries->id));
          	
-         	$stockentries = new Stockentries();
-         	$stockentries->id = $tempid;
          	$stockentries->userlog = $model->userlog;
          	$stockentries->datetimelog = idmaker::getDateTime();
-         	$stockentries->transid = $model->regnum;
-         	$stockentries->transname = 'AC27';
-         	$stockentries->transinfo = 'Akuisisi Barang dan Nomor Seri - ' + $model->regnum + ' - ' +
+         	$stockentries->transinfo = 'Akuisisi Barang - ' + $model->regnum + ' - ' +
          		$model->idatetime;
          	$stockentries->idwarehouse = $model->idwarehouse;
-         	$stockentries->donum = $model->regnum;
          	$stockentries->idatetime = $model->idatetime;
-         	$stockentries->regnum = idmaker::getRegNum('AC3') + 1;
-         	idmaker::saveRegNum('AC3', $stockentries->regnum);
          	if ($stockentries->validate())
          		$stockentries->save();
          	else
          		throw new CHttpException(101,'Error in Stock Entry.');
          	$details = $this->loadDetails($model->id);
          	
-	         foreach($details as $detail) {
-	         	$detailstockentries = new Detailstockentries();
-	         	$detailstockentries->id = $stockentries->id;
-	         	$detailstockentries->iddetail = idmaker::getCurrentID2();
-	         	$detailstockentries->iditem = $model->iditem;
-	         	$detailstockentries->serialnum = $detail['serialnum'];
-	         	$detailstockentries->userlog = $model->userlog;
+         	
+         	$detailstockentries->iditem = $model->iditem;
+         	$detailstockentries->serialnum = $detail['serialnum'];
+         	$detailstockentries->userlog = $model->userlog;
 	         	$detailstockentries->datetimelog = idmaker::getDateTime();
 	         	if ($detailstockentries->validate()) {
 	         		$detailstockentries->save();
@@ -729,7 +528,7 @@ class DefaultController extends Controller
             if ($detail['serialnum'] !== 'Belum Diterima') {
                /*$count=Yii::app()->db->createCommand()
                   ->select('count(*)')
-                  ->from('detailacquisitions')
+                  ->from('detailacquisitionsnsn')
                   ->where("serialnum = :p_serialnum", array(':serialnum'=>$detail['serialnum']))
                   ->queryScalar();*/
 				$count=Yii::app()->db->createCommand()
@@ -793,7 +592,7 @@ class DefaultController extends Controller
       	
       }
       
-      public function actionAcquisitionsreport()
+      public function actionAcquisitionsnsnreport()
       {
       	if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
       			Yii::app()->user->id))  {
@@ -841,8 +640,8 @@ EOS;
       		}
       		$data=Yii::app()->db->createCommand()
       			->select($selectfields)
-      			->from('acquisitions a')
-      			->join('detailacquisitions b', 'b.id = a.id')
+      			->from('acquisitionsnsn a')
+      			->join('detailacquisitionsnsn b', 'b.id = a.id')
       			->join('warehouses c', 'c.id = a.idwarehouse')
 				->join('items d', 'd.id = b.iditem')
       			->where($selectwhere, $selectparam)
@@ -894,8 +693,8 @@ EOS;
 		$datadetails = Yii::app()->db->createCommand()
 			->select('c.iditem, c.serialnum')
 			->from("requestdisplays a")
-			->join("acquisitions b", "b.transid = a.regnum")
-			->join("detailacquisitions c", "c.id = b.id")	
+			->join("acquisitionsnsn b", "b.transid = a.regnum")
+			->join("detailacquisitionsnsn c", "c.id = b.id")	
 			->where("a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse",
 				array(':p_regnum'=>$itnum, ':p_idwarehouse'=>$idwhsource))
 			->queryAll();
@@ -959,7 +758,7 @@ EOS;
 			$detail['avail'] = '1';
 			$details[] = $detail;
 		}
-		Yii::app()->session['Detailacquisitions'] = $details;
+		Yii::app()->session['Detailacquisitionsnsn'] = $details;
 	}
 	
 }
