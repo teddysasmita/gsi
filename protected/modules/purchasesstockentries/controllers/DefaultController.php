@@ -710,6 +710,7 @@ EOS;
 				Yii::app()->user->id)) {
 			$this->trackActivity('p');
 			$iditem = '';
+			$founddata = array();
 			$selectfields = <<<EOS
 			b.iddetail, a.regnum, a.idatetime, b.buyprice, b.qty, concat(c.firstname, ' ', c.lastname) as suppliername
 EOS;
@@ -727,10 +728,7 @@ EOS;
 					$data['serialnums'] = implode(', ',$serial->queryColumn());
 				}
 			}
-			if (isset($founddata))
-				$this->render('finditem', array('founddata' => $founddata, 'iditem'=>$iditem));
-			else
-				$this->render('finditem');
+			$this->render('finditem', array('founddata' => $founddata, 'iditem'=>$iditem));
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		}	
