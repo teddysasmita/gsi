@@ -722,9 +722,11 @@ EOS;
 					->queryAll();
 				$serial = Yii::app()->db->createCommand()
 					->select('b.serialnum')->from('stockentries a')->join('detailstockentries b', 'b.id = a.id')
-					->where("a.transid = :p_transid and b.serialnum <> 'Belum Diterima'");
+					->where("a.transid = :p_transid and b.serialnum <> 'Belum Diterima' and b.iditem = :p_iditem");
 				foreach ($founddata as & $data) {
 					$serial->bindParam(':p_transid', $data['regnum']);
+					$serial->bindParam(':p_iditem', $iditem);
+			
 					$result = $serial->queryColumn();
 					if ($result !== FALSE)
 						$data['serialnums'] = implode(', ', $result);
