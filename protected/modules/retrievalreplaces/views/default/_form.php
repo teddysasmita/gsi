@@ -93,11 +93,11 @@ EOS;
 	</div>
 	 
     <div class="row">
-		<?php echo $form->labelEx($model,'invnum'); ?>
+		<?php echo $form->labelEx($model,'retrievalnum'); ?>
         <?php 
-           echo $form->textField($model, 'invnum', array('maxlength'=>12)); 
+           echo $form->textField($model, 'retrievalnum', array('maxlength'=>12)); 
         ?>
-        <?php echo $form->error($model,'invnum');?> 
+        <?php echo $form->error($model,'retrievalnum');?> 
 	</div>
 	
 	<div class="row">

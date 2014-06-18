@@ -49,7 +49,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'id',
 		'regnum',
 		'idatetime',
-        'transid',
+        'retrievalnum',
 		array(
 			'name'=>'iditem',
 			'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])",
