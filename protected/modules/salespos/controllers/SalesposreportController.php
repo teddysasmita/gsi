@@ -78,12 +78,32 @@ EOS;
 				->where($selectwhere, $selectparam)
 				->order('a.idatetime, a.regnum')
 				->queryAll();
+			$serialnumpb = Yii::app()->db->createCommand()
+				->select('c.serialnum')->from('orderretrievals a')
+				->join('stockexits b', 'b.transid = a.regnum')
+				->join('detailstockexits c', 'c.id = b.id')
+				->where("a.invnum = :p_invnum and c.serialnum <> 'Belum Diterima'");
+			$serialnumsj = Yii::app()->db->createCommand()
+				->select('c.serialnum')->from('deliveryorders a')
+				->join('stockexits b', 'b.transid = a.regnum')
+				->join('detailstockexits c', 'c.id = b.id')
+				->where("a.invnum = :p_invnum and c.serialnum <> 'Belum Diterima'");
+			foreach($data as & $myrow) {
+				$serialnumpb->bindParam(':p_invnum', $myrow['regnum']);
+				$datapb = $serialnumpb->queryColumn();
+				$serialnumsj->bindParam(':p_invnum', $myrow['regnum']);
+				$datasj = $serialnumsj->queryColumn();
+				if ($datapb !== FALSE)
+					$myrow['serialnums'] = implode(', ', $datapb);
+				if ($datasj !== FALSE)
+					$myrow['serialnums'] = implode(', ', $datasj);
+			}
 			$headersfield = array( 'idatetime', 'regnum', 'total', 'discount', 'cash', 'cashreturn', 
 				'payer_name', 'payer_address', 'payer_phone', 'userlog',
-				'name', 'address', 'phone','idsales', 'iditem', 'qty', 'price', 'discount');
+				'name', 'address', 'phone','idsales', 'iditem', 'qty', 'price', 'discount', 'serialnums');
 			$headersname = array('Tanggal', 'No Faktur', 'Total', 'Potongan', 'Terima Tunai', 'Kembalian',
 				'Nama Pembeli', 'Alamat Pembeli', 'Telp Pembeli', 'Nama Kasir', 'Nama Penerima', 'Alamat Penerima', 'Telp Penerima',
-				'Nama Sales', 'Nama Barang', 'Qty', 'Harga', 'Potongan');
+				'Nama Sales', 'Nama Barang', 'Qty', 'Harga', 'Potongan', 'Nomor Seri');
 			for( $i=0;$i<count($headersname); $i++ ) {
 				$xl->setActiveSheetIndex(0)
 					->setCellValueByColumnAndRow($i,1, $headersname[$i]);
