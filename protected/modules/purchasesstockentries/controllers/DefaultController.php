@@ -718,6 +718,13 @@ EOS;
 					->select($selectfields)->from('purchasesstockentries a')->join('detailpurchasesstockentries b', 'b.id = a.id')
 					->join('suppliers c', 'c.id = a.idsupplier')->where('b.iditem = :p_iditem', array(':p_iditem'=>$_POST['iditem']))
 					->queryAll();
+				$serial = Yii::app()->db->createCommand()
+					->select('b.serialnum')->from('stockentries a')->join('detailstockentries b', 'b.id = a.id')
+					->where('a.transid = :p_transid');
+				foreach ($founddata as & $data) {
+					$serial->bindParam(':p_transid', $data['regnum']);
+					$data['serialnums'] = implode(', ',$serial->queryColumn());
+				}
 			}
 			if (isset($founddata))
 				$this->render('finditem', array('founddata' => $founddata));

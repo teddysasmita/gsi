@@ -84,6 +84,11 @@ EOH;
 						'type'=>'number'
 					),
 					array(
+						'header'=>'Nomor Seri',
+						'name'=>'serialnums',
+						'type'=>'ntext'
+					),
+					array(
 						'header'=>'Pemasok',
 						'name'=>'suppliername',
 					),
