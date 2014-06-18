@@ -82,16 +82,18 @@ EOS;
 				->select('c.serialnum')->from('orderretrievals a')
 				->join('stockexits b', 'b.transid = a.regnum')
 				->join('detailstockexits c', 'c.id = b.id')
-				->where("a.invnum = :p_invnum and c.serialnum <> 'Belum Diterima'");
+				->where("a.invnum = :p_invnum and c.serialnum <> 'Belum Diterima' and c.iditem = :p_iditem");
 			$serialnumsj = Yii::app()->db->createCommand()
 				->select('c.serialnum')->from('deliveryorders a')
 				->join('stockexits b', 'b.transid = a.regnum')
 				->join('detailstockexits c', 'c.id = b.id')
-				->where("a.invnum = :p_invnum and c.serialnum <> 'Belum Diterima'");
+				->where("a.invnum = :p_invnum and c.serialnum <> 'Belum Diterima' and c.iditem = :p_iditem");
 			foreach($data as & $myrow) {
 				$serialnumpb->bindParam(':p_invnum', $myrow['regnum']);
+				$serialnumpb->bindParam(':p_iditem', $myrow['iditem']);
 				$datapb = $serialnumpb->queryColumn();
 				$serialnumsj->bindParam(':p_invnum', $myrow['regnum']);
+				$serialnumsj->bindParam(':p_iditem', $myrow['iditem']);
 				$datasj = $serialnumsj->queryColumn();
 				if ($datapb !== FALSE)
 					$myrow['serialnums'] = implode(', ', $datapb);
