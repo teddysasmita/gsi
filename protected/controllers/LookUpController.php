@@ -622,7 +622,7 @@ EOS;
 	
 	}
 	
-	public function actionGetExitedItemFromSerial($serialnum)
+	public function actionGetExitedItemFromSerial($serialnum, $retrievalnum)
 	{
 		//$invnum = rawurldecode($invnum);
 		//$serialnum = rawurldecode($serialnum);
@@ -633,8 +633,8 @@ EOS;
 				->from('stockexits a')
 				->join('detailstockexits b', 'b.id = a.id')
 				->join('items c', 'c.id = b.iditem')
-				->where('b.serialnum = :p_serialnum',
-						array(':p_serialnum'=>$serialnum))
+				->where('b.serialnum = :p_serialnum and a.transid = :p_transid',
+						array(':p_serialnum'=>$serialnum, ':p_transid'=>$retrievalnum))
 				->queryRow();
 			echo json_encode($data);
 		} else {
