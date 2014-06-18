@@ -102,14 +102,14 @@ class Tracker extends CComponent {
         $datas=Yii::app()->tracker->createCommand()->select()->from($tablename)
          ->where("$id=:p_idtrack",array(':p_idtrack'=>$idtrack))->queryAll();
         foreach($datas as $data) {
+        	Yii::app()->tracker->createCommand()->delete($tablename,"idtrack=:p_idtrack",
+        		array(':p_idtrack'=>$data['idtrack']));
             unset($data['idtrack']);
             unset($data['userlogtrack']);
             unset($data['datetimelogtrack']);
             unset($data['action']);
             Yii::app()->db->createCommand()->insert($tablename, $data);
         }
-        Yii::app()->tracker->createCommand()->delete($tablename,'idtrack=:idtrack',
-           array(':idtrack'=>$idtrack));
     }
 }
 
