@@ -53,8 +53,11 @@ EOH;
 		echo CHtml::endForm();
 	?>
 
+	
 </div> <!-- form -->
 	
+<h2><?php echo lookup::ItemNameFromItemID($iditem). " - $iditem" ?></h2>
+
 	<?php 
 	if (isset($founddata)) {
 		$count=count($founddata);

@@ -709,11 +709,12 @@ EOS;
 		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
 				Yii::app()->user->id)) {
 			$this->trackActivity('p');
-		
+			$iditem = '';
 			$selectfields = <<<EOS
 			b.iddetail, a.regnum, a.idatetime, b.buyprice, b.qty, concat(c.firstname, ' ', c.lastname) as suppliername
 EOS;
 			if (isset($_POST['iditem'])) {
+				$iditem = $_POST['iditem'];
 				$founddata = Yii::app()->db->createCommand()
 					->select($selectfields)->from('purchasesstockentries a')->join('detailpurchasesstockentries b', 'b.id = a.id')
 					->join('suppliers c', 'c.id = a.idsupplier')->where('b.iditem = :p_iditem', array(':p_iditem'=>$_POST['iditem']))
@@ -727,7 +728,7 @@ EOS;
 				}
 			}
 			if (isset($founddata))
-				$this->render('finditem', array('founddata' => $founddata));
+				$this->render('finditem', array('founddata' => $founddata, 'iditem'=>$iditem));
 			else
 				$this->render('finditem');
 		} else {
