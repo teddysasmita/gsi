@@ -725,7 +725,11 @@ EOS;
 					->where('a.transid = :p_transid');
 				foreach ($founddata as & $data) {
 					$serial->bindParam(':p_transid', $data['regnum']);
-					$data['serialnums'] = implode(', ',$serial->queryColumn());
+					$result = $serial->queryColumn();
+					if ($result !== FALSE)
+						$data['serialnums'] = implode(', ', $result);
+					else
+						$data['serialnums'] = '';
 				}
 			}
 			$this->render('finditem', array('founddata' => $founddata, 'iditem'=>$iditem));
