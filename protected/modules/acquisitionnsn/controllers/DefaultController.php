@@ -352,7 +352,7 @@ class DefaultController extends Controller
 			$detailstockentries->id = $stockentries->id;
 			$detailstockentries->iddetail = idmaker::getCurrentID2();
 			$detailstockentries->iditem = $model->iditem;
-			$detailstockentries->serialnum = 'Akuisisi Barang';
+			$detailstockentries->serialnum = 'N.S.T.D.';
 			$detailstockentries->userlog = $model->userlog;
 			$detailstockentries->datetimelog = idmaker::getDateTime();
 			if ($detailstockentries->validate()) {
