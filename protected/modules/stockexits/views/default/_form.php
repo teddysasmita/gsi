@@ -101,6 +101,15 @@ EOS;
 			}
          ?>
 	</div>
+		
+	<div class="row">
+		<?php echo $form->labelEx($model,'donum'); ?>
+        <?php
+			echo CHtml::label($model->donum, false); 
+           //echo $form->textField($model, 'donum', array('maxlength'=>50)); 
+        ?>
+        <?php echo $form->error($model,'donum');?> 
+	</div>
 	
 	<div class="row">
 		<?php echo $form->labelEx($model,'transid'); ?>
@@ -117,17 +126,6 @@ EOS;
 				array('id'=>'transinfo','width'=>'200px'));
 		?>
 		<?php echo $form->error($model,'transinfo'); ?>
-	</div>
-	  
-	
-		
-	<div class="row">
-		<?php echo $form->labelEx($model,'donum'); ?>
-        <?php
-			echo CHtml::label($model->donum, false); 
-           //echo $form->textField($model, 'donum', array('maxlength'=>50)); 
-        ?>
-        <?php echo $form->error($model,'donum');?> 
 	</div>
 	
 	<div class="row">

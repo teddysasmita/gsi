@@ -100,23 +100,6 @@ EOS;
          ?>
 	</div>
 	
-	<div class="row">
-		<?php echo $form->labelEx($model,'transid'); ?>
-		<?php 
-			echo $form->textField($model,'transid', array('maxlength'=>30));
-		?>
-		<?php echo $form->error($model,'transid'); ?>
-	</div>
-	
-    <div class="row">
-		<?php echo CHtml::label('Info', false); ?>
-		<?php 
-			echo CHtml::label($model->transinfo, false, 
-				array('id'=>'transinfo','width'=>'200px'));
-		?>
-		<?php echo $form->error($model,'transinfo'); ?>
-	</div>
-	  
 	
 		
 	<div class="row">
@@ -135,6 +118,24 @@ EOS;
         <?php echo $form->error($model,'remark');?> 
 	</div>
       
+    <div class="row">
+		<?php echo $form->labelEx($model,'transid'); ?>
+		<?php 
+			echo $form->textField($model,'transid', array('maxlength'=>30));
+		?>
+		<?php echo $form->error($model,'transid'); ?>
+	</div>
+	
+    <div class="row">
+		<?php echo CHtml::label('Info', false); ?>
+		<?php 
+			echo CHtml::label($model->transinfo, false, 
+				array('id'=>'transinfo','width'=>'200px'));
+		?>
+		<?php echo $form->error($model,'transinfo'); ?>
+	</div>
+	  
+	
 <?php 
     if (isset(Yii::app()->session['Detailstockentries'])) {
        $rawdata=Yii::app()->session['Detailstockentries'];
