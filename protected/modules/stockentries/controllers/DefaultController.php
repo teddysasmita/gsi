@@ -581,9 +581,14 @@ class DefaultController extends Controller
          }
      }
 
-     protected function    beforeDelete(& $model)
+     protected function beforeDelete(& $model)
      {
-
+     	$details = $this->loadDetails($model->id);
+     	foreach($details as $detail) {
+     		if ($detail['serialnum'] !==  'Belum Diterima') {
+     			Action::deleteItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
+     		}
+     	};
      }
 
      protected function afterDelete(& $model)

@@ -370,7 +370,7 @@ class DefaultController extends Controller
          $model->userlog=Yii::app()->user->id;
          $model->datetimelog=$idmaker->getDateTime();
          if ($this->state == 'create')
-         	$model->regnum='DA'.$idmaker->getRegNum($this->formid);
+         	$model->regnum='DT'.$idmaker->getRegNum($this->formid);
          else
          if ($this->state == 'update') {
          	Yii::import('application.modules.stockentries.models.*');
