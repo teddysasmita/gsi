@@ -64,7 +64,7 @@ class DefaultController extends Controller
 				// The user pressed the button;
 				$model->attributes = $_POST ['Retrievalreplaces'];
 				
-				$validdata = $this->checkRetrieval($model->invnum, $model->serialnum) &&
+				$validdata = $this->checkRetrieval($model->retrievalnum, $model->serialnum) &&
 					($_POST['validdata'] == 'true');
 				if (!$validdata) {
 					$error = 'Proses tidak dapat dilakukan krn ada kesalahan data';
@@ -499,28 +499,18 @@ class DefaultController extends Controller
 		};
 	}
 	
-	private function checkRetrieval($invnum, $serialnum)
+	private function checkRetrieval($retrievalnum, $serialnum)
 	{
-		$orderretrievals=Yii::app()->db->createCommand()
-			->select('b.regnum')
-			->from('salespos a')
-			->join('orderretrievals b', 'b.invnum = a.regnum')
-			->where('b.invnum = :p_invnum',	array(':p_invnum'=>$invnum))
-			->queryAll();
-		$command=Yii::app()->db->createCommand()
+		$data=Yii::app()->db->createCommand()
 			->select('b.serialnum, b.iditem')
 			->from('stockexits a')
 			->join('detailstockexits b', 'b.id = a.id')
-			->where('a.transid = :p_transid and b.serialnum = :p_serialnum');
-		$data = array();
-		foreach($orderretrievals as $or) {
-			$command->bindParam(':p_transid', $or['regnum'], PDO::PARAM_STR);
-			$command->bindParam(':p_serialnum', $serialnum, PDO::PARAM_STR);
-			$data = $command->queryAll();
-			if (count($data)>0) {
-				return true;
-			}
-		}
-		return false;
+			->where('a.transid = :p_transid and b.serialnum = :p_serialnum',
+				array(':p_transid'=>$retrievalnum, ':p_serialnum'=>$serialnum))
+			->queryAll();
+		if (count($data)>0) {
+			return true;
+		} else
+			return false;
 	}
 }

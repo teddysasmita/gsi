@@ -9,7 +9,7 @@
  * @property string $regnum
  * @property string $iditem
  * @property string $serialnum
- * @property string $invnum
+ * @property string $retrievenum
  * @property string $idwhsource
  * @property string $idwarehouse
  * @property string $userlog
@@ -33,14 +33,14 @@ class Retrievalreplaces extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, idatetime, regnum, iditem, serialnum, invnum, idwhsource, idwarehouse, userlog, datetimelog', 'required'),
+			array('id, idatetime, regnum, iditem, serialnum, retrievalnum, idwhsource, idwarehouse, userlog, datetimelog', 'required'),
 			array('id, iditem, idwhsource, idwarehouse, userlog', 'length', 'max'=>21),
 			array('idatetime, datetimelog', 'length', 'max'=>19),
-			array('regnum, invnum', 'length', 'max'=>12),
+			array('regnum, retrievalnum', 'length', 'max'=>12),
 			array('serialnum', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, idatetime, regnum, iditem, serialnum, invnum, idwhsource, idwarehouse, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('id, idatetime, regnum, iditem, serialnum, retrievalnum, idwhsource, idwarehouse, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,7 +66,7 @@ class Retrievalreplaces extends CActiveRecord
 			'regnum' => 'Nomor Urut',
 			'iditem' => 'Nama Barang',
 			'serialnum' => 'Nomor Seri',
-			'invnum' => 'Nomor Faktur',
+			'retrievalnum' => 'Nomor Pengambilan',
 			'idwhsource' => 'Gudang Ganti',
 			'idwarehouse' => 'Gudang Terima',
 			'userlog' => 'Userlog',
@@ -97,7 +97,7 @@ class Retrievalreplaces extends CActiveRecord
 		$criteria->compare('regnum',$this->regnum,true);
 		$criteria->compare('iditem',$this->iditem,true);
 		$criteria->compare('serialnum',$this->serialnum,true);
-		$criteria->compare('invnum',$this->invnum,true);
+		$criteria->compare('retrievalnum',$this->retrievalnum,true);
 		$criteria->compare('idwhsource',$this->idwhsource,true);
 		$criteria->compare('idwarehouse',$this->idwarehouse,true);
 		$criteria->compare('userlog',$this->userlog,true);
