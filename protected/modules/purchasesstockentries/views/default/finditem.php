@@ -69,6 +69,7 @@ EOH;
 					array(
 						'header'=>'Tanggal',
 						'name'=>'idatetime',
+						
 					),
 					array(
 						'header'=>'No LPB',
@@ -91,6 +92,7 @@ EOH;
 					array(
 						'header'=>'Pemasok',
 						'name'=>'suppliername',
+						'type'=>'ntext'
 					),
 			),
 		));
