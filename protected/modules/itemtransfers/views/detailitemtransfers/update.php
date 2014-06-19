@@ -27,4 +27,4 @@ $this->menu=array(
 
 <h1>Detil Pemindahan Barang </h1>
 
-<?php $this->renderPartial('_form', array('model'=>$model, 'mode'=>'Update')); ?>
+<?php $this->renderPartial('_form', array('model'=>$model, 'mode'=>'Update', 'error'=>$error)); ?>

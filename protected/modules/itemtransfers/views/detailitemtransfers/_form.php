@@ -116,6 +116,13 @@ EOS;
 		<?php echo $form->textField($model,'qty'); ?>
 		<?php echo $form->error($model,'qty'); ?>
 	</div>
+	
+	<div class="row">
+		<?php 
+			if(strlen($error))
+				echo CHtml::tag('span', array('class'=>'errorMessage'), $error)
+		?>
+	</div>
         
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($mode, array('id'=>'yt0')); ?>

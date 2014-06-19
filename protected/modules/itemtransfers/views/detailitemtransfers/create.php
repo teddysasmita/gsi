@@ -24,4 +24,4 @@ else if ($master=='update')
 
 <h1>Detil Pemindahan Barang </h1>
 
-<?php $this->renderPartial('_form', array('model'=>$model, 'mode'=>'Create')); ?>
+<?php $this->renderPartial('_form', array('model'=>$model, 'mode'=>'Create', 'error'=>$error)); ?>

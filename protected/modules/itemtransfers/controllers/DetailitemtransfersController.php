@@ -58,6 +58,7 @@ class DetailitemtransfersController extends Controller
                 $model=new Detailitemtransfers;
                 $this->afterInsert($id, $model);
                 
+                $error = '';
                 $master=Yii::app()->session['master'];
                                 
 		// Uncomment the following line if AJAX validation is needed
@@ -83,7 +84,7 @@ class DetailitemtransfersController extends Controller
                 }                
 
                 $this->render('create',array(
-                    'model'=>$model, 'master'=>$master,
+                    'model'=>$model, 'master'=>$master, 'error'=>$error
                 ));
                 
              } else {
@@ -105,6 +106,7 @@ class DetailitemtransfersController extends Controller
                 $this->trackActivity('u');
                 
                 $master=Yii::app()->session['master'];
+                $error = '';
                 
                 $model=$this->loadModel($iddetail);
                 if(isset(Yii::app()->session['Detailitemtransfers'])) {
@@ -141,7 +143,7 @@ class DetailitemtransfersController extends Controller
                 }
                
                 $this->render('update',array(
-                        'model'=>$model,'master'=>$master
+                        'model'=>$model,'master'=>$master, 'error'=>$error
                 ));
             }  else {
                 throw new CHttpException(404,'You have no authorization for this operation.');
