@@ -15,11 +15,8 @@ $this->menu=array(
 	//array('label'=>'View Itemtransfers', 'url'=>array('view', 'id'=>$model->id)),
 	//array('label'=>'Manage Itemtransfers', 'url'=>array('admin')),
     array('label'=>'Tambah Detil', 'url'=>array('detailitemtransfers/create', 
-       'id'=>$model->id, 'command'=>'update', 'regnum'=>$model->regnum),
+       'id'=>$model->id, 'idwhsource'=>$model->idwhsource, 'command'=>'update', 'regnum'=>$model->regnum),
           'linkOptions'=>array('id'=>'adddetail')), 
-   array('label'=>'Tambah Detil2', 'url'=>array('detailitemtransfers2/create', 
-      'id'=>$model->id, 'command'=>'update', 'regnum'=>$model->regnum),
-          'linkOptions'=>array('id'=>'adddetail2')) 
 );
 ?>
 

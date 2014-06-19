@@ -12,7 +12,7 @@ $this->menu=array(
 	//array('label'=>'Daftar', 'url'=>array('index')),
 	//array('label'=>'Pengaturan', 'url'=>array('admin')),
       array('label'=>'Tambah Detil', 'url'=>array('detailitemtransfers/create', 
-         'id'=>$model->id),
+         'id'=>$model->id, 'idwhsource'=>$model->idwhsource),
           'linkOptions'=>array('id'=>'adddetail')), 
 );
 

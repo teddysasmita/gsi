@@ -48,7 +48,7 @@ class DetailitemtransfersController extends Controller
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
-	public function actionCreate($id)
+	public function actionCreate($id, $idwhsource)
 	{
              if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
                     Yii::app()->user->id))  {   
@@ -66,16 +66,20 @@ class DetailitemtransfersController extends Controller
                 if(isset($_POST['yt0'])) {
                     $temp=Yii::app()->session['Detailitemtransfers'];
                     $model->attributes=$_POST['Detailitemtransfers'];
+                    if (Action::checkItemQty($model->iditem, $idwhsource) >= $model->qty) {
                     //posting into session
-                    $temp[]=$_POST['Detailitemtransfers'];
-                    
-                    if ($model->validate()) {
-                        Yii::app()->session['Detailitemtransfers']=$temp;
-                        if ($master=='create')
-                            $this->redirect(array('default/createdetail'));
-                        else if($master=='update')
-                            $this->redirect(array('default/updatedetail'));
-                    }    
+	                    $temp[]=$_POST['Detailitemtransfers'];
+	                    
+	                    if ($model->validate()) {
+	                        Yii::app()->session['Detailitemtransfers']=$temp;
+	                        if ($master=='create')
+	                            $this->redirect(array('default/createdetail'));
+	                        else if($master=='update')
+	                            $this->redirect(array('default/updatedetail'));
+	                    }    
+                    } else {
+                    	$error = 'Jumlah barang tidak cukup di gudang tersebut';
+                    }
                 }                
 
                 $this->render('create',array(
@@ -92,7 +96,7 @@ class DetailitemtransfersController extends Controller
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionUpdate($iddetail)
+	public function actionUpdate($iddetail, $idwhsource)
 	{
              if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                     Yii::app()->user-> id))  {
@@ -112,25 +116,28 @@ class DetailitemtransfersController extends Controller
                 // Uncomment the following line if AJAX validation is needed
                 $this->performAjaxValidation($model);
                 
-                if(isset($_POST['yt0']))
-               {
+                if(isset($_POST['yt0'])) {
                     $temp=Yii::app()->session['Detailitemtransfers'];
                     $model->attributes=$_POST['Detailitemtransfers'];
-                    foreach ($temp as $tk=>$tv) {
-                        if($tv['iddetail']==$_POST['Detailitemtransfers']['iddetail']) {
-                            $temp[$tk]=$_POST['Detailitemtransfers'];
-                            break;
-                        }
-                    }
-                    //posting into session
-		    if($model->validate()) {
-                    	Yii::app()->session['Detailitemtransfers']=$temp;
-			
-                    	if ($master=='create')
-                        	$this->redirect(array('default/createdetail'));
-                    	else if($master=='update')
-                        	$this->redirect(array('default/updatedetail'));
-		    }	
+                    if (Action::checkItemQty($model->iditem, $idwhsource) >= $model->qty) {
+	                    foreach ($temp as $tk=>$tv) {
+	                        if($tv['iddetail']==$_POST['Detailitemtransfers']['iddetail']) {
+	                            $temp[$tk]=$_POST['Detailitemtransfers'];
+	                            break;
+	                        }
+	                    }
+	                    //posting into session
+			    		if($model->validate()) {
+	                    	Yii::app()->session['Detailitemtransfers']=$temp;
+				
+	                    	if ($master=='create')
+	                        	$this->redirect(array('default/createdetail'));
+	                    	else if($master=='update')
+	                        	$this->redirect(array('default/updatedetail'));
+			    		}
+                    } else {
+                    	$error = 'Jumlah barang tidak cukup di gudang tersebut';
+                    }	
                 }
                
                 $this->render('update',array(
