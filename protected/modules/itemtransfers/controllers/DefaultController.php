@@ -112,7 +112,7 @@ class DefaultController extends Controller
                          $model->attributes=$_POST['Itemtransfers'];
                          Yii::app()->session['Itemtransfers']=$_POST['Itemtransfers'];
                          $this->redirect(array('detailitemtransfers/create',
-                            'id'=>$model->id, 'regnum'=>$model->regnum));
+                            'id'=>$model->id, 'idwhsource'=>$model->idwhsource, 'regnum'=>$model->regnum));
                       } else if ($_POST['command']=='updateDetail') {
                          $model->attributes=$_POST['Itemtransfers'];
                          Yii::app()->session['Itemtransfers']=$_POST['Itemtransfers'];
