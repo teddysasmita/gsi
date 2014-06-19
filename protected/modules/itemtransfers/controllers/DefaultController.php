@@ -100,11 +100,6 @@ class DefaultController extends Controller
                         $respond=$respond&&$this->saveNewDetails($details);
                       } 
                       
-                      if(isset(Yii::app()->session['Detailitemtransfers2']) ) {
-                        $details=Yii::app()->session['Detailitemtransfers2'];
-                        $respond=$respond&&$this->saveNewDetails2($details);
-                      }
-                      
                       if($respond) {
                          Yii::app()->session->remove('Itemtransfers');
                          Yii::app()->session->remove('Detailitemtransfers');
@@ -118,11 +113,6 @@ class DefaultController extends Controller
                          Yii::app()->session['Itemtransfers']=$_POST['Itemtransfers'];
                          $this->redirect(array('detailitemtransfers/create',
                             'id'=>$model->id, 'regnum'=>$model->regnum));
-                      } else if($_POST['command']=='adddetail2') {
-                         $model->attributes=$_POST['Itemtransfers'];
-                         Yii::app()->session['Itemtransfers']=$_POST['Itemtransfers'];
-                         $this->redirect(array('detailitemtransfers2/create',
-                            'id'=>$model->id, 'regnum'=>$model->regnum ));                          
                       } else if ($_POST['command']=='updateDetail') {
                          $model->attributes=$_POST['Itemtransfers'];
                          Yii::app()->session['Itemtransfers']=$_POST['Itemtransfers'];
@@ -196,14 +186,6 @@ class DefaultController extends Controller
                          }
                      };
                      
-                     if(isset(Yii::app()->session['DeleteDetailitemtransfers2'])) {
-                         $deletedetails=Yii::app()->session['DeleteDetailitemtransfers2'];
-                         $respond=$respond&&$this->deleteDetails2($deletedetails);
-                         if(!$respond) {
-                           throw new CHttpException(404,'There is an error in detail2 deletion');
-                         }
-                     };
-
                      if($respond) {
                          Yii::app()->session->remove('Itemtransfers');
                          Yii::app()->session->remove('Detailitemtransfers');
@@ -243,12 +225,6 @@ class DefaultController extends Controller
                $dm->delete();
             }
 
-            $detailmodels=Detailitemtransfers2::model()->findAll('id=:id',array(':id'=>$id));
-            foreach($detailmodels as $dm) {
-               $this->tracker->delete('detailitemtransfers', array('iddetail'=>$dm->iddetail));
-               $dm->delete();
-            }
-
             $model->delete();
             $this->afterDelete();
 
@@ -271,9 +247,7 @@ class DefaultController extends Controller
 
                Yii::app()->session->remove('Itemtransfers');
                Yii::app()->session->remove('Detailitemtransfers');
-               Yii::app()->session->remove('Detailitemtransfers2');
                Yii::app()->session->remove('DeleteDetailitemtransfers');
-               Yii::app()->session->remove('DeleteDetailitemtransfers2');
                $dataProvider=new CActiveDataProvider('Itemtransfers',
                   array(
                      'criteria'=>array(
