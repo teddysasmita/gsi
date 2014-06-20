@@ -549,7 +549,9 @@ class DefaultController extends Controller
      {
      	$details = $this->loadDetails($model->id);
      	foreach($details as $detail) {
-     		Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
+     		if ($detail['serialnum'] != 'Belum Diterima') {
+				Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
+         	}
      	};
      }
 
