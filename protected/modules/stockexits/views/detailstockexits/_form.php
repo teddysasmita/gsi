@@ -26,7 +26,8 @@ $supplierScript=<<<EOS
    		var myserialnum = $('#Detailstockexits_serialnum').val();
    		if (myserialnum !== 'Belum Diterima') {
    			$('#isAccepted').prop('checked', false);
-   			$.getJSON('index.php?r=LookUp/checkSerial', { serialnum: escape($('#Detailstockexits_serialnum').val()), 
+   			$.getJSON('index.php?r=LookUp/checkSerial', 
+   				{ serialnum: escape($('#Detailstockexits_serialnum').val()), 
    				idwh:$('#idwh').val() },
    				function(data) {
    				if ((data === false) || (data.status == '0')) {

@@ -27,7 +27,8 @@ $supplierScript=<<<EOS
    			
    		
 			if( $('#transname').val() == 'AC18') {
-				$.getJSON('index.php?r=LookUp/checkSerial', {'serialnum': myserialnum, 
+				$.getJSON('index.php?r=LookUp/checkSerial', 
+					{'serialnum': escape(myserialnum), 
    					'idwh' : $('#idwhsource').val()},
    					function(data) {
    						if (data !== false) {
@@ -48,7 +49,7 @@ $supplierScript=<<<EOS
 						}
 					});
 			} else {
-   				$.getJSON('index.php?r=LookUp/checkSerial', {'serialnum': myserialnum, 
+   				$.getJSON('index.php?r=LookUp/checkSerial', {'serialnum': escape(myserialnum), 
    						'idwh' : $('#idwh').val()},
    				function(data) {
    					if (data == false) {
