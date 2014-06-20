@@ -29,23 +29,23 @@ $supplierScript=<<<EOS
    			$.getJSON('index.php?r=LookUp/checkSerial', { serialnum: escape($('#Detailstockexits_serialnum').val()), 
    				idwh:$('#idwh').val() },
    				function(data) {
-   				if ((data === false) || (data.avail == '0')) {
-   					$('#avail').removeClass('money');
-   					$('#avail').addClass('error');
-   					$('#avail').html('Tidak ditemukan');
-   					$('#Detailstockexits_avail').val('0');
+   				if ((data === false) || (data.status == '0')) {
+   					$('#status').removeClass('money');
+   					$('#status').addClass('error');
+   					$('#status').html('Tidak ditemukan');
+   					$('#Detailstockexits_status').val('');
    				} else {
-   					$('#Detailstockexits_avail').val(data.avail);
-   					if (data.avail == '1') {
-   						$('#avail').removeClass('error');
-   						$('#avail').addClass('money');
-   						$('#avail').html('Tersedia');
-   						$('#Detailstockexits_avail').val('0');
-   					} else if (data.avail == '2') {
-   						$('#avail').removeClass('error');
-   						$('#avail').addClass('money');
-   						$('#avail').html('Rusak');
-   						$('#Detailstockexits_avail').val('2');
+   					$('#Detailstockexits_status').val(data.status);
+   					if (data.status == '1') {
+   						$('#status').removeClass('error');
+   						$('#status').addClass('money');
+   						$('#status').html('Bagus');
+   						$('#Detailstockexits_status').val('1');
+   					} else if (data.status == '0') {
+   						$('#status').removeClass('error');
+   						$('#status').addClass('money');
+   						$('#status').html('Rusak');
+   						$('#Detailstockexits_status').val('0');
    					}
    				}
    			});
@@ -90,7 +90,7 @@ EOS;
          echo $form->hiddenField($model,'userlog');
          echo $form->hiddenField($model,'datetimelog');
          echo $form->hiddenField($model,'iditem');
-         echo $form->hiddenField($model,'avail');
+         echo $form->hiddenField($model,'status');
          echo CHtml::hiddenField('idwh',$idwh);
         ?>
 
@@ -116,11 +116,11 @@ EOS;
 	</div>
         
     <div class="row">
-		<?php echo $form->labelEx($model,'avail'); ?>
+		<?php echo $form->labelEx($model,'status'); ?>
 		<?php 
-			echo CHtml::tag('span', array('id'=>'avail', 'class'=>'error'), false, true);
+			echo CHtml::tag('span', array('id'=>'status', 'class'=>'error'), false, true);
 		?>		
-		<?php echo $form->error($model,'avail'); ?>
+		<?php echo $form->error($model,'status'); ?>
 	</div>
 	
 	<div class="row buttons">

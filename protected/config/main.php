@@ -68,7 +68,8 @@ return array(
             'acquisition',
             'displayentries',
             'retrievalreplaces',
-            'acquisitionnsn'
+            'acquisitionnsn',
+            'itemmastermods'
         ),
 
         

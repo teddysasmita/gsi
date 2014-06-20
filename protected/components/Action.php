@@ -275,10 +275,11 @@ class Action extends CComponent {
       return Yii::app()->createUrl('/stockentries/detailstockentries/delete', array('iddetail'=>$data['iddetail']));
    }
    
-   public static function decodeUpdateDetailStockEntryUrl($data, $idwh)
+   public static function decodeUpdateDetailStockEntryUrl($data, $idwh, $transname, $transid)
    {
       return Yii::app()->createUrl('/stockentries/detailstockentries/update', 
-      		array('iddetail'=>$data['iddetail'], 'idwh'=>$idwh));
+      		array('iddetail'=>$data['iddetail'], 'idwh'=>$idwh, 'transname'=>$transname,
+      			'transid'=>$transid));
    }
    
    public static function decodeViewDetailStockEntryUrl($data)
@@ -345,7 +346,8 @@ class Action extends CComponent {
    public static function decodeUpdateDetailStockExitUrl($data, $idwh)
    {
    	//return Yii::app()->createUrl('/stockexits/detailstockexits/update', array('idwh'=>$idwh));
-   	return Yii::app()->createUrl('/stockexits/detailstockexits/update', array('iddetail'=>$data['iddetail'], 'idwh'=>$idwh));
+   	return Yii::app()->createUrl('/stockexits/detailstockexits/update', array('iddetail'=>$data['iddetail'], 
+   			'idwh'=>$idwh));
    }
     
    public static function decodeViewDetailStockExitUrl($data)
@@ -671,7 +673,7 @@ class Action extends CComponent {
         };
    }
    
-   public static function addItemToWarehouse($idwh, $iddetail, $iditem, $serialnum)
+   public static function addItemToWarehouse($idwh, $iddetail, $iditem, $serialnum, $status = '1')
    {
    		if (!Yii::app()->user->isGuest) {
 			Yii::app()->db->createCommand()
@@ -680,7 +682,7 @@ class Action extends CComponent {
 					'iditem'=>$iditem,
 					'serialnum'=>$serialnum,
 					'avail'=>'1',
-					'status'=>'1'
+					'status'=>$status
 				));
    		} else {
    			throw new CHttpException(405,'You have no authorization for this operation.');

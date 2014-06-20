@@ -24,18 +24,44 @@ $supplierScript=<<<EOS
    		var myserialnum = $('#Detailstockentries_serialnum').val();
    		if (myserialnum !== 'Belum Diterima') {
    			$('#isAccepted').prop('checked', false);
-   			$.getJSON('index.php?r=LookUp/checkSerial', {'serialnum': myserialnum, 'idwh' : $('#idwh').val()},
+   			
+   		
+			if( $('#transname').val() == 'AC18') {
+				$.getJSON('index.php?r=LookUp/checkSerial', {'serialnum': myserialnum, 
+   					'idwh' : $('#idwhsource').val()},
+   					function(data) {
+   						if (data !== false) {
+   							var message;
+   							$('#Detailstockentries_status').val(data.status);	
+   							if (data.status == '1')
+								message = 'Bagus'
+   							else if (data.status == '0')
+								message = 'Rusak';
+   							$('#statusinfo').addClass('money');
+   							$('#statusinfo').removeClass('errorMessage');
+   							$('#statusinfo').html(message);
+   						} else {
+   							$('#Detailstockentries_status').val('');
+   							$('#statusinfo').addClass('errorMessage');
+   							$('#statusinfo').removeClass('money');
+   							$('#statusinfo').html('Barang tidak ditemukan');
+						}
+					});
+			} else {
+   				$.getJSON('index.php?r=LookUp/checkSerial', {'serialnum': myserialnum, 
+   						'idwh' : $('#idwh').val()},
    				function(data) {
-   					if (data !== false) {
-   						$('#itemstatus').addClass('errorMessage');
-   						$('#itemstatus').removeClass('money');
-   						$('#itemstatus').html('Nomor seri telah terdaftar');
-   					} else {
-   						$('#itemstatus').addClass('money');
-   						$('#itemstatus').removeClass('errorMessage');
-   						$('#itemstatus').html('Item bisa diterima');
-   					}
-   				});
+   					if (data == false) {
+   						$('#statusinfo').addClass('money');
+   						$('#statusinfo').removeClass('errorMessage');
+   						$('#statusinfo').html('Item bisa diterima');
+   					} else if (data.avail == '1') {
+   						$('#statusinfo').addClass('errorMessage');
+   						$('#statusinfo').removeClass('money');
+   						$('#statusinfo').html('Nomor seri telah terdaftar');
+   					} 
+				});
+			}
 		}
 	});
 EOS;
@@ -47,15 +73,21 @@ EOS;
 
 	<?php echo $form->errorSummary($model); ?>
         
-        <?php 
-         echo $form->hiddenField($model,'iddetail');
-         echo $form->hiddenField($model,'id');
-         echo $form->hiddenField($model,'userlog');
-         echo $form->hiddenField($model,'datetimelog');
-         echo $form->hiddenField($model,'iditem');
-         echo $form->hiddenField($model,'avail');
-         echo CHtml::hiddenField('idwh', $idwh);
-        ?>
+	<?php 
+        echo $form->hiddenField($model,'iddetail');
+		echo $form->hiddenField($model,'id');
+        echo $form->hiddenField($model,'userlog');
+        echo $form->hiddenField($model,'datetimelog');
+        echo $form->hiddenField($model,'iditem');
+        echo CHtml::hiddenField('idwh', $idwh);
+        echo CHtml::hiddenField('transname', $transname);
+		if ($transname == 'AC18') {
+			$idwhsource = Yii::app()->db->createCommand()->select('idwhsource')->from('itemtransfers')
+				->where('regnum = :p_regnum', array(':p_regnum'=>$transid))->queryScalar();
+			if ($idwhsource !== FALSE)
+			echo CHtml::hiddenField('idwhsource', $idwhsource);
+		}
+	?>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'iditem'); ?>
@@ -81,8 +113,15 @@ EOS;
 	<div class="row">
 		<?php echo CHtml::label('Status', false); ?>
 		<?php 
-			echo CHtml::tag('span', array('id'=>'itemstatus'), ''); 
+			if ($transname	== 'AC12') {
+				echo $form->dropDownList($model, 'status', 
+					array('empty' => 'Harap Pilih','1'=>'Bagus', '0'=>'Rusak' )); 
+			} else {
+				echo $form->hiddenField($model, 'status');
+				echo CHtml::tag('span', array('id'=>'statusinfo'));
+			}
 		?>
+		<?php echo $form->error($model,'status'); ?>
 	</div>
         
 	<div class="row buttons">

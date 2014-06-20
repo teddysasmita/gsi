@@ -601,17 +601,17 @@ EOS;
 	
 	}
 	
-	public function actionCheckSerial($serialnum, $idwh, $avail = '1')
+	public function actionCheckSerial($serialnum, $idwh)
 	{
 		//$idwh=rawurldecode($idwh);
 		//$serialnum=rawurldecode($serialnum);
 		
 		if (!Yii::app()->user->isGuest) {
 			$data=Yii::app()->db->createCommand()
-				->select('iditem, avail')
+				->select('iditem, avail, status')
 				->from('wh'.$idwh.' a')
-				->where('a.serialnum = :p_serialnum and a.avail = :p_avail',
-						array(':p_serialnum'=>$serialnum, ':p_avail'=>$avail))
+				->where('a.serialnum = :p_serialnum',
+						array(':p_serialnum'=>$serialnum))
 						/*->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum',
 						 array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))*/
 				->queryRow();

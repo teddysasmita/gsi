@@ -50,24 +50,25 @@ class DetailstockentriesController extends Controller
 	 */
 	public function actionCreate($id)
 	{
-             if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
-                    Yii::app()->user->id))  {   
-                $this->state='c';
-                $this->trackActivity('c');    
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
+			Yii::app()->user->id))  {   
+			$this->state='c';
+			$this->trackActivity('c');    
                     
-                $model=new Detailstockentries;
-                $this->afterInsert($id, $model);
+			$model=new Detailstockentries;
+			$this->afterInsert($id, $model);
                 
-                $master=Yii::app()->session['master'];
+			$master=Yii::app()->session['master'];
                                 
-		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
+			// Uncomment the following line if AJAX validation is needed
+			$this->performAjaxValidation($model);
                 
-                if(isset($_POST['yt0'])) {
-                    $temp=Yii::app()->session['Detailstockentries'];
-                    $model->attributes=$_POST['Detailstockentries'];
+			if(isset($_POST['yt0'])) {
+				$temp=Yii::app()->session['Detailstockentries'];
+				$model->attributes=$_POST['Detailstockentries'];
                     //posting into session
-                    $temp[]=$_POST['Detailstockentries'];
+				//if ($model->serialnum !== 'Belum Diterima') {
+					$temp[]=$_POST['Detailstockentries'];
                     
                     if ($model->validate()) {
                         Yii::app()->session['Detailstockentries']=$temp;
@@ -76,15 +77,15 @@ class DetailstockentriesController extends Controller
                         else if($master=='update')
                             $this->redirect(array('default/updatedetail'));
                     }    
-                }                
+            }                
 
                 $this->render('create',array(
                     'model'=>$model, 'master'=>$master
                 ));
                 
-             } else {
-                throw new CHttpException(404,'You have no authorization for this operation.');
-             }
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		}
 	}
 
 	/**
@@ -92,7 +93,7 @@ class DetailstockentriesController extends Controller
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionUpdate($iddetail, $idwh)
+	public function actionUpdate($iddetail, $idwh, $transname, $transid)
 	{
              if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                     Yii::app()->user->id))  {
@@ -133,7 +134,8 @@ class DetailstockentriesController extends Controller
                 }
                
                 $this->render('update',array(
-                        'model'=>$model,'master'=>$master, 'idwh'=>$idwh
+					'model'=>$model,'master'=>$master, 'idwh'=>$idwh, 
+					'transname'=>$transname, 'transid'=>$transid
                 ));
             }  else {
                 throw new CHttpException(404,'You have no authorization for this operation.');

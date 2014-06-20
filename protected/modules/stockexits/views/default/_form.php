@@ -165,7 +165,7 @@ EOS;
 				array(
 					'header'=>'Tersedia',
 					'name'=>'avail',
-					'value'=>"lookup::StockAvailName(\$data['avail'])",
+					'value'=>"lookup::StockStatusName(\$data['status'])",
 				),
               array(
                   'class'=>'CButtonColumn',

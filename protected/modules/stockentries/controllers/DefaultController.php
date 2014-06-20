@@ -551,10 +551,10 @@ class DefaultController extends Controller
 	         		$detail['serialnum'], '%') > 0;
 	         	if (!$exist)	
 	         		Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'], 
-	         			$detail['iditem'], $detail['serialnum']);
+	         			$detail['iditem'], $detail['serialnum'], $detail['status']);
 	         	else {
 	         		Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
-	         		Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
+	         		Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $detail['status']);
 				}
 	         }
          };
@@ -737,7 +737,7 @@ EOS;
 					$detail['userlog']=Yii::app()->user->id;
 					$detail['datetimelog']=idmaker::getDateTime();
 					$detail['serialnum']='Belum Diterima';
-					$detail['avail'] = '1';
+					$detail['status'] = '';
 	      			$details[]=$detail;
 				}
 			}

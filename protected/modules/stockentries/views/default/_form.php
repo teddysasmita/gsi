@@ -163,8 +163,8 @@ EOS;
               ),
 				array(
 					'header'=>'Tersedia',
-					'name'=>'avail',
-					'value'=>"lookup::StockAvailName(\$data['avail'])",
+					'name'=>'status',
+					'value'=>"lookup::StockStatusName(\$data['status'])",
 				),
               array(
                   'class'=>'CButtonColumn',
@@ -177,7 +177,8 @@ EOS;
                      )
                   ),
 				'updateButtonOptions'=>array("class"=>'updateButton'),
-                  'updateButtonUrl'=>"Action::decodeUpdateDetailStockEntryUrl(\$data, '$model->idwarehouse')",
+				'updateButtonUrl'=>"Action::decodeUpdateDetailStockEntryUrl(\$data, '$model->idwarehouse', 
+					'$model->transname', '$model->transid')",
               )
           ),
     ));

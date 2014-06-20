@@ -27,4 +27,5 @@ $this->menu=array(
 
 <h1>Penerimaan Barang dari Pemasok</h1>
 
-<?php $this->renderPartial('_form', array('model'=>$model, 'mode'=>'Update', 'idwh'=>$idwh)); ?>
+<?php $this->renderPartial('_form', array('model'=>$model, 'mode'=>'Update', 'idwh'=>$idwh, 
+		'transname'=>$transname, 'transid'=>$transid)); ?>
