@@ -129,6 +129,14 @@ class DefaultController extends Controller
 						->where("a.serialnum = :p_serialnum", 
 							array(':p_serialnum'=>$serialnumparam))
 						->queryAll();
+					if (!$data) {
+						$data = Yii::app()->db->createCommand()
+						->select("a.iddetail, a.iditem, ('${wh['code']}') as code, a.avail, a.status, ('Tidak Terdaftar') as name")
+						->from("wh${wh['id']} a")
+						->where("a.serialnum = :p_serialnum",
+								array(':p_serialnum'=>$serialnumparam))
+								->queryAll();
+					}
 					$alldata = array_merge($alldata, $data);
 				}
 			}
