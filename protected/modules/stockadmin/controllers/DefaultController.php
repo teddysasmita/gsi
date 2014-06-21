@@ -126,7 +126,7 @@ class DefaultController extends Controller
 						->select("a.iddetail, a.iditem, ('${wh['code']}') as code, a.avail, a.status, b.name")
 						->from("wh${wh['id']} a")
 						->join('items b', 'b.id = a.iditem')
-						->where("a.serialnum =- :p_serialnum", 
+						->where("a.serialnum = :p_serialnum", 
 							array(':p_serialnum'=>$serialnumparam))
 						->queryAll();
 					$alldata = array_merge($alldata, $data);
