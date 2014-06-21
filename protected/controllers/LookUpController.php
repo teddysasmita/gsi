@@ -186,7 +186,6 @@ class LookUpController extends Controller {
    public function actionGetItem($name)
    {
 		if (!Yii::app()->user->isGuest) {
-			echo $name;
 	   		$data=Yii::app()->db->createCommand()->selectDistinct('name')->from('items')
 	              ->where('name like :itemname', array(':itemname'=>'%'.$name.'%'))
 	              ->order('name')
