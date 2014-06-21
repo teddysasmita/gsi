@@ -54,10 +54,6 @@ echo CHtml::textField('serialnum', $serialnum);
 							'name'=>'name',
 					),
 					array(
-							'header'=>'Nomor Seri',
-							'name'=>'serialnum',
-					),
-					array(
 							'header'=>'Gudang',
 							'name'=>'code',
 					),
