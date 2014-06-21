@@ -57,10 +57,11 @@ echo CHtml::textField('serialnum', $serialnum);
 							'header'=>'Gudang',
 							'name'=>'code',
 					),
-					/*array(
+					array(
 							'header'=>'Sedia',
 							'name'=>'avail',
-					),*/
+							'value'=>"lookup::StockAvailName(\$data['avail'])",
+					),
 					array(
 						'header'=>'Status',
 						'name'=>'status',

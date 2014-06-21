@@ -126,8 +126,8 @@ class DefaultController extends Controller
 						->select("a.iddetail, a.iditem, ('${wh['code']}') as code, a.avail, a.status, b.name")
 						->from("wh${wh['id']} a")
 						->join('items b', 'b.id = a.iditem')
-						->where("a.serialnum =- :p_serialnum and a.avail = :p_avail", 
-							array(':p_serialnum'=>$serialnumparam, ':p_avail'=>'1'))
+						->where("a.serialnum =- :p_serialnum", 
+							array(':p_serialnum'=>$serialnumparam))
 						->queryAll();
 				}
 			}
