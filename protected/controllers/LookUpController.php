@@ -267,7 +267,7 @@ class LookUpController extends Controller {
 			//print_r($name);	
       		$name=rawurldecode($name);
       		$data=Yii::app()->db->createCommand()->select('id')->from('items')
-              ->where("name = '$name'")
+              ->where("name = :p_name", array(':p_name'=>$name))
               ->order('id')
               ->queryScalar();
       		echo $data; 
