@@ -31,4 +31,7 @@ Yii::app()->clientScript->registerScript('myscript', $jq, CClientScript::POS_REA
 
 <h1>Pengiriman Barang untuk Perbaikan</h1>
 
-<?php $this->renderPartial('_form', array('model'=>$model, 'id'=>$model->id, 'command'=>'create')); ?>
+<?php 
+	$this->renderPartial('_form', array('model'=>$model, 'id'=>$model->id, 
+		'command'=>'create', 'allitems'=>$allitems )); 
+?>

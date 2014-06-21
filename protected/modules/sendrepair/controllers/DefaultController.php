@@ -63,44 +63,38 @@ class DefaultController extends Controller
 			
 			// Uncomment the following line if AJAX validation is needed
 			$this->performAjaxValidation ( $model );
-			
 			if (isset ( $_POST )) {
 				if (isset ( $_POST ['yt0'] )) {
 					// The user pressed the button;
+					$details = $this->processSelectedItems($_POST['yw0_c3']);
+					$allitems = $details;
 					$model->attributes = $_POST ['Sendrepairs'];
 					
 					$this->beforePost ( $model );
-					$respond = true;
-					if ($respond) {
-						$respond = $model->save ();
-						if (! $respond) {
-							print_r ( $model->errors );
-							throw new CHttpException ( 404, 'There is an error in master posting' );
-						}
-						
-						if (isset ( Yii::app ()->session ['Detailsendrepairs'] )) {
-							$details = Yii::app ()->session ['Detailsendrepairs'];
-							$respond = $respond && $this->saveNewDetails ( $details );
-						}
-						
-						if (isset ( Yii::app ()->session ['Detailsendrepairs2'] )) {
-							$details = Yii::app ()->session ['Detailsendrepairs2'];
-							$respond = $respond && $this->saveNewDetails2 ( $details );
-						}
-						
-						if ($respond) {
-							$this->afterPost ( $model );
-							Yii::app ()->session->remove ( 'Sendrepairs' );
-							Yii::app ()->session->remove ( 'Detailsendrepairs' );
-							Yii::app ()->session->remove ( 'Detailsendrepairs2' );
-							$this->redirect ( array (
-									'view',
-									'id' => $model->id 
-							) );
-						}
-					} else {
-						throw new CHttpException ( 404, 'Nomor Serial telah terdaftar.' );
+					$respond = $model->save ();
+					if (! $respond) 
+						throw new CHttpException ( 404, 'There is an error in master posting ');
+				
+					print_r($details);
+					if ($details) {
+						$respond = $respond && $this->saveNewDetails ( $details );
 					}
+					if (! $respond)
+						throw new CHttpException ( 404, 'There is an error in detail posting' );
+					
+					if (isset ( Yii::app ()->session ['Detailsendrepairs2'] )) {
+						$details = Yii::app ()->session ['Detailsendrepairs2'];
+						$respond = $respond && $this->saveNewDetails2 ( $details );
+					}
+					if (! $respond)
+						throw new CHttpException ( 404, 'There is an error in detail2 posting' );
+					
+					$this->afterPost ( $model );
+					Yii::app ()->session->remove ( 'Sendrepairs' );
+					Yii::app ()->session->remove ( 'Detailsendrepairs' );
+					Yii::app ()->session->remove ( 'Detailsendrepairs_temp' );
+					$this->redirect ( array(
+						'view','id' => $model->id) );
 				} else if (isset ( $_POST ['command'] )) {
 					// save the current master data before going to the detail page
 					if ($_POST ['command'] == 'adddetail') {
@@ -111,16 +105,21 @@ class DefaultController extends Controller
 								'id' => $model->id 
 						) );
 					} else if ($_POST ['command'] == 'setDO') {
-						
 						$model->attributes = $_POST ['Sendrepairs'];
 						Yii::app ()->session ['Sendrepairs'] = $_POST ['Sendrepairs'];
 						$this->loadDO ( $model->donum, $model->id );
 					}
 				}
-			}
+			} 
 			
+			if (isset(Yii::app()->session['Detailsendrepairs_temp']))
+				$allitems = Yii::app()->session['Detailsendrepairs_temp'];
+			else {
+				$allitems = $this->InsertDamagedItems($model->id);
+				Yii::app()->session['Detailsendrepairs_temp'] = $allitems;
+			}
 			$this->render ( 'create', array (
-					'model' => $model 
+					'model'=>$model, 'allitems'=>$allitems 
 			) );
 		} else {
 			throw new CHttpException ( 404, 'You have no authorization for this operation.' );
@@ -278,8 +277,7 @@ class DefaultController extends Controller
                Yii::app()->session->remove('Sendrepairs');
                Yii::app()->session->remove('Detailsendrepairs');
                Yii::app()->session->remove('DeleteDetailsendrepairs');
-               Yii::app()->session->remove('Detailsendrepairs2');
-               Yii::app()->session->remove('DeleteDetailsendrepairs2');
+               Yii::app()->session->remove('Detailsendrepairs_temp');
                $dataProvider=new CActiveDataProvider('Sendrepairs',
                   array(
                      'criteria'=>array(
@@ -790,9 +788,42 @@ EOS;
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		}
-		 
-		 
-		 
+	}
+	
+	private function InsertDamagedItems($id)
+	{
+		$allitems = array();
+		$warehouses = Yii::app()->db->createCommand()->select('id')->from('warehouses')->queryColumn();	
+		foreach($warehouses as $wh) {
+			$items = Yii::app()->db->createCommand()->select("iditem, serialnum, ('$wh') as idwarehouse")->from('wh'.$wh)
+				->where('avail = :p_avail and status = :p_status', 
+					array(':p_avail'=>'1', ':p_status'=>'0'))
+				->queryAll();
+			$allitems = array_merge($allitems, $items);	
+		}
+		foreach($allitems as & $item) {
+			$item['id'] = $id;
+			$item['iddetail'] = idmaker::getCurrentID2();
+			$item['selected'] = '0';
+			$item['exit'] = '0';
+			$item['userlog'] = Yii::app()->user->id;
+			$item['datetimelog'] = idmaker::getDateTime();
+		}
+		return $allitems;
 	}
       
+	private function processSelectedItems(array $selectIDs)
+	{
+		$found = array();
+		foreach($selectIDs as $id) {
+			foreach(Yii::app()->session['Detailsendrepairs_temp'] as $temp) {
+				if ($temp['iddetail'] == $id) {
+					$found[] = $temp;
+					break;	
+				}
+			} 
+		}	
+		return $found;
+	}
+	
 }

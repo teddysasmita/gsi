@@ -115,16 +115,8 @@ EOS;
 	</div>
       
 <?php 
-    if (isset(Yii::app()->session['Detailsendrepairs'])) {
-       $rawdata=Yii::app()->session['Detailsendrepairs'];
-       $count=count($rawdata);
-    } else {
-       $count=Yii::app()->db->createCommand("select count(*) from detailsendrepairs where id='$model->id'")->queryScalar();
-       $sql="select * from detailsendrepairs where id='$model->id'";
-       $rawdata=Yii::app()->db->createCommand($sql)->queryAll ();
-    }
-    $dataProvider=new CArrayDataProvider($rawdata, array(
-          'totalItemCount'=>$count,
+    $dataProvider=new CArrayDataProvider($allitems, array(
+          'totalItemCount'=>count($allitems),
     ));
     $this->widget('zii.widgets.grid.CGridView', array(
             'dataProvider'=>$dataProvider,
@@ -135,9 +127,8 @@ EOS;
                    'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
                ),
 				array(
-                   'header'=>'Qty',
-                   'name'=>'qty',
-                   'type'=>'number'               
+                   'header'=>'Nomor Seri',
+                   'name'=>'serialnum',
 				),
 				array(
 					'header'=>'Gudang',
@@ -145,21 +136,17 @@ EOS;
 					'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
 				),
               array(
-                  'class'=>'CButtonColumn',
-                  'buttons'=> array(
-                      /*'delete'=>array(
-                       'visible'=>'false'
-                      ),*/
-                     'view'=>array(
-                        'visible'=>'false'
-                     ),
-					/*'update'=>array(
-						'visible'=>'false'
-					)*/
-                  ),
-					'deleteButtonUrl'=>"Action::decodeDeleteDetailSendRepairUrl(\$data)",
-					'updateButtonUrl'=>"Action::decodeUpdateDetailSendRepairUrl(\$data)"
-              )
+                  	'class'=>'CCheckBoxColumn',
+					'header'=>'Kirim',
+					'selectableRows'=>2,
+					'headerTemplate'=>'<span> Pilih {item}</span>',
+					'value'=>"\$data['iddetail']",
+				),
+				array(
+					'header'=>'Keluar',
+					'name'=>'exit',
+					'value'=>"lookup::SendRepairExit(\$data)"
+				),
           ),
     ));
     

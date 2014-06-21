@@ -372,6 +372,21 @@ class lookup extends CComponent {
    					array('regnum'=>$data['transid']));
    		};
    }
+   
+	public static function SendRepairexit($data)
+	{
+		switch($data['exit']) {
+			case '1': {
+				echo "<span class='money'>OK</span>";
+				break;
+			}
+			case '0': {
+				echo "<span class='errorMessage'>Belum</span>";
+				break;
+			}
+		}
+	}
+   
 }
 
 

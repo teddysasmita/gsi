@@ -30,7 +30,7 @@ $supplierScript=<<<EOS
    				{ serialnum: escape($('#Detailstockexits_serialnum').val()), 
    				idwh:$('#idwh').val() },
    				function(data) {
-   				if ((data === false) || (data.status == '0')) {
+   				if ((data === false)) {
    					$('#status').removeClass('money');
    					$('#status').addClass('error');
    					$('#status').html('Tidak ditemukan');
