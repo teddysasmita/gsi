@@ -108,6 +108,34 @@ class DefaultController extends Controller
 		};
 	}
 	
+	public function actionTrace()
+	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+				Yii::app()->user->id))  {
+			$this->trackActivity('v');
+	
+			$alldata = array();
+			$serialnumparam = '';
+				
+			if (isset($_GET['go'])) {
+				$serialnumparam = $_GET['serialnum'];
+				$whs = Yii::app()->db->createCommand()
+					->select("id, code")->from('warehouses')->queryAll();
+				foreach($whs as $wh) {
+					$alldata = Yii::app()->db->createCommand()
+						->select("a.iddetail, a.iditem, ('${wh['code']}') as code, a.avail, a.status, b.name")
+						->from("wh${wh['id']} a")
+						->join('items b', 'b.id = a.iditem')
+						->where("a.serialnum =- :p_serialnum", array(':p_serialnum'=>$serialnumparam))
+						->queryAll();
+				}
+			}
+			$this->render('trace', array('alldata'=>$alldata, 'serialnum'=>$serialnumparam));
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+	
 	public function actionFlow()
 	{
 		if(Yii::app()->authManager->checkAccess($this->formid.'-List',

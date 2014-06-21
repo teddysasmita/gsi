@@ -21,3 +21,5 @@ $this->menu=array(
 		Yii::app()->createUrl('stockadmin/default/flow'))?></h3>
 <h3><?php echo CHtml::link('Daftar Stok Error', 
 		Yii::app()->createUrl('stockadmin/default/indexError'))?></h3>
+<h3><?php echo CHtml::link('Lacak Nomor Seri', 
+		Yii::app()->createUrl('stockadmin/default/trace'))?></h3>
