@@ -122,13 +122,14 @@ class DefaultController extends Controller
 				$whs = Yii::app()->db->createCommand()
 					->select("id, code")->from('warehouses')->queryAll();
 				foreach($whs as $wh) {
-					$alldata = Yii::app()->db->createCommand()
+					$data = Yii::app()->db->createCommand()
 						->select("a.iddetail, a.iditem, ('${wh['code']}') as code, a.avail, a.status, b.name")
 						->from("wh${wh['id']} a")
 						->join('items b', 'b.id = a.iditem')
 						->where("a.serialnum =- :p_serialnum", 
 							array(':p_serialnum'=>$serialnumparam))
 						->queryAll();
+					$alldata = array_merge($alldata, $data);
 				}
 			}
 			$this->render('trace', array('alldata'=>$alldata, 'serialnum'=>$serialnumparam));
