@@ -75,19 +75,12 @@ class DefaultController extends Controller
 					if (! $respond) 
 						throw new CHttpException ( 404, 'There is an error in master posting ');
 				
-					print_r($details);
 					if ($details) {
 						$respond = $respond && $this->saveNewDetails ( $details );
 					}
 					if (! $respond)
 						throw new CHttpException ( 404, 'There is an error in detail posting' );
 					
-					if (isset ( Yii::app ()->session ['Detailsendrepairs2'] )) {
-						$details = Yii::app ()->session ['Detailsendrepairs2'];
-						$respond = $respond && $this->saveNewDetails2 ( $details );
-					}
-					if (! $respond)
-						throw new CHttpException ( 404, 'There is an error in detail2 posting' );
 					
 					$this->afterPost ( $model );
 					Yii::app ()->session->remove ( 'Sendrepairs' );
