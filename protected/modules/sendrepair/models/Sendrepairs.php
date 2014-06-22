@@ -9,7 +9,6 @@
  * @property string $idatetime
  * @property string $drivername
  * @property string $vehicleinfo
- * @property string $brandname
  * @property string $idservicecenter
  * @property string $duedate
  * @property string $userlog
@@ -33,16 +32,15 @@ class Sendrepairs extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, regnum, idatetime, drivername, vehicleinfo, brandname, idservicecenter, duedate, userlog, datetimelog', 'required'),
+			array('id, regnum, idatetime, drivername, vehicleinfo, idservicecenter, duedate, userlog, datetimelog', 'required'),
 			array('id, idservicecenter, userlog', 'length', 'max'=>21),
 			array('regnum', 'length', 'max'=>12),
 			array('idatetime, duedate, datetimelog', 'length', 'max'=>19),
 			array('drivername', 'length', 'max'=>200),
 			array('vehicleinfo', 'length', 'max'=>50),
-			array('brandname', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, regnum, idatetime, drivername, vehicleinfo, brandname, idservicecenter, duedate, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('id, regnum, idatetime, drivername, vehicleinfo, idservicecenter, duedate, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,8 +66,7 @@ class Sendrepairs extends CActiveRecord
 			'idatetime' => 'Tanggal',
 			'drivername' => 'Nama Supir',
 			'vehicleinfo' => 'Info Kendaraan',
-			'brandname' => 'Merk',
-			'idservicecenter' => 'Idservicecenter',
+			'idservicecenter' => 'Nama Perusahaan',
 			'duedate' => 'Tanggal Selesai',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
@@ -99,7 +96,6 @@ class Sendrepairs extends CActiveRecord
 		$criteria->compare('idatetime',$this->idatetime,true);
 		$criteria->compare('drivername',$this->drivername,true);
 		$criteria->compare('vehicleinfo',$this->vehicleinfo,true);
-		$criteria->compare('brandname',$this->brandname,true);
 		$criteria->compare('idservicecenter',$this->idservicecenter,true);
 		$criteria->compare('duedate',$this->duedate,true);
 		$criteria->compare('userlog',$this->userlog,true);

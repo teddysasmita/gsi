@@ -8,14 +8,9 @@
 
 <?php
 	$supplierScript=<<<EOS
-	$('#Sendrepairs_brandname').change(function(evt) {
-		$.getJSON('index.php?r=LookUp/getServiceCenter', {brandname: $('#Sendrepairs_brandname').val()},
-		function(data) {
-			$('#Sendrepairs_idservicecenter').val(data);
-		});
-	});
+	
 EOS;
-	Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);
+	//Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);
 	
    if($command=='create') 
       $form=$this->beginWidget('CActiveForm', array(
@@ -40,7 +35,6 @@ EOS;
       <?php 
         echo CHtml::hiddenField('command', '', array('id'=>'command'));
         echo $form->hiddenField($model, 'id');
-        echo $form->hiddenField($model, 'idservicecenter');
         echo $form->hiddenField($model, 'userlog');
         echo $form->hiddenField($model, 'regnum');
         echo $form->hiddenField($model, 'datetimelog');
@@ -65,17 +59,17 @@ EOS;
             ?>
 		<?php echo $form->error($model,'idatetime'); ?>
 	</div>
-
+	
 	<div class="row">
-		<?php echo $form->labelEx($model,'brandname'); ?>
+		<?php echo $form->labelEx($model,'idservicecenter'); ?>
 		<?php 
-         $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
-             'name'=>'Sendrepairs[brandname]',
-             'sourceUrl'=>Yii::app()->createUrl("LookUp/getBrand"),
-           'value'=>$model->brandname,
-         ));
-      ?>
-		<?php echo $form->error($model,'brandname'); ?>
+			$data = Yii::app()->db->createCommand()
+				->select("id, concat (brandname, ' - ', companyname, ' - ', address) as name")
+				->from('servicecenters')->queryAll();
+			$data = CHtml::listData($data, 'id', 'name');
+        	echo $form->dropDownList($model, 'idservicecenter', $data, array('empty'=>'Harap Pilih'));
+      	?>
+		<?php echo $form->error($model,'idservicecenter'); ?>
 	</div>
 	
 	<div class="row">
@@ -150,58 +144,6 @@ EOS;
           ),
     ));
     
-?>
-
-<?php 
-	$rawdata = FALSE;
-    if (isset(Yii::app()->session['Detailsendrepairs2'])) {
-       $rawdata=Yii::app()->session['Detailsendrepairs2'];
-       $count=count($rawdata);
-    } else {
-       $count=Yii::app()->db->createCommand("select count(*) from detailsendrepairs2 where id='$model->id'")->queryScalar();
-       $sql="select * from detailsendrepairs2 where id='$model->id'";
-       $rawdata=Yii::app()->db->createCommand($sql)->queryAll ();
-    }
-if (($rawdata !== FALSE) && count($rawdata) > 0) {
-	$dataProvider = new CArrayDataProvider ( $rawdata, array (
-			'totalItemCount' => $count 
-	) );
-	$this->widget ( 'zii.widgets.grid.CGridView', array (
-			'dataProvider' => $dataProvider,
-			'columns' => array (
-					array (
-							'header' => 'Item Name',
-							'name' => 'iditem',
-							'value' => "lookup::ItemNameFromItemID(\$data['iditem'])" 
-					),
-					array (
-							'header' => 'Nomor Seri',
-							'name' => 'serialnum' 
-					),
-					array (
-							'header' => 'Catatan',
-							'name' => 'remark' 
-					),
-					array (
-							'class' => 'CButtonColumn',
-							'buttons' => array (
-									'delete' => array (
-											'visible' => 'false' 
-									),
-									'view' => array (
-											'visible' => 'false' 
-									) 
-							),
-							'updateButtonOptions' => array (
-									"class" => 'updateButton' 
-							),
-							'updateButtonUrl' => "Action::decodeUpdateDetailReturStock2Url(\$data)" 
-					) 
-			) 
-	) );
-} else {
-	echo "Data nomor serial tidak ditemukan.";
-	}
 ?>
 
    <div class="row buttons">

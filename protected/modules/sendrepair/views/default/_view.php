@@ -17,10 +17,6 @@
 	<?php echo CHtml::encode(lookup::CompanyNameFromServiceCenterID($data->idservicecenter)); ?>
 	<br />
     
-	<b><?php echo CHtml::encode($data->getAttributeLabel('brandname')); ?>:</b>
-	<?php echo CHtml::encode($data->brandname); ?>
-	<br />
-    
     <b><?php echo CHtml::encode($data->getAttributeLabel('userlog')); ?>:</b>
 	<?php echo CHtml::encode(lookup::UserNameFromUserID($data->userlog)); ?>
 	<br />

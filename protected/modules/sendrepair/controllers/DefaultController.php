@@ -49,7 +49,7 @@ class DefaultController extends Controller
 			$this->state = 'create';
 			$this->trackActivity ( 'c' );
 			
-			$model = new Sendrepairs ();
+			$model = new Sendrepairs;
 			$this->afterInsert ( $model );
 			
 			Yii::app ()->session ['master'] = 'create';
@@ -60,7 +60,6 @@ class DefaultController extends Controller
 				// use the session to fill the model
 				$model->attributes = Yii::app ()->session ['Sendrepairs'];
 			}
-			
 			// Uncomment the following line if AJAX validation is needed
 			$this->performAjaxValidation ( $model );
 			if (isset ( $_POST )) {
@@ -388,7 +387,7 @@ class DefaultController extends Controller
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='sendrepair-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='sendrepairs-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
