@@ -66,15 +66,17 @@ class DefaultController extends Controller
                 // use the session to fill the model
                     $model->attributes=Yii::app()->session['Stockentries'];
                 }
-                
+                if (isset($_POST['Stockentries'])) {
+                	$model->attributes=$_POST['Stockentries'];
+                }
                // Uncomment the following line if AJAX validation is needed
                $this->performAjaxValidation($model);
 				
 				if (isset($_POST)){
+					
 					if(isset($_POST['yt0'])) {
-                      //The user pressed the button;
 						$model->attributes=$_POST['Stockentries'];
-                       
+                      //The user pressed the button;
 						$this->beforePost($model);
 						$respond=$this->checkWarehouse($model->idwarehouse);
 						if (!$respond)
