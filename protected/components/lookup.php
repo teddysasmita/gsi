@@ -386,6 +386,14 @@ class lookup extends CComponent {
 			}
 		}
 	}
+	
+	public static function SendRepairCheck($data)
+	{
+		if ($data['selected'] == '1') 
+			return true;
+		else
+			return false;
+	}
    
 }
 

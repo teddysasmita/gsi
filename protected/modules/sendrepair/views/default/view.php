@@ -30,7 +30,12 @@ $this->menu=array(
 		'regnum',
 		'idatetime',
 		array(
-               'label'=>'Userlog',
+			'name'=>'idservicecenter',
+			'value'=>lookup::CompanyNameFromServiceCenterID($model->idservicecenter),			
+		),
+		'duedate',
+		array(
+               'name'=>'Userlog',
                'value'=>lookup::UserNameFromUserID($model->userlog),
             ),
 		'datetimelog',
@@ -85,50 +90,3 @@ $this->menu=array(
    ));	
  ?>
  
- <?php 
-   $count=Yii::app()->db->createCommand("select count(*) from detailsendrepairs2 where id='$model->id'")
-      ->queryScalar();
-   $sql="select * from detailsendrepairs2 where id='$model->id'";
-
-   $dataProvider=new CSqlDataProvider($sql,array(
-          'totalItemCount'=>$count,
-          ));
-   $this->widget('zii.widgets.grid.CGridView', array(
-         'dataProvider'=>$dataProvider,
-         'columns'=>array(
-		array(
-			'header'=>'Nama Barang',
-			'name'=>'iditem',
-			'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
-		),
-		array(
-			'header'=>'Nomor Serial',
-			'name'=>'serialnum',
-		),
-		array(
-			'header'=>'Catatan',
-			'name'=>'remark',
-			'type'=>'ntext'
-		),
-		/*array(
-			'header'=>'Catatan',
-			'name'=>'remark',
-		),*/
-			array(
-                  'class'=>'CButtonColumn',
-                  'buttons'=> array(
-                      'delete'=>array(
-                       'visible'=>'false'
-                      ),
-                     'update'=>array(
-                        'visible'=>'false'
-                     ),
-					/*'view'=>array(
-                        'visible'=>'false'
-                     ),*/
-                  ),
-                  'viewButtonUrl'=>"Action::decodeViewDetailReturStock2Url(\$data)",
-              )
-         ),
-   ));	
- ?>

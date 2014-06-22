@@ -8,9 +8,16 @@
 
 <?php
 	$supplierScript=<<<EOS
+	$('#Sendrepairs_idservicecenter').change(function() {
+		$.getJSON('index.php?r=LookUp/getSCAddress', 
+		{id:$('#Sendrepairs_idservicecenter').val()},
+		function(data) {
+			$('#address').html(data);
+		});
+	});
 	
 EOS;
-	//Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);
+	Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);
 	
    if($command=='create') 
       $form=$this->beginWidget('CActiveForm', array(
@@ -64,12 +71,19 @@ EOS;
 		<?php echo $form->labelEx($model,'idservicecenter'); ?>
 		<?php 
 			$data = Yii::app()->db->createCommand()
-				->select("id, concat (brandname, ' - ', companyname, ' - ', address) as name")
+				->select("id, concat (brandname, ' - ', companyname) as name")
 				->from('servicecenters')->queryAll();
 			$data = CHtml::listData($data, 'id', 'name');
         	echo $form->dropDownList($model, 'idservicecenter', $data, array('empty'=>'Harap Pilih'));
       	?>
 		<?php echo $form->error($model,'idservicecenter'); ?>
+	</div>
+	
+	<div class="row">
+		<?php echo CHtml::label('Alamat', false); ?>
+		<?php 
+			echo CHtml::tag('span', array('id'=>'address', 'class'=>'money'));
+      	?>
 	</div>
 	
 	<div class="row">
@@ -135,6 +149,7 @@ EOS;
 					'selectableRows'=>2,
 					'headerTemplate'=>'<span> Pilih {item}</span>',
 					'value'=>"\$data['iddetail']",
+					'checked'=>"lookup::SendRepairCheck(\$data)",
 				),
 				array(
 					'header'=>'Keluar',

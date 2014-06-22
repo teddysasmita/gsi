@@ -60,6 +60,9 @@ class DefaultController extends Controller
 				// use the session to fill the model
 				$model->attributes = Yii::app ()->session ['Sendrepairs'];
 			}
+			if (isset($_POST['Sendrepairs'])) {
+				$model->attributes = $_POST['Sendrepairs'];
+			}
 			// Uncomment the following line if AJAX validation is needed
 			$this->performAjaxValidation ( $model );
 			if (isset ( $_POST )) {
@@ -140,16 +143,14 @@ class DefaultController extends Controller
                 Yii::app()->session['Sendrepairs']=$model->attributes;
              else
                 $model->attributes=Yii::app()->session['Sendrepairs'];
+             
+             if(isset($_POST['Sendrepairs'])) {
+             	$model->attributes=$_POST['Sendrepairs'];
+             }
 
              if(!isset(Yii::app()->session['Detailsendrepairs'])) 
                Yii::app()->session['Detailsendrepairs']=$this->loadDetails($id);
              
-             if(!isset(Yii::app()->session['Detailsendrepairs2'])) {
-             	Yii::app()->session['Detailsendrepairs2']=$this->loadDetails2($id);
-             }
-             if (count(Yii::app()->session['Detailsendrepairs2']) == 0) {
-             	$this->loadSerialNums($model->regnum, $model->id);
-             }
              	
              // Uncomment the following line if AJAX validation is needed
              $this->performAjaxValidation($model);
@@ -159,58 +160,45 @@ class DefaultController extends Controller
                      $model->attributes=$_POST['Sendrepairs'];
                      $this->beforePost($model);
                      $this->tracker->modify('sendrepair', $id);
+                     
+                     $details = $this->processSelectedItems($_POST['yw0_c3']);
+                     $allitems = $details;
+                     
                      $respond=$model->save();
-                     if($respond) {
-                       $this->afterPost($model);
-                     } else {
+                     if(!$respond) 
                      	throw new CHttpException(404,'There is an error in master posting ');
+					
+                     $this->afterPost($model);
+                     
+                     if ($details) {
+                     	$respond = $respond && $this->saveDetails ( $details );
                      }
 
-                     if(isset(Yii::app()->session['Detailsendrepaisr'])) {
-                         $details=Yii::app()->session['Detailsendrepairs'];
-                         $respond=$respond&&$this->saveDetails($details);
-                         if(!$respond) {
-                           throw new CHttpException(404,'There is an error in detail posting');
-                         }
-                     };
+                     if(!$respond)
+						throw new CHttpException(404,'There is an error in detail posting');
                      
-                     if(isset(Yii::app()->session['Detailsendrepairs2'])) {
-                     	$details=Yii::app()->session['Detailsendrepairs2'];
-                     	$respond=$respond&&$this->saveDetails2($details);
-                     	if(!$respond) {
-                     		throw new CHttpException(404,'There is an error in detail posting');
-                     	}
-                     };
-                     
-                     if(isset(Yii::app()->session['Deletedetailsendrepairs'])) {
-                         $deletedetails=Yii::app()->session['Deletedetailsendrepairs'];
-                         $respond=$respond&&$this->deleteDetails($deletedetails);
-                         if(!$respond) {
-                           throw new CHttpException(404,'There is an error in detail deletion');
-                         }
-                     };
-                     
-                     if(isset(Yii::app()->session['Deletedetailsendrepairs2'])) {
-                     	$deletedetails=Yii::app()->session['Deletedetailsendrepairs2'];
-                     	$respond=$respond&&$this->deleteDetails2($deletedetails);
-                     	if(!$respond) {
-                     		throw new CHttpException(404,'There is an error in detail deletion');
-                     	}
-                     };
-                    
-                     if($respond) {
-                         Yii::app()->session->remove('Sendrepairs');
-                         Yii::app()->session->remove('Detailsendrepairs');
-                         Yii::app()->session->remove('Deletedetailsendrepairs');
-                         Yii::app()->session->remove('Detailsendrepairs2');
-                         Yii::app()->session->remove('Deletedetailsendrepairs2');
-                         $this->redirect(array('view','id'=>$model->id));
-                     }
+					Yii::app()->session->remove('Sendrepairs');
+					Yii::app()->session->remove('Detailsendrepairs');
+					Yii::app()->session->remove('Detailsendrepairs_temp');
+					$this->redirect(array('view','id'=>$model->id));
                  }
              }
              
+             if (isset(Yii::app()->session['Detailsendrepairs_temp']))
+             	$allitems = Yii::app()->session['Detailsendrepairs_temp'];
+             else {
+             	$allitems = $this->loadDetails($model->id);
+             	foreach($allitems as & $item) {
+             		$item['selected'] = '1';
+             	}
+             	$allitems2 = $this->InsertDamagedItems($model->id);
+             	$allitems = array_merge($allitems, $allitems2);
+             	
+             	Yii::app()->session['Detailsendrepairs_temp'] = $allitems;
+             }
+             
              $this->render('update',array(
-                     'model'=>$model,
+                     'model'=>$model, 'allitems'=>$allitems
              ));
          }  else {
              throw new CHttpException(404,'You have no authorization for this operation.');
@@ -467,20 +455,7 @@ class DefaultController extends Controller
          return $respond;
      }
      
-     protected function saveNewDetails2(array $details)
-     {
-     	foreach ($details as $row) {
-     		$detailmodel=new Detailsendrepairs2;
-     		$detailmodel->attributes=$row;
-     		$respond=$detailmodel->insert();
-     		if (!$respond) {
-     			break;
-     		}
-     	}
-     	return $respond;
-	}
-     
-
+    
      protected function saveDetails(array $details)
      {
          $idmaker=new idmaker();
@@ -507,32 +482,6 @@ class DefaultController extends Controller
           return $respond;
      }
      
-     protected function saveDetails2(array $details)
-     {
-     	$idmaker=new idmaker();
-     
-     	$respond=true;
-     	foreach ($details as $row) {
-     		$detailmodel=Detailsendrepairs2::model()->findByPk($row['iddetail']);
-     		if($detailmodel==NULL) {
-     			$detailmodel=new Detailsendrepairs2;
-     		} else {
-     			if(count(array_diff($detailmodel->attributes,$row))) {
-     				$this->tracker->init();
-     				$this->tracker->modify('detailsendrepairs2', array('iddetail'=>$detailmodel->iddetail));
-     			}
-     		}
-     		$detailmodel->attributes=$row;
-     		$detailmodel->userlog=Yii::app()->user->id;
-     		$detailmodel->datetimelog=$idmaker->getDateTime();
-     		$respond=$detailmodel->save();
-     		if (!$respond) {
-     			break;
-     		}
-     	}
-     	return $respond;
-     }
-      
      protected function deleteDetails(array $details)
      {
          $respond=true;
@@ -551,25 +500,6 @@ class DefaultController extends Controller
          return $respond;
      }
 
-
-     protected function deleteDetails2(array $details)
-     {
-     	$respond=true;
-     	foreach ($details as $row) {
-     		$detailmodel=Detailsendrepairs2::model()->findByPk($row['iddetail']);
-     		if($detailmodel) {
-     			$this->tracker->init();
-     			$this->trackActivity('d');
-     			$this->tracker->delete('detailsendrepairs2', $detailmodel->id);
-     			$respond=$detailmodel->delete();
-     			if (!$respond) {
-     				break;
-     			}
-     		}
-     	}
-     	return $respond;
-     }
-     
      protected function loadDetails($id)
      {
 		$sql="select * from detailsendrepairs where id='$id'";
@@ -578,14 +508,6 @@ class DefaultController extends Controller
 		return $details;
      }
      
-     protected function loadDetails2($id)
-     {
-     	$sql="select * from detailsendrepairs2 where id='$id'";
-     	$details=Yii::app()->db->createCommand($sql)->queryAll();
-     
-     	return $details;
-     }
-
 
      protected function afterInsert(& $model)
      {
@@ -655,87 +577,6 @@ class DefaultController extends Controller
          $this->tracker->logActivity($this->formid, $action);
      }
      
-      private function loadDO($donum, $id)
-      {
-        $details=array();
-
-        $sql=<<<EOS
-        select a.qty from detailpurchasesorders a
-        join purchasesorders b on b.id = a.id
-        where b.regnum = :p_regnum and a.iditem = :p_iditem
-EOS;
-        $mycommand=Yii::app()->db->createCommand($sql);
-        
-        $dataPO=Yii::app()->db->createCommand()
-           ->select('count(*) as totalqty, b.iditem, a.idwarehouse, a.transid')
-           ->from('detailstockentries b')
-           ->join('stockentries a', 'a.id=b.id')
-           ->where('a.donum = :donum and b.serialnum <> :serialnum', 
-           		array(':donum'=>$donum, 'serialnum'=>'Belum Diterima') )
-           ->group('b.iditem, a.idwarehouse')
-           ->queryAll();
-        Yii::app()->session->remove('Detailsendrepairs');
-         foreach($dataPO as $row) {
-			$detail['iddetail']=idmaker::getCurrentID2();
-			$detail['id']=$id;
-			$detail['iditem']=$row['iditem'];
-			$detail['qty']=$row['totalqty'];
-			$detail['idwarehouse']=$row['idwarehouse'];
-			$detail['idpurchaseorder']=$row['transid'];
-			$mycommand->bindParam(':p_regnum', $row['transid'], PDO::PARAM_STR);
-			$mycommand->bindParam(':p_iditem', $row['iditem'], PDO::PARAM_STR);
-			$orderqty=$mycommand->queryScalar();	
-			$detail['leftqty']=$orderqty-$row['totalqty'];
-			$detail['userlog']=Yii::app()->user->id;
-			$detail['datetimelog']=idmaker::getDateTime();
-			
-			$details[]=$detail; 
-        }
-        Yii::app()->session['Detailsendrepairs']=$details;
-      }
-
-      private function loadSerialNums($regnum, $id) 
-      {
-		$stockexits = Yii::app()->db->createCommand()
-			->select('b.serialnum, b.iditem, b.iddetail')
-			->from('stockexits a')
-			->join('detailstockexits b', 'b.id = a.id')
-			->where('a.transid = :p_transid', array(":p_transid"=>$regnum))
-			->queryAll();
-		$details = array();
-		foreach ($stockexits as $retur) {
-			$detail['id'] = $id;
-			$detail['iddetail'] = $retur['iddetail'];
-			$detail['iditem'] = $retur['iditem'];
-			$detail['serialnum'] = $retur['serialnum'];
-			$detail['userlog'] = Yii::app()->user->id;
-         	$detail['datetimelog']=idmaker::getDateTime();
-			
-         	$details[] = $detail;
-		}	
-      	Yii::app()->session['Detailsendrepairs2'] = $details;
-      }
-      
-      private function setStatusPO($idpo, array $details)
-      {
-         $complete=true;
-         $partial=false;
-         foreach($details as $detail) {
-            if($detail['serialnum'] !== 'Belum Diterima')
-               $partial=true;
-            if($detail['serialnum']=='Belum Diterima') 
-               $complete=false;
-         }
-         if(!$complete && !$partial)
-            $status='0';
-         if(!$complete && $partial)
-            $status='1';
-         if($complete && $partial)
-            $status='2';
-         Action::setStatusPO ($idpo, $status);
-      }
-      
-      
       public function actionSummary($id)
       {
       	$this->trackActivity('v');
