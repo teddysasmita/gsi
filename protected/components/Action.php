@@ -343,11 +343,11 @@ class Action extends CComponent {
    	return Yii::app()->createUrl('/stockexits/detailstockexits/delete', array('iddetail'=>$data['iddetail']));
    }
     
-   public static function decodeUpdateDetailStockExitUrl($data, $idwh)
+   public static function decodeUpdateDetailStockExitUrl($data, $idwh, $transname, $transid)
    {
    	//return Yii::app()->createUrl('/stockexits/detailstockexits/update', array('idwh'=>$idwh));
    	return Yii::app()->createUrl('/stockexits/detailstockexits/update', array('iddetail'=>$data['iddetail'], 
-   			'idwh'=>$idwh));
+   			'idwh'=>$idwh, 'transname'=>$transname, 'transid'=>$transid));
    }
     
    public static function decodeViewDetailStockExitUrl($data)
@@ -761,6 +761,19 @@ class Action extends CComponent {
 	   		->queryScalar();
 	   
 	   	return $qty;
+   }
+   
+   public static function sendRepairOut($regnum, $serialnum) 
+   {
+   		$id = Yii::app()->db->createCommand()->select('id')->from('sendrepairs')
+   			->where('regnum = :p_regnum', array(':p_regnum'=>$regnum))
+   			->queryScalar();
+   		
+   		if ($id !== FALSE) {
+   			Yii::app()->db->createCommand()->update('detailsendrepairs', 
+   				array('exit'=>'1'), 'id = :p_id and serialnum = :p_serialnum', 
+   					array(':p_id'=>$id, ':p_serialnum'=>$serialnum) );
+   		}
    }
 }
 

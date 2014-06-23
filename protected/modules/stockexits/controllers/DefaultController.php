@@ -526,6 +526,8 @@ class DefaultController extends Controller
         $details = $this->loadDetails($model->id);
 		foreach($details as $detail) {
 	         Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '0');
+	         if ($model->transname = 'AC25')
+	         	Action::sendRepairOut($model->transid, $detail['serialnum']);
 		};
      }
 
@@ -692,8 +694,8 @@ EOS;
       		->select('a.id, b.iditem, (1) as qty')
       		->from('sendrepairs a')
       		->join('detailsendrepairs b', 'b.id=a.id')
-      		->where('a.regnum = :p_regnum',
-      				array(':p_regnum'=>$nolpb) )
+      		->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
+      				array(':p_regnum'=>$nolpb, ':p_idwarehouse'=>$idwh) )
       		->queryAll();
       	}	
       	

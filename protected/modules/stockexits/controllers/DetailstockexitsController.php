@@ -92,14 +92,14 @@ class DetailstockexitsController extends Controller
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionUpdate($iddetail, $idwh)
+	public function actionUpdate($iddetail, $idwh, $transname, $transid)
 	{
              if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                     Yii::app()->user->id))  {
                 
                 $this->state='u';
                 $this->trackActivity('u');
-                
+                $error = '';
                 $master=Yii::app()->session['master'];
                 
                 $model=$this->loadModel($iddetail);
@@ -121,19 +121,28 @@ class DetailstockexitsController extends Controller
                          break;
                      }
                   }
+                  if ($transname = 'AC25') {
+                  	$respond = $this->checkSendRepair($transid, $model->iditem, $model->serialnum);
+                  	if (!$respond) {
+						$error = 'Nomor seri keliru';
+                  	}
+                  } else 
+                  	$respond = TRUE;
                     //posting into session
-                  if($model->validate()) {
-                     Yii::app()->session['Detailstockexits']=$temp;
+                  if ($respond) {
+                  	if($model->validate()) {
+						Yii::app()->session['Detailstockexits']=$temp;
 
-                     if ($master=='create')
+                     	if ($master=='create')
                            $this->redirect(array('default/createdetail'));
-                     else if($master=='update')
+                     	else if($master=='update')
                            $this->redirect(array('default/updatedetail'));
+                  	}
                   }	
                 }
                
                 $this->render('update',array(
-                        'model'=>$model,'master'=>$master, 'idwh'=>$idwh
+                        'model'=>$model,'master'=>$master, 'idwh'=>$idwh, 'error'=>$error
                 ));
             }  else {
                 throw new CHttpException(404,'You have no authorization for this operation.');
@@ -314,5 +323,23 @@ class DetailstockexitsController extends Controller
             $this->tracker=new Tracker();
             $this->tracker->init();
             $this->tracker->logActivity($this->formid, $action);
+        }
+        
+        private function checkSendRepair($regnum, $iditem, $serialnum) 
+        {
+        	$id = Yii::app()->db->createCommand()->select('id')->from('sendrepairs')
+        		->where('regnum = :p_regnum', array(':p_regnum'=>$regnum))
+        		->queryScalar();
+        	 
+        	$item = Yii::app()->db->createCommand()->select()
+				->from('detailsendrepairs')
+				->where('id = :p_id and iditem = :p_iditem and serialnum = :p_serialnum',
+        				array(':p_id'=>$id, ':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))
+        		->queryAll();
+        	
+        	if (!$item)
+        		return FALSE;
+        	else 
+        		return TRUE;
         }
 }

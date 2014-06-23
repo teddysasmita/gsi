@@ -119,7 +119,7 @@ EOS;
     <div class="row">
 		<?php echo $form->labelEx($model,'status'); ?>
 		<?php 
-			echo CHtml::tag('span', array('id'=>'status', 'class'=>'error'), false, true);
+			echo CHtml::tag('span', array('id'=>'status', 'class'=>'error'), $error);
 		?>		
 		<?php echo $form->error($model,'status'); ?>
 	</div>

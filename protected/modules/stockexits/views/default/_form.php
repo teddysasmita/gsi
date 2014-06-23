@@ -178,7 +178,8 @@ EOS;
                      )
                   ),
 				'updateButtonOptions'=>array("class"=>'updateButton'),
-                  'updateButtonUrl'=>"Action::decodeUpdateDetailStockExitUrl(\$data, \"$model->idwarehouse\")",
+                  'updateButtonUrl'=>"Action::decodeUpdateDetailStockExitUrl(\$data, \"$model->idwarehouse\",
+					\"$model->transname\", \"$model->transid\")",
               )
           ),
     ));
