@@ -500,10 +500,23 @@ EOS;
 			
 			if ($data == FALSE) {
 				$sql=<<<EOS
-				select a.id, a.regnum, a.invnum,
-				concat( 'Penukaran Pengambilan Barang - ',a.invnum,' - ', a.idatetime) as transinfo,
+				select a.id, a.regnum, a.retrievalnum,
+				concat( 'Penukaran Pengambilan Barang - ',a.retrievalnum,' - ', a.idatetime) as transinfo,
 				'AC29' as transname
 				from retrievalreplaces a
+				where a.regnum=:p_regnum
+EOS;
+				$command=Yii::app()->db->createCommand($sql);
+				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
+				$data=$command->queryAll();
+			}
+			
+			if ($data == FALSE) {
+				$sql=<<<EOS
+				select a.id, a.regnum, '-' as invnum,
+				concat( 'Pengiriman Barang utk Perbaikan - ',a.regnum,' - ', a.idatetime) as transinfo,
+				'AC25' as transname
+				from sendrepairs a
 				where a.regnum=:p_regnum
 EOS;
 				$command=Yii::app()->db->createCommand($sql);

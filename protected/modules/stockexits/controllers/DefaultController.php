@@ -689,12 +689,11 @@ EOS;
       	}
       	if ($dataLPB == FALSE ) {
       		$dataLPB=Yii::app()->db->createCommand()
-      		->select('a.id, b.*')
+      		->select('a.id, b.iditem, (1) as qty')
       		->from('sendrepairs a')
       		->join('detailsendrepairs b', 'b.id=a.id')
-      		->join('wh'.$idwh.' c', 'c.iditem = b.iditem')
-      		->where('a.regnum = :p_regnum and c.avail = :p_avail',
-      				array(':p_regnum'=>$nolpb, ':p_avail'=>'2') )
+      		->where('a.regnum = :p_regnum',
+      				array(':p_regnum'=>$nolpb) )
       		->queryAll();
       	}	
       	

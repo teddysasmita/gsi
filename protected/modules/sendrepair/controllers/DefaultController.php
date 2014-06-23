@@ -221,7 +221,7 @@ class DefaultController extends Controller
             $model=$this->loadModel($id);
             $this->trackActivity('d');
             $this->beforeDelete($model);
-            $this->tracker->delete('sendrepair', $id);
+            $this->tracker->delete('sendrepairs', $id);
 
             $detailmodels=Detailsendrepairs::model()->findAll('id=:id',array(':id'=>$id));
             foreach($detailmodels as $dm) {
@@ -230,13 +230,6 @@ class DefaultController extends Controller
                $dm->delete();
             }
             
-            $detailmodels=Detailsendrepairs2::model()->findAll('id=:id',array(':id'=>$id));
-            foreach($detailmodels as $dm) {
-            	$this->tracker->init();
-            	$this->tracker->delete('detailsendrepairs2', array('iddetail'=>$dm->iddetail));
-            	$dm->delete();
-            }
-
             $model->delete();
             $this->afterDelete($model);
 
