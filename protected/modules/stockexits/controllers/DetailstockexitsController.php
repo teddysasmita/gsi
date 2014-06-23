@@ -121,7 +121,7 @@ class DetailstockexitsController extends Controller
                          break;
                      }
                   }
-                  if ($transname = 'AC25') {
+                  if ($transname == 'AC25') {
                   	$respond = $this->checkSendRepair($transid, $model->iditem, $model->serialnum);
                   	if (!$respond) {
 						$error = 'Nomor seri keliru';
