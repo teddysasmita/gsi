@@ -1,5 +1,6 @@
 <?php
 
+
 class DefaultController extends Controller
 {
 	/**
@@ -10,6 +11,7 @@ class DefaultController extends Controller
 	public $formid='AC25';
 	public $tracker;
 	public $state;
+	public $details = array();
 
 	/**
 	 * @return array action filters
@@ -192,6 +194,7 @@ class DefaultController extends Controller
              		$item['selected'] = '1';
              	}
              	$allitems2 = $this->InsertDamagedItems($model->id);
+             	$allitems2 = $this->filterList($allitems, $allitems2);
              	$allitems = array_merge($allitems, $allitems2);
              	
              	Yii::app()->session['Detailsendrepairs_temp'] = $allitems;
@@ -659,4 +662,21 @@ class DefaultController extends Controller
 		return $found;
 	}
 	
+	private function filterList(array $savedlist, array $scannedlist)
+	{
+		$good = array();
+		foreach($scannedlist as $sc) {
+			$found = FALSE;
+			foreach($savedlist as $sv) {
+				if ($sc['serialnum'] == $sv['serialnum']) {
+					$found = TRUE;
+					break;
+				}
+			}			
+			if (!$found) {
+				$good[] = $sc;
+			}
+		}
+		return $good;
+	}
 }

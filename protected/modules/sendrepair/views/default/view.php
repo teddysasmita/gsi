@@ -67,6 +67,11 @@ $this->menu=array(
 			'name'=>'idwarehouse',
 			'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
 		),
+		array(
+			'header'=>'Keluar',
+			'name'=>'exit',
+			'value'=>"lookup::SendRepairExit(\$data)"
+		),
 		/*array(
 			'header'=>'Catatan',
 			'name'=>'remark',
