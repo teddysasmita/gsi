@@ -52,7 +52,12 @@ $supplierScript=<<<EOS
    				$.getJSON('index.php?r=LookUp/checkSerial', {'serialnum': escape(myserialnum), 
    						'idwh' : $('#idwh').val()},
    				function(data) {
-   					if ((data == false) || (data.avail == '0')){
+   					if (data == false) {
+   						$('#statusinfo').addClass('money');
+   						$('#statusinfo').removeClass('errorMessage');
+   						$('#statusinfo').html('Item bisa diterima');
+   						$('#Detailstockentries_status').val('1');
+   					} else if (data.avail == '0') {
    						$('#statusinfo').addClass('money');
    						$('#statusinfo').removeClass('errorMessage');
    						$('#statusinfo').html('Item bisa diterima');
