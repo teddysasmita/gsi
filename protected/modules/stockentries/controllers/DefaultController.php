@@ -551,7 +551,7 @@ class DefaultController extends Controller
 	         		Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
 	         		Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $detail['status']);
 	         	}
-	         	if ($model->transname = 'AC33')
+	         	if ($model->transname == 'AC33')
 	         		Action::receiveRepairOut($model->transid, $detail['serialnum']);
 	         }
          };
