@@ -95,52 +95,61 @@ class DetailstockentriesController extends Controller
 	 */
 	public function actionUpdate($iddetail, $idwh, $transname, $transid)
 	{
-             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                     Yii::app()->user->id))  {
                 
-                $this->state='u';
-                $this->trackActivity('u');
+			$this->state='u';
+			$this->trackActivity('u');
                 
-                $master=Yii::app()->session['master'];
+			$master=Yii::app()->session['master'];
                 
-                $model=$this->loadModel($iddetail);
-                if(isset(Yii::app()->session['Detailstockentries'])) {
-                    $model=new Detailstockentries;
-                    $model->attributes=$this->loadSession($iddetail);
-                }
-                $this->afterEdit($model);
+			$model=$this->loadModel($iddetail);
+			if(isset(Yii::app()->session['Detailstockentries'])) {
+				$model=new Detailstockentries;
+				$model->attributes=$this->loadSession($iddetail);
+			}
+			$this->afterEdit($model);
                     
-                // Uncomment the following line if AJAX validation is needed
-                $this->performAjaxValidation($model);
+			$error = '';
+			// Uncomment the following line if AJAX validation is needed
+			$this->performAjaxValidation($model);
                 
-               if(isset($_POST['yt0'])) {
-                  $temp=Yii::app()->session['Detailstockentries'];
-                  $model->attributes=$_POST['Detailstockentries'];
-                  foreach ($temp as $tk=>$tv) {
-                     if($tv['iddetail']==$_POST['Detailstockentries']['iddetail']) {
-                         $temp[$tk]=$_POST['Detailstockentries'];
-                         break;
-                     }
-                  }
+			if(isset($_POST['yt0'])) {
+				$temp=Yii::app()->session['Detailstockentries'];
+				$model->attributes=$_POST['Detailstockentries'];
+				foreach ($temp as $tk=>$tv) {
+					if($tv['iddetail']==$_POST['Detailstockentries']['iddetail']) {
+						$temp[$tk]=$_POST['Detailstockentries'];
+						 break;
+					}
+				}
+                  
+				if ($transname == 'AC33') {
+					$respond = $this->checkReceiveRepair($transid, $model->iditem, $model->serialnum);
+                  	if (!$respond) 
+                  		$error = 'Nomor seri keliru';
+				} else
+                  	$respond = TRUE;
                     //posting into session
-                  if($model->validate()) {
-                     Yii::app()->session['Detailstockentries']=$temp;
-
-                     if ($master=='create')
+				if ($respond) {
+                  	if($model->validate()) {
+						Yii::app()->session['Detailstockentries']=$temp;
+                     	if ($master=='create')
                            $this->redirect(array('default/createdetail'));
-                     else if($master=='update')
+                     	else if($master=='update')
                            $this->redirect(array('default/updatedetail'));
-                  }	
+                  	}	
                 }
-               
-                $this->render('update',array(
+			}
+			$this->render('update',array(
 					'model'=>$model,'master'=>$master, 'idwh'=>$idwh, 
-					'transname'=>$transname, 'transid'=>$transid
-                ));
-            }  else {
-                throw new CHttpException(404,'You have no authorization for this operation.');
-            }
-	}
+					'transname'=>$transname, 'transid'=>$transid, 
+					'error'=>$error
+			));
+		}  else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		}
+	}	
 
 	/**
 	 * Deletes a particular model.
@@ -317,5 +326,23 @@ class DetailstockentriesController extends Controller
             $this->tracker=new Tracker();
             $this->tracker->init();
             $this->tracker->logActivity($this->formid, $action);
+        }
+        
+        private function checkReceiveRepair($regnum, $iditem, $serialnum)
+        {
+        	$id = Yii::app()->db->createCommand()->select('id')->from('receiverepairs')
+        	->where('regnum = :p_regnum', array(':p_regnum'=>$regnum))
+        	->queryScalar();
+        
+        	$item = Yii::app()->db->createCommand()->select()
+        	->from('detailreceiverepairs')
+        	->where('id = :p_id and iditem = :p_iditem and serialnum = :p_serialnum',
+        			array(':p_id'=>$id, ':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))
+        			->queryAll();
+        	 
+        	if (!$item)
+        		return FALSE;
+        	else
+        		return TRUE;
         }
 }

@@ -387,7 +387,21 @@ class lookup extends CComponent {
 		}
 	}
 	
-	public static function SendRepairCheck($data)
+	public static function ReceiveRepairexit($data)
+	{
+		switch($data['entry']) {
+			case '1': {
+				echo "<span class='money'>OK</span>";
+				break;
+			}
+			case '0': {
+				echo "<span class='errorMessage'>Belum</span>";
+				break;
+			}
+		}
+	}
+	
+	public static function RepairCheck($data)
 	{
 		if ($data['selected'] == '1') 
 			return true;

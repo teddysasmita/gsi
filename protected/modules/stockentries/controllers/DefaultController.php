@@ -550,7 +550,9 @@ class DefaultController extends Controller
 	         	else {
 	         		Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
 	         		Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $detail['status']);
-				}
+	         	}
+	         	if ($model->transname = 'AC33')
+	         		Action::receiveRepairOut($model->transid, $detail['serialnum']);
 	         }
          };
           
@@ -709,6 +711,16 @@ EOS;
 				->queryAll();
       		
       		$dataLPB = array_merge($dataPB, $dataSJ);
+      	}
+      	
+      	if ($dataLPB == FALSE ) {
+      		$dataLPB=Yii::app()->db->createCommand()
+      		->select('a.id, b.iditem, (1) as qty')
+      		->from('receiverepairs a')
+      		->join('detailreceiverepairs b', 'b.id=a.id')
+      		->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
+      				array(':p_regnum'=>$nolpb, ':p_idwarehouse'=>$idwh) )
+      				->queryAll();
       	}
       	
       	Yii::app()->session->remove('Detailstockentries');

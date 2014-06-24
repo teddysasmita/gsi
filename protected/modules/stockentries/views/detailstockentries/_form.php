@@ -52,10 +52,12 @@ $supplierScript=<<<EOS
    				$.getJSON('index.php?r=LookUp/checkSerial', {'serialnum': escape(myserialnum), 
    						'idwh' : $('#idwh').val()},
    				function(data) {
-   					if (data == false) {
+   					if ((data == false) || (data.avail == '0')){
    						$('#statusinfo').addClass('money');
    						$('#statusinfo').removeClass('errorMessage');
    						$('#statusinfo').html('Item bisa diterima');
+						if( $('#transname').val() == 'AC33')
+   							$('#Detailstockentries_status').val('0');
    					} else if (data.avail == '1') {
    						$('#statusinfo').addClass('errorMessage');
    						$('#statusinfo').removeClass('money');
@@ -112,7 +114,7 @@ EOS;
 	</div>
 	
 	<div class="row">
-		<?php echo CHtml::label('Status', false); ?>
+		<?php echo $form->labelEx($model,'status'); ?>
 		<?php 
 			if ($transname	== 'AC12') {
 				echo $form->dropDownList($model, 'status', 
@@ -125,6 +127,13 @@ EOS;
 		<?php echo $form->error($model,'status'); ?>
 	</div>
         
+    <div class="row">
+		
+		<?php 
+			echo CHtml::tag('span', array('id'=>'status', 'class'=>'error'), $error);
+		?>		
+	</div>
+	
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($mode); ?>
 	</div>

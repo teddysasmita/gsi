@@ -69,7 +69,8 @@ return array(
             'displayentries',
             'retrievalreplaces',
             'acquisitionnsn',
-            'itemmastermods'
+            'itemmastermods',
+            'receiverepair'
         ),
 
         

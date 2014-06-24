@@ -775,6 +775,19 @@ class Action extends CComponent {
    					array(':p_id'=>$id, ':p_serialnum'=>$serialnum) );
    		}
    }
+   
+   public static function receiveRepairOut($regnum, $serialnum)
+   {
+   	$id = Yii::app()->db->createCommand()->select('id')->from('receiverepairs')
+   	->where('regnum = :p_regnum', array(':p_regnum'=>$regnum))
+   	->queryScalar();
+   	 
+   	if ($id !== FALSE) {
+   		Yii::app()->db->createCommand()->update('detailreceiverepairs',
+   		array('entry'=>'1'), 'id = :p_id and serialnum = :p_serialnum',
+   		array(':p_id'=>$id, ':p_serialnum'=>$serialnum) );
+   	}
+   }
 }
 
 ?>
