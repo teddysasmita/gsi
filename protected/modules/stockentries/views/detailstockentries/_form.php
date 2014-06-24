@@ -56,8 +56,7 @@ $supplierScript=<<<EOS
    						$('#statusinfo').addClass('money');
    						$('#statusinfo').removeClass('errorMessage');
    						$('#statusinfo').html('Item bisa diterima');
-						if( $('#transname').val() == 'AC33')
-   							$('#Detailstockentries_status').val('0');
+						$('#Detailstockentries_status').val(data.status);
    					} else if (data.avail == '1') {
    						$('#statusinfo').addClass('errorMessage');
    						$('#statusinfo').removeClass('money');
