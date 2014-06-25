@@ -149,7 +149,7 @@ EOS;
 					'selectableRows'=>2,
 					'headerTemplate'=>'<span> Pilih {item}</span>',
 					'value'=>"\$data['iddetail']",
-					'checked'=>"lookup::SendRepairCheck(\$data)",
+					'checked'=>"lookup::RepairCheck(\$data)",
 				),
 				array(
 					'header'=>'Keluar',
