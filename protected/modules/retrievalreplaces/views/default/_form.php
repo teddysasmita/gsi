@@ -11,7 +11,7 @@
 		$('#Retrievalreplaces_serialnum').change(
 		function() {
 			$.getJSON('index.php?r=LookUp/getExitedItemFromSerial',
-				{serialnum: $('#Retrievalreplaces_serialnum').val(),
+				{serialnum: escape($('#Retrievalreplaces_serialnum').val()),
 				retrievalnum: $('#Retrievalreplaces_retrievalnum').val() },
             function(data) {
 				if (data == false ) {

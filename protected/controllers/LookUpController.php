@@ -652,7 +652,7 @@ EOS;
 	public function actionGetExitedItemFromSerial($serialnum, $retrievalnum)
 	{
 		//$invnum = rawurldecode($invnum);
-		//$serialnum = rawurldecode($serialnum);
+		$serialnum = rawurldecode($serialnum);
 		
 		if (!Yii::app()->user->isGuest) {
 			$data=Yii::app()->db->createCommand()
