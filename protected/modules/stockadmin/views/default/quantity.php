@@ -91,6 +91,11 @@ echo CHtml::dropDownList('status', $status, array('Semua'=>'Semua', '1'=>'Bagus'
 							'name'=>'status',
 							'value'=>"lookup::StockStatusName(\$data['status'])"
 					),
+					array(
+						'header'=>'Sedia',
+						'name'=>'avail',
+						'value'=>"lookup::StockAvailName(\$data['avail'])"
+					),
 			),
 	));
 //}
