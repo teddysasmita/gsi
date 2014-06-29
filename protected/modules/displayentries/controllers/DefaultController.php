@@ -403,7 +403,7 @@ class DefaultController extends Controller
 		foreach($detailstockentries as $dse) {
 			$dse->delete();
 		};
-		Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, 0);
+		Action::setItemAvailinWarehouse($model->idwarehouse, $model->serialnum, 0);
 	}
 	
 	protected function afterDelete(& $model) {

@@ -675,7 +675,7 @@ class DefaultController extends Controller
      	
      	$details = $this->loadDetails($model->id);
      	foreach($details as $detail) {
-     		Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $detail['avail']);
+     		Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], $detail['avail']);
      	};
      	
      	/*if ($model->transname == 'AC16') {
