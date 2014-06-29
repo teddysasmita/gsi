@@ -575,7 +575,7 @@ class DefaultController extends Controller
          			/*if ($model->transname == 'AC12')
          				Action::deleteItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
          			else*/ 
-         				Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '0');
+         			Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '0');
          		}
          	};
          }
