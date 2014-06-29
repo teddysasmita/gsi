@@ -89,10 +89,12 @@ echo CHtml::dropDownList('status', $status, array('Semua'=>'Semua', '1'=>'Bagus'
 					array(
 							'header'=>'Sedia',
 							'name'=>'avail',
+						'value'=>"lookup::StockAvailName(\$data['avail'])"
 					),
 					array(
 						'header'=>'Status',
 						'name'=>'status',
+						'value'=>"lookup::StockStatusName(\$data['status'])"
 					),
 			),
 	));
