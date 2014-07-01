@@ -354,7 +354,7 @@ class DefaultController extends Controller
 			Action::addItemToWarehouse($model->idwarehouse, $model->id,
 					$model->iditem, $model->serialnum);
 		else
-			Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, '1');
+			Action::setItemAvailinWarehouse($model->idwarehouse, $model->serialnum, '1');
 	}
 	
 	protected function beforePost(& $model) {
@@ -379,7 +379,7 @@ class DefaultController extends Controller
 		foreach($detailstockentries as $dse) {
 			$dse->delete();
 		};
-		Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, 0);
+		Action::setItemAvailinWarehouse($model->idwarehouse, $model->serialnum, 0);
 	}
 	
 	protected function afterDelete(& $model) {
