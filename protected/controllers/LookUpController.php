@@ -500,7 +500,7 @@ EOS;
 			
 			if ($data == FALSE) {
 				$sql=<<<EOS
-				select a.id, a.regnum, a.retrievalnum,
+				select a.id, a.regnum, a.retrievalnum, '-' as invnum, 
 				concat( 'Penukaran Pengambilan Barang - ',a.retrievalnum,' - ', a.idatetime) as transinfo,
 				'AC29' as transname
 				from retrievalreplaces a
