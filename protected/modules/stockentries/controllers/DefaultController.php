@@ -690,6 +690,8 @@ EOS;
       		->queryAll();
       	}
       	
+      	
+      	
       	if ($dataLPB == FALSE ) {
       		$invnum = Yii::app()->db->createCommand()
       		->select('invnum')->from('salescancel')
@@ -713,6 +715,32 @@ EOS;
 				->group('b.iditem')
 				->queryAll();
       		
+      		$dataLPB = array_merge($dataPB, $dataSJ);
+      	}
+      	
+      	if ($dataLPB == FALSE ) {
+      		$invnum = Yii::app()->db->createCommand()
+      		->select('invnum')->from('salesreplace')
+      		->where('regnum = :p_regnum', array(':p_regnum'=>$nolpb))
+      		->queryScalar();
+      	
+      		$dataSJ=Yii::app()->db->createCommand()
+      		->select('a.id, b.iditem, sum(b.qty) as qty')
+      		->from('deliveryorders a')
+      		->join('detaildeliveryorders b', 'b.id=a.id')
+      		->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse',
+      				array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh) )
+      				->group('b.iditem')
+      				->queryAll();
+      		$dataPB=Yii::app()->db->createCommand()
+      		->select('a.id, b.iditem, sum(b.qty) as qty')
+      		->from('orderretrievals a')
+      		->join('detailorderretrievals b', 'b.id=a.id')
+      		->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse',
+      				array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh) )
+      				->group('b.iditem')
+      				->queryAll();
+      	
       		$dataLPB = array_merge($dataPB, $dataSJ);
       	}
       	
