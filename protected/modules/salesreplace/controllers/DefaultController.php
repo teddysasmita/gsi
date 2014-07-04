@@ -45,60 +45,55 @@ class DefaultController extends Controller
 	 */
 	public function actionCreate()
 	{
-             if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
                     Yii::app()->user->id))  {   
-                $this->state='create';
-                $this->trackActivity('c');    
+			$this->state='create';
+			$this->trackActivity('c');    
                     
-                $model=new Salesreplace;
-                $this->afterInsert($model);
+			$model=new Salesreplace;
+			$this->afterInsert($model);
                 
-                Yii::app()->session['master']='create';
+			Yii::app()->session['master']='create';
                 //as the operator enter for the first time, we load the default value to the session
-                if (!isset(Yii::app()->session['Salesreplace'])) {
-                   Yii::app()->session['Salesreplace']=$model->attributes;
-                } else {
+			if (!isset(Yii::app()->session['Salesreplace'])) {
+				Yii::app()->session['Salesreplace']=$model->attributes;
+			} else {
                 // use the session to fill the model
-                    $model->attributes=Yii::app()->session['Salesreplace'];
-                }
+				$model->attributes=Yii::app()->session['Salesreplace'];
+			}
                 
                // Uncomment the following line if AJAX validation is needed
-               $this->performAjaxValidation($model);
+			$this->performAjaxValidation($model);
 
-                if (isset($_POST)){
-                   if(isset($_POST['yt0'])) {
-                      //The user pressed the button;
-                      $model->attributes=$_POST['Salesreplace'];
+			if (isset($_POST['Salesreplace'])){
+				if(isset($_POST['yt0'])) {
+					//The user pressed the button;
+					$model->attributes=$_POST['Salesreplace'];
+					$this->beforePost($model);
+					$respond=$model->save();
+					if(!$respond) 
+						throw new CHttpException(404,'There is an error in master posting: '.print_r($model->errors));
+					$this->afterPost($model);
+				      
+					if(isset(Yii::app()->session['Detailsalesreplace']) ) {
+						$details=Yii::app()->session['Detailsalesreplace'];
+						$respond=$respond&&$this->saveNewDetails($details);
+					} 
                       
-                      $this->beforePost($model);
-                      $respond=$model->save();
-                      if($respond) {
-                          $this->afterPost($model);
-                      } else {
-                      	print_r($model->getErrors());
-                          //throw new CHttpException(404,'There is an error in master posting: ');
-                      }
-                      
-                      if(isset(Yii::app()->session['Detailsalesreplace']) ) {
-                        $details=Yii::app()->session['Detailsalesreplace'];
-                        $respond=$respond&&$this->saveNewDetails($details);
-                      } 
-                      
-                      if($respond) {
-                         Yii::app()->session->remove('Salesreplace');
-                         Yii::app()->session->remove('Detailsalesreplace');
-                         $this->redirect(array('view','id'=>$model->id));
-                      }
-
-                   } else if (isset($_POST['command'])){
+					if($respond) {
+						Yii::app()->session->remove('Salesreplace');
+						Yii::app()->session->remove('Detailsalesreplace');
+						$this->redirect(array('view','id'=>$model->id));
+					}
+				} else if (isset($_POST['command'])){
                       // save the current master data before going to the detail page
-                      if($_POST['command']=='adddetail') {
-                         $model->attributes=$_POST['Salesreplace'];
-                         Yii::app()->session['Salesreplace']=$_POST['Salesreplace'];
-                         $this->redirect(array('detailsalesreplace/create',
-                            'id'=>$model->id, 'regnum'=>$model->regnum));
-                      } else if ($_POST['command'] == 'setInvnum') {
-                      	$model->attributes=$_POST['Salesreplace'];
+					if($_POST['command']=='adddetail') {
+						$model->attributes=$_POST['Salesreplace'];
+						Yii::app()->session['Salesreplace']=$_POST['Salesreplace'];
+						$this->redirect(array('detailsalesreplace/create',
+							'id'=>$model->id, 'regnum'=>$model->regnum));
+					} else if ($_POST['command'] == 'setInvnum') {
+						$model->attributes=$_POST['Salesreplace'];
 						$total = $this->loadInvoice($model->invnum);
 						$model->totalcash = $total['cash'];
 						$model->totalnoncash = $total['noncash'];
@@ -106,10 +101,10 @@ class DefaultController extends Controller
 						Yii::app()->session['Salesreplace'] = $model->attributes;
 						Yii::app()->session['Detailsalesreplace']=$this->loadSales($model->invnum,
 							$model->id);
-					  } else if ($_POST['command']=='updateDetail') {
-                         $model->attributes=$_POST['Salesreplace'];
-                         Yii::app()->session['Salesreplace']=$_POST['Salesreplace'];
-                      }
+					} else if ($_POST['command']=='updateDetail') {
+						$model->attributes=$_POST['Salesreplace'];
+                        Yii::app()->session['Salesreplace']=$_POST['Salesreplace'];
+					}
 				}
 			}
 			
@@ -127,41 +122,39 @@ class DefaultController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-          if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                  Yii::app()->user->id))  {
 
-             $this->state='update';
-             $this->trackActivity('u');
+			$this->state='update';
+            $this->trackActivity('u');
 
-             $model=$this->loadModel($id);
-             $this->afterEdit($model);
+            $model=$this->loadModel($id);
+            $this->afterEdit($model);
              
-             Yii::app()->session['master']='update';
+            Yii::app()->session['master']='update';
 
-             if(!isset(Yii::app()->session['Salesreplace']))
-                Yii::app()->session['Salesreplace']=$model->attributes;
-             else
+            if(!isset(Yii::app()->session['Salesreplace']))
+				Yii::app()->session['Salesreplace']=$model->attributes;
+            else
                 $model->attributes=Yii::app()->session['Salesreplace'];
 			
-             if(!isset(Yii::app()->session['Detailsalesreplace'])) 
-               Yii::app()->session['Detailsalesreplace']=$this->loadDetails($id);
+            if(!isset(Yii::app()->session['Detailsalesreplace'])) 
+				Yii::app()->session['Detailsalesreplace']=$this->loadDetails($id);
              
              // Uncomment the following line if AJAX validation is needed
-             $this->performAjaxValidation($model);
+            $this->performAjaxValidation($model);
 
-             if(isset($_POST)) {
-                 if(isset($_POST['yt0'])) {
-                     $model->attributes=$_POST['Salesreplace'];
-                     $this->beforePost($model);
-                     $this->tracker->modify('salesreplace', $id);
-                     $respond=$model->save();
-                     if($respond) {
-                       $this->afterPost($model);
-                     } else {
-                       throw new CHttpException(404,'There is an error in master posting');
-                     }
-
-                     if(isset(Yii::app()->session['Detailsalesreplace'])) {
+			if(isset($_POST['Salesreplace'])) {
+				if(isset($_POST['yt0'])) {
+					$this->beforePost($model);
+                    $model->attributes=$_POST['Salesreplace'];
+                    $this->tracker->modify('salesreplace', $id);
+                    $respond=$model->save();
+					if(!$respond) 
+						throw new CHttpException(404,'There is an error in master posting');
+					$this->afterPost($model);
+                    
+					if(isset(Yii::app()->session['Detailsalesreplace'])) {
                          $details=Yii::app()->session['Detailsalesreplace'];
                          $respond=$respond&&$this->saveDetails($details);
                          if(!$respond) {
@@ -177,12 +170,10 @@ class DefaultController extends Controller
                          }
                      };
                      
-                     if($respond) {
-                         Yii::app()->session->remove('Salesreplace');
-                         Yii::app()->session->remove('Detailsalesreplace');
-                         Yii::app()->session->remove('DeleteDetailsalesreplace');
-                         $this->redirect(array('view','id'=>$model->id));
-                     }
+					Yii::app()->session->remove('Salesreplace');
+					Yii::app()->session->remove('Detailsalesreplace');
+					Yii::app()->session->remove('DeleteDetailsalesreplace');
+					$this->redirect(array('view','id'=>$model->id));
                  }
              }
              $this->render('update',array(
@@ -508,6 +499,7 @@ class DefaultController extends Controller
             $idmaker=new idmaker();
             if ($this->state == 'create')
             	$idmaker->saveRegNum($this->formid, substr($model->regnum,2));    
+            Action::setInvStatus($model->invnum, '0');
         }
         
         protected function beforePost(& $model)
@@ -518,11 +510,13 @@ class DefaultController extends Controller
             $model->datetimelog=$idmaker->getDateTime();
             if ($this->state == 'create')
             	$model->regnum='FG'.$idmaker->getRegNum($this->formid);
+            else if ($this->state == 'update')
+            	Action::setInvStatus($model->invnum, '1');
         }
         
         protected function beforeDelete(& $model)
         {
-            
+        	Action::setInvStatus($model->invnum, '1');
         }
         
         protected function afterDelete()

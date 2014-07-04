@@ -788,6 +788,12 @@ class Action extends CComponent {
    		array(':p_id'=>$id, ':p_serialnum'=>$serialnum) );
    	}
    }
+   
+	public static function setInvStatus($invnum, $status)
+	{
+   		Yii::app()->db->createCommand()->update('salespos', array('status'=>$status ), 
+   			'regnum = :p_regnum', array(':p_regnum'=>$invnum));
+   	}
 }
 
 ?>

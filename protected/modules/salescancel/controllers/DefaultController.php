@@ -85,16 +85,19 @@ class DefaultController extends Controller
                 
 			// Uncomment the following line if AJAX validation is needed
 			$this->performAjaxValidation($model);
-                        
+            print_r($_POST);            
 			if(isset($_POST['Salescancel'])) {
-				$model->attributes=$_POST['Salescancel'];
 				if(isset($_POST['yt0'])) {
+					$model->attributes=$_POST['Salescancel'];
 					$this->beforePost($model);
-					if($model->save()) {
-						$this->afterPost($model);
-						$this->redirect(array('view','id'=>$model->id));
-					};
+					$respond = $model->save();
+					if (!$respond) 
+						throw new CHttpException(404,'You have no authorization for this operation.');
+
+					$this->afterPost($model);
+					$this->redirect(array('view','id'=>$model->id));
 				} else if ($_POST['command'] == 'setInvnum') { 
+					$model->attributes=$_POST['Salescancel'];
 					$total = $this->loadInvoice($model->invnum);
 					$model->totalcash = $total['cash'];
 					$model->totalnoncash = $total['noncash'];
@@ -137,14 +140,12 @@ class DefaultController extends Controller
 			if(isset($_POST['Salescancel']))
 			{
 				$oldinvnum = $model->invnum;
-				$model->attributes=$_POST['Salescancel'];
 				if(isset($_POST['yt0'])) {    
                 	$this->beforePost($model);    
+                	$model->attributes=$_POST['Salescancel'];
 					$this->tracker->modify('salescancel', $id);
 					if($model->save()) {
 						$this->afterPost($model);
-						if($oldinvnum !== $model->invnum)
-							$this->setInvStatus($oldinvnum, '1');
 						$this->redirect(array('view','id'=>$model->id));
 					}
                 } else if ($_POST['command'] == 'setInvnum') {
@@ -334,8 +335,9 @@ class DefaultController extends Controller
         
         protected function afterPost(& $model)
         {
-        	idmaker::saveRegnum($this->formid, substr($model->regnum, 2));
-        	$this->setInvStatus($model->invnum, '0');
+        	if($this->state == 'create')
+        		idmaker::saveRegnum($this->formid, substr($model->regnum, 2));
+        	Action::setInvStatus($model->invnum, '0');
         }
         
         protected function beforePost(& $model)
@@ -346,7 +348,9 @@ class DefaultController extends Controller
             $model->datetimelog=$idmaker->getDateTime();
             if ($this->state == 'create') {
             	$model->regnum="FB".$idmaker->getRegnum($this->formid);
-            };
+            } else if ($this->state == 'update') {
+            	Action::setInvStatus($model->invnum, '1');
+            }
         }
         
         protected function beforeDelete(& $model)
@@ -424,13 +428,6 @@ class DefaultController extends Controller
         	} else
         	return array('cash'=>0, 'noncash'=>0);
         }	
-        
-        protected static function setInvStatus($invnum, $status)
-        {
- 			$sql="update salespos set status = :p_status where regnum = :p_regnum ";
-        	$stmt=Yii::app()->db->createCommand($sql)
-        		->execute(array(':p_regnum'=>$invnum, ':p_status'=>$status));
-        }
         
         protected function loadSalesDetail($invnum)
         {
