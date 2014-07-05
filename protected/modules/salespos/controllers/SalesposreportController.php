@@ -119,7 +119,6 @@ EOS;
 					$myrow['serialnums'] = implode(', ', $datasj);
 			}
 			foreach($data2 as & $myrow) {
-				$invnum = 'G'.(int)$myrow['regnum'];
 				$serialnumpb->bindParam(':p_invnum', $myrow['regnum']);
 				$serialnumpb->bindParam(':p_iditem', $myrow['iditem']);
 				$datapb = $serialnumpb->queryColumn();
