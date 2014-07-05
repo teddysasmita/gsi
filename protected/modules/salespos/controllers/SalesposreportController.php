@@ -50,16 +50,24 @@ class SalesposreportController extends Controller
 			$enddate=$enddate.' 23:59:59';
 			$selectfields = <<<EOS
 			a.idatetime, a.regnum, a.total, a.discount, a.cash, a.cashreturn, 
-			a.payer_name, a.payer_address, a.payer_phone, a.userlog, 
+			a.payer_name, a.payer_address, a.payer_phone, a.userlog, a.receiveable,  
 			c.name, c.address, c.phone, 
-			b.idsales, b.iditem, b.qty, b.price, b.discount,	
+			b.idsales, b.iditem, b.qty, b.price, b.discount	
+EOS;
+			$selectfields2 = <<<EOS
+			a.idatetime, a.regnum, a.diff as total, (0) as discount, a.cash, a.cashreturn,
+			a.payer_name, a.payer_address, a.payer_phone, a.userlog, a.receiveable,
+			c.name, c.address, c.phone,
+			b.idsales, b.iditem, b.qty, b.price, b.discount
 EOS;
 			$selectwhere = <<<EOS
-			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime
+			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime 
+			and a.status = :p_status
 EOS;
 			unset($selectparam);
 			$selectparam['p_startidatetime'] = $startdate;
 			$selectparam['p_endidatetime'] = $enddate;
+			$selectparam['p_status'] = '1';
 				
 			if (isset($brand) && ($brand <> '')) {
 				$selectwhere .= ' and d.brand = :p_brand';
@@ -78,6 +86,16 @@ EOS;
 				->where($selectwhere, $selectparam)
 				->order('a.idatetime, a.regnum')
 				->queryAll();
+			$data2=Yii::app()->db->createCommand()
+				->select($selectfields2)
+				->from('salesreplace2 a')
+				->join('detailsalesreplace2 b', 'b.id = a.id')
+				->join('items d', 'd.id = b.iditem')
+				->leftJoin('salesreceivers c', 'c.id = a.idreceiver')
+				->where($selectwhere, $selectparam)
+				->order('a.idatetime, a.regnum')
+				->queryAll();
+			$data = array_merge($data, $data2);
 			$serialnumpb = Yii::app()->db->createCommand()
 				->select('c.serialnum')->from('orderretrievals a')
 				->join('stockexits b', 'b.transid = a.regnum')
@@ -100,10 +118,10 @@ EOS;
 				if ($datasj !== FALSE)
 					$myrow['serialnums'] = implode(', ', $datasj);
 			}
-			$headersfield = array( 'idatetime', 'regnum', 'total', 'discount', 'cash', 'cashreturn', 
+			$headersfield = array( 'idatetime', 'regnum', 'total', 'discount', 'cash', 'cashreturn', 'receivable',
 				'payer_name', 'payer_address', 'payer_phone', 'userlog',
 				'name', 'address', 'phone','idsales', 'iditem', 'qty', 'price', 'discount', 'serialnums');
-			$headersname = array('Tanggal', 'No Faktur', 'Total', 'Potongan', 'Terima Tunai', 'Kembalian',
+			$headersname = array('Tanggal', 'No Faktur', 'Total', 'Potongan', 'Terima Tunai', 'Kembalian', 'Piutang',
 				'Nama Pembeli', 'Alamat Pembeli', 'Telp Pembeli', 'Nama Kasir', 'Nama Penerima', 'Alamat Penerima', 'Telp Penerima',
 				'Nama Sales', 'Nama Barang', 'Qty', 'Harga', 'Potongan', 'Nomor Seri');
 			for( $i=0;$i<count($headersname); $i++ ) {

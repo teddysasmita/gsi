@@ -770,9 +770,18 @@ class DefaultController extends Controller
         
         private function loadInvoice($invnum, $id)
         {
-        	$master=Yii::app()->db->createCommand()
-        		->select()->from('salespos')->where('regnum = :p_regnum', 
-        		array(':p_regnum'=>$invnum))->queryRow(); 
+        	$ganti = substr($invnum, 0, 1) == 'G';
+        	if ($ganti === true) {
+        		$tempnum = substr($invnum, 1);
+        		$tempnum = str_pad($tempnum, 12, '0', STR_PAD_LEFT);
+        		$master=Yii::app()->db->createCommand()
+        		->select()->from('salesreplace')->where('regnum = :p_regnum',
+        				array(':p_regnum'=>$tempnum))->queryRow();
+        	} else {
+        		$master=Yii::app()->db->createCommand()
+        		->select()->from('salespos')->where('regnum = :p_regnum',
+        				array(':p_regnum'=>$invnum))->queryRow();
+        	}
         	
         	$masterdata=Yii::app()->session['Orderretrievals'];
         	if ($master['idreceiver'] <> '') {

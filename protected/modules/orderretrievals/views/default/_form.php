@@ -94,6 +94,11 @@ EOS;
 		<?php echo $form->error($model,'idatetime'); ?>
 	</div>
 	
+	<div class='row'>
+		<?php echo CHtml::tag('span', array('id'=>'info', 'class'=>'errorMessage'), 
+			'Utk Ganti Barang, beri awalan G, tanpa angka 0 didepan'); ?>
+	</div>
+	
 	<div class="row">
          <?php echo $form->labelEx($model,'invnum'); ?>
          <?php 
