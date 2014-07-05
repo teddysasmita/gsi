@@ -56,9 +56,9 @@ class SalesposreportController extends Controller
 EOS;
 			$selectfields2 = <<<EOS
 			a.idatetime, a.regnum, a.diff as total, (0) as discount, a.cash, a.cashreturn,
-			a.payer_name, a.payer_address, a.payer_phone, a.userlog, a.receiveable,
+			a.payer_name, a.payer_address, a.payer_phone, a.userlog, a.receiveable, a.invnum,
 			c.name, c.address, c.phone,
-			b.idsales, b.iditem, b.qty, b.price, b.discount
+			b.idsales, b.iditem, b.qty, b.price, b.discount, b.status
 EOS;
 			$selectwhere = <<<EOS
 			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime 
@@ -119,12 +119,21 @@ EOS;
 					$myrow['serialnums'] = implode(', ', $datasj);
 			}
 			foreach($data2 as & $myrow) {
-				$serialnumpb->bindParam(':p_invnum', $myrow['regnum']);
-				$serialnumpb->bindParam(':p_iditem', $myrow['iditem']);
-				$datapb = $serialnumpb->queryColumn();
-				$serialnumsj->bindParam(':p_invnum', $myrow['regnum']);
-				$serialnumsj->bindParam(':p_iditem', $myrow['iditem']);
-				$datasj = $serialnumsj->queryColumn();
+				if ($myrow['status'] == '1') {
+					$serialnumpb->bindParam(':p_invnum', $myrow['regnum']);
+					$serialnumpb->bindParam(':p_iditem', $myrow['iditem']);
+					$datapb = $serialnumpb->queryColumn();
+					$serialnumsj->bindParam(':p_invnum', $myrow['regnum']);
+					$serialnumsj->bindParam(':p_iditem', $myrow['iditem']);
+					$datasj = $serialnumsj->queryColumn();
+				} else if ($myrow['status'] == '0') { 
+					$serialnumpb->bindParam(':p_invnum', $myrow['invnum']);
+					$serialnumpb->bindParam(':p_iditem', $myrow['iditem']);
+					$datapb = $serialnumpb->queryColumn();
+					$serialnumsj->bindParam(':p_invnum', $myrow['invnum']);
+					$serialnumsj->bindParam(':p_iditem', $myrow['iditem']);
+					$datasj = $serialnumsj->queryColumn();
+				}
 				if ($datapb !== FALSE)
 					$myrow['serialnums'] = implode(', ', $datapb);
 				if ($datasj !== FALSE)
