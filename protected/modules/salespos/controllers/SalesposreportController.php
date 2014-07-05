@@ -95,7 +95,7 @@ EOS;
 				->where($selectwhere, $selectparam)
 				->order('a.idatetime, a.regnum')
 				->queryAll();
-			$data = array_merge($data, $data2);
+			
 			$serialnumpb = Yii::app()->db->createCommand()
 				->select('c.serialnum')->from('orderretrievals a')
 				->join('stockexits b', 'b.transid = a.regnum')
@@ -118,6 +118,20 @@ EOS;
 				if ($datasj !== FALSE)
 					$myrow['serialnums'] = implode(', ', $datasj);
 			}
+			foreach($data2 as & $myrow) {
+				$invnum = 'G'.(int)$myrow['regnum'];
+				$serialnumpb->bindParam(':p_invnum', $myrow['regnum']);
+				$serialnumpb->bindParam(':p_iditem', $myrow['iditem']);
+				$datapb = $serialnumpb->queryColumn();
+				$serialnumsj->bindParam(':p_invnum', $myrow['regnum']);
+				$serialnumsj->bindParam(':p_iditem', $myrow['iditem']);
+				$datasj = $serialnumsj->queryColumn();
+				if ($datapb !== FALSE)
+					$myrow['serialnums'] = implode(', ', $datapb);
+				if ($datasj !== FALSE)
+					$myrow['serialnums'] = implode(', ', $datasj);
+			}	
+			$data = array_merge($data, $data2);
 			$headersfield = array( 'idatetime', 'regnum', 'total', 'discount', 'cash', 'cashreturn', 'receiveable',
 				'payer_name', 'payer_address', 'payer_phone', 'userlog',
 				'name', 'address', 'phone','idsales', 'iditem', 'qty', 'price', 'discount', 'serialnums');

@@ -775,7 +775,7 @@ class DefaultController extends Controller
         		$tempnum = substr($invnum, 1);
         		$tempnum = str_pad($tempnum, 12, '0', STR_PAD_LEFT);
         		$master=Yii::app()->db->createCommand()
-        		->select()->from('salesreplace')->where('regnum = :p_regnum',
+        		->select()->from('salesreplace2')->where('regnum = :p_regnum',
         				array(':p_regnum'=>$tempnum))->queryRow();
         	} else {
         		$master=Yii::app()->db->createCommand()
