@@ -118,7 +118,7 @@ EOS;
 				if ($datasj !== FALSE)
 					$myrow['serialnums'] = implode(', ', $datasj);
 			}
-			$headersfield = array( 'idatetime', 'regnum', 'total', 'discount', 'cash', 'cashreturn', 'receivable',
+			$headersfield = array( 'idatetime', 'regnum', 'total', 'discount', 'cash', 'cashreturn', 'receiveable',
 				'payer_name', 'payer_address', 'payer_phone', 'userlog',
 				'name', 'address', 'phone','idsales', 'iditem', 'qty', 'price', 'discount', 'serialnums');
 			$headersname = array('Tanggal', 'No Faktur', 'Total', 'Potongan', 'Terima Tunai', 'Kembalian', 'Piutang',
