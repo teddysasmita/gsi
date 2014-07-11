@@ -126,7 +126,7 @@ EOS;
 				if ($datapb !== FALSE)
 					$myrow['serialnums'] = implode(', ', $datapb);
 				if ($datasj !== FALSE)
-					$myrow['serialnums'] = implode(', ', $datasj);
+					$myrow['serialnums'] = $myrow['serialnums'] . implode(', ', $datasj);
 			}
 			// end -- Get ALL Sales data
 			
