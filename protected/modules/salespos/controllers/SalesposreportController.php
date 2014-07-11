@@ -61,15 +61,13 @@ class SalesposreportController extends Controller
 EOS;
 			$selectfields2 = <<<EOS
 			a.idatetime, a.regnum, a.total, a.discount, a.cash, a.cashreturn, a.status,
-			a.payer_name, a.payer_address, a.payer_phone, a.userlog, a.receiveable, 
-			('Pembatalan') as kind, 
+			a.payer_name, a.payer_address, a.payer_phone, a.userlog, a.receiveable,  
 			c.name, c.address, c.phone,
 			b.idsales, b.iditem, b.qty, b.price, b.discount
 EOS;
 			$selectfields3 = <<<EOS
 			a.idatetime, a.regnum, a.total, a.discount, a.cash, a.cashreturn,
 			a.payer_name, a.payer_address, a.payer_phone, a.userlog, a.receiveable,
-			('Ganti Barang') as kind,
 			c.name, c.address, c.phone,
 			b.idsales, b.iditem, b.qty, b.price, b.discount
 EOS;
@@ -160,6 +158,7 @@ EOS;
 					$datacancel['datetimelog'] = $dc['datetimelog'];
 					$datacancel['idsales'] = $cs['idsales'];
 					$datacancel['cstatus'] = 'Berlaku';
+					$datacancel['kind'] = 'Pembatalan';
 					$datacancels[] = $datacancel;
 				}
 			}
@@ -211,6 +210,7 @@ EOS;
 				$datareplace['userlog'] = $dr['userlog'];
 				$datareplace['datetimelog'] = $dr['datetimelog'];
 				$datareplace['idsales'] = $replacesales['idsales'];
+				$datareplace['kind'] = 'Ganti Barang';
 				/*switch ($dr['status']) {
 					case 0:
 						$datareplace['cstatus'] = 'Batal';
