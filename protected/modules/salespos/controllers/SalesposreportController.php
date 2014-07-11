@@ -193,7 +193,7 @@ EOS;
 				$datareplace['regnum'] = $dr['regnum'];
 				$datareplace['invnum'] = $dr['invnum'];
 				$datareplace['status'] = $dr['deleted'];
-				$datareplace['total'] = $dr['totaldiff'];
+				$datareplace['total'] = - $dr['totaldiff'];
 				$datareplace['cash'] = $replacesales['cash'];
 				$datareplace['cashreturn'] = $replacesales['cashreturn'];
 				$datareplace['receiveable'] = $replacesales['receiveable'];
