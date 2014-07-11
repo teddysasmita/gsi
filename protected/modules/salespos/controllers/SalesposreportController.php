@@ -62,22 +62,14 @@ EOS;
 			$selectfields2 = <<<EOS
 			a.idatetime, a.regnum, a.total, a.discount, a.cash, a.cashreturn, a.status,
 			a.payer_name, a.payer_address, a.payer_phone, a.userlog, a.receiveable, 
-			'Ganti Barang' as kind, 
-			case when (a.status) = '0' then 'Batal'
-				when (a.status) = '1' then 'Berlaku'
-				when (a.status) = '2' then 'Ganti Barang'
-			end as cstatus,
+			('Pembatalan') as kind, 
 			c.name, c.address, c.phone,
 			b.idsales, b.iditem, b.qty, b.price, b.discount
 EOS;
 			$selectfields3 = <<<EOS
 			a.idatetime, a.regnum, a.total, a.discount, a.cash, a.cashreturn,
 			a.payer_name, a.payer_address, a.payer_phone, a.userlog, a.receiveable,
-			'Ganti Barang' as kind,
-			case when (a.status) = '0' then 'Batal'
-				when (a.status) = '1' then 'Berlaku'
-				when (a.status) = '2' then 'Ganti Barang'
-			end as cstatus,
+			('Ganti Barang') as kind,
 			c.name, c.address, c.phone,
 			b.idsales, b.iditem, b.qty, b.price, b.discount
 EOS;
@@ -167,7 +159,7 @@ EOS;
 					$datacancel['userlog'] = $dc['userlog'];
 					$datacancel['datetimelog'] = $dc['datetimelog'];
 					$datacancel['idsales'] = $cs['idsales'];
-					$datacancel['cstatus'] = $cs['cstatus'];
+					$datacancel['cstatus'] = 'Berlaku';
 					$datacancels[] = $datacancel;
 				}
 			}
@@ -219,7 +211,18 @@ EOS;
 				$datareplace['userlog'] = $dr['userlog'];
 				$datareplace['datetimelog'] = $dr['datetimelog'];
 				$datareplace['idsales'] = $replacesales['idsales'];
-				$datareplace['cstatus'] = $replacesales['cstatus'];
+				/*switch ($dr['status']) {
+					case 0:
+						$datareplace['cstatus'] = 'Batal';
+						break;
+					case 1:
+						$datareplace['cstatus'] = 'Berlaku';
+						break;
+					case 0:
+						$datareplace['cstatus'] = 'Diganti';
+						break;
+				}*/
+				$datareplace['cstatus'] = 'Berlaku';
 				$datareplaces[] = $datareplace;
 			}
 			/*
@@ -241,10 +244,10 @@ EOS;
 			}
 			// end -- Get ALL Sales Modification
 			$data = array_merge($data, $datacancels, $datareplaces);
-			$headersfield = array( 'cstatus', 'idatetime', 'regnum', 'invnum', 'total', 'discount', 'cash', 'cashreturn', 'receiveable',
+			$headersfield = array( 'kind', 'cstatus', 'idatetime', 'regnum', 'invnum', 'total', 'discount', 'cash', 'cashreturn', 'receiveable',
 				'payer_name', 'payer_address', 'payer_phone', 'userlog',
 				'name', 'address', 'phone','idsales', 'iditem', 'qty', 'price', 'discount', 'serialnums');
-			$headersname = array('Status', 'Tanggal', 'No Urut', 'No Faktur', 'Potongan', 'Terima Tunai', 'Kembalian', 'Piutang',
+			$headersname = array('Jenis', 'Status', 'Tanggal', 'No Urut', 'No Faktur', 'Potongan', 'Terima Tunai', 'Kembalian', 'Piutang',
 				'Nama Pembeli', 'Alamat Pembeli', 'Telp Pembeli', 'Nama Kasir', 'Nama Penerima', 'Alamat Penerima', 'Telp Penerima',
 				'Nama Sales', 'Nama Barang', 'Qty', 'Harga', 'Potongan', 'Nomor Seri');
 			for( $i=0;$i<count($headersname); $i++ ) {
