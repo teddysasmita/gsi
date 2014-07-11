@@ -201,7 +201,7 @@ EOS;
 					->select($selectfields4)->from('salesreplace2 a')->join('detailsalesreplace2 b', 'b.id = a.id')
 					->leftJoin('salesreceivers c', 'c.id = a.idreceiver')
 					->where('a.invnum = :p_invnum and b.iditem = :p_iditem and b.price = :p_price and b.qty = :p_qty',
-							array(':p_regnum'=>$dr['invnum'], ':p_iditem' => $dr['iditemnew'], ':p_price'=>$dr['pricenew'],
+							array(':p_invnum'=>$dr['invnum'], ':p_iditem' => $dr['iditemnew'], ':p_price'=>$dr['pricenew'],
 									'p_qty'=>$dr['qtynew']))
 									->queryRow();
 				}
