@@ -71,6 +71,12 @@ EOS;
 			c.name, c.address, c.phone,
 			b.idsales, b.iditem, b.qty, b.price, b.discount
 EOS;
+			$selectfields4 = <<<EOS
+			a.idatetime, a.regnum, a.diff as total, (0) as discount, a.cash, a.cashreturn,
+			a.payer_name, a.payer_address, a.payer_phone, a.userlog, a.receiveable,
+			c.name, c.address, c.phone,
+			b.idsales, b.iditem, b.qty, b.price, b.discount
+EOS;
 			$selectwhere = <<<EOS
 			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime 
 EOS;
@@ -182,13 +188,23 @@ EOS;
 				->where($selectwhere, $selectparam)
 				->queryAll();
 			foreach($datarawreplaces as $dr) {
-				$replacesales = Yii::app()->db->createCommand()
-					->select($selectfields3)->from('salespos a')->join('detailsalespos b', 'b.id = a.id')
+				if ($dr['deleted'] == '0') {
+					$replacesales = Yii::app()->db->createCommand()
+						->select($selectfields3)->from('salespos a')->join('detailsalespos b', 'b.id = a.id')
+						->leftJoin('salesreceivers c', 'c.id = a.idreceiver')
+						->where('a.regnum = :p_regnum and b.iditem = :p_iditem and b.price = :p_price and b.qty = :p_qty', 
+							array(':p_regnum'=>$dr['invnum'], ':p_iditem' => $dr['iditem'], ':p_price'=>$dr['price'],
+								'p_qty'=>$dr['qty']))
+						->queryRow();
+				} else if ($dr['deleted'] == '1') {
+					$replacesales = Yii::app()->db->createCommand()
+					->select($selectfields4)->from('salesreplace2 a')->join('detailsalesreplace2 b', 'b.id = a.id')
 					->leftJoin('salesreceivers c', 'c.id = a.idreceiver')
-					->where('a.regnum = :p_regnum and b.iditem = :p_iditem and b.price = :p_price and b.qty = :p_qty', 
-						array(':p_regnum'=>$dr['invnum'], ':p_iditem' => $dr['iditem'], ':p_price'=>$dr['price'],
-							'p_qty'=>$dr['qty']))
-					->queryRow();
+					->where('a.regnum = :p_regnum and b.iditem = :p_iditem and b.price = :p_price and b.qty = :p_qty',
+							array(':p_regnum'=>$dr['invnum'], ':p_iditem' => $dr['iditem'], ':p_price'=>$dr['price'],
+									'p_qty'=>$dr['qty']))
+									->queryRow();
+				}
 				$datareplace['idatetime'] = $replacesales['idatetime'];
 				$datareplace['regnum'] = $dr['regnum'];
 				$datareplace['invnum'] = $dr['invnum'];
