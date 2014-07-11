@@ -52,9 +52,10 @@ class SalesposreportController extends Controller
 			a.idatetime, a.regnum, a.total, a.discount, a.cash, a.cashreturn,  
 			a.payer_name, a.payer_address, a.payer_phone, a.userlog, a.receiveable, 
 			'Penjualan' as kind, '-' as invnum,
-			case when a.status = '0' then 'Batal' as cstatus
-				when a.status = '1' then 'Berlaku' as cstatus
-				when a.status = '2' then 'Ganti Barang' as cstatus,
+			case when (a.status) = '0' then 'Batal'
+				when (a.status) = '1' then 'Berlaku'
+				when (a.status) = '2' then 'Ganti Barang'
+			end as cstatus,
 			c.name, c.address, c.phone, 
 			b.idsales, b.iditem, b.qty, b.price, b.discount	
 EOS;
@@ -62,9 +63,10 @@ EOS;
 			a.idatetime, a.regnum, a.diff as total, (0) as discount, a.cash, a.cashreturn,
 			a.payer_name, a.payer_address, a.payer_phone, a.userlog, a.receiveable, 
 			'Ganti Barang' as kind, a.invnum,
-			case when a.status = '0' then 'Batal' as cstatus
-				when a.status = '1' then 'Berlaku' as cstatus
-				when a.status = '2' then 'Ganti Barang' as cstatus,
+			case when (a.status) = '0' then 'Batal'
+				when (a.status) = '1' then 'Berlaku'
+				when (a.status) = '2' then 'Ganti Barang'
+			end as cstatus,
 			c.name, c.address, c.phone,
 			b.idsales, b.iditem, b.qty, b.price, b.discount, b.status
 EOS;
@@ -129,6 +131,7 @@ EOS;
 			foreach($datarawcancels as $dc) {
 				$cancelsales = Yii::app()->db->createCommand()
 					->select()->from('salespos a')->join('detailsalespos b', 'b.id = a.id')
+					->leftJoin('salesreceivers', 'a.idreceiver = b.id')
 					->where('a.regnum = :p_regnum', array(':p_regnum'=>$dc['invnum']))
 					->queryAll();
 				foreach($cancelsales as $cs) {
@@ -147,11 +150,17 @@ EOS;
 					$datacancel['price'] = $cs['price'];
 					$datacancel['qty'] = $cs['qty'];
 					$datacancel['discount'] = $cs['discount'];
+					$datacancel['name'] = $cs['name'];
+					$datacancel['address'] = $cs['address'];
+					$datacancel['phone'] = $cs['phone'];
+					$datacancel['userlog'] = $dc['userlog'];
+					$datacancel['datetimelog'] = $dc['datetimelog'];
+					$datacancel['idsales'] = $cs['idsales'];
 					$datacancels[] = $datacancel;
 				}
 			}
 			$serialnumkn1 = Yii::app()->db->createCommand()
-				->select('c.serialnum')->from('salescancels a')
+				->select('c.serialnum')->from('salescancel a')
 				->join('stockentries b', 'b.transid = a.regnum')
 				->join('detailstockentries c', 'c.id = b.id')
 				->where("a.invnum = :p_invnum and c.serialnum <> 'Belum Diterima' and c.iditem = :p_iditem");
@@ -172,6 +181,7 @@ EOS;
 			foreach($datarawreplaces as $dr) {
 				$replacesales = Yii::app()->db->createCommand()
 					->select()->from('salespos a')->join('detailsalespos b', 'b.id = a.id')
+					->leftJoin('salesreceivers', 'a.idreceiver = b.id')
 					->where('a.regnum = :p_regnum and b.iditem = :p_iditem and b.price = :p_price and b.qty = :p_qty', 
 						array(':p_regnum'=>$dr['invnum'], ':p_iditem' => $dr['iditem'], ':p_price'=>$dr['price'],
 							'p_qty'=>$dr['qty']))
@@ -179,7 +189,7 @@ EOS;
 				$datareplace['idatetime'] = $replacesales['idatetime'];
 				$datareplace['regnum'] = $replacesales['regnum'];
 				$datareplace['invnum'] = $dr['regnum'];
-				$datareplace['status'] = $dr['status'];
+				$datareplace['status'] = $replacesales['status'];
 				$datareplace['total'] = $dr['totaldiff'];
 				$datareplace['cash'] = $replacesales['cash'];
 				$datareplace['cashreturn'] = $replacesales['cashreturn'];
@@ -191,6 +201,12 @@ EOS;
 				$datareplace['price'] = $replacesales['price'];
 				$datareplace['qty'] = $replacesales['qty'];
 				$datareplace['discount'] = $replacesales['discount'];
+				$datareplace['name'] = $replacesales['name'];
+				$datareplace['address'] = $replacesales['address'];
+				$datareplace['phone'] = $replacesales['phone'];
+				$datareplace['userlog'] = $dr['userlog'];
+				$datareplace['datetimelog'] = $dr['datetimelog'];
+				$datareplace['idsales'] = $replacesales['idsales'];
 				$datareplaces[] = $datareplace;
 			}
 			/*
