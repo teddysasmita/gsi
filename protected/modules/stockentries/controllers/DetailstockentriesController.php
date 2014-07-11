@@ -128,7 +128,11 @@ class DetailstockentriesController extends Controller
 					$respond = $this->checkReceiveRepair($transid, $model->iditem, $model->serialnum);
                   	if (!$respond) 
                   		$error = 'Nomor seri keliru';
-				} else
+				} else if ($transname == 'AC18') {
+					$respond = $this->checkReceiveTransfer($transid, $model->iditem, $model->serialnum);
+					if (!$respond)
+						$error = 'Nomor seri keliru';
+				} else {
                   	$respond = TRUE;
                     //posting into session
 				if ($respond) {
@@ -340,6 +344,24 @@ class DetailstockentriesController extends Controller
         			array(':p_id'=>$id, ':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))
         			->queryAll();
         	 
+        	if (!$item)
+        		return FALSE;
+        	else
+        		return TRUE;
+        }
+        
+        private function checkReceiveTransfer($regnum, $iditem, $serialnum)
+        {
+        	$id = Yii::app()->db->createCommand()->select('id')->from('itemtransfers')
+        	->where('regnum = :p_regnum', array(':p_regnum'=>$regnum))
+        	->queryScalar();
+        
+        	$item = Yii::app()->db->createCommand()->select()
+        	->from('detailitemtransfers')
+        	->where('id = :p_id and iditem = :p_iditem and serialnum = :p_serialnum',
+        			array(':p_id'=>$id, ':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))
+        			->queryAll();
+        
         	if (!$item)
         		return FALSE;
         	else
