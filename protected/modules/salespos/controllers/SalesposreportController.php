@@ -201,8 +201,8 @@ EOS;
 					->select($selectfields4)->from('salesreplace2 a')->join('detailsalesreplace2 b', 'b.id = a.id')
 					->leftJoin('salesreceivers c', 'c.id = a.idreceiver')
 					->where('a.regnum = :p_regnum and b.iditem = :p_iditem and b.price = :p_price and b.qty = :p_qty',
-							array(':p_regnum'=>$dr['invnum'], ':p_iditem' => $dr['iditem'], ':p_price'=>$dr['price'],
-									'p_qty'=>$dr['qty']))
+							array(':p_regnum'=>$dr['invnum'], ':p_iditem' => $dr['iditemnew'], ':p_price'=>$dr['pricenew'],
+									'p_qty'=>$dr['qtynew']))
 									->queryRow();
 				}
 				$datareplace['idatetime'] = $replacesales['idatetime'];
