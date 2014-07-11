@@ -190,7 +190,7 @@ EOS;
 							'p_qty'=>$dr['qty']))
 					->queryRow();
 				$datareplace['idatetime'] = $replacesales['idatetime'];
-				$datareplace['regnum'] = $replacesales['regnum'];
+				$datareplace['regnum'] = $dr['regnum'];
 				$datareplace['invnum'] = $dr['invnum'];
 				$datareplace['status'] = $dr['deleted'];
 				$datareplace['total'] = $dr['totaldiff'];
