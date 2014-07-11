@@ -132,7 +132,7 @@ class DetailstockentriesController extends Controller
 					$respond = $this->checkReceiveTransfer($transid, $model->iditem, $model->serialnum);
 					if (!$respond)
 						$error = 'Nomor seri keliru';
-				} else {
+				} else 
                   	$respond = TRUE;
                     //posting into session
 				if ($respond) {
@@ -142,8 +142,9 @@ class DetailstockentriesController extends Controller
                            $this->redirect(array('default/createdetail'));
                      	else if($master=='update')
                            $this->redirect(array('default/updatedetail'));
-                  	}	
-                }
+                  		
+                	}
+				}
 			}
 			$this->render('update',array(
 					'model'=>$model,'master'=>$master, 'idwh'=>$idwh, 
