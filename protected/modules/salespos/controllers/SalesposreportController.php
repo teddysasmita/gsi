@@ -49,26 +49,33 @@ class SalesposreportController extends Controller
 				->setCategory("Laporan");	
 			$enddate=$enddate.' 23:59:59';
 			$selectfields = <<<EOS
-			a.idatetime, a.regnum, a.total, a.discount, a.cash, a.cashreturn, 
-			a.payer_name, a.payer_address, a.payer_phone, a.userlog, a.receiveable,  
+			a.idatetime, a.regnum, a.total, a.discount, a.cash, a.cashreturn,  
+			a.payer_name, a.payer_address, a.payer_phone, a.userlog, a.receiveable, 
+			'Penjualan' as kind, '-' as invnum,
+			case when a.status = '0' then 'Batal' as cstatus
+				when a.status = '1' then 'Berlaku' as cstatus
+				when a.status = '2' then 'Ganti Barang' as cstatus,
 			c.name, c.address, c.phone, 
 			b.idsales, b.iditem, b.qty, b.price, b.discount	
 EOS;
 			$selectfields2 = <<<EOS
 			a.idatetime, a.regnum, a.diff as total, (0) as discount, a.cash, a.cashreturn,
-			a.payer_name, a.payer_address, a.payer_phone, a.userlog, a.receiveable, a.invnum,
+			a.payer_name, a.payer_address, a.payer_phone, a.userlog, a.receiveable, 
+			'Ganti Barang' as kind, a.invnum,
+			case when a.status = '0' then 'Batal' as cstatus
+				when a.status = '1' then 'Berlaku' as cstatus
+				when a.status = '2' then 'Ganti Barang' as cstatus,
 			c.name, c.address, c.phone,
 			b.idsales, b.iditem, b.qty, b.price, b.discount, b.status
 EOS;
 			$selectwhere = <<<EOS
 			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime 
-			and a.status = :p_status
 EOS;
+			
 			unset($selectparam);
 			$selectparam['p_startidatetime'] = $startdate;
 			$selectparam['p_endidatetime'] = $enddate;
-			$selectparam['p_status'] = '1';
-				
+
 			if (isset($brand) && ($brand <> '')) {
 				$selectwhere .= ' and d.brand = :p_brand';
 				$selectparam[':p_brand'] = $brand;
@@ -77,19 +84,12 @@ EOS;
 				$selectwhere .= ' and d.objects = :p_objects';
 				$selectparam[':p_objects'] = $objects;
 			}
+			
+			// Get ALL Sales data
 			$data=Yii::app()->db->createCommand()
 				->select($selectfields)				
-				->from('salespos a')
-				->join('detailsalespos b', 'b.id = a.id')
-				->join('items d', 'd.id = b.iditem')
-				->leftJoin('salesreceivers c', 'c.id = a.idreceiver')
-				->where($selectwhere, $selectparam)
-				->order('a.idatetime, a.regnum')
-				->queryAll();
-			$data2=Yii::app()->db->createCommand()
-				->select($selectfields2)
-				->from('salesreplace2 a')
-				->join('detailsalesreplace2 b', 'b.id = a.id')
+				->from('detailsalespos b')
+				->join('salespos a', 'a.id = b.id')
 				->join('items d', 'd.id = b.iditem')
 				->leftJoin('salesreceivers c', 'c.id = a.idreceiver')
 				->where($selectwhere, $selectparam)
@@ -106,6 +106,7 @@ EOS;
 				->join('stockexits b', 'b.transid = a.regnum')
 				->join('detailstockexits c', 'c.id = b.id')
 				->where("a.invnum = :p_invnum and c.serialnum <> 'Belum Diterima' and c.iditem = :p_iditem");
+			
 			foreach($data as & $myrow) {
 				$serialnumpb->bindParam(':p_invnum', $myrow['regnum']);
 				$serialnumpb->bindParam(':p_iditem', $myrow['iditem']);
@@ -118,28 +119,99 @@ EOS;
 				if ($datasj !== FALSE)
 					$myrow['serialnums'] = implode(', ', $datasj);
 			}
-			foreach($data2 as & $myrow) {
-				if ($myrow['status'] == '1') {
-					$serialnumpb->bindParam(':p_invnum', $myrow['regnum']);
-					$serialnumpb->bindParam(':p_iditem', $myrow['iditem']);
-					$datapb = $serialnumpb->queryColumn();
-					$serialnumsj->bindParam(':p_invnum', $myrow['regnum']);
-					$serialnumsj->bindParam(':p_iditem', $myrow['iditem']);
-					$datasj = $serialnumsj->queryColumn();
-				} else if ($myrow['status'] == '0') { 
-					$serialnumpb->bindParam(':p_invnum', $myrow['invnum']);
-					$serialnumpb->bindParam(':p_iditem', $myrow['iditem']);
-					$datapb = $serialnumpb->queryColumn();
-					$serialnumsj->bindParam(':p_invnum', $myrow['invnum']);
-					$serialnumsj->bindParam(':p_iditem', $myrow['iditem']);
-					$datasj = $serialnumsj->queryColumn();
+			// end -- Get ALL Sales data
+			
+			// Get ALL Sales Cancelation data
+			$datarawcancels = Yii::app()->db->createCommand()
+				->select()->from('salescancel a')
+				->where($selectwhere, $selectparam)
+				->queryAll();
+			foreach($datarawcancels as $dc) {
+				$cancelsales = Yii::app()->db->createCommand()
+					->select()->from('salespos a')->join('detailsalespos b', 'b.id = a.id')
+					->where('a.regnum = :p_regnum', array(':p_regnum'=>$dc['invnum']))
+					->queryAll();
+				foreach($cancelsales as $cs) {
+					$datacancel['idatetime'] = $cs['idatetime'];
+					$datacancel['regnum'] = $dc['regnum'];
+					$datacancel['invnum'] = $cs['regnum'];
+					$datacancel['status'] = $cs['status'];
+					$datacancel['total'] = - ($dc['totalcash'] + $dc['totalnoncash']);
+					$datacancel['cash'] = $cs['cash'];
+					$datacancel['cashreturn'] = $cs['cashreturn'];
+					$datacancel['receiveable'] = $cs['receiveable'];
+					$datacancel['payer_name'] = $cs['payer_name'];
+					$datacancel['payer_address'] = $cs['payer_address'];
+					$datacancel['payer_phone'] = $cs['payer_phone'];
+					$datacancel['iditem'] = $cs['iditem'];
+					$datacancel['price'] = $cs['price'];
+					$datacancel['qty'] = $cs['qty'];
+					$datacancel['discount'] = $cs['discount'];
+					$datacancels[] = $datacancel;
 				}
-				if ($datapb !== FALSE)
-					$myrow['serialnums'] = implode(', ', $datapb);
-				if ($datasj !== FALSE)
-					$myrow['serialnums'] = implode(', ', $datasj);
-			}	
-			$data = array_merge($data, $data2);
+			}
+			$serialnumkn1 = Yii::app()->db->createCommand()
+				->select('c.serialnum')->from('salescancels a')
+				->join('stockentries b', 'b.transid = a.regnum')
+				->join('detailstockentries c', 'c.id = b.id')
+				->where("a.invnum = :p_invnum and c.serialnum <> 'Belum Diterima' and c.iditem = :p_iditem");
+			foreach($datacancels as & $myrow) {
+				$serialnumkn1->bindParam(':p_invnum', $myrow['regnum']);
+				$serialnumkn1->bindParam(':p_iditem', $myrow['iditem']);
+				$datakn = $serialnumkn1->queryColumn();
+				if ($datakn !== FALSE)
+					$myrow['serialnums'] = implode(', ', $datakn);
+			}
+			// end -- Get ALL Sales Cancelation
+			
+			// Get ALL Sales Modification data
+			$datarawreplaces = Yii::app()->db->createCommand()
+				->select()->from('salesreplace a')->join('detailsalesreplace b', 'b.id = a.id')
+				->where($selectwhere, $selectparam)
+				->queryAll();
+			foreach($datarawreplaces as $dr) {
+				$replacesales = Yii::app()->db->createCommand()
+					->select()->from('salespos a')->join('detailsalespos b', 'b.id = a.id')
+					->where('a.regnum = :p_regnum and b.iditem = :p_iditem and b.price = :p_price and b.qty = :p_qty', 
+						array(':p_regnum'=>$dr['invnum'], ':p_iditem' => $dr['iditem'], ':p_price'=>$dr['price'],
+							'p_qty'=>$dr['qty']))
+					->queryRow();
+				$datareplace['idatetime'] = $replacesales['idatetime'];
+				$datareplace['regnum'] = $replacesales['regnum'];
+				$datareplace['invnum'] = $dr['regnum'];
+				$datareplace['status'] = $dr['status'];
+				$datareplace['total'] = $dr['totaldiff'];
+				$datareplace['cash'] = $replacesales['cash'];
+				$datareplace['cashreturn'] = $replacesales['cashreturn'];
+				$datareplace['receiveable'] = $replacesales['receiveable'];
+				$datareplace['payer_name'] = $replacesales['payer_name'];
+				$datareplace['payer_address'] = $replacesales['payer_address'];
+				$datareplace['payer_phone'] = $replacesales['payer_phone'];
+				$datareplace['iditem'] = $replacesales['iditem'];
+				$datareplace['price'] = $replacesales['price'];
+				$datareplace['qty'] = $replacesales['qty'];
+				$datareplace['discount'] = $replacesales['discount'];
+				$datareplaces[] = $datareplace;
+			}
+			/*
+			$serialnumkn2a = Yii::app()->db->createCommand()
+				->select('c.serialnum')->from('salesreplaces a')
+				->join('stockentries b', 'b.transid = a.regnum')
+				->join('detailstockentries c', 'c.id = b.id')
+				->where("a.invnum = :p_invnum and c.serialnum <> 'Belum Diterima' and c.iditem = :p_iditem");
+			*/
+			foreach($datareplaces as & $myrow) {
+				/*
+				$serialnumkn1->bindParam(':p_invnum', $myrow['regnum']);
+				$serialnumkn1->bindParam(':p_iditem', $myrow['iditem']);
+				$datakn = $serialnumkn1->queryColumn();
+				if ($datakn !== FALSE)
+					$myrow['serialnums'] = implode(', ', $datakn);
+				*/
+				$myrow['serialnums'] = '-';
+			}
+			// end -- Get ALL Sales Modification
+			$data = array_merge($data, $datacancels, $datareplaces);
 			$headersfield = array( 'idatetime', 'regnum', 'total', 'discount', 'cash', 'cashreturn', 'receiveable',
 				'payer_name', 'payer_address', 'payer_phone', 'userlog',
 				'name', 'address', 'phone','idsales', 'iditem', 'qty', 'price', 'discount', 'serialnums');

@@ -499,7 +499,7 @@ class DefaultController extends Controller
             $idmaker=new idmaker();
             if ($this->state == 'create')
             	$idmaker->saveRegNum($this->formid, substr($model->regnum,2));    
-            Action::setInvStatus($model->invnum, '0');
+            Action::setInvStatus($model->invnum, '2');
         }
         
         protected function beforePost(& $model)
