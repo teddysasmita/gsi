@@ -205,41 +205,43 @@ EOS;
 									'p_qty'=>$dr['qtynew']))
 									->queryRow();
 				}
-				$datareplace['idatetime'] = $replacesales['idatetime'];
-				$datareplace['regnum'] = $dr['regnum'];
-				$datareplace['invnum'] = $dr['invnum'];
-				$datareplace['status'] = $dr['deleted'];
-				$datareplace['total'] = - $dr['totaldiff'];
-				$datareplace['cash'] = $replacesales['cash'];
-				$datareplace['cashreturn'] = $replacesales['cashreturn'];
-				$datareplace['receiveable'] = $replacesales['receiveable'];
-				$datareplace['payer_name'] = $replacesales['payer_name'];
-				$datareplace['payer_address'] = $replacesales['payer_address'];
-				$datareplace['payer_phone'] = $replacesales['payer_phone'];
-				$datareplace['iditem'] = $replacesales['iditem'];
-				$datareplace['price'] = $replacesales['price'];
-				$datareplace['qty'] = $replacesales['qty'];
-				$datareplace['discount'] = $replacesales['discount'];
-				$datareplace['name'] = $replacesales['name'];
-				$datareplace['address'] = $replacesales['address'];
-				$datareplace['phone'] = $replacesales['phone'];
-				$datareplace['userlog'] = $dr['userlog'];
-				$datareplace['datetimelog'] = $dr['datetimelog'];
-				$datareplace['idsales'] = $replacesales['idsales'];
-				$datareplace['kind'] = 'Ganti Barang';
-				/*switch ($dr['status']) {
-					case 0:
-						$datareplace['cstatus'] = 'Batal';
-						break;
-					case 1:
-						$datareplace['cstatus'] = 'Berlaku';
-						break;
-					case 0:
-						$datareplace['cstatus'] = 'Diganti';
-						break;
-				}*/
-				$datareplace['cstatus'] = 'Berlaku';
-				$datareplaces[] = $datareplace;
+				if ($dr['deleted'] == '0' || $dr['deleted'] == '1') {
+					$datareplace['idatetime'] = $replacesales['idatetime'];
+					$datareplace['regnum'] = $dr['regnum'];
+					$datareplace['invnum'] = $dr['invnum'];
+					$datareplace['status'] = $dr['deleted'];
+					$datareplace['total'] = - $dr['totaldiff'];
+					$datareplace['cash'] = $replacesales['cash'];
+					$datareplace['cashreturn'] = $replacesales['cashreturn'];
+					$datareplace['receiveable'] = $replacesales['receiveable'];
+					$datareplace['payer_name'] = $replacesales['payer_name'];
+					$datareplace['payer_address'] = $replacesales['payer_address'];
+					$datareplace['payer_phone'] = $replacesales['payer_phone'];
+					$datareplace['iditem'] = $replacesales['iditem'];
+					$datareplace['price'] = $replacesales['price'];
+					$datareplace['qty'] = $replacesales['qty'];
+					$datareplace['discount'] = $replacesales['discount'];
+					$datareplace['name'] = $replacesales['name'];
+					$datareplace['address'] = $replacesales['address'];
+					$datareplace['phone'] = $replacesales['phone'];
+					$datareplace['userlog'] = $dr['userlog'];
+					$datareplace['datetimelog'] = $dr['datetimelog'];
+					$datareplace['idsales'] = $replacesales['idsales'];
+					$datareplace['kind'] = 'Ganti Barang';
+					/*switch ($dr['status']) {
+						case 0:
+							$datareplace['cstatus'] = 'Batal';
+							break;
+						case 1:
+							$datareplace['cstatus'] = 'Berlaku';
+							break;
+						case 0:
+							$datareplace['cstatus'] = 'Diganti';
+							break;
+					}*/
+					$datareplace['cstatus'] = 'Berlaku';
+					$datareplaces[] = $datareplace;
+				}
 			}
 			/*
 			$serialnumkn2a = Yii::app()->db->createCommand()
