@@ -260,12 +260,16 @@ EOS;
 			}
 			// end -- Get ALL Sales Modification
 			$data = array_merge($data, $datacancels, $datareplaces);
-			$headersfield = array( 'kind', 'cstatus', 'idatetime', 'regnum', 'invnum', 'total', 'discount', 'cash', 'cashreturn', 'receiveable',
-				'payer_name', 'payer_address', 'payer_phone', 'userlog',
-				'name', 'address', 'phone','idsales', 'iditem', 'qty', 'price', 'discount', 'serialnums');
-			$headersname = array('Jenis', 'Status', 'Tanggal', 'No Urut', 'No Faktur', 'Potongan', 'Terima Tunai', 'Kembalian', 'Piutang',
-				'Nama Pembeli', 'Alamat Pembeli', 'Telp Pembeli', 'Nama Kasir', 'Nama Penerima', 'Alamat Penerima', 'Telp Penerima',
-				'Nama Sales', 'Nama Barang', 'Qty', 'Harga', 'Potongan', 'Nomor Seri');
+			$headersfield = array( 
+				'kind', 'cstatus', 'idatetime', 'regnum', 'invnum', 'total', 'discount', 
+				'cash', 'cashreturn', 'receiveable', 'payer_name', 'payer_address', 'payer_phone', 'userlog',
+				'name', 'address', 'phone','idsales', 'iditem', 'qty', 'price', 'discount', 
+				'serialnums');
+			$headersname = array(
+				'Jenis', 'Status', 'Tanggal', 'No Urut', 'No Faktur', 'Total', 'Potongan', 
+				'Terima Tunai', 'Kembalian', 'Piutang', 'Nama Pembeli', 'Alamat Pembeli', 'Telp Pembeli', 'Nama Kasir', 
+				'Nama Penerima', 'Alamat Penerima', 'Telp Penerima', 'Nama Sales', 'Nama Barang', 'Qty', 'Harga', 'Potongan', 
+				'Nomor Seri');
 			for( $i=0;$i<count($headersname); $i++ ) {
 				$xl->setActiveSheetIndex(0)
 					->setCellValueByColumnAndRow($i,1, $headersname[$i]);
