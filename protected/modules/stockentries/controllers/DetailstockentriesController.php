@@ -352,17 +352,13 @@ class DetailstockentriesController extends Controller
         }
         
         private function checkReceiveTransfer($regnum, $iditem, $serialnum)
-        {
-        	$id = Yii::app()->db->createCommand()->select('id')->from('itemtransfers')
-        	->where('regnum = :p_regnum', array(':p_regnum'=>$regnum))
-        	->queryScalar();
-        
+        {	
         	$item = Yii::app()->db->createCommand()->select()
-        	->from('detailitemtransfers')
-        	->where('id = :p_id and iditem = :p_iditem and serialnum = :p_serialnum',
-        			array(':p_id'=>$id, ':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))
-        			->queryAll();
-        
+        		->from('stockexits a')->join('detailstockexits b', 'b.id = a.id')
+        		->where('a.transid = :p_transid and b.iditem = :p_iditem and b.serialnum = :p_serialnum',
+        			array(':p_transid'=>$regnum, 'p_iditem'=>$iditem, 'p_serialnum'=>$serialnum))
+        		->queryAll();
+        	
         	if (!$item)
         		return FALSE;
         	else
