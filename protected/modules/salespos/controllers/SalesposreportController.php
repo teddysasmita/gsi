@@ -35,6 +35,10 @@ class SalesposreportController extends Controller
 	
 	public function actionGetexcel($startdate, $enddate, $brand, $objects)
 	{
+		$datacancels = array();
+		$datareplaces = array();
+		$data = array();
+		
 		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
 				Yii::app()->user->id))  {
 			$this->trackActivity('v');

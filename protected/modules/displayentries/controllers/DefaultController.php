@@ -530,6 +530,8 @@ class DefaultController extends Controller
 			->where('serialnum = :p_serialnum and avail = :p_avail', 
 				array(':p_serialnum'=>$serialnum, ':p_avail'=>'1'))
 			->queryScalar();
+	
+		
 		if ($indisplay == 0) {
 			$dataexit = Yii::app()->db->createCommand()
 				->select("a.regnum, a.idatetime, concat('AC16') as transname, a.idsales, b.regnum as stocknum, b.idatetime as stocktime, b.idwarehouse, c.iditem")
