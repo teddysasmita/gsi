@@ -530,17 +530,32 @@ class DefaultController extends Controller
 			->where('serialnum = :p_serialnum and avail = :p_avail', 
 				array(':p_serialnum'=>$serialnum, ':p_avail'=>'1'))
 			->queryScalar();
-	
-		
-		if ($indisplay == 0) {
-			$dataexit = Yii::app()->db->createCommand()
-				->select("a.regnum, a.idatetime, concat('AC16') as transname, a.idsales, b.regnum as stocknum, b.idatetime as stocktime, b.idwarehouse, c.iditem")
-				->from('requestdisplays a')->join('stockexits b', 'b.transid = a.regnum')
-				->join('detailstockexits c', 'c.id = b.id')
-				->where('c.serialnum = :p_serialnum', array(':p_serialnum'=>$serialnum))
-				->queryRow();
-			return $dataexit;
-		} else 
+		if ($indisplay > 0) 
 			return FALSE;
+		
+		$sql1 = <<<EOS
+		a.regnum, a.idatetime,  
+		b.regnum as stocknum, b.idatetime as stocktime, b.idwarehouse, c.iditem
+EOS;
+		$dataexit = Yii::app()->db->createCommand()
+			->select($sql1)
+			->from('requestdisplays a')->join('stockexits b', 'b.transid = a.regnum')
+			->join('detailstockexits c', 'c.id = b.id')
+			->where('c.serialnum = :p_serialnum', array(':p_serialnum'=>$serialnum))
+			->order('a.idatetime desc')	
+			->queryAll();
+		
+		if (!$dataexit)
+			return FALSE;
+		
+		$dataentry = Yii::app()->db->createCommand()
+			->select('count(*) as total')->from('stockentries a')
+			->join('detailstockentries b', 'b.id = a.id')
+			->where('a.transid = :p_transid and b.serialnum = :p_serialnum and a.idwarehouse = :p_idwarehouse',
+				array(':p_transid'=>$dataexit[0]['regnum'], ':p_serialnum'=>$serialnum,
+					':p_idwarehouse'=>$idwh))
+			->queryRow();
+		
+		return $dataentry['total'] == 0;
 	}
 }
