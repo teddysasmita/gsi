@@ -534,7 +534,7 @@ class DefaultController extends Controller
 			return FALSE;
 		
 		$sql1 = <<<EOS
-		a.regnum, a.idatetime,  
+		a.regnum, a.idatetime,  concat('AC16') as transname, a.idsales,
 		b.regnum as stocknum, b.idatetime as stocktime, b.idwarehouse, c.iditem
 EOS;
 		$dataexit = Yii::app()->db->createCommand()
@@ -556,6 +556,9 @@ EOS;
 					':p_idwarehouse'=>$idwh))
 			->queryRow();
 		
-		return $dataentry['total'] == 0;
+		if ($dataentry['total'] > 0)
+			return FALSE;
+		
+		return $dataexit;
 	}
 }
