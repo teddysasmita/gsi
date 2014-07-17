@@ -79,20 +79,19 @@ class DefaultController extends Controller
 				$model->attributes = $_POST ['Displayentries'];
 				
 				$dataexit = $this->checkSerial($model->serialnum, $model->idwarehouse);
-				print_r($dataexit);die;
 				
 				if ($dataexit === FALSE) {
 					$info = 'Data Permintaan Barang tidak ditemukan';
 				} else {
-					$model->iditem = $dataexit['iditem'];
+					$model->iditem = $dataexit[0]['iditem'];
 					//this avail is actually status. Wrong use of name
-					$model->avail = Action::checkItemStatusInWarehouse($dataexit['idwarehouse'], $model->serialnum);
-					$model->transid = $dataexit['regnum'];
-					$info = 'Permintaan Barang Keluar no. ' .$dataexit['regnum']. ' - '. $dataexit['idatetime']. ' - '.
-							lookup::SalesNameFromID($dataexit['idsales']). '<br>'.
-							lookup::ItemNameFromItemID($dataexit['iditem']). '<br>'.
-							'Keluar Gudang no. '. $dataexit['stocknum']. ' - '. $dataexit['stocktime'].' - '.
-							lookup::WarehouseNameFromWarehouseID($dataexit['idwarehouse']).' - '.
+					$model->avail = Action::checkItemStatusInWarehouse($dataexit[0]['idwarehouse'], $model->serialnum);
+					$model->transid = $dataexit[0]['regnum'];
+					$info = 'Permintaan Barang Keluar no. ' .$dataexit[0]['regnum']. ' - '. $dataexit[0]['idatetime']. ' - '.
+							lookup::SalesNameFromID($dataexit[0]['idsales']). '<br>'.
+							lookup::ItemNameFromItemID($dataexit[0]['iditem']). '<br>'.
+							'Keluar Gudang no. '. $dataexit[0]['stocknum']. ' - '. $dataexit[0]['stocktime'].' - '.
+							lookup::WarehouseNameFromWarehouseID($dataexit[0]['idwarehouse']).' - '.
 							'Kondisi Barang: '.lookup::StockStatusName($model->avail);
 					$this->beforePost ( $model );
 					$respond = $model->save();
