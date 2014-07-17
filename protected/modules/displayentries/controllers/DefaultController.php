@@ -79,6 +79,7 @@ class DefaultController extends Controller
 				$model->attributes = $_POST ['Displayentries'];
 				
 				$dataexit = $this->checkSerial($model->serialnum, $model->idwarehouse);
+				print_r($dataexit);
 				if ($dataexit === FALSE) {
 					$info = 'Data Permintaan Barang tidak ditemukan';
 				} else {
@@ -545,7 +546,6 @@ EOS;
 			->order('a.idatetime desc')	
 			->queryAll();
 		
-		print_r($dataexit);
 		
 		if (!$dataexit)
 			return FALSE;
