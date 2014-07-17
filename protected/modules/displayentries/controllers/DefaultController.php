@@ -545,6 +545,8 @@ EOS;
 			->order('a.idatetime desc')	
 			->queryAll();
 		
+		print_r($dataexit);
+		
 		if (!$dataexit)
 			return FALSE;
 		
