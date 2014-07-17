@@ -79,7 +79,8 @@ class DefaultController extends Controller
 				$model->attributes = $_POST ['Displayentries'];
 				
 				$dataexit = $this->checkSerial($model->serialnum, $model->idwarehouse);
-				print_r($dataexit);
+				print_r($dataexit);die;
+				
 				if ($dataexit === FALSE) {
 					$info = 'Data Permintaan Barang tidak ditemukan';
 				} else {
