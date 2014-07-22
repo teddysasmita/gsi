@@ -27,8 +27,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'idsupplier'); ?>
-		<?php echo $form->textField($model,'idsupplier',array('size'=>21,'maxlength'=>21)); ?>
+		<?php echo $form->label($model,'idservicecenter'); ?>
+		<?php echo $form->textField($model,'idservicecenter',array('size'=>21,'maxlength'=>21)); ?>
 	</div>
    
 	<div class="row">
