@@ -49,14 +49,15 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'id',
 		'regnum',
 		'idatetime',
-		'idsupplier',
+		'sendnum',
 		/*
 		'discount',
 		'status',
 		'remark',
+		
 		'userlog',
-		'datetimelog',
 		*/
+		'datetimelog',
 		array(
 			'class'=>'CButtonColumn',
 		),
