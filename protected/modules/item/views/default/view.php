@@ -43,7 +43,10 @@ $this->menu=array(
                    //'value'=>  html_entity_decode(CHtml::image(Yii::app()->basePath.'/images/'.$model['picture'])),
                    'value'=>  html_entity_decode(CHtml::image(YIi::app()->baseUrl.'/images/'.$model['picture'],'Not Available')),
                 ),
-		'userlog',
+		array(
+                   'name'=>'userlog',
+                   'value'=>lookup::UserNameFromUserID($model->userlog)
+                ),
 		'datetimelog',
 	),
 )); ?>
