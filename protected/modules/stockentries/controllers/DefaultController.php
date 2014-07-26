@@ -750,8 +750,8 @@ EOS;
 	      			->group('b.iditem')
 					->queryAll();
       			
-      			$dataPBs[] = $dataPB;
-      			$dataSJs[] = $dataSJ;
+      			$dataPBs = array_merge($dataPBs, $dataPB);
+      			$dataSJs = array_merge($dataSJs, $dataSJ);
       		}
       		
       		$dataLPB = array_merge($dataPBs, $dataSJs);
