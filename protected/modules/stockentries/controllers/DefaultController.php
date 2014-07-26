@@ -720,28 +720,41 @@ EOS;
       	
       	if ($dataLPB == FALSE ) {
       		$invnum = Yii::app()->db->createCommand()
-      		->select('invnum')->from('salesreplace')
-      		->where('regnum = :p_regnum', array(':p_regnum'=>$nolpb))
-      		->queryScalar();
+	      		->select('invnum')->from('salesreplace')
+	      		->where('regnum = :p_regnum', array(':p_regnum'=>$nolpb))
+	      		->queryScalar();
       	
-      		$dataSJ=Yii::app()->db->createCommand()
-      		->select('a.id, b.iditem, sum(b.qty) as qty')
-      		->from('deliveryorders a')
-      		->join('detaildeliveryorders b', 'b.id=a.id')
-      		->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse',
-      				array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh) )
-      				->group('b.iditem')
-      				->queryAll();
-      		$dataPB=Yii::app()->db->createCommand()
-      		->select('a.id, b.iditem, sum(b.qty) as qty')
-      		->from('orderretrievals a')
-      		->join('detailorderretrievals b', 'b.id=a.id')
-      		->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse',
-      				array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh) )
-      				->group('b.iditem')
-      				->queryAll();
-      	
-      		$dataLPB = array_merge($dataPB, $dataSJ);
+      		$detailreplaces = Yii::app()->db->createCommand()
+      			->select('iditem')->from('detailsalesreplace b')
+      			->join('salesreplace a', 'a.id = b.id')
+      			->where('a.regnum = :p_regnum and b.deleted <> :p_same', 
+      				array(':p_regnum'=>$nolpb, ':p_same'=>'0'))
+      			->queryScalar();
+      		
+      		foreach($detailreplaces as $dr) {
+      			$dataSJ=Yii::app()->db->createCommand()
+	      			->select('a.id, b.iditem, sum(b.qty) as qty')
+	      			->from('deliveryorders a')
+	      			->join('detaildeliveryorders b', 'b.id=a.id')
+	      			->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse and b.iditem = :p_iditem',
+	      					array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh, ':p_iditem'=>$dr) )
+	      			->group('b.iditem')
+	      			->queryAll();
+      			
+      			$dataPB=Yii::app()->db->createCommand()
+	      			->select('a.id, b.iditem, sum(b.qty) as qty')
+	      			->from('orderretrievals a')
+	      			->join('detailorderretrievals b', 'b.id=a.id')
+	      			->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse and b.iditem = :p_iditem',
+	      					array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh, ':p_iditem'=>$dr) )
+	      			->group('b.iditem')
+					->queryAll();
+      			
+      			$dataPBs[] = $dataPB;
+      			$dataSJs[] = $dataSJ;
+      		}
+      		
+      		$dataLPB = array_merge($dataPBs, $dataSJs);
       	}
       	
       	if ($dataLPB == FALSE ) {
