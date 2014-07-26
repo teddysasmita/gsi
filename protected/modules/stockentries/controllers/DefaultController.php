@@ -779,7 +779,7 @@ EOS;
 	      			->from('orderretrievals a')
 	      			->join('detailorderretrievals b', 'b.id=a.id')
 	      			->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse and b.iditem = :p_iditem',
-	      				array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh, ':p_iditem'=>$dr) )
+	      				array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh, ':p_iditem'=>$dr['iditem']) )
 					->group('b.iditem')
       				->queryScalar();
       			 
