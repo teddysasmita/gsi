@@ -727,37 +727,66 @@ EOS;
 	      		->where('regnum = :p_regnum', array(':p_regnum'=>$nolpb))
 	      		->queryScalar();
       	
-      		$detailreplaces = Yii::app()->db->createCommand()
-      			->select('iditem')->from('detailsalesreplace b')
+      		$detailreplaces1 = Yii::app()->db->createCommand()
+      			->select('a.id, b.iditem, b.qty')->from('detailsalesreplace b')
       			->join('salesreplace a', 'a.id = b.id')
-      			->where('a.regnum = :p_regnum and b.deleted <> :p_same', 
-      				array(':p_regnum'=>$nolpb, ':p_same'=>'0'))
-      			->queryColumn();
+      			->where('a.regnum = :p_regnum and b.deleted = :p_same', 
+      				array(':p_regnum'=>$nolpb, ':p_same'=>'2'))
+      			->queryAll();
       		
-      		foreach($detailreplaces as $dr) {
-      			$dataSJ=Yii::app()->db->createCommand()
-	      			->select('a.id, b.iditem, sum(b.qty) as qty')
+      		foreach($detailreplaces1 as & $dr) {
+      			$qtySJ=Yii::app()->db->createCommand()
+	      			->select('sum(b.qty) as qty')
 	      			->from('deliveryorders a')
 	      			->join('detaildeliveryorders b', 'b.id=a.id')
 	      			->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse and b.iditem = :p_iditem',
-	      					array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh, ':p_iditem'=>$dr) )
-	      			->group('b.iditem')
-	      			->queryAll();
-      			
-      			$dataPB=Yii::app()->db->createCommand()
-	      			->select('a.id, b.iditem, sum(b.qty) as qty')
+      					array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh, ':p_iditem'=>$dr['iditem']) )
+      				->group('b.iditem')
+					->queryScalar();
+      			 
+      			$qtyPB=Yii::app()->db->createCommand()
+	      			->select('sum(b.qty) as qty')
 	      			->from('orderretrievals a')
 	      			->join('detailorderretrievals b', 'b.id=a.id')
 	      			->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse and b.iditem = :p_iditem',
-	      					array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh, ':p_iditem'=>$dr) )
-	      			->group('b.iditem')
-					->queryAll();
-      			
-      			$dataPBs = array_merge($dataPBs, $dataPB);
-      			$dataSJs = array_merge($dataSJs, $dataSJ);
+      					array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh, ':p_iditem'=>$dr['iditem']) )
+      				->group('b.iditem')
+      				->queryScalar();
+      		
+      			$dr['qty'] = $qtyPB + $qtySJ;
       		}
       		
-      		$dataLPB = array_merge($dataPBs, $dataSJs);
+      		
+      		$detailreplaces2 = Yii::app()->db->createCommand()
+      		->select('a.id, b.iditem, (b.qty-b.qtynew) as nqty')->from('detailsalesreplace b')
+      		->join('salesreplace a', 'a.id = b.id')
+      		->where('a.regnum = :p_regnum and b.deleted = :p_same',
+      				array(':p_regnum'=>$nolpb, ':p_same'=>'1'))
+      				->queryColumn();
+      		
+      		foreach($detailreplaces2 as & $dr) {
+      			$qtySJ=Yii::app()->db->createCommand()
+	      			->select('sum(b.qty) as qty')
+	      			->from('deliveryorders a')
+	      			->join('detaildeliveryorders b', 'b.id=a.id')
+	      			->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse and b.iditem = :p_iditem',
+	      				array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh, ':p_iditem'=>$dr['iditem']) )
+	      			->group('b.iditem')
+	      			->queryScalar();
+	      			 
+      			$dataPB=Yii::app()->db->createCommand()
+	      			->select('sum(b.qty) as qty')
+	      			->from('orderretrievals a')
+	      			->join('detailorderretrievals b', 'b.id=a.id')
+	      			->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse and b.iditem = :p_iditem',
+	      				array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh, ':p_iditem'=>$dr) )
+					->group('b.iditem')
+      				->queryScalar();
+      			 
+      			$dr['qty'] = $qtyPB + $qtySJ;
+      		}
+      		
+      		$dataLPB = array_merge($detailreplaces2, $detailreplaces1);
       	}
       	
       	if ($dataLPB == FALSE ) {
