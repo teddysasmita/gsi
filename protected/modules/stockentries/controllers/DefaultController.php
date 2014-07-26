@@ -729,7 +729,7 @@ EOS;
       			->join('salesreplace a', 'a.id = b.id')
       			->where('a.regnum = :p_regnum and b.deleted <> :p_same', 
       				array(':p_regnum'=>$nolpb, ':p_same'=>'0'))
-      			->queryScalar();
+      			->queryColumn();
       		
       		foreach($detailreplaces as $dr) {
       			$dataSJ=Yii::app()->db->createCommand()
