@@ -774,7 +774,7 @@ EOS;
 	      			->group('b.iditem')
 	      			->queryScalar();
 	      			 
-      			$dataPB=Yii::app()->db->createCommand()
+      			$qtyPB=Yii::app()->db->createCommand()
 	      			->select('sum(b.qty) as qty')
 	      			->from('orderretrievals a')
 	      			->join('detailorderretrievals b', 'b.id=a.id')
