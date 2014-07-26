@@ -758,11 +758,11 @@ EOS;
       		
       		
       		$detailreplaces2 = Yii::app()->db->createCommand()
-      		->select('a.id, b.iditem, (b.qty-b.qtynew) as nqty')->from('detailsalesreplace b')
-      		->join('salesreplace a', 'a.id = b.id')
-      		->where('a.regnum = :p_regnum and b.deleted = :p_same',
-      				array(':p_regnum'=>$nolpb, ':p_same'=>'1'))
-      				->queryColumn();
+	      		->select('a.id, b.iditem, (b.qty-b.qtynew) as nqty')->from('detailsalesreplace b')
+	      		->join('salesreplace a', 'a.id = b.id')
+	      		->where('a.regnum = :p_regnum and b.deleted = :p_same',
+	      				array(':p_regnum'=>$nolpb, ':p_same'=>'1'))
+				->queryAll();
       		
       		foreach($detailreplaces2 as & $dr) {
       			$qtySJ=Yii::app()->db->createCommand()
@@ -787,7 +787,6 @@ EOS;
       		}
       		
       		$dataLPB = array_merge($detailreplaces2, $detailreplaces1);
-      		print_r($dataLPB);
       	}
       	
       	if ($dataLPB == FALSE ) {
