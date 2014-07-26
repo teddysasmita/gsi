@@ -753,13 +753,14 @@ EOS;
       				->group('b.iditem')
       				->queryScalar();
       		
-      			$dr['qty'] = $qtyPB + $qtySJ;
+      			if (($qtySJ + $qtyPB) < $dr['qty'] )
+      				$dr['qty'] = $qtyPB + $qtySJ;
       		}
       		
       		print_r($detailreplaces1);
       		echo ' - ';
       		$detailreplaces2 = Yii::app()->db->createCommand()
-	      		->select('a.id, b.iditem, (b.qty-b.qtynew) as nqty')->from('detailsalesreplace b')
+	      		->select('a.id, b.iditem, (b.qty-b.qtynew) as qty')->from('detailsalesreplace b')
 	      		->join('salesreplace a', 'a.id = b.id')
 	      		->where('a.regnum = :p_regnum and b.deleted = :p_same',
 	      				array(':p_regnum'=>$nolpb, ':p_same'=>'1'))
@@ -784,7 +785,8 @@ EOS;
 					->group('b.iditem')
       				->queryScalar();
       			 
-      			$dr['qty'] = $qtyPB + $qtySJ;
+      			if (($qtySJ + $qtyPB) < $dr['qty'] )
+      				$dr['qty'] = $qtyPB + $qtySJ;
       		}
       		print_r($detailreplaces2);
       		$dataLPB = array_merge($detailreplaces2, $detailreplaces1);
