@@ -719,6 +719,9 @@ EOS;
       	}
       	
       	if ($dataLPB == FALSE ) {
+      		$dataPBs = array();
+      		$dataSJs = array();
+      		
       		$invnum = Yii::app()->db->createCommand()
 	      		->select('invnum')->from('salesreplace')
 	      		->where('regnum = :p_regnum', array(':p_regnum'=>$nolpb))
