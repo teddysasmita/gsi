@@ -756,7 +756,8 @@ EOS;
       			$dr['qty'] = $qtyPB + $qtySJ;
       		}
       		
-      		
+      		print_r($detailreplaces1);
+      		echo ' - ';
       		$detailreplaces2 = Yii::app()->db->createCommand()
 	      		->select('a.id, b.iditem, (b.qty-b.qtynew) as nqty')->from('detailsalesreplace b')
 	      		->join('salesreplace a', 'a.id = b.id')
@@ -785,7 +786,7 @@ EOS;
       			 
       			$dr['qty'] = $qtyPB + $qtySJ;
       		}
-      		
+      		print_r($detailreplaces2);
       		$dataLPB = array_merge($detailreplaces2, $detailreplaces1);
       	}
       	
