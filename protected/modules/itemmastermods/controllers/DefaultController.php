@@ -61,7 +61,7 @@ class DefaultController extends Controller
 			$this->performAjaxValidation ( $model );
 			$error = '';
 			
-			if (isset ( $_POST ['yt0'] )) {
+			if (isset ( $_POST ['yt1'] )) {
 				// The user pressed the button;
 				$model->attributes = $_POST ['Itemmastermods'];
 				
@@ -523,7 +523,7 @@ class DefaultController extends Controller
 	    			if (!$respond)
 	    				throw new CHttpException ( 404, 'Detil Pemasukan Barang tidak bisa disimpan.');
 	    			Action::modifyIDItemInWarehouse($wh['id'], $item['serialnum'], 
-	    				$$model->iditemprevious, $model->iditemnext);
+	    				$model->iditemprevious, $model->iditemnext);
 	    		}
 	    		
     		}
