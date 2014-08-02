@@ -246,7 +246,7 @@ EOS;
 ?>
 	
 	<div class="row">
-		<?php echo CHtml::Button('Process', array('id'=>'processbtn')); ?>
+		<?php echo CHtml::submitButton(ucfirst($command)); ?>
 	</div>
       
 <?php $this->endWidget(); ?>
