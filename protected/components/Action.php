@@ -689,6 +689,17 @@ class Action extends CComponent {
    		};
    }
    
+   public static function modifyIDItemInWarehouse($idwh, $serialnum, $iditemprevious, $iditemnext)
+   {
+   	if (!Yii::app()->user->isGuest) {
+   		Yii::app()->db->createCommand()
+   			->update('wh'.$idwh, array('iditem'=>$iditemnext), 
+   				array('iditem'=>$iditemprevious, 'serialnum'=>$serialnum));
+   	} else {
+   		throw new CHttpException(405,'You have no authorization for this operation.');
+   	};
+   }
+   
    public static function checkItemToWarehouse($idwh, $iditem, $serialnum, $avail = '1')
    {
    	if (!Yii::app()->user->isGuest) {
@@ -703,7 +714,7 @@ class Action extends CComponent {
    	};
    }
    
-   public static function setItemAvailinWarehouse($idwh, $serialnum, $avail)
+   public static function setItemAvailinWarehouse($idwh, $serialnum, $avail = '1')
    {
 	   	if (!Yii::app()->user->isGuest) {
 	   		Yii::app()->db->createCommand()
