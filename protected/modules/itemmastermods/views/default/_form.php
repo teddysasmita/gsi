@@ -201,6 +201,10 @@ EOS;
 	</div>
 	
 	<div class="row">
+		<?php echo CHtml::Button('Process', array('id'=>'processbtn')); ?>
+	</div>
+      
+	<div class="row">
         <?php 
            	if (strlen($error) > 0)
         		echo CHtml::tag('span', array('class'=>'errorMessage'), $error); 
