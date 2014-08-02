@@ -246,7 +246,6 @@ EOS;
 ?>
 	
 	<div class="row">
-		<?php echo CHtml::submitButton(ucfirst($command)); ?>
 		<?php echo CHtml::Button('Process', array('id'=>'processbtn')); ?>
 	</div>
       
