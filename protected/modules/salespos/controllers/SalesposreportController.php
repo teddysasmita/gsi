@@ -136,7 +136,7 @@ EOS;
 			
 			// Get ALL Sales Cancelation data
 			$datarawcancels = Yii::app()->db->createCommand()
-				->select('a.regnum, a.userlog, a.datetimelog, a.totalcash, a.totalnoncash')->from('salescancel a')
+				->select('a.regnum, a.userlog, a.datetimelog, a.totalcash, a.invnum, a.totalnoncash')->from('salescancel a')
 				->join('salespos b', 'b.regnum = a.invnum')
 				->join('detailsalespos c', 'c.id = b.id')
 				->join('items d', 'd.id = c.iditem')
