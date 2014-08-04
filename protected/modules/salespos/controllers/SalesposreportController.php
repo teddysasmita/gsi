@@ -136,7 +136,7 @@ EOS;
 			
 			// Get ALL Sales Cancelation data
 			$datarawcancels = Yii::app()->db->createCommand()
-				->select()->from('salescancel a')
+				->select('a.regnum, a.userlog, a.datetimelog, a.totalcash, a.totalnoncash')->from('salescancel a')
 				->join('salespos b', 'b.regnum = a.invnum')
 				->join('detailsalespos c', 'c.id = b.id')
 				->join('items d', 'd.id = c.iditem')
@@ -191,7 +191,8 @@ EOS;
 			
 			// Get ALL Sales Modification data
 			$datarawreplaces = Yii::app()->db->createCommand()
-				->select()->from('salesreplace a')
+				->select('a.regnum, a.invnum, a.totaldiff, a.userlog, a.datetimelog, b.deleted')
+				->from('salesreplace a')
 				->join('detailsalesreplace b', 'b.id = a.id')
 				->join('items d', 'd.id = b.iditem')
 				->where($selectwhere, $selectparam)
