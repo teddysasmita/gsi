@@ -7,7 +7,7 @@ class DefaultController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $formid='AC30';
+	public $formid='AC34';
 	public $tracker;
 	public $state;
 	private $recapdetails = array();
@@ -751,162 +751,22 @@ class DefaultController extends Controller
         	$model->discount=$totaldisc;
         }
         
-        private function loadInvoice($invnum, $id)
+        private function loadDelivery($model)
         {
-			$ganti = substr($invnum, 0, 1) == 'G'; 
-        	if ($ganti === true) {
-        		$tempnum = substr($invnum, 1);
-        		$tempnum = str_pad($tempnum, 12, '0', STR_PAD_LEFT);
-        		$master=Yii::app()->db->createCommand()
-        		->select()->from('salesreplace')->where('regnum = :p_regnum',
-        				array(':p_regnum'=>$tempnum))->queryRow();
-        	} else {
-        		$master=Yii::app()->db->createCommand()
-        			->select()->from('salespos')->where('regnum = :p_regnum', 
-        			array(':p_regnum'=>$invnum))->queryRow(); 
-        	}
-        	$masterdata=Yii::app()->session['Deliveryreplaces'];
-        	if ($master['idreceiver'] <> '') {
-        		$receiver=Yii::app()->db->createCommand()
-        			->select()->from('salesreceivers')
-        			->where('id = :p_id', array(':p_id'=>$master['idreceiver']))
-        			->queryRow();
-        		if ($receiver !== FALSE) {
-        			$masterdata['receivername']=$receiver['name'];
-        			$masterdata['receiveraddress']=$receiver['address'];
-        			$masterdata['receiverphone']=$receiver['phone'];
-        		} else {
-        			$masterdata['receivername']=$master['payer_name'];
-        			$masterdata['receiveraddress']=$master['payer_address'];
-        			$masterdata['receiverphone']=$master['payer_phone'];
-        		}
-        	} else {
-        		$masterdata['receivername']=$master['payer_name'];
-        		$masterdata['receiveraddress']=$master['payer_address'];
-        		$masterdata['receiverphone']=$master['payer_phone'];
-        	}
-        	Yii::app()->session['Deliveryreplaces']=$masterdata;
-        	if ($ganti === true) {
-        		$details=Yii::app()->db->createCommand()
-        		->select('b.*')->from('salesreplace a')->join('detailsalesreplace b', 'b.id = a.id')
-        		->where('a.regnum = :p_regnum and deleted = :p_deleted',
-        				array(':p_regnum'=>$tempnum, ':p_deleted'=>'1'))->queryAll();
-        	} else {
-        		$details=Yii::app()->db->createCommand()
-        			->select('b.*')->from('salespos a')->join('detailsalespos b', 'b.id = a.id')
-        			->where('a.regnum = :p_regnum',
-					array(':p_regnum'=>$invnum))->queryAll();
-        	}
-        	$detailsdone=Yii::app()->db->createCommand()
-        		->select('b.iditem, sum(b.qty) as sentqty')->from('deliveryreplaces a')->join('detaildeliveryreplaces b', 'b.id = a.id')
-        		->where('a.invnum = :p_regnum',
-        			array(':p_regnum'=>$invnum))
-        		->group('b.iditem')->queryAll();
-        	$detailsdone2=Yii::app()->db->createCommand()
-	        	->select('b.iditem, sum(b.qty) as sentqty')->from('orderretrievals a')
-	        	->join('detailorderretrievals b', 'b.id = a.id')
-	        	->where('a.invnum = :p_regnum',
-        			array(':p_regnum'=>$invnum))
-        		->group('b.iditem')->queryAll();
-        	foreach($details as $detail ) {
-        		$detaildata['id']=$id;
-        		$detaildata['iddetail']=idmaker::getCurrentID2();
-        		
-        		if ($ganti === true) {
-        			$detaildata['invqty']=$detail['qtynew'];
-        			$detaildata['iditem']=$detail['iditemnew'];
-        			$detaildata['leftqty']=$detail['qtynew'];
-        		} else {
-        			$detaildata['invqty']=$detail['qty'];
-        			$detaildata['iditem']=$detail['iditem'];
-        			$detaildata['leftqty']=$detail['qty'];
-        		}
-        		$detaildata['qty']=0;
-        		$detaildata['userlog']=Yii::app()->user->id;
-				$detaildata['datetimelog']=idmaker::getDateTime();
-        		$doneqty = 0;
-        		foreach($detailsdone as $detaildone) {
-        			if ($detaildone['iditem']==$detail['iditem']) {
-        				$doneqty = $detaildone['sentqty'];
-        			}
-        		}
-        		foreach($detailsdone2 as $detaildone2) {
-        			if ($detaildone2['iditem']==$detail['iditem']) {
-        				$doneqty += $detaildone2['sentqty'];
-        			}
-        		}
-        		$detaildata['leftqty']=$detaildata['leftqty']-$doneqty;
-        		$detailsdata[]=$detaildata;
-        		
-        		$detaildata2['id']=$id;
-        		$detaildata2['iddetail']=idmaker::getCurrentID2();
-        		$detaildata2['iditem']=$detail['iditem'];
-        		$detaildata2['qty']=$detaildata['leftqty'];
-        		$detaildata2['idwarehouse']='-';
-        		$detaildata2['userlog']=Yii::app()->user->id;
-        		$detaildata2['datetimelog']=idmaker::getDateTime();
-        		$detailsdata2[]=$detaildata2;
-        	} 
-        	Yii::app()->session['Detaildeliveryreplaces2'] = $detailsdata;
-        	Yii::app()->session['Detaildeliveryreplaces'] = $detailsdata2;
-        }
-    	
-        private function addRecapItem($iditem, $qty) 
-        {
-        	foreach ($this->recapdetails as &$recap ) {
-        		if ($recap['iditem'] == $iditem) {
-        			$recap['qty'] += $qty;
-       				
-        			return;
-        		}
-        	}
-        	$temp['iditem'] = $iditem;
-        	$temp['qty'] = $qty;
-        	$this->recapdetails[] = $temp;	
-        }
-        
-        private function addInvItem($iditem, $leftqty)
-        {
-        	foreach ($this->invdetails as &$inv ) {
-        		if ($inv['iditem'] == $iditem) {
-        			$inv['leftqty'] += $leftqty;
-        			 
-        			return;
-        		}
-        	}
-        	$temp['iditem'] = $iditem;
-        	$temp['leftqty'] = $leftqty;
-        	$this->invdetails[] = $temp;
-        }
-               
-        private function checkDetailsItemQty()
-        {
-			$details2 = Yii::app()->session['Detaildeliveryreplaces2'];
-			$details1 = Yii::app()->session['Detaildeliveryreplaces'];
+        	$deliverydatas = Yii::app()->db->createCommand()
+        		->select('a.regnum, a.idwarehouse, b.iddetail, b.iditem, b.serialnum')
+        		->from('stockdeliveries a')
+        		->join('detailstockdeliveries b', 'b.id = a.id')
+        		->where('a.transid = :p_transid', array(':p_transid'=>$model->deliverynum));
 			
-			foreach ($details1 as $deliverydata) {
-				$this->addRecapItem($deliverydata['iditem'], $deliverydata['qty']);
+        	if (count($deliverydatas) > 0) {
+	        	foreach($deliverydatas as & $dd) {
+	        		$dd['userlog'] = Yii::app()->user->id;
+	        		$dd['datetimelog'] = idmaker::getDateTime();
+	        	}
         	}
         	
-        	foreach ($details2 as $invdata) {
-        		$this->addInvItem($invdata['iditem'], $invdata['leftqty']);
-        	}
-        	
-        	 
-        	foreach ($this->recapdetails as $deliverydata) {
-        		$found = FALSE;
-        		foreach($this->invdetails as $data) {
-        			if ($data['iditem'] == $deliverydata['iditem']) {
-        				$found = TRUE;
-        				if ($data['leftqty'] < $deliverydata['qty'])
-        					return FALSE;
-        			}
-        		}
-        		if (! $found) {
-        			return FALSE;
-        		}
-        	}
-        	return TRUE;
+        	return $deliverydatas;
         }
 	
 		public function actionPrintsj($id)

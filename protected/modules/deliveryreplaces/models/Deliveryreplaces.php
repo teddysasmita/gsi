@@ -7,7 +7,7 @@
  * @property string $id
  * @property string $regnum
  * @property string $idatetime
- * @property string $invnum
+ * @property string $deliverynum
  * @property string $drivername
  * @property string $vehicleinfo
  * @property string $receivername
@@ -35,9 +35,9 @@ class Deliveryreplaces extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, regnum, idatetime, invnum, drivername, vehicleinfo, receivername, receiveraddress, receiverphone, status, userlog, datetimelog', 'required'),
+			array('id, regnum, idatetime, deliverynum, drivername, vehicleinfo, receivername, receiveraddress, receiverphone, status, userlog, datetimelog', 'required'),
 			array('id, userlog', 'length', 'max'=>21),
-			array('regnum, invnum', 'length', 'max'=>12),
+			array('regnum, deliverynum', 'length', 'max'=>12),
 			array('idatetime, datetimelog', 'length', 'max'=>19),
 			array('drivername, receiveraddress', 'length', 'max'=>200),
 			array('vehicleinfo, receiverphone', 'length', 'max'=>50),
@@ -45,7 +45,7 @@ class Deliveryreplaces extends CActiveRecord
 			array('status', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, regnum, idatetime, invnum, drivername, vehicleinfo, receivername, receiveraddress, receiverphone, status, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('id, regnum, idatetime, deliverynum, drivername, vehicleinfo, receivername, receiveraddress, receiverphone, status, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -69,7 +69,7 @@ class Deliveryreplaces extends CActiveRecord
 			'id' => 'ID',
 			'regnum' => 'Nomor Urut',
 			'idatetime' => 'Tanggal',
-			'invnum' => 'Nomor Faktur',
+			'deliverynum' => 'Nomor Kirim',
 			'drivername' => 'Nama Supir',
 			'vehicleinfo' => 'Info Kendaraan',
 			'receivername' => 'Nama Penerima',
@@ -102,7 +102,7 @@ class Deliveryreplaces extends CActiveRecord
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('regnum',$this->regnum,true);
 		$criteria->compare('idatetime',$this->idatetime,true);
-		$criteria->compare('invnum',$this->invnum,true);
+		$criteria->compare('deliverynum',$this->deliverynum,true);
 		$criteria->compare('drivername',$this->drivername,true);
 		$criteria->compare('vehicleinfo',$this->vehicleinfo,true);
 		$criteria->compare('receivername',$this->receivername,true);

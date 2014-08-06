@@ -572,10 +572,10 @@ class DefaultController extends Controller
          	$details = $this->loadDetails($model->id);
          	foreach($details as $detail) {
          		if ($detail['serialnum'] !==  'Belum Diterima') {
-         			/*if ($model->transname == 'AC12')
+         			if ($model->transname == 'AC12')
          				Action::deleteItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
-         			else*/ 
-         			Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '0');
+         			else
+         				Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '0');
          		}
          	};
          }

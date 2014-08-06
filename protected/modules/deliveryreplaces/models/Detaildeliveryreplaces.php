@@ -7,7 +7,7 @@
  * @property string $iddetail
  * @property string $id
  * @property string $iditem
- * @property string $idwhdest
+ * @property string $regnum
  * @property string $idwhsource
  * @property string $serialnum
  * @property string $userlog
@@ -31,13 +31,14 @@ class Detaildeliveryreplaces extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('iddetail, id, iditem, idwhdest, idwhsource, serialnum, userlog, datetimelog', 'required'),
-			array('iddetail, id, iditem, idwhdest, idwhsource, userlog', 'length', 'max'=>21),
+			array('iddetail, id, iditem, regnum, idwhsource, serialnum, userlog, datetimelog', 'required'),
+			array('iddetail, id, iditem, idwhsource, userlog', 'length', 'max'=>21),
 			array('serialnum', 'length', 'max'=>50),
+			array('regnum', 'length', 'max'=>12),
 			array('datetimelog', 'length', 'max'=>19),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('iddetail, id, iditem, idwhdest, idwhsource, serialnum, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('iddetail, id, iditem, regnum, idwhsource, serialnum, userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,7 +62,7 @@ class Detaildeliveryreplaces extends CActiveRecord
 			'iddetail' => 'Iddetail',
 			'id' => 'ID',
 			'iditem' => 'Barang',
-			'idwhdest' => 'Gudang Simpan',
+			'regnum' => 'Nomor Keluar',
 			'idwhsource' => 'Gudang Keluar',
 			'serialnum' => 'Nomor Seri',
 			'userlog' => 'Userlog',
@@ -90,7 +91,7 @@ class Detaildeliveryreplaces extends CActiveRecord
 		$criteria->compare('iddetail',$this->iddetail,true);
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('iditem',$this->iditem,true);
-		$criteria->compare('idwhdest',$this->idwhdest,true);
+		$criteria->compare('regnum',$this->regnum,true);
 		$criteria->compare('idwhsource',$this->idwhsource,true);
 		$criteria->compare('serialnum',$this->serialnum,true);
 		$criteria->compare('userlog',$this->userlog,true);
