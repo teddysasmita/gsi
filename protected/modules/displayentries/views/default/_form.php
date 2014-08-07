@@ -66,6 +66,7 @@ EOS;
         <?php 
 			$warehouses = lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
 			print_r($warehouses);
+			die();
          	if (count($warehouses) > 1) {
 				$data = CHtml::listData($warehouses, 'id', 'code');
          		echo CHtml::dropDownList('Displayentries[idwarehouse]', '', $data, 
