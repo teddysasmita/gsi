@@ -89,11 +89,6 @@ class DefaultController extends Controller
 	                        $respond=$respond&&$this->saveNewDetails($details);
 	                      } 
 	                      
-	                      if(isset(Yii::app()->session['Detaildeliveryreplaces2']) ) {
-	                        $details=Yii::app()->session['Detaildeliveryreplaces2'];
-	                        $respond=$respond&&$this->saveNewDetails2($details);
-	                      }
-	                      
 	                      if($respond) {
 	                         Yii::app()->session->remove('Deliveryreplaces');
 	                         Yii::app()->session->remove('Detaildeliveryreplaces');
@@ -105,25 +100,10 @@ class DefaultController extends Controller
                    } else if (isset($_POST['command'])){
                    	
                       // save the current master data before going to the detail page
-                      if($_POST['command']=='adddetail') {
-                         $model->attributes=$_POST['Deliveryreplaces'];
-                         Yii::app()->session['Deliveryreplaces']=$_POST['Deliveryreplaces'];
-                         $this->redirect(array('detaildeliveryreplaces/create',
-                            'id'=>$model->id, 'regnum'=>$model->regnum));
-                      } else if($_POST['command']=='adddetail2') {
-                         $model->attributes=$_POST['Deliveryreplaces'];
-                         Yii::app()->session['Deliveryreplaces']=$_POST['Deliveryreplaces'];
-                         $this->redirect(array('detaildeliveryreplaces2/create',
-                            'id'=>$model->id, 'regnum'=>$model->regnum ));                          
-                      } else if($_POST['command']=='loadInvoice') {
+                      if($_POST['command']=='loadDelivery') {
 						$model->attributes=$_POST['Deliveryreplaces'];
-						Yii::app()->session['Deliveryreplaces']=$_POST['Deliveryreplaces'];
-						$this->loadInvoice($model->invnum, $model->id);
-						$model->attributes=Yii::app()->session['Deliveryreplaces'];
-                      } else if ($_POST['command']=='updateDetail') {
-                         $model->attributes=$_POST['Deliveryreplaces'];
-                         Yii::app()->session['Deliveryreplaces']=$_POST['Deliveryreplaces'];
-                      }
+						Yii::app()->session['Detaildeliveryreplaces']=$this->loadDelivery($model);
+                      } 
                    }
                 }
 
@@ -189,14 +169,6 @@ class DefaultController extends Controller
                          }
                      };
                      
-                     if(isset(Yii::app()->session['Detaildeliveryreplaces2'])) {
-                         $details=Yii::app()->session['Detaildeliveryreplaces2'];
-                         $respond=$respond&&$this->saveDetails2($details);
-                         if(!$respond) {
-                           throw new CHttpException(404,'There is an error in detail2 posting');
-                         }
-                     };
-
                      if(isset(Yii::app()->session['DeleteDetaildeliveryreplaces'])) {
                          $deletedetails=Yii::app()->session['DeleteDetaildeliveryreplaces'];
                          $respond=$respond&&$this->deleteDetails($deletedetails);
@@ -281,9 +253,7 @@ class DefaultController extends Controller
 
                Yii::app()->session->remove('Deliveryreplaces');
                Yii::app()->session->remove('Detaildeliveryreplaces');
-               Yii::app()->session->remove('Detaildeliveryreplaces2');
                Yii::app()->session->remove('DeleteDetaildeliveryreplaces');
-               Yii::app()->session->remove('DeleteDetaildeliveryreplaces2');
                $dataProvider=new CActiveDataProvider('Deliveryreplaces',
                   array(
                      'criteria'=>array(

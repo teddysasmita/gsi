@@ -1,6 +1,6 @@
 <?php
-/* @var $this DeliveryordersController */
-/* @var $model Deliveryorders */
+/* @var $this DeliveryreplacesController */
+/* @var $model Deliveryreplaces */
 
 $this->breadcrumbs=array(
    'Proses'=>array('/site/proses'),
@@ -15,23 +15,23 @@ $this->menu=array(
 
 ?>
 
-<h1>Pengiriman Barang</h1>
+<h1>Penukaran Pengiriman Barang</h1>
 
 <?php    $data=Yii::app()->tracker->createCommand()->
-       select()->from('deliveryorders')->where('id=:id',array(':id'=>$model->id))->queryAll();
+       select()->from('deliveryreplaces')->where('id=:id',array(':id'=>$model->id))->queryAll();
     $ap=new CArrayDataProvider($data);
  ?> 
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'deliveryorders-grid',
+	'id'=>'deliveryreplaces-grid',
 	'dataProvider'=>$ap,
 	'columns'=>array(
 		'id',
 		'regnum',
 		'idatetime',
-		'rdatetime',
-		'idsupplier',
-		'total',
+		'deliverynum',
+		'vehicleinfo',
+		'receivername',
 		/*
 		'discount',
 		'status',

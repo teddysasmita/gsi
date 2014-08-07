@@ -13,8 +13,8 @@
 	<?php echo CHtml::encode($data->idatetime); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('invnum')); ?>:</b>
-	<?php echo CHtml::encode($data->invnum); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('deliverynum')); ?>:</b>
+	<?php echo CHtml::encode($data->deliverynum); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('receivername')); ?>:</b>

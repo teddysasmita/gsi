@@ -31,6 +31,7 @@ $this->pageTitle=Yii::app()->name;
 <h3><?php echo CHtml::link('Pengiriman Barang untuk Perbaikan', Yii::app()->createUrl('sendrepair'))?></h3>
 <h3><?php echo CHtml::link('Barang Masuk ke Display', Yii::app()->createUrl('displayentries/default/create'))?></h3>
 <h3><?php echo CHtml::link('Penukaran Pengambilan Barang', Yii::app()->createUrl('retrievalreplaces/default/create'))?></h3>
+<h3><?php echo CHtml::link('Penukaran Pengiriman Barang', Yii::app()->createUrl('deliveryreplaces'))?></h3>
 <h3><?php echo CHtml::link('Penerimaan Barang dari Perbaikan', Yii::app()->createUrl('receiverepair'))?></h3>
 
 <h2>Bagian Gudang</h2>

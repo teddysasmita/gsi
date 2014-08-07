@@ -1,5 +1,5 @@
 <?php
-/* @var $this DeliveryordersController */
+/* @var $this DeliveryreplacesController */
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
@@ -14,7 +14,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>Pengiriman Barang</h1>
+<h1>Penukaran Pengiriman Barang</h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,

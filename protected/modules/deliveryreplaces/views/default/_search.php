@@ -27,8 +27,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'invnum'); ?>
-		<?php echo $form->textField($model,'invnum',array('size'=>12,'maxlength'=>12)); ?>
+		<?php echo $form->label($model,'deliverynum'); ?>
+		<?php echo $form->textField($model,'deliverynum',array('size'=>12,'maxlength'=>12)); ?>
 	</div>
 
 	<div class="row">
@@ -45,12 +45,6 @@
 		<?php echo $form->label($model,'receiverphone'); ?>
 		<?php echo $form->textField($model,'receiverphone'); ?>
 	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'status'); ?>
-		<?php echo $form->textField($model,'status',array('size'=>10,'maxlength'=>10)); ?>
-	</div>
-
 
 	<div class="row">
 		<?php echo $form->label($model,'userlog'); ?>

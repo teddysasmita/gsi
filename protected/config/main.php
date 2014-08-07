@@ -70,7 +70,8 @@ return array(
             'retrievalreplaces',
             'acquisitionnsn',
             'itemmastermods',
-            'receiverepair'
+            'receiverepair',
+            'deliveryreplaces'
         ),
 
         

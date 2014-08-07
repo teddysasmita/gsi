@@ -1,6 +1,6 @@
 <?php
-/* @var $this DeliveryordersController */
-/* @var $model Deliveryorders */
+/* @var $this DeliveryreplacesController */
+/* @var $model Deliveryreplaces */
 
 $this->breadcrumbs=array(
    'Proses'=>array('/site/proses'),
@@ -15,7 +15,7 @@ $this->menu=array(
 	array('label'=>'Pencarian Data', 'url'=>array('admin')),
       array('label'=>'Sejarah', 'url'=>array('history', 'id'=>$model->id)),
       array('label'=>'Data Detil yang dihapus', 
-         'url'=>array('/purchasesorder/detaildeliveryorders/deleted', 'id'=>$model->id)),
+         'url'=>array('/purchasesorder/detaildeliveryreplaces/deleted', 'id'=>$model->id)),
 	array('label'=>'Cetak', 'url'=>array('printsj', 'id'=>$model->id))
 );
 ?>
@@ -62,39 +62,9 @@ $this->menu=array(
 )); ?>
 
 <?php 
-   $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryorders2 where id='$model->id'")
+   $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryreplaces where id='$model->id'")
       ->queryScalar();
-   $sql="select * from detaildeliveryorders2 where id='$model->id'";
-
-   $dataProvider=new CSqlDataProvider($sql,array(
-		'totalItemCount'=>$count,
-	));
-   $this->widget('zii.widgets.grid.CGridView', array(
-		'dataProvider'=>$dataProvider,
-		'columns'=>array(
-			array(
-				'header'=>'Item Name',
-				'name'=>'iditem',
-				'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
-			),
-			array(
-				'header'=>'Faktur',
-				'name'=>'invqty',
-			),
-			array(
-				'header'=>'Sisa',
-				'name'=>'leftqty',
-			),
-			array(
-				'header'=>'Jumlah',
-				'name'=>'qty',
-			),
-         ),
-   ));
-   
-   $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryorders where id='$model->id'")
-      ->queryScalar();
-   $sql="select * from detaildeliveryorders where id='$model->id'";
+   $sql="select * from detaildeliveryreplaces where id='$model->id'";
 
    $dataProvider=new CSqlDataProvider($sql,array(
           'totalItemCount'=>$count,
@@ -107,27 +77,12 @@ $this->menu=array(
 						'name'=>'iditem',
 						'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
 				),
-				array(
-						'header'=>'Jumlah',
-						'name'=>'qty',
-				),
+				'serialnum',
 				array(
 						'header'=>'Gudang',
 						'name'=>'idwarehouse',
 						'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
 				),
-				array(
-						'class'=>'CButtonColumn',
-						'buttons'=> array(
-								'delete'=>array(
-										'visible'=>'false'
-								),
-								'update'=>array(
-										'visible'=>'false'
-								)
-						),
-						'viewButtonUrl'=>"Action::decodeViewDetailDeliveryOrderUrl(\$data)",
-				)
 		),
 	));
  ?>

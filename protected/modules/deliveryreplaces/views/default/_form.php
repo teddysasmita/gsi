@@ -1,56 +1,32 @@
 <?php
-/* @var $this DeliveryordersController */
-/* @var $model Deliveryorders */
+/* @var $this DeliveryreplacesController */
+/* @var $model Deliveryreplaces */
 /* @var $form CActiveForm */
 ?>
 
 <div class="form">
 
 <?php
-   $suppliers=Yii::app()->db->createCommand()
-      ->select('id, firstname, lastname')
-      ->from('suppliers')
-      ->order('firstname, lastname')
-      ->queryAll();
-   foreach($suppliers as $row) {
-      $supplierids[]=$row['id'];
-      $suppliernames[]=$row['firstname'].' '.$row['lastname'];
-   }
-   $supplierids=CJSON::encode($supplierids);
-   $suppliernames=CJSON::encode($suppliernames);
-   $supplierScript=<<<EOS
-      var supplierids=$supplierids;
-      var suppliernames=$suppliernames;
-      $('#Deliveryorders_suppliername').change(function() {
-         var activename=$('#Deliveryorders_suppliername').val();
-         $('#Deliveryorders_idsupplier').val(
-            supplierids[suppliernames.indexOf(activename)]);
-      });
-		$('#Deliveryorders_invnum').change(function() {
-   			$('#command').val('loadInvoice');
-   			$('#deliveryorders-form').submit();
-		});
-		$('.updateButton').click(
-		function(evt) {
-			$('#command').val('updateDetail');
-			$('#detailcommand').val(this.href);
-			$('#deliveryorders-form').submit();
-   			//evt.preventDefault();
-		});  
+
+	$deliveryScript=<<<EOS
+	$('#Deliveryreplaces_deliverynum').change(function(event) {
+		$('#command').val('loadDelivery');
+		$('#deliveryreplaces-form').submit();
+	});
 EOS;
-   Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);
+   Yii::app()->clientScript->registerScript("deliveryScript", $deliveryScript, CClientscript::POS_READY);
 
    if($command=='create') 
       $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'deliveryorders-form',
-	'enableAjaxValidation'=>true,
-      'action'=>Yii::app()->createUrl("/deliveryorders/default/create")
+		'id'=>'deliveryreplaces-form',
+		'enableAjaxValidation'=>true,
+      	'action'=>Yii::app()->createUrl("/deliveryreplaces/default/create")
       ));
    else if($command=='update')
       $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'deliveryorders-form',
-	'enableAjaxValidation'=>true,
-      'action'=>Yii::app()->createUrl("/deliveryorders/default/update", array('id'=>$model->id))
+		'id'=>'deliveryreplaces-form',
+		'enableAjaxValidation'=>true,
+      	'action'=>Yii::app()->createUrl("/deliveryreplaces/default/update", array('id'=>$model->id))
       ));
   ?>
 
@@ -78,7 +54,7 @@ EOS;
 		<?php echo $form->labelEx($model,'idatetime'); ?>
             <?php
                $this->widget('zii.widgets.jui.CJuiDatePicker',array(
-                  'name'=>'Deliveryorders[idatetime]',
+                  'name'=>'Deliveryreplaces[idatetime]',
                      // additional javascript options for the date picker plugin
                   'options'=>array(
                      'showAnim'=>'fold',
@@ -94,33 +70,17 @@ EOS;
 		<?php echo $form->error($model,'idatetime'); ?>
 	</div>
 	
-	<div class='row'>
-		<?php echo CHtml::tag('span', array('id'=>'info', 'class'=>'errorMessage'), 
-			'Utk Ganti Barang, beri awalan G, tanpa angka 0 didepan'); ?>
-	</div>
-	
 	<div class="row">
-		<?php echo $form->labelEx($model,'invnum'); ?>
+		<?php echo $form->labelEx($model,'deliverynum'); ?>
          <?php 
-            /*$this->widget("zii.widgets.jui.CJuiAutoComplete", array(
-                'name'=>'Deliveryordersnt_receivername',
-                'sourceUrl'=>Yii::app()->createUrl('LookUp/getReceiverinfobyname'),
-              'value'=>$model->receivername
-            ));*/
-			echo $form->textField($model, 'invnum', array('size'=>30));
+			echo $form->textField($model, 'deliverynum', array('size'=>12));
          ?>
-         <?php echo $form->error($model,'invnum'); ?>
+         <?php echo $form->error($model,'deliverynum'); ?>
 	</div>
 
 	<div class="row">
          <?php echo $form->labelEx($model,'receivername'); ?>
          <?php 
-            /*$this->widget("zii.widgets.jui.CJuiAutoComplete", array(
-                'name'=>'Deliveryordersnt_receivername',
-                'sourceUrl'=>Yii::app()->createUrl('LookUp/getReceiverinfobyname'),
-              'value'=>$model->receivername
-            ));*/
-			//echo $form->textField($model, 'receivername', array('size'=>50));
 			echo CHtml::label($model->receivername, FALSE);
          ?>
          <?php echo $form->error($model,'receivername'); ?>
@@ -130,7 +90,6 @@ EOS;
          <?php echo $form->labelEx($model,'receiveraddress'); ?>
          <?php
          	echo CHtml::label($model->receiveraddress, FALSE); 
-			//echo $form->textField($model, 'receiveraddress', array('size'=>50));
          ?>
          <?php echo $form->error($model,'receiveraddress'); ?>
 	</div>
@@ -161,82 +120,37 @@ EOS;
 	</div>
 
 <?php 
-   
-	if (isset(Yii::app()->session['Detaildeliveryorders2'])) {
-       $rawdata=Yii::app()->session['Detaildeliveryorders2'];
+    if (isset(Yii::app()->session['Detaildeliveryreplaces'])) {
+       $rawdata=Yii::app()->session['Detaildeliveryreplaces'];
        $count=count($rawdata);
     } else {
-       $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryorders2 where id='$model->id'")->queryScalar();
-       $sql="select * from detaildeliveryorders2 where id='$model->id'";
+       $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryreplaces where id='$model->id'")
+       		->queryScalar();
+       $sql="select * from detaildeliveryreplaces where id='$model->id'";
        $rawdata=Yii::app()->db->createCommand($sql)->queryAll ();
     }
     $dataProvider=new CArrayDataProvider($rawdata, array(
           'totalItemCount'=>$count,
     ));
     $this->widget('zii.widgets.grid.CGridView', array(
-            'dataProvider'=>$dataProvider,
-            'columns'=>array(
-            array(
-               'header'=>'Item Name',
-               'name'=>'iditem',
-               'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
-            ),
+		'dataProvider'=>$dataProvider,
+		'columns'=>array(
 			array(
-				'header'=>'Jmlh Faktur',
-				'name'=>'invqty',
+				'header'=>'Nama Barang',
+				'name'=>'iditem',
+				'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
 			),
-            array(
-               'header'=>'Sisa',
-               'name'=>'leftqty',
-            ),
-            array(
-				'header'=>'Kirim',
-				'name'=>'qty',
+			array(
+				'header'=>'Serialnum',
+				'name'=>'serialnum',
 			),
-          ),
+			array(
+				'header'=>'Gudang',
+				'name'=>'idwarehouse',
+				'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
+			),
+		),
     ));
-
-    if (isset(Yii::app()->session['Detaildeliveryorders'])) {
-       $rawdata=Yii::app()->session['Detaildeliveryorders'];
-       $count=count($rawdata);
-    } else {
-       $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryorders where id='$model->id'")->queryScalar();
-       $sql="select * from detaildeliveryorders where id='$model->id'";
-       $rawdata=Yii::app()->db->createCommand($sql)->queryAll ();
-    }
-    $dataProvider=new CArrayDataProvider($rawdata, array(
-          'totalItemCount'=>$count,
-    ));
-    $this->widget('zii.widgets.grid.CGridView', array(
-            'dataProvider'=>$dataProvider,
-            'columns'=>array(
-				array(
-					'header'=>'Nama Barang',
-					'name'=>'iditem',
-					'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
-				),
-				array(
-					'header'=>'Jmlh',
-					'name'=>'qty',
-				),
-				array(
-					'header'=>'Gudang',
-					'name'=>'idwarehouse',
-					'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
-				),
-				array(
-					'class'=>'CButtonColumn',
-					'buttons'=> array(
-						'view'=>array(
-							'visible'=>'false'
-						),
-					),
-					'updateButtonOptions'=>array("class"=>'updateButton'),
-					'updateButtonUrl'=>"Action::decodeUpdateDetailDeliveryOrderUrl(\$data)",
-					'deleteButtonUrl'=>"Action::decodeDeleteDetailDeliveryOrderUrl(\$data)",
-				)
-			),
-    	));
 ?>
 
 	<div class='error'>
