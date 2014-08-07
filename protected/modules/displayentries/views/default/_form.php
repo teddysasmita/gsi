@@ -70,7 +70,7 @@ EOS;
          		echo CHtml::dropDownList('Displayentries[idwarehouse]', '', $data, 
 					array('empty'=>'Harap Pilih'));
          	} else {
-				echo CHtml::hiddenField('Displayentries[idwarehouse]', $warehouses['id']);
+				echo CHtml::hiddenField('Displayentries[idwarehouse]', $warehouses[0]['id']);
 				echo CHtml::label($warehouses[0]['code'],'false', array('class'=>'money')); 
 			}
         ?>
