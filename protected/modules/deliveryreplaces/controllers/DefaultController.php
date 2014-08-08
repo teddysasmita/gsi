@@ -72,7 +72,7 @@ class DefaultController extends Controller
 				if (isset($_POST)){
 					if(isset($_POST['yt0'])) {
                       //The user pressed the button;
-                   		$details = $this->processSelectedItems($_POST['yw0_c3']);
+                   		$details = $this->processSelectedItems($_POST['yw0_c4']);
 						$allitems = $details;
                    		
 						$model->attributes=$_POST['Deliveryreplaces'];
