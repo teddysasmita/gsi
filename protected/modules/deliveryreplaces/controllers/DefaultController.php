@@ -598,7 +598,7 @@ class DefaultController extends Controller
 				->where('regnum = :p_regnum', array(':p_regnum'=>$model->deliverynum))
         		->queryRow();
 			
-        	if ($info) {
+        	if ($info !== FALSE) {
         		$model->receivername = $info['receivername'];
         		$model->receiveraddress = $info['receiveraddress'];
         		$model->receiverphone = $info['receiverphone'];
