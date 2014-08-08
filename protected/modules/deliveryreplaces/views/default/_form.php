@@ -120,6 +120,8 @@ EOS;
 	</div>
 
 <?php 
+	$rawdata = array();
+	$count = 0;
     if (isset(Yii::app()->session['Detaildeliveryreplaces'])) {
        $rawdata=Yii::app()->session['Detaildeliveryreplaces'];
        $count=count($rawdata);
@@ -129,6 +131,7 @@ EOS;
        $sql="select * from detaildeliveryreplaces where id='$model->id'";
        $rawdata=Yii::app()->db->createCommand($sql)->queryAll ();
     }
+    
     $dataProvider=new CArrayDataProvider($rawdata, array(
           'totalItemCount'=>$count,
     ));
@@ -149,6 +152,7 @@ EOS;
 				'name'=>'idwarehouse',
 				'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
 			),
+			
 		),
     ));
 ?>

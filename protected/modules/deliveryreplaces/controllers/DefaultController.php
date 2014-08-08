@@ -725,9 +725,10 @@ class DefaultController extends Controller
         {
         	$deliverydatas = Yii::app()->db->createCommand()
         		->select('a.regnum, a.idwarehouse, b.iddetail, b.iditem, b.serialnum')
-        		->from('stockdeliveries a')
-        		->join('detailstockdeliveries b', 'b.id = a.id')
-        		->where('a.transid = :p_transid', array(':p_transid'=>$model->deliverynum));
+        		->from('stockexits a')
+        		->join('detailstockexits b', 'b.id = a.id')
+        		->where('a.transid = :p_transid', array(':p_transid'=>$model->deliverynum))
+        		->queryAll();
 			
         	if (count($deliverydatas) > 0) {
 	        	foreach($deliverydatas as & $dd) {
