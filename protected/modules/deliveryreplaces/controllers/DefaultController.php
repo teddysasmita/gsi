@@ -589,16 +589,15 @@ class DefaultController extends Controller
         private function loadDelivery(& $model)
         {
         	$prefix = substr($model->deliverynum, 0, 2); 
-        	if ( $prefix == 'PB')
+        	if ( $prefix == 'SJ')
         		$tablename = 'deliveryorders';
-        	else
+        	else if ( $prefix == 'SM')
         		$tablename = 'deliveryordersnt';
         	
 			$info = Yii::app()->db->createCommand()->select()->from($tablename)
 				->where('regnum = :p_regnum', array(':p_regnum'=>$model->deliverynum))
         		->queryRow();
 			
-			print_r($info);
         	if ($info !== FALSE) {
         		$model->receivername = $info['receivername'];
         		$model->receiveraddress = $info['receiveraddress'];
