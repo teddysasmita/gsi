@@ -11,9 +11,9 @@ $this->breadcrumbs=array(
 $this->menu=array(
 	//array('label'=>'Daftar', 'url'=>array('index')),
 	//array('label'=>'Pengaturan', 'url'=>array('admin')),
-      array('label'=>'Tambah Detil', 'url'=>array('detaildeliveryreplaces/create', 
+     /* array('label'=>'Tambah Detil', 'url'=>array('detaildeliveryreplaces/create', 
          'id'=>$model->id),
-          'linkOptions'=>array('id'=>'adddetail')), 
+          'linkOptions'=>array('id'=>'adddetail')),*/ 
 );
 
 $jq=<<<EOH
