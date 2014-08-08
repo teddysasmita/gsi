@@ -586,8 +586,24 @@ class DefaultController extends Controller
         	$model->discount=$totaldisc;
         }
         
-        private function loadDelivery($model)
+        private function loadDelivery(& $model)
         {
+        	$prefix = substr($model->deliverynum, 0, 2); 
+        	if ( $prefix == 'PB')
+        		$tablename = 'deliveryorders';
+        	else
+        		$tablename = 'deliveryordersnt';
+        	
+			$info = Yii::app()->db->createCommand()->select()->from($tablename)
+				->where('regnum = :p_regnum', array(':p_regnum'=>$model->deliverynum))
+        		->queryRow();
+			
+        	if ($info) {
+        		$model->receivername = $info['receivername'];
+        		$model->receiveraddress = $info['receiveraddress'];
+        		$model->receiverphone = $info['receiverphone'];
+        	}
+        	
         	$deliverydatas = Yii::app()->db->createCommand()
         		->select('a.regnum, a.idwarehouse, b.iddetail, b.iditem, b.serialnum')
         		->from('stockexits a')
