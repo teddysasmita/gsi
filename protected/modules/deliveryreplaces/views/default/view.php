@@ -20,7 +20,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>Pengiriman Barang</h1>
+<h1>Penukaran Pengiriman Barang</h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
@@ -28,30 +28,12 @@ $this->menu=array(
 		//'id',
 		'regnum',
 		'idatetime',
-		array(
-			'label'=>'Nomor Faktur',
-			'name'=>'invnum',
-		),
-		array(
-			'label'=>'Supir',
-			'name'=>'drivername'
-		),
-		array(
-			'label'=>'Info Kendaraan',
-			'name'=>'vehicleinfo'
-		),
-		array(
-			'label'=>'Penerima',
-			'name'=>'receivername'
-		),
-		array(
-			'label'=>'Alamat',
-			'name'=>'receiveraddress'
-		),
-		array(
-			'label'=>'Nomor Telp',
-			'name'=>'receiverphone'
-		),
+		'deliverynum',
+		'drivername',
+		'vehicleinfo',
+		'receivername',
+		'receiveraddress',
+		'receiverphone',
 		array(
                'label'=>'Userlog',
                'value'=>lookup::UserNameFromUserID($model->userlog),
