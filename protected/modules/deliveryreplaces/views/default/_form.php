@@ -152,7 +152,14 @@ EOS;
 				'name'=>'idwarehouse',
 				'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
 			),
-			
+			array(
+				'class'=>'CCheckBoxColumn',
+				'header'=>'Tukar',
+				'selectableRows'=>2,
+				'headerTemplate'=>'<span> Pilih {item}</span>',
+				'value'=>"\$data['iddetail']",
+				'checked'=>"lookup::RepairCheck(\$data)",
+			),
 		),
     ));
 ?>

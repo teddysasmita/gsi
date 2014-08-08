@@ -732,6 +732,7 @@ class DefaultController extends Controller
 			
         	if (count($deliverydatas) > 0) {
 	        	foreach($deliverydatas as & $dd) {
+	       			$dd['selected'] = '0';
 	        		$dd['userlog'] = Yii::app()->user->id;
 	        		$dd['datetimelog'] = idmaker::getDateTime();
 	        	}
