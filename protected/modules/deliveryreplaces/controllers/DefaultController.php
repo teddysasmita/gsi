@@ -69,34 +69,32 @@ class DefaultController extends Controller
                 $this->performAjaxValidation($model);
                
 
-                if (isset($_POST)){
-                   if(isset($_POST['yt0'])) {
+				if (isset($_POST)){
+					if(isset($_POST['yt0'])) {
                       //The user pressed the button;
-                      $model->attributes=$_POST['Deliveryreplaces'];
+                   		$details = $this->processSelectedItems($_POST['yw0_c3']);
+						$allitems = $details;
+                   		
+						$model->attributes=$_POST['Deliveryreplaces'];
                       
-                      $this->beforePost($model);
+                      	$this->beforePost($model);
                       
-                      if ($this->checkDetailsItemQty()) {
-	                      $respond=$model->save();
-	                      if($respond) {
-	                          $this->afterPost($model);
-	                      } else {
-	                          throw new CHttpException(404,'There is an error in master posting');
-	                      }
-	                      
-	                      if(isset(Yii::app()->session['Detaildeliveryreplaces']) ) {
-	                        $details=Yii::app()->session['Detaildeliveryreplaces'];
-	                        $respond=$respond&&$this->saveNewDetails($details);
-	                      } 
-	                      
-	                      if($respond) {
-	                         Yii::app()->session->remove('Deliveryreplaces');
-	                         Yii::app()->session->remove('Detaildeliveryreplaces');
-	                         $this->redirect(array('view','id'=>$model->id));
-	                      }
-                      } else {
-                      	$error = 'Ada kesalahan dalam detil pengiriman';
-                      }
+                      
+						$respond=$model->save();
+						if(!$respond)
+							throw new CHttpException(404,'There is an error in master posting');
+							                     
+						if (count($details)>0) 
+							$respond= $this->saveNewDetails($details);
+						
+						if (!$respond)
+							throw new CHttpException(404,'There is an error in detail posting');
+
+						$this->afterPost($model);
+						
+						Yii::app()->session->remove('Deliveryreplaces');
+						Yii::app()->session->remove('Detaildeliveryreplaces');
+						$this->redirect(array('view','id'=>$model->id));
                    } else if (isset($_POST['command'])){
                    	
                       // save the current master data before going to the detail page
@@ -402,25 +400,6 @@ class DefaultController extends Controller
          } 
       }
       
-      public function actionCreateDetail2()
-      {
-      //this action continues the process from the detail page
-         if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
-                 Yii::app()->user->id))  {
-             $model=new Deliveryreplaces;
-             $model->attributes=Yii::app()->session['Deliveryreplaces'];
-
-             $details=Yii::app()->session['Detaildeliveryreplaces2'];
-             $this->afterInsertDetail2($model, $details);
-
-             $this->render('create',array(
-                 'model'=>$model,
-             ));
-         } else {
-             throw new CHttpException(404,'You have no authorization for this operation.');
-         } 
-      }
-      
       public function actionUpdateDetail()
       {
          if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
@@ -440,25 +419,7 @@ class DefaultController extends Controller
          }
       }
       
-      public function actionUpdateDetail2()
-      {
-         if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
-                 Yii::app()->user->id))  {
-
-             $model=new Deliveryreplaces;
-             $model->attributes=Yii::app()->session['Deliveryreplaces'];
-
-             $details=Yii::app()->session['Detaildeliveryreplaces2'];
-             $this->afterUpdateDetail2($model, $details);
-
-             $this->render('update',array(
-                 'model'=>$model,
-             ));
-         } else {
-             throw new CHttpException(404,'You have no authorization for this operation.');
-         }
-      }
-      
+            
       public function actionDeleteDetail()
       {
          if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
@@ -479,26 +440,6 @@ class DefaultController extends Controller
          }
       }
       
-      public function actionDeleteDetail2()
-      {
-         if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
-                 Yii::app()->user->id))  {
-
-
-             $model=new Deliveryreplaces;
-             $model->attributes=Yii::app()->session['Deliveryreplaces'];
-
-             $details=Yii::app()->session['Detaildeliveryreplaces2'];
-             $this->afterDeleteDetail($model, $details);
-
-             $this->render('update',array(
-                 'model'=>$model,
-             ));
-         } else {
-             throw new CHttpException(404,'You have no authorization for this operation.');
-         }
-      }
-
      protected function saveNewDetails(array $details)
      {                  
          foreach ($details as $row) {
@@ -512,18 +453,6 @@ class DefaultController extends Controller
          return $respond;
      }
      
-     protected function saveNewDetails2(array $details)
-     {                  
-         foreach ($details as $row) {
-             $detailmodel=new Detaildeliveryreplaces2;
-             $detailmodel->attributes=$row;
-             $respond=$detailmodel->insert();
-             if (!$respond) {
-                break;
-             }
-         }
-         return $respond;
-     }
       
         protected function saveDetails(array $details)
         {
@@ -551,32 +480,6 @@ class DefaultController extends Controller
              return $respond;
         }
         
-        protected function saveDetails2(array $details)
-        {
-            $idmaker=new idmaker();
-                        
-            $respond=true;
-            foreach ($details as $row) {
-                $detailmodel=Detaildeliveryreplaces2::model()->findByPk($row['iddetail']);
-                if($detailmodel==NULL) {
-                  die("cannot find data");  
-                  //$detailmodel=new Detaildeliveryreplaces2;
-                } else {
-                    if(count(array_diff($detailmodel->attributes,$row))) {
-                        $this->tracker->init();
-                        $this->tracker->modify('detaildeliveryreplaces2', array('iddetail'=>$detailmodel->iddetail));
-                    }    
-                }
-                $detailmodel->attributes=$row;
-                $detailmodel->userlog=Yii::app()->user->id;
-                $detailmodel->datetimelog=$idmaker->getDateTime();
-                $respond=$detailmodel->save();
-                if (!$respond) {
-                  break;
-                }
-             }
-             return $respond;
-        }
       
         protected function deleteDetails(array $details)
         {
@@ -596,24 +499,6 @@ class DefaultController extends Controller
             return $respond;
         }
 
-        protected function deleteDetails2(array $details)
-        {
-            $respond=true;
-            foreach ($details as $row) {
-                $detailmodel=Detaildeliveryreplaces2::model()->findByPk($row['iddetail']);
-                if($detailmodel) {
-                    $this->tracker->init();
-                    $this->trackActivity('d', $this->__DETAILFORMID);
-                    $this->tracker->delete('detaildeliveryreplaces2', $detailmodel->iddetail);
-                    $respond=$detailmodel->delete();
-                    if (!$respond) {
-                      break;
-                    }
-                }
-            }
-            return $respond;
-        }
-
         protected function loadDetails($id)
         {
          $sql="select * from detaildeliveryreplaces where id='$id'";
@@ -621,15 +506,6 @@ class DefaultController extends Controller
 
          return $details;
         }
-        
-        protected function loadDetails2($id)
-        {
-         $sql="select * from detaildeliveryreplaces2 where id='$id'";
-         $details=Yii::app()->db->createCommand($sql)->queryAll();
-
-         return $details;
-        }
-        
         
         protected function afterInsert(& $model)
         {
@@ -678,27 +554,16 @@ class DefaultController extends Controller
             //$this->sumDetail($model, $details);
         }
         
-        protected function afterInsertDetail2(& $model, $details)
-        {
-        }
         
-
         protected function afterUpdateDetail(& $model, $details)
         {
         	//$this->sumDetail($model, $details);
         }
         
-        protected function afterUpdateDetail2(& $model, $details)
-        {
-        }
         
         protected function afterDeleteDetail(& $model, $details)
         {
         	$this->sumDetail($model, $details);
-        }
-        
-        protected function afterDeleteDetail2(& $model, $details)
-        {
         }
         
         protected function trackActivity($action)
@@ -765,5 +630,19 @@ class DefaultController extends Controller
         		throw new CHttpException(404,'You have no authorization for this operation.');
         	}
         }    
+	
+	private function processSelectedItems(array $selectIDs)
+	{
+		$found = array();
+		foreach($selectIDs as $id) {
+			foreach(Yii::app()->session['Detaildeliveryreplaces'] as $temp) {
+				if ($temp['iddetail'] == $id) {
+					$found[] = $temp;
+					break;
+				}
+			}
+		}
+		return $found;
+	}
 	
 }
