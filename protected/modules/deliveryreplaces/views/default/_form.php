@@ -140,6 +140,10 @@ EOS;
 		'dataProvider'=>$dataProvider,
 		'columns'=>array(
 			array(
+				'header'=>'Nomor Barang Keluar',
+				'name'=>'regnum',
+			),
+			array(
 				'header'=>'Nama Barang',
 				'name'=>'iditem',
 				'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
