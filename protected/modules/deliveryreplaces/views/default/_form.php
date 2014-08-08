@@ -44,6 +44,7 @@ EOS;
         echo $form->hiddenField($model, 'receivername');
         echo $form->hiddenField($model, 'receiveraddress');
         echo $form->hiddenField($model, 'receiverphone');
+        print_r($model->attributes);
       ?>
       
 	<div class='error'>
