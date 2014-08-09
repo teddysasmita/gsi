@@ -360,7 +360,7 @@ class DefaultController extends Controller
         
         protected function afterDelete($invnum)
         {
-			$this->setInvStatus($invnum, '1');
+			Action::setInvStatus($invnum, '1');
         }
         
         protected function afterEdit(& $model)
