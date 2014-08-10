@@ -96,7 +96,7 @@ class DefaultController extends Controller
                          $respond=$this->saveNewDetails($details, $model->idwarehouse);
                       } 
                       if(!$respond) {
-                      	throw new CHttpException(404,'There is an error in detail posting: '. print_r($model->getErrors()));
+                      	throw new CHttpException(404,'There is an error in detail posting');
                       }
 
 						$this->afterPost($model);
@@ -180,9 +180,6 @@ class DefaultController extends Controller
 					if(isset(Yii::app()->session['Detailstockexits']) ) {
 						$details=Yii::app()->session['Detailstockexits'];
                         $respond=$this->saveDetails($details, $model->idwarehouse);
-                        if(!$respond)
-                        	throw new CHttpException(404,'There is an error in detail posting: '. 
-                        			print_r($model->errors));
 					} 
 
 					$this->afterPost($model);
@@ -477,7 +474,8 @@ class DefaultController extends Controller
              $detailmodel->datetimelog=$idmaker->getDateTime();
              $respond=$detailmodel->save();
              if (!$respond) {
-               break;
+             	throw new CHttpException(404,'There is an error in detail posting: '. print_r($detailmodel->getErrors()));
+               //break;
              }
           }
           return $respond;
