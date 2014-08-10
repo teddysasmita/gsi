@@ -93,8 +93,11 @@ class DefaultController extends Controller
 
                       if(isset(Yii::app()->session['Detailstockexits']) ) {
                          $details=Yii::app()->session['Detailstockexits'];
-                         $respond=$respond&&$this->saveNewDetails($details, $model->idwarehouse);
+                         $respond=$this->saveNewDetails($details, $model->idwarehouse);
                       } 
+                      if(!$respond) {
+                      	throw new CHttpException(404,'There is an error in detail posting: '. print_r($model->errors));
+                      }
 
 						$this->afterPost($model);
                         Yii::app()->session->remove('Stockexits');
