@@ -179,8 +179,6 @@ class DefaultController extends Controller
 
 					if(isset(Yii::app()->session['Detailstockexits']) ) {
 						$details=Yii::app()->session['Detailstockexits'];
-						print_r($details);
-						die;
                         $respond=$this->saveDetails($details, $model->idwarehouse);
 					} 
 
@@ -472,16 +470,14 @@ class DefaultController extends Controller
                  }    
              }
              $detailmodel->attributes=$row;
+             if ($detailmodel->status == '')
+             	$detailmodel->status = '0';
              $detailmodel->userlog=Yii::app()->user->id;
              $detailmodel->datetimelog=$idmaker->getDateTime();
              $respond=$detailmodel->save();
              if (!$respond) {
-             	$temp = $detailmodel->getErrors();
-             	if (is_array($temp)) 
-             		$error = serialize($temp);
-             	else	
-             		$error = $temp;
-             	throw new CHttpException(404,'There is an error in detail posting: '. $error);
+             	$temp = serialize($detailmodel->getErrors());
+             	throw new CHttpException(404,'There is an error in detail posting: '. $temp);
                //break;
              }
           }

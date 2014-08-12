@@ -286,6 +286,7 @@ class DetailstockexitsController extends Controller
             $idmaker=new idmaker();
             $model->id=$id;  
             $model->iddetail=$idmaker->getCurrentID2();
+            $model->status = '0';
             $model->userlog=Yii::app()->user->id;
             $model->datetimelog=$idmaker->getDateTime();
         }
