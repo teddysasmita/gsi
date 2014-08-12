@@ -479,7 +479,7 @@ class DefaultController extends Controller
              		$error = implode(';', $temp);
              	else	
              		$error = $temp;
-             	throw new CHttpException(404,'There is an error in detail posting: '. $temp);
+             	throw new CHttpException(404,'There is an error in detail posting: '. $error);
                //break;
              }
           }
