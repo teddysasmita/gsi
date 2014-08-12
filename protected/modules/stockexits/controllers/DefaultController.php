@@ -474,11 +474,10 @@ class DefaultController extends Controller
              $detailmodel->datetimelog=$idmaker->getDateTime();
              $respond=$detailmodel->save();
              if (!$respond) {
-             	if (is_array($detailmodel->getErrors)) 
-             		$error = implode(';', $detailmodel->getErrors());
-             	else 
-             		$error = $detailmodel->getErrors();
-             	throw new CHttpException(404,'There is an error in detail posting: '. $errors);
+             	$temp = $detailmodel->getErrors();
+             	if (is_array($temp)) 
+             		$error = implode(';', $temp);
+             	throw new CHttpException(404,'There is an error in detail posting: '. $temp);
                //break;
              }
           }
