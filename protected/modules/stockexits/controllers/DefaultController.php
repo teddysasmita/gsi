@@ -179,6 +179,8 @@ class DefaultController extends Controller
 
 					if(isset(Yii::app()->session['Detailstockexits']) ) {
 						$details=Yii::app()->session['Detailstockexits'];
+						print_r($details);
+						die;
                         $respond=$this->saveDetails($details, $model->idwarehouse);
 					} 
 
