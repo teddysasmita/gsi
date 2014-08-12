@@ -476,7 +476,9 @@ class DefaultController extends Controller
              if (!$respond) {
              	$temp = $detailmodel->getErrors();
              	if (is_array($temp)) 
-             		$temp = implode(';', $temp);
+             		$error = implode(';', $temp);
+             	else	
+             		$error = $temp;
              	throw new CHttpException(404,'There is an error in detail posting: '. $temp);
                //break;
              }
