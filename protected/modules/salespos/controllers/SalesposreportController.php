@@ -191,7 +191,7 @@ EOS;
 			
 			// Get ALL Sales Modification data
 			$datarawreplaces = Yii::app()->db->createCommand()
-				->select('a.regnum, a.invnum, a.totaldiff, a.userlog, a.datetimelog, b.deleted')
+				->select('a.regnum, a.invnum, a.totaldiff, a.userlog, a.datetimelog, b.*')
 				->from('salesreplace a')
 				->join('detailsalesreplace b', 'b.id = a.id')
 				->join('items d', 'd.id = b.iditem')
