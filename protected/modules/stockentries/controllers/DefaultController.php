@@ -185,7 +185,9 @@ class DefaultController extends Controller
 	
 					if(isset(Yii::app()->session['Detailstockentries']) ) {
 						$details=Yii::app()->session['Detailstockentries'];
-						$respond=$respond&&$this->saveDetails($details, $model->idwarehouse	);
+						$respond=$this->saveDetails($details, $model->idwarehouse);
+						if (!$respond)
+							throw new CHttpException(5002,'There is an error in detail posting: '.$error);
 					} 
 	
 					$this->afterPost($model);
