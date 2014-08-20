@@ -48,14 +48,14 @@ class DefaultController extends Controller
 					->queryAll();	
 				foreach($whs as $wh) {
 					$command = Yii::app()->db->createCommand()
-						->select("count(*) as total, a.iddetail, a.iditem, b.name, '${wh['code']}' as code, avail, status")
+						->select("count(*) as total, a.iddetail, a.iditem, b.name, '${wh['code']}' as code, a.avail, a.status")
 						->from("wh${wh['id']} a")
 						->join('items b', 'b.id = a.iditem')
 						->where("b.name like :p_name", array(':p_name'=>"%$itemnameparam%"));	
 						if ($statusparam !== 'Semua')
 							$command->andWhere("a.status = :p_status", array(':p_status'=>$statusparam));
 					$data = $command->group(array('iditem', 'avail'))
-						->order('iditem')
+						->order('a.iditem, a.avail')
 						->queryAll();
 					$alldata = array_merge($alldata, $data);
 				}
@@ -89,14 +89,14 @@ class DefaultController extends Controller
 						->queryAll();
 				foreach($whs as $wh) {
 					$command = Yii::app()->db->createCommand()
-						->select("a.iddetail, a.iditem, b.name, a.serialnum, concat('${wh['code']}') as code, avail, status")
+						->select("a.iddetail, a.iditem, b.name, a.serialnum, concat('${wh['code']}') as code, a.avail, a.status")
 						->from("wh${wh['id']} a")
 						->join('items b', 'b.id = a.iditem')
 						->where("b.name like :p_name", array(':p_name'=>"%$itemnameparam%"));
 						
 					if ($statusparam !== 'Semua')
 						$command->andWhere("a.status = :p_status", array(':p_status'=>$statusparam));
-					$data = $command->order('b.name')->queryAll();
+					$data = $command->order('b.name, a.avail')->queryAll();
 					$alldata = array_merge($alldata, $data);
 				}
 				usort($alldata, 'cmp');
