@@ -187,7 +187,7 @@ class DefaultController extends Controller
 						$details=Yii::app()->session['Detailstockentries'];
 						$respond=$this->saveDetails($details, $model->idwarehouse);
 						if (!$respond)
-							throw new CHttpException(5002,'There is an error in detail posting: '.$error);
+							throw new CHttpException(5002,'There is an error in detail posting');
 					} 
 	
 					$this->afterPost($model);
@@ -834,7 +834,6 @@ EOS;
       {
          $respond=true;
          
-         print_r($details);
          foreach($details as $detail) {
             if ($detail['serialnum'] !== 'Belum Diterima') {
                $count=Yii::app()->db->createCommand()
