@@ -10,7 +10,8 @@
    'Lihat Detil'
  );
 
- print_r($model->attributes);
+print_r($detail);
+die;
 $this->menu=array(
 	/*array('label'=>'List Detailstockexits', 'url'=>array('index')),
 	array('label'=>'Create Detailstockexits', 'url'=>array('create')),
