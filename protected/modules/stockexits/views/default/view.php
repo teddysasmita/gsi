@@ -78,7 +78,7 @@ $this->menu=array(
                         'visible'=>'false'
                      )
                   ),
-                  'viewButtonUrl'=>"Action::decodeViewDetailStockEntryUrl(\$data)",
+                  'viewButtonUrl'=>"Action::decodeViewDetailStockExitUrl(\$data)",
               )
          ),
    ));
