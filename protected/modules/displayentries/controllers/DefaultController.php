@@ -377,9 +377,9 @@ class DefaultController extends Controller
 		if (!$exist)
 			Action::addItemToWarehouse($model->idwarehouse, $model->id,
 					$model->iditem, $model->serialnum);
-		else {
+		else 
 			Action::setItemAvailinWarehouse($model->idwarehouse, $model->serialnum, '1');
-		}
+		
 		Action::setItemStatusinWarehouse($model->idwarehouse, $model->serialnum, $model->avail);
 	}
 	
