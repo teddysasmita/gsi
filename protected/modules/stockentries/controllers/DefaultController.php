@@ -788,10 +788,10 @@ EOS;
       			if (($qtySJ + $qtyPB) < $dr['qty'] )
       				$dr['qty'] = $qtyPB + $qtySJ;
       		}
+      		print_r($detailreplaces1);
+      		print_r($detailreplaces2);
       		$dataLPB = array_merge($detailreplaces2, $detailreplaces1);
       	}
-      	
-      	print_r($dataLPB);
       	
       	if ($dataLPB == FALSE ) {
       		$dataLPB=Yii::app()->db->createCommand()
