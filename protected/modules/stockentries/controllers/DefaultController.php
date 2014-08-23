@@ -785,8 +785,11 @@ EOS;
 					->group('b.iditem')
       				->queryScalar();
       			 
-      			if ($dr['qty'] > $dr['qtynew'])
+      			if ($dr['qty'] > $dr['qtynew']) 
       				$dr['qty'] = $dr['qty'] - $dr['qtynew'];
+      			else 
+      				$dr['qty'] = 0;
+      			
       			if (($qtySJ + $qtyPB) < $dr['qty'] )
       				$dr['qty'] = $qtyPB + $qtySJ;
       		}
