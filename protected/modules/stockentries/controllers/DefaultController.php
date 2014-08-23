@@ -791,6 +791,8 @@ EOS;
       		$dataLPB = array_merge($detailreplaces2, $detailreplaces1);
       	}
       	
+      	print_r($dataLPB);
+      	
       	if ($dataLPB == FALSE ) {
       		$dataLPB=Yii::app()->db->createCommand()
       		->select('a.id, b.iditem, (1) as qty')

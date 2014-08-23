@@ -58,7 +58,7 @@ EOS;
 	<div class="row">
 		<?php echo $form->labelEx($model,'idatetime'); ?>
             <?php
-               $this->widget('zii.widgets.jui.CJuiDatePicker',array(
+             	$this->widget('zii.widgets.jui.CJuiDatePicker',array(
                   'name'=>'Purchasesstockentries[idatetime]',
                      // additional javascript options for the date picker plugin
                   'options'=>array(
@@ -72,6 +72,7 @@ EOS;
                   'value'=>$model->idatetime,
                ));
             ?>
+            
 		<?php echo $form->error($model,'idatetime'); ?>
 	</div>
 	
