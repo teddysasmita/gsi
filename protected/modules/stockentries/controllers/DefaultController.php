@@ -785,7 +785,7 @@ EOS;
 					->group('b.iditem')
       				->queryScalar();
       			 
-      			echo $qtySJ + $qtyPB. ' - '.$dr[qty];
+      			echo $qtySJ + $qtyPB. ' - '.$dr['qty'];
       			if (($qtySJ + $qtyPB) < $dr['qty'] )
       				$dr['qty'] = $qtyPB + $qtySJ;
       		}
