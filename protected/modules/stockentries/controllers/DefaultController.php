@@ -755,8 +755,9 @@ EOS;
       				->group('b.iditem')
       				->queryScalar();
       		
-      			/*if (($qtySJ + $qtyPB) < $dr['qty'] )
-      				$dr['qty'] = $qtyPB + $qtySJ;*/
+      			echo $qtySJ. '-'. $qtyPB. '=';
+      			if (($qtySJ + $qtyPB) < $dr['qty'] )
+      				$dr['qty'] = $qtyPB + $qtySJ;
       		}
       		
       		$detailreplaces2 = Yii::app()->db->createCommand()
@@ -785,11 +786,10 @@ EOS;
 					->group('b.iditem')
       				->queryScalar();
       			 
-      			/*if (($qtySJ + $qtyPB) < $dr['qty'] )
-      				$dr['qty'] = $qtyPB + $qtySJ;*/
+      			echo $qtySJ. '-'. $qtyPB;
+      			if (($qtySJ + $qtyPB) < $dr['qty'] )
+      				$dr['qty'] = $qtyPB + $qtySJ;
       		}
-      		print_r($detailreplaces1);
-      		print_r($detailreplaces2);
       		$dataLPB = array_merge($detailreplaces2, $detailreplaces1);
       	}
       	
