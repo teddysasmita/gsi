@@ -69,7 +69,7 @@ class Deliveryreplaces extends CActiveRecord
 			'id' => 'ID',
 			'regnum' => 'Nomor Urut',
 			'idatetime' => 'Tanggal',
-			'deliverynum' => 'Nomor Kirim',
+			'deliverynum' => 'Nomor SJ',
 			'drivername' => 'Nama Supir',
 			'vehicleinfo' => 'Info Kendaraan',
 			'receivername' => 'Nama Penerima',
