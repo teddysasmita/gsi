@@ -93,7 +93,7 @@ EOS;
 			$warehouses = lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
          	if (count($warehouses) > 1) {
 				$data = CHtml::listData($warehouses, 'id', 'code');
-         		echo CHtml::dropDownList('Stockexits[idwarehouse]', $model->idwarehouse, $data, 
+         		echo $form->dropDownList($model, 'idwarehouse', $data, 
 					array('empty'=>'Harap Pilih'));
          	} else {
 				echo CHtml::hiddenField('Stockexits[idwarehouse]', $warehouses[0]['id']);
