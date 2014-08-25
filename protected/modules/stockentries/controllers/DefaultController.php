@@ -765,7 +765,6 @@ EOS;
 	      		->where('a.regnum = :p_regnum and b.deleted = :p_same',
 	      				array(':p_regnum'=>$nolpb, ':p_same'=>'1'))
 				->queryAll();
-      		print_r($detailreplaces2);
       		foreach($detailreplaces2 as & $dr) {
       			$qtySJ=Yii::app()->db->createCommand()
 	      			->select('sum(b.qty) as qty')
@@ -787,7 +786,7 @@ EOS;
       			 
       			if ($dr['qty'] > $dr['qtynew']) 
       				$dr['qty'] = $dr['qty'] - $dr['qtynew'];
-      			else 
+      			else if ($dr['qty'] < $dr['qtynew'])
       				$dr['qty'] = 0;
       			
       			if (($qtySJ + $qtyPB) < $dr['qty'] )
