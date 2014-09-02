@@ -481,7 +481,7 @@ class DefaultController extends Controller
                 $detailmodel=Detailrequestdisplays::model()->findByPk($row['iddetail']);
                 if($detailmodel) {
                     $this->tracker->init();
-                    $this->trackActivity('d', $this->detailformid);
+                    $this->trackActivity('d');
                     $this->tracker->delete('detailrequestdisplays', $detailmodel->id);
                     $respond=$detailmodel->delete();
                     if (!$respond) {
