@@ -778,7 +778,7 @@ EOS;
 								$data['serialnums'] = '';
 						}
 					}
-					$this->render('finditem', array('founddata' => $founddata, 'iditem'=>$iditem));
+					$this->render('findbrand',array('founddata' => $founddata, 'iditem'=>$iditem));
 				} else {
 					throw new CHttpException(404,'You have no authorization for this operation.');
 				}

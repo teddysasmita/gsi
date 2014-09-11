@@ -39,7 +39,7 @@ EOH;
 			'name'=>'iditem',
 			'sourceUrl'=> Yii::app()->createUrl('LookUp/getItem2'),
 			'htmlOptions'=>array(
-				'style'=>'height:20px;width:100px',
+				'style'=>'height:20px;width:200px',
 			),
 		));
 	?>
