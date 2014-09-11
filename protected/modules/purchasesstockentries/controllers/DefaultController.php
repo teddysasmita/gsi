@@ -721,7 +721,7 @@ EOS;
 					->select($selectfields)->from('purchasesstockentries a')
 					->join('detailpurchasesstockentries b', 'b.id = a.id')
 					->join('suppliers c', 'c.id = a.idsupplier')
-					->where('b.iditem = :p_iditem', array(':p_iditem'=>$_POST['iditem']))
+					->where('b.iditem = :p_iditem', array(':p_iditem'=>$iditem))
 					->order('a.regnum')
 					->queryAll();
 				$serial = Yii::app()->db->createCommand()
