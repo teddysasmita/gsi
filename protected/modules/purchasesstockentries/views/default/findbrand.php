@@ -80,6 +80,12 @@ EOH;
 						'name'=>'regnum',
 					),
 					array(
+						'header'=>'Nama Barang',
+						'name'=>'iditem',
+						'type'=>'ntext',
+						'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])"
+					),
+					array(
 						'header'=>'Qty',
 						'name'=>'qty',
 					),

@@ -751,22 +751,22 @@ EOS;
 					$brand = '';
 					$founddata = array();
 					$selectfields = <<<EOS
-			b.iddetail, a.regnum, a.idatetime, b.buyprice, b.qty,
+			b.iddetail, a.regnum, a.idatetime, b.buyprice, b.qty, b.iditem, 
 			concat(c.firstname, ' ', c.lastname) as suppliername
 EOS;
 					if (isset($_GET['brand'])) {
 						$brand = $_GET['brand'];
 						$founddata = Yii::app()->db->createCommand()
-						->select($selectfields)->from('purchasesstockentries a')
-						->join('detailpurchasesstockentries b', 'b.id = a.id')
-						->join('suppliers c', 'c.id = a.idsupplier')
-						->join('items d', 'd.id = b.iditem')
-						->where('d.brand = :p_brand', array(':p_brand'=>$brand))
-						->queryAll();
+							->select($selectfields)->from('purchasesstockentries a')
+							->join('detailpurchasesstockentries b', 'b.id = a.id')
+							->join('suppliers c', 'c.id = a.idsupplier')
+							->join('items d', 'd.id = b.iditem')
+							->where('d.brand = :p_brand', array(':p_brand'=>$brand))
+							->queryAll();
 						$serial = Yii::app()->db->createCommand()
-						->select('b.serialnum')->from('stockentries a')
-						->join('detailstockentries b', 'b.id = a.id')
-						->where("a.transid = :p_transid and b.serialnum <> 'Belum Diterima' and b.iditem = :p_iditem");
+							->select('b.serialnum')->from('stockentries a')
+							->join('detailstockentries b', 'b.id = a.id')
+							->where("a.transid = :p_transid and b.serialnum <> 'Belum Diterima' and b.iditem = :p_iditem");
 						foreach ($founddata as & $data) {
 							$serial->bindParam(':p_transid', $data['regnum']);
 							$serial->bindParam(':p_iditem', $data['iditem']);
