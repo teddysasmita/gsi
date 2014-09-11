@@ -29,7 +29,7 @@ EOH;
 		echo CHtml::beginForm(Yii::app()->createUrl("/purchasesstockentries/default/findbrand"), 'get');
 	?>
 	
-<p class="note">Masukkan Jenis Barang yg dicari.</p>
+<p class="note">Masukkan Merk yg dicari.</p>
 	
 	<div class="row">
 	<?php echo CHtml::label('Merk', FALSE); ?>
