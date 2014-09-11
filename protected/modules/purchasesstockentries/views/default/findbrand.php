@@ -3,7 +3,7 @@
 	$this->breadcrumbs=array(
 		'Proses'=>array('/site/proses'),
 		'Daftar'=>array('index'),
-		'Cari LPB berdasar Jenis Barang',
+		'Cari LPB berdasar Merk',
 	);
 
 	$this->menu=array();
@@ -21,23 +21,23 @@ EOH;
 	Yii::app()->clientScript->registerScript('myscript', $jq, CClientScript::POS_READY);
 ?>
 
-<h1>Pencarian LPB berdasarkan Jenis Barang</h1>
+<h1>Pencarian LPB berdasarkan Merk</h1>
 
 <div class="form">
 
 	<?php 
-		echo CHtml::beginForm(Yii::app()->createUrl("/purchasesstockentries/default/finditem"));
+		echo CHtml::beginForm(Yii::app()->createUrl("/purchasesstockentries/default/findbrand"));
 	?>
 	
 <p class="note">Masukkan Jenis Barang yg dicari.</p>
 	
 	<div class="row">
-	<?php echo CHtml::label('Jenis Barang', FALSE); ?>
+	<?php echo CHtml::label('Merk', FALSE); ?>
 	<?php
 
 		$this->widget('zii.widgets.jui.CJuiAutoComplete', array(
-			'name'=>'iditem',
-			'sourceUrl'=> Yii::app()->createUrl('LookUp/getItem2'),
+			'name'=>'brand',
+			'sourceUrl'=> Yii::app()->createUrl('LookUp/getBrand'),
 			'htmlOptions'=>array(
 				'style'=>'height:20px;width:100px',
 			),

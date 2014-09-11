@@ -712,13 +712,16 @@ EOS;
 			$iditem = '';
 			$founddata = array();
 			$selectfields = <<<EOS
-			b.iddetail, a.regnum, a.idatetime, b.buyprice, b.qty, concat(c.firstname, ' ', c.lastname) as suppliername
+			b.iddetail, a.regnum, a.idatetime, b.buyprice, b.qty, 
+			concat(c.firstname, ' ', c.lastname) as suppliername
 EOS;
 			if (isset($_POST['iditem'])) {
 				$iditem = $_POST['iditem'];
 				$founddata = Yii::app()->db->createCommand()
-					->select($selectfields)->from('purchasesstockentries a')->join('detailpurchasesstockentries b', 'b.id = a.id')
-					->join('suppliers c', 'c.id = a.idsupplier')->where('b.iditem = :p_iditem', array(':p_iditem'=>$_POST['iditem']))
+					->select($selectfields)->from('purchasesstockentries a')
+					->join('detailpurchasesstockentries b', 'b.id = a.id')
+					->join('suppliers c', 'c.id = a.idsupplier')
+					->where('b.iditem = :p_iditem', array(':p_iditem'=>$_POST['iditem']))
 					->queryAll();
 				$serial = Yii::app()->db->createCommand()
 					->select('b.serialnum')->from('stockentries a')->join('detailstockentries b', 'b.id = a.id')
@@ -738,8 +741,46 @@ EOS;
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		}	
-			 
-		 
 	}
       
+	public function actionFindbrand()
+	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
+				Yii::app()->user->id)) {
+					$this->trackActivity('p');
+					$iditem = '';
+					$founddata = array();
+					$selectfields = <<<EOS
+			b.iddetail, a.regnum, a.idatetime, b.buyprice, b.qty,
+			concat(c.firstname, ' ', c.lastname) as suppliername
+EOS;
+					if (isset($_POST['iditem'])) {
+						$iditem = $_POST['iditem'];
+						$founddata = Yii::app()->db->createCommand()
+						->select($selectfields)->from('purchasesstockentries a')
+						->join('detailpurchasesstockentries b', 'b.id = a.id')
+						->join('suppliers c', 'c.id = a.idsupplier')
+						->join('items d', 'd.id = b.iditem')
+						->where('d.brand = :p_brand', array(':p_brand'=>$_POST['brand']))
+						->queryAll();
+						$serial = Yii::app()->db->createCommand()
+						->select('b.serialnum')->from('stockentries a')
+						->join('detailstockentries b', 'b.id = a.id')
+						->where("a.transid = :p_transid and b.serialnum <> 'Belum Diterima' and b.iditem = :p_iditem");
+						foreach ($founddata as & $data) {
+							$serial->bindParam(':p_transid', $data['regnum']);
+							$serial->bindParam(':p_iditem', $iditem);
+								
+							$result = $serial->queryColumn();
+							if ($result !== FALSE)
+								$data['serialnums'] = implode(', ', $result);
+							else
+								$data['serialnums'] = '';
+						}
+					}
+					$this->render('finditem', array('founddata' => $founddata, 'iditem'=>$iditem));
+				} else {
+					throw new CHttpException(404,'You have no authorization for this operation.');
+				}
+	}
 }
