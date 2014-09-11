@@ -41,6 +41,7 @@ EOH;
 			'htmlOptions'=>array(
 				'style'=>'height:20px;width:200px',
 			),
+			'value'=>$iditem,
 		));
 	?>
 	</div>
