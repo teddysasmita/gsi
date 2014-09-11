@@ -748,7 +748,7 @@ EOS;
 		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
 				Yii::app()->user->id)) {
 					$this->trackActivity('p');
-					$iditem = '';
+					$brand = '';
 					$founddata = array();
 					$selectfields = <<<EOS
 			b.iddetail, a.regnum, a.idatetime, b.buyprice, b.qty,
