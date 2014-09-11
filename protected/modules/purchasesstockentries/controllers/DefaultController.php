@@ -715,8 +715,8 @@ EOS;
 			b.iddetail, a.regnum, a.idatetime, b.buyprice, b.qty, 
 			concat(c.firstname, ' ', c.lastname) as suppliername
 EOS;
-			if (isset($_POST['iditem'])) {
-				$iditem = $_POST['iditem'];
+			if (isset($_GET['iditem'])) {
+				$iditem = $_GET['iditem'];
 				$founddata = Yii::app()->db->createCommand()
 					->select($selectfields)->from('purchasesstockentries a')
 					->join('detailpurchasesstockentries b', 'b.id = a.id')
@@ -754,8 +754,8 @@ EOS;
 			b.iddetail, a.regnum, a.idatetime, b.buyprice, b.qty,
 			concat(c.firstname, ' ', c.lastname) as suppliername
 EOS;
-					if (isset($_POST['brand'])) {
-						$brand = $_POST['brand'];
+					if (isset($_GET['brand'])) {
+						$brand = $_GET['brand'];
 						$founddata = Yii::app()->db->createCommand()
 						->select($selectfields)->from('purchasesstockentries a')
 						->join('detailpurchasesstockentries b', 'b.id = a.id')
