@@ -761,7 +761,7 @@ EOS;
 						->join('detailpurchasesstockentries b', 'b.id = a.id')
 						->join('suppliers c', 'c.id = a.idsupplier')
 						->join('items d', 'd.id = b.iditem')
-						->where('d.brand = :p_brand', array(':p_brand'=>$brand)
+						->where('d.brand = :p_brand', array(':p_brand'=>$brand))
 						->queryAll();
 						$serial = Yii::app()->db->createCommand()
 						->select('b.serialnum')->from('stockentries a')
