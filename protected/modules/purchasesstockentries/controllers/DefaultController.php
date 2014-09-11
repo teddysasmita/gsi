@@ -722,7 +722,7 @@ EOS;
 					->join('detailpurchasesstockentries b', 'b.id = a.id')
 					->join('suppliers c', 'c.id = a.idsupplier')
 					->where('b.iditem = :p_iditem', array(':p_iditem'=>$iditem))
-					->order('a.regnum')
+					->order('a.regnum desc')
 					->queryAll();
 				$serial = Yii::app()->db->createCommand()
 					->select('b.serialnum')->from('stockentries a')->join('detailstockentries b', 'b.id = a.id')
@@ -763,7 +763,7 @@ EOS;
 							->join('suppliers c', 'c.id = a.idsupplier')
 							->join('items d', 'd.id = b.iditem')
 							->where('d.brand = :p_brand', array(':p_brand'=>$brand))
-							->order('a.regnum')
+							->order('a.regnum desc')
 							->queryAll();
 						$serial = Yii::app()->db->createCommand()
 							->select('b.serialnum')->from('stockentries a')
