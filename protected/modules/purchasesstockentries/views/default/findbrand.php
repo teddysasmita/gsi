@@ -56,7 +56,7 @@ EOH;
 	
 </div> <!-- form -->
 	
-<h2><?php echo lookup::ItemNameFromItemID($iditem). " - $iditem" ?></h2>
+<h2><?php echo $brand; ?></h2>
 
 	<?php 
 	if (isset($founddata)) {
