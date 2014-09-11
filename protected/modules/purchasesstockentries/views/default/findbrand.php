@@ -40,8 +40,8 @@ EOH;
 			'sourceUrl'=> Yii::app()->createUrl('LookUp/getBrand'),
 			'htmlOptions'=>array(
 				'style'=>'height:20px;width:200px',
-			'value'=>$brand
 			),
+			'value'=>$brand
 		));
 	?>
 	</div>
