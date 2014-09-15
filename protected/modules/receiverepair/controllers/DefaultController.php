@@ -515,9 +515,16 @@ class DefaultController extends Controller
      protected function afterPost(& $model)
      {
          $idmaker=new idmaker();
-         if ($this->state == 'create')
+         if ($this->state == 'create') {
          	$idmaker->saveRegNum($this->formid, substr($model->regnum, 2)); 
          
+         	Yii::import('application.modules.receiverepair.models.*');
+		
+         	$details = Detailreceiverepairs::model()->findByAttributes('id', $model->id);
+         	foreach ($details as $detail) {
+         		Action::setItemStatusinWarehouse($detail->idwarehouse, $detail->serialnum, '1');
+         	}
+         }
          /*$this->setStatusPO($model->idpurchaseorder,
             Yii::app()->session['Detailreceiverepairs']);
          */
