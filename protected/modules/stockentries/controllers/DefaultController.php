@@ -662,7 +662,7 @@ EOS;
         Yii::app()->session['Detailstockentries']=$details;
       }
      
-      private function loadLPB($nolpb, $id, $idwh)
+      private function loadLPB2($nolpb, $id, $idwh)
       {
       	$details=array();
       
@@ -834,6 +834,172 @@ EOS;
       	};
 	}
       			
+	private function loadLPB($nolpb, $id, $idwh)
+	{
+		$details=array();
+	
+		$prefix = substr($nolpb, 0, 2);
+		
+		/*if ($dataLPB == FALSE) {
+		 $dataLPB=Yii::app()->db->createCommand()
+		->select('a.id, b.*')
+		->from('requestdisplays a')
+		->join('detailrequestdisplays b', 'b.id=a.id')
+		->where('a.regnum = :p_regnum', array(':p_regnum'=>$nolpb) )
+		->queryAll();
+		}*/
+		if ($prefix == 'TB') {
+			$dataLPB=Yii::app()->db->createCommand()
+			->select('a.id, b.iditem, sum(b.qty) as qty')
+			->from('itemtransfers a')
+			->join('detailitemtransfers b', 'b.id=a.id')
+			->where('a.regnum = :p_regnum and a.idwhdest = :p_idwhdest',
+					array(':p_regnum'=>$nolpb, ':p_idwhdest'=>$idwh) )
+					->group('b.iditem')
+					->queryAll();
+		} else if ($prefix == 'FB') {
+			$invnum = Yii::app()->db->createCommand()
+			->select('invnum')->from('salescancel')
+			->where('regnum = :p_regnum', array(':p_regnum'=>$nolpb))
+			->queryScalar();
+	
+			$dataSJ=Yii::app()->db->createCommand()
+			->select('a.id, b.iditem, sum(b.qty) as qty')
+			->from('deliveryorders a')
+			->join('detaildeliveryorders b', 'b.id=a.id')
+			->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse',
+					array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh) )
+					->group('b.iditem')
+					->queryAll();
+			$dataPB=Yii::app()->db->createCommand()
+			->select('a.id, b.iditem, sum(b.qty) as qty')
+			->from('orderretrievals a')
+			->join('detailorderretrievals b', 'b.id=a.id')
+			->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse',
+					array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh) )
+					->group('b.iditem')
+					->queryAll();
+	
+			$dataLPB = array_merge($dataPB, $dataSJ);
+		} else if ($prefix == 'FG' ) {
+			$dataPBs = array();
+			$dataSJs = array();
+	
+			$invnum = Yii::app()->db->createCommand()
+			->select('invnum')->from('salesreplace')
+			->where('regnum = :p_regnum', array(':p_regnum'=>$nolpb))
+			->queryScalar();
+			 
+			$detailreplaces1 = Yii::app()->db->createCommand()
+			->select('a.id, b.iditem, b.qty')->from('detailsalesreplace b')
+			->join('salesreplace a', 'a.id = b.id')
+			->where('a.regnum = :p_regnum and b.deleted = :p_same',
+					array(':p_regnum'=>$nolpb, ':p_same'=>'2'))
+					->queryAll();
+	
+			foreach($detailreplaces1 as & $dr) {
+				$qtySJ=Yii::app()->db->createCommand()
+				->select('sum(b.qty) as qty')
+				->from('deliveryorders a')
+				->join('detaildeliveryorders b', 'b.id=a.id')
+				->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse and b.iditem = :p_iditem',
+						array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh, ':p_iditem'=>$dr['iditem']) )
+						->group('b.iditem')
+						->queryScalar();
+	
+				$qtyPB=Yii::app()->db->createCommand()
+				->select('sum(b.qty) as qty')
+				->from('orderretrievals a')
+				->join('detailorderretrievals b', 'b.id=a.id')
+				->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse and b.iditem = :p_iditem',
+						array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh, ':p_iditem'=>$dr['iditem']) )
+						->group('b.iditem')
+						->queryScalar();
+	
+				if (($qtySJ + $qtyPB) < $dr['qty'] )
+					$dr['qty'] = $qtyPB + $qtySJ;
+			}
+	
+			$detailreplaces2 = Yii::app()->db->createCommand()
+			->select('a.id, b.iditem, b.qty, b.qtynew')->from('detailsalesreplace b')
+			->join('salesreplace a', 'a.id = b.id')
+			->where('a.regnum = :p_regnum and b.deleted = :p_same',
+					array(':p_regnum'=>$nolpb, ':p_same'=>'1'))
+					->queryAll();
+			foreach($detailreplaces2 as & $dr) {
+				$qtySJ=Yii::app()->db->createCommand()
+				->select('sum(b.qty) as qty')
+				->from('deliveryorders a')
+				->join('detaildeliveryorders b', 'b.id=a.id')
+				->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse and b.iditem = :p_iditem',
+						array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh, ':p_iditem'=>$dr['iditem']) )
+						->group('b.iditem')
+						->queryScalar();
+				 
+				$qtyPB=Yii::app()->db->createCommand()
+				->select('sum(b.qty) as qty')
+				->from('orderretrievals a')
+				->join('detailorderretrievals b', 'b.id=a.id')
+				->where('a.invnum = :p_invnum and b.idwarehouse = :p_idwarehouse and b.iditem = :p_iditem',
+						array(':p_invnum'=>$invnum, ':p_idwarehouse'=>$idwh, ':p_iditem'=>$dr['iditem']) )
+						->group('b.iditem')
+						->queryScalar();
+	
+				if ($dr['qty'] > $dr['qtynew'])
+					$dr['qty'] = $dr['qty'] - $dr['qtynew'];
+				else if ($dr['qty'] < $dr['qtynew'])
+					$dr['qty'] = 0;
+				 
+				if (($qtySJ + $qtyPB) < $dr['qty'] )
+					$dr['qty'] = $qtyPB + $qtySJ;
+			}
+			$dataLPB = array_merge($detailreplaces2, $detailreplaces1);
+		} else if ($prefix == 'KR' ) {
+			$dataLPB=Yii::app()->db->createCommand()
+			->select('a.id, b.iditem, (1) as qty')
+			->from('receiverepairs a')
+			->join('detailreceiverepairs b', 'b.id=a.id')
+			->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
+					array(':p_regnum'=>$nolpb, ':p_idwarehouse'=>$idwh) )
+					->queryAll();
+		} else {
+			$dataLPB=Yii::app()->db->createCommand()
+			->select('a.id, b.iditem, sum(b.qty) as qty')
+			->from('purchasesstockentries a')
+			->join('detailpurchasesstockentries b', 'b.id=a.id')
+			->where('a.regnum = :p_regnum', array(':p_regnum'=>$nolpb) )
+			->group('b.iditem')
+			->queryAll();
+		}
+		 
+		Yii::app()->session->remove('Detailstockentries');
+		if ($dataLPB !== FALSE) {
+			$sql=<<<EOS
+	    	select count(*) as received from stockentries a
+			join detailstockentries b on b.id = a.id
+			where a.transid = :p_transid and b.iditem = :p_iditem and
+	        b.serialnum <> 'Belum Diterima'
+EOS;
+			$mycommand=Yii::app()->db->createCommand($sql);
+			foreach($dataLPB as $row) {
+	
+				$mycommand->bindParam(':p_transid', $nolpb, PDO::PARAM_STR);
+				$mycommand->bindParam(':p_iditem', $row['iditem'], PDO::PARAM_STR);
+				$accepted=$mycommand->queryScalar();
+				for ($index = 0; $index < $row['qty'] - $accepted; $index++) {
+					$detail['iddetail']=idmaker::getCurrentID2();
+					$detail['id']=$id;
+					$detail['iditem']=$row['iditem'];
+					$detail['userlog']=Yii::app()->user->id;
+					$detail['datetimelog']=idmaker::getDateTime();
+					$detail['serialnum']='Belum Diterima';
+					$detail['status'] = '';
+					$details[]=$detail;
+				}
+			}
+			Yii::app()->session['Detailstockentries']=$details;
+		};
+	}
       private function checkSerialNum(array $details, $idwh ) 
       {
          $respond=true;

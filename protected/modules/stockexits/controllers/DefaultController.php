@@ -636,7 +636,7 @@ EOS;
         Yii::app()->session['Detailstockexits']=$details;
       }
      
-      private function loadLPB($nolpb, $id, $idwh)
+      private function loadLPB2($nolpb, $id, $idwh)
       {
       	$details=array();
       
@@ -736,6 +736,115 @@ EOS;
 				$detail['serialnum']='Belum Diterima';
 				$detail['status']='';
       			$details[]=$detail;
+			}
+		}
+		Yii::app()->session->remove('Detailstockexits');
+		Yii::app()->session['Detailstockexits']=$details;
+	}
+	
+	private function loadLPB($nolpb, $id, $idwh)
+	{
+		$details=array();
+	
+		$prefix = substr($nolpb, 0, 2);
+		
+		if ($prefix == 'MD' ) {
+			$dataLPB=Yii::app()->db->createCommand()
+			->select('a.id, b.iditem, sum(b.qty) as qty')
+			->from('requestdisplays a')
+			->join('detailrequestdisplays b', 'b.id=a.id')
+			->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
+					array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
+					->group('b.iditem')
+					->queryAll();
+		} else 
+		if ($prefix == 'PB' ) {
+			$dataLPB=Yii::app()->db->createCommand()
+			->select('a.id, b.iditem, sum(b.qty) as qty')
+			->from('orderretrievals a')
+			->join('detailorderretrievals b', 'b.id=a.id')
+			->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
+					array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
+					->group('b.iditem')
+					->queryAll();
+		} else
+		if ($prefix == 'TB' ) {
+			$dataLPB=Yii::app()->db->createCommand()
+			->select('a.id, b.*')
+			->from('itemtransfers a')
+			->join('detailitemtransfers b', 'b.id=a.id')
+			->where('a.regnum = :p_regnum and a.idwhsource = :p_idwarehouse',
+					array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
+					->queryAll();
+		} else
+		if ($prefix == 'PR' ) {
+			$dataLPB=Yii::app()->db->createCommand()
+			->select('a.id, b.*')
+			->from('returstocks a')
+			->join('detailreturstocks b', 'b.id=a.id')
+			->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
+					array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
+					->queryAll();
+		} else
+		if ($prefix == 'SM' ) {
+			$dataLPB=Yii::app()->db->createCommand()
+			->select('a.id, b.*, c.id as iditem')
+			->from('deliveryordersnt a')
+			->join('detaildeliveryordersnt b', 'b.id=a.id')
+			->join('items c', 'c.name = b.itemname')
+			->where('a.regnum = :p_regnum',
+					array(':p_regnum'=>$nolpb) )
+					->queryAll();
+		} else
+		if ($prefix == 'KS' ) {
+			$dataLPB=Yii::app()->db->createCommand()
+			->select('a.id, b.iditem, (1) as qty')
+			->from('sendrepairs a')
+			->join('detailsendrepairs b', 'b.id=a.id')
+			->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
+					array(':p_regnum'=>$nolpb, ':p_idwarehouse'=>$idwh) )
+					->queryAll();
+		} else
+		if ($prefix == 'RE' ) {
+			$dataLPB=Yii::app()->db->createCommand()
+			->select("a.*, (1) as qty")
+			->from('retrievalreplaces a')
+			->where('a.regnum = :p_regnum and a.idwhsource = :p_idwhsource',
+					array(':p_regnum'=>$nolpb, ':p_idwhsource'=>$idwh) )
+					->queryAll();
+		} else 
+		if ($prefix == 'SJ') {
+			$dataLPB=Yii::app()->db->createCommand()
+			->select('a.id, b.iditem, sum(b.qty) as qty')
+			->from('deliveryorders a')
+			->join('detaildeliveryorders b', 'b.id=a.id')
+			->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
+					array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
+					->group('b.iditem')
+					->queryAll();
+		}
+		 
+		$sql=<<<EOS
+    	select count(*) as received from stockexits a
+		join detailstockexits b on b.id = a.id
+		where a.transid = :p_transid and b.iditem = :p_iditem and
+        b.serialnum <> 'Belum Diterima' and a.idwarehouse = :p_idwarehouse
+EOS;
+		$mycommand=Yii::app()->db->createCommand($sql);
+		foreach($dataLPB as $row) {
+			$mycommand->bindParam(':p_transid', $nolpb, PDO::PARAM_STR);
+			$mycommand->bindParam(':p_iditem', $row['iditem'], PDO::PARAM_STR);
+			$mycommand->bindParam(':p_idwarehouse', $idwh);
+			$accepted=$mycommand->queryScalar();
+			for ($index = 0; $index < $row['qty'] - $accepted; $index++) {
+				$detail['iddetail']=idmaker::getCurrentID2();
+				$detail['id']=$id;
+				$detail['iditem']=$row['iditem'];
+				$detail['userlog']=Yii::app()->user->id;
+				$detail['datetimelog']=idmaker::getDateTime();
+				$detail['serialnum']='Belum Diterima';
+				$detail['status']='';
+				$details[]=$detail;
 			}
 		}
 		Yii::app()->session->remove('Detailstockexits');

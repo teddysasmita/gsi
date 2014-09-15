@@ -533,7 +533,7 @@ class DefaultController extends Controller
 			$model->regnum='KR'.$idmaker->getRegNum($this->formid);
      }
 
-     protected function    beforeDelete(& $model)
+     protected function beforeDelete(& $model)
      {
 
      }
