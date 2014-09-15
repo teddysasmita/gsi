@@ -747,7 +747,6 @@ EOS;
 		$details=array();
 	
 		$prefix = substr($nolpb, 0, 2);
-		print_r($prefix);
 		if ($prefix == 'MD' ) {
 			$dataLPB=Yii::app()->db->createCommand()
 			->select('a.id, b.iditem, sum(b.qty) as qty')
