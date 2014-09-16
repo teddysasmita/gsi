@@ -376,19 +376,9 @@ class LookUpController extends Controller {
 	public function actionGetTrans($id)
 	{
 		if (!Yii::app()->user->isGuest) {
-			$sql=<<<EOS
-			select a.id, a.regnum,
-			concat( 'Penerimaan Barang - ', b.firstname, ' ', b.lastname, ' - ', a.idatetime) as transinfo,
-			'AC12' as transname
-			from purchasesstockentries a
-			join suppliers b on b.id = a.idsupplier
-			where regnum=:p_regnum
-EOS;
-			$command=Yii::app()->db->createCommand($sql);
-			$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
-			$data=$command->queryAll();
+			$prefix = substr($id, 0, 2);
 			
-			if ($data == FALSE) {
+			if ($prefix == 'SJ') {
 				$sql=<<<EOS
 				select a.id, a.regnum, a.invnum,
 				concat( 'Pengiriman Barang - ', a.invnum, ' - ', a.receivername, ' - ', a.idatetime) as transinfo,
@@ -399,9 +389,8 @@ EOS;
 				$command=Yii::app()->db->createCommand($sql);
 				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
 				$data=$command->queryAll();
-			}
-			
-			if ($data == FALSE) {
+			} else
+			if ($prefix == 'MD') {
 				$sql=<<<EOS
 				select a.id, a.regnum, 'NA' as invnum,
 				concat( 'Permintaan Barang Display - NA - ', concat(b.firstname, ' ', b.lastname), 
@@ -414,9 +403,8 @@ EOS;
 				$command=Yii::app()->db->createCommand($sql);
 				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
 				$data=$command->queryAll();
-			}
-			
-			if ($data == FALSE) {
+			} else
+			if ($prefix == 'PB') {
 				$sql=<<<EOS
 				select a.id, a.regnum, a.invnum,
 				concat( 'Pengambilan Barang Pembeli - ',a.invnum,' - ', a.receivername, ' - ', a.idatetime) as transinfo,
@@ -427,9 +415,8 @@ EOS;
 				$command=Yii::app()->db->createCommand($sql);
 				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
 				$data=$command->queryAll();
-			}
-			
-			if ($data == FALSE) {
+			} else
+			if ($prefix == 'PR') {
 				$sql=<<<EOS
 				select a.id, a.regnum, '-' as invnum,
 				concat( 'Pengembalian Barang ke Pemasok - ', a.regnum,' - ', concat(c.firstname, ' ', c.lastname), ' - ', a.idatetime) as transinfo,
@@ -442,9 +429,8 @@ EOS;
 				$command=Yii::app()->db->createCommand($sql);
 				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
 				$data=$command->queryAll();
-			}
-			
-			if ($data == FALSE) {
+			} else
+			if ($prefix == 'TB') {
 				$sql=<<<EOS
 				select a.id, a.regnum, 'NA' as invnum,
 				concat( 'Pemindahan Barang - NA - ', b.code, ' - ', a.idatetime) as transinfo,
@@ -456,9 +442,8 @@ EOS;
 				$command=Yii::app()->db->createCommand($sql);
 				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
 				$data=$command->queryAll();
-			}
-			
-			if ($data == FALSE) {
+			} else
+			if ($prefix == 'SM') {
 				$sql=<<<EOS
 				select a.id, a.regnum, 'NA' as invnum,
 				concat( 'Pengiriman Barang Tanpa Transaksi - ',a.receivername,' - ', a.idatetime) as transinfo,
@@ -470,9 +455,8 @@ EOS;
 				$command=Yii::app()->db->createCommand($sql);
 				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
 				$data=$command->queryAll();
-			}
-			
-			if ($data == FALSE) {
+			} else
+			if ($prefix == 'FB') {
 				$sql=<<<EOS
 				select a.id, a.regnum, a.invnum,
 				concat( 'Pembatalan Faktur - ',a.invnum,' - ', a.idatetime) as transinfo,
@@ -483,9 +467,8 @@ EOS;
 				$command=Yii::app()->db->createCommand($sql);
 				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
 				$data=$command->queryAll();
-			}
-			
-			if ($data == FALSE) {
+			} else
+			if ($prefix == 'FG') {
 				$sql=<<<EOS
 				select a.id, a.regnum, a.invnum,
 				concat( 'Ganti Barang Faktur - ',a.invnum,' - ', a.idatetime) as transinfo,
@@ -496,9 +479,8 @@ EOS;
 				$command=Yii::app()->db->createCommand($sql);
 				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
 				$data=$command->queryAll();
-			}
-			
-			if ($data == FALSE) {
+			} else
+			if ($prefix == 'RE') {
 				$sql=<<<EOS
 				select a.id, a.regnum, a.retrievalnum, '-' as invnum, 
 				concat( 'Penukaran Pengambilan Barang - ',a.retrievalnum,' - ', a.idatetime) as transinfo,
@@ -509,9 +491,8 @@ EOS;
 				$command=Yii::app()->db->createCommand($sql);
 				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
 				$data=$command->queryAll();
-			}
-			
-			if ($data == FALSE) {
+			} else
+			if ($prefix == 'KS') {
 				$sql=<<<EOS
 				select a.id, a.regnum, '-' as invnum,
 				concat( 'Pengiriman Barang utk Perbaikan - ',a.regnum,' - ', a.idatetime) as transinfo,
@@ -522,15 +503,26 @@ EOS;
 				$command=Yii::app()->db->createCommand($sql);
 				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
 				$data=$command->queryAll();
-			}
-			
-			if ($data == FALSE) {
+			} else
+			if ($prefix == 'KR') {
 				$sql=<<<EOS
 				select a.id, a.regnum, '-' as invnum,
 				concat( 'Penerimaan Barang dari Perbaikan - ',a.regnum,' - ', a.idatetime) as transinfo,
 				'AC33' as transname
 				from receiverepairs a
 				where a.regnum=:p_regnum
+EOS;
+				$command=Yii::app()->db->createCommand($sql);
+				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
+				$data=$command->queryAll();
+			} else {
+				$sql=<<<EOS
+				select a.id, a.regnum,
+				concat( 'Penerimaan Barang - ', b.firstname, ' ', b.lastname, ' - ', a.idatetime) as transinfo,
+				'AC12' as transname
+				from purchasesstockentries a
+				join suppliers b on b.id = a.idsupplier
+				where regnum=:p_regnum
 EOS;
 				$command=Yii::app()->db->createCommand($sql);
 				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
