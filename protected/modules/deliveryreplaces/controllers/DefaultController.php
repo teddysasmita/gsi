@@ -616,6 +616,7 @@ class DefaultController extends Controller
 	       			$dd['selected'] = '0';
 	        		$dd['userlog'] = Yii::app()->user->id;
 	        		$dd['datetimelog'] = idmaker::getDateTime();
+	        		$dd['id'] = $model->id;
 	        	}
         	}
         	
