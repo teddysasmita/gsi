@@ -63,8 +63,8 @@ $this->menu=array(
 				'serialnum',
 				array(
 						'header'=>'Gudang',
-						'name'=>'idwarehouse',
-						'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
+						'name'=>'idwhsource',
+						'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwhsource'])"
 				),
 		),
 	));
