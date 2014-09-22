@@ -617,7 +617,8 @@ class DefaultController extends Controller
 	        		$dd['userlog'] = Yii::app()->user->id;
 	        		$dd['datetimelog'] = idmaker::getDateTime();
 	        		$dd['id'] = $model->id;
-	        	}
+	        		$dd['idwhsource'] = $model->idwarehouse;
+ 	        	}
         	}
         	
         	return $deliverydatas;
