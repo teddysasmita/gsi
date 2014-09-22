@@ -47,7 +47,6 @@ $this->menu=array(
    $count=Yii::app()->db->createCommand("select count(*) from detaildeliveryreplaces where id='$model->id'")
       ->queryScalar();
    $sql="select * from detaildeliveryreplaces where id='$model->id'";
-   echo $sql;
    
    $dataProvider=new CSqlDataProvider($sql,array(
           'totalItemCount'=>$count,
