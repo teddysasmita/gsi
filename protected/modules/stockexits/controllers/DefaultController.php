@@ -827,7 +827,6 @@ EOS;
 			->select('a.id, b.iditem, count(*) as qty')
 			->from('deliveryreplaces a')
 			->join('detaildeliveryreplaces b', 'b.id=a.id')
-			->group('b.iditem')
 			->where('a.regnum = :p_regnum and b.idwhsource = :p_idwarehouse',
 					array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
 					->group('b.iditem')
