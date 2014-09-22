@@ -378,7 +378,18 @@ class LookUpController extends Controller {
 		if (!Yii::app()->user->isGuest) {
 			$prefix = substr($id, 0, 2);
 			
-			if ($prefix == 'SJ') {
+			if ($prefix == 'RD') {
+				$sql=<<<EOS
+				select a.id, a.regnum, a.invnum,
+				concat( 'Penukaran Pengiriman Barang - NA - ', a.receivername, ' - ', a.idatetime) as transinfo,
+				'AC34' as transname
+				from deliveryreplaces a
+				where regnum=:p_regnum
+EOS;
+				$command=Yii::app()->db->createCommand($sql);
+				$command->bindParam(':p_regnum', $id, PDO::PARAM_STR);
+				$data=$command->queryAll();
+			} else if ($prefix == 'SJ') {
 				$sql=<<<EOS
 				select a.id, a.regnum, a.invnum,
 				concat( 'Pengiriman Barang - ', a.invnum, ' - ', a.receivername, ' - ', a.idatetime) as transinfo,
