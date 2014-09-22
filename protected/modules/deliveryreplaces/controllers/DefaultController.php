@@ -605,7 +605,7 @@ class DefaultController extends Controller
         	}
         	
         	$deliverydatas = Yii::app()->db->createCommand()
-        		->select('a.regnum, a.idwarehouse, b.iddetail, b.iditem, b.serialnum')
+        		->select('a.regnum, a.idwarehouse as idwhsource, b.iddetail, b.iditem, b.serialnum')
         		->from('stockexits a')
         		->join('detailstockexits b', 'b.id = a.id')
         		->where('a.transid = :p_transid', array(':p_transid'=>$model->deliverynum))
@@ -617,7 +617,6 @@ class DefaultController extends Controller
 	        		$dd['userlog'] = Yii::app()->user->id;
 	        		$dd['datetimelog'] = idmaker::getDateTime();
 	        		$dd['id'] = $model->id;
-	        		$dd['idwhsource'] = '-';
  	        	}
         	}
         	
