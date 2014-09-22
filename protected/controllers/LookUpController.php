@@ -381,7 +381,7 @@ class LookUpController extends Controller {
 			if ($prefix == 'RD') {
 				$sql=<<<EOS
 				select a.id, a.regnum, a.deliverynum,
-				concat( 'Penukaran Pengiriman Barang - ',a.deliverynum. ' - ', a.receivername, ' - ', a.idatetime) as transinfo,
+				concat( 'Penukaran Pengiriman Barang - ',a.deliverynum, ' - ', a.receivername, ' - ', a.idatetime) as transinfo,
 				'AC34' as transname
 				from deliveryreplaces a
 				where regnum=:p_regnum
