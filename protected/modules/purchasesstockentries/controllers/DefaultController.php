@@ -712,7 +712,7 @@ EOS;
 			$iditem = '';
 			$founddata = array();
 			$selectfields = <<<EOS
-			b.iddetail, a.regnum, a.idatetime, b.buyprice, b.qty, 
+			b.iddetail, a.regnum, a.idatetime, a.ponum, b.buyprice, b.qty, 
 			concat(c.firstname, ' ', c.lastname) as suppliername
 EOS;
 			if (isset($_GET['iditem'])) {
@@ -752,7 +752,7 @@ EOS;
 					$brand = '';
 					$founddata = array();
 					$selectfields = <<<EOS
-			b.iddetail, a.regnum, a.idatetime, b.buyprice, b.qty, b.iditem, 
+			b.iddetail, a.regnum, a.idatetime, a.ponum, b.buyprice, b.qty, b.iditem, 
 			concat(c.firstname, ' ', c.lastname) as suppliername
 EOS;
 					if (isset($_GET['brand'])) {

@@ -80,6 +80,10 @@ EOH;
 						'name'=>'regnum',
 					),
 					array(
+						'header'=>'No PO',
+						'name'=>'ponum',
+					),
+					array(
 						'header'=>'Nama Barang',
 						'name'=>'iditem',
 						'type'=>'ntext',
