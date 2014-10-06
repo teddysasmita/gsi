@@ -106,7 +106,7 @@ EOS;
 				->join('items d', 'd.id = b.iditem')
 				->leftJoin('salesreceivers c', 'c.id = a.idreceiver')
 				->where($selectwhere, $selectparam)
-				->order('a.idatetime, a.regnum')
+				->order('a.idatetime, a.regnum, b.iddetail')
 				->queryAll();
 			
 			$serialnumpb = Yii::app()->db->createCommand()
