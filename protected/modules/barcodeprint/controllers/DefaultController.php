@@ -107,7 +107,7 @@ class DefaultController extends Controller
                       	 for($counter=1; $counter < $model->totalnum; $counter++) {
                       	 	$test['id'] = $model->id;
                       	 	$test['iddetail'] = idmaker::getcurrentid2();
-                      	 	$test['num'] = $model->prefixcode.str_pad($counter, 4, '0', STR_PAD_LEFT); 
+                      	 	$test['num'] = $model->prefixcode.str_pad($counter, 3, '0', STR_PAD_LEFT); 
                       	 	$barcodes[] = $test;                    
                       	 }    
                       	 Yii::app()->session['Detailbarcodeprints'] = $barcodes;
