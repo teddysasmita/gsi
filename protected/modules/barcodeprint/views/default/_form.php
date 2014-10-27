@@ -98,6 +98,14 @@ EOS;
 	</div>
 	
 	<div class="row">
+		<?php echo $form->labelEx($model,'prefixcode'); ?>
+        <?php 
+           echo $form->textField($model, 'prefixcode'); 
+        ?>
+        <?php echo $form->error($model,'prefixcode');?> 
+	</div>
+	
+	<div class="row">
 		<?php echo $form->labelEx($model,'startnumber'); ?>
         <?php 
            echo $form->textField($model, 'startnumber'); 
@@ -112,14 +120,7 @@ EOS;
         ?>
         <?php echo $form->error($model,'totalnum');?> 
 	</div>
-	
-	<div class="row">
-		<?php echo $form->labelEx($model,'prefixcode'); ?>
-        <?php 
-           echo $form->textField($model, 'prefixcode'); 
-        ?>
-        <?php echo $form->error($model,'prefixcode');?> 
-	</div>
+
 	  
 <?php 
 	
