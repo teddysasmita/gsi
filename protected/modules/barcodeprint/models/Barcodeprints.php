@@ -12,6 +12,8 @@
  * @property integer $paperheight
  * @property integer $labelwidth
  * @property integer $labelheight
+ * @property integer $startnumber
+ * @property integer $totalnum
  * @property string $barcodetype
  * @property string $userlog
  * @property string $datetimelog
@@ -35,10 +37,11 @@ class Barcodeprints extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('id, idatetime, regnum, papersize, labelwidth, labelheight, userlog, datetimelog', 'required'),
-			array('paperwidth, paperheight, labelwidth, labelheight', 'numerical'),
+			array('paperwidth, paperheight, startnumber, totalnum, labelwidth, labelheight', 'numerical'),
 			array('id, userlog', 'length', 'max'=>21),
 			array('idatetime, datetimelog', 'length', 'max'=>19),
 			array('regnum', 'length', 'max'=>12),
+			array('prefixcode', 'length', 'max'=>10),
 			array('papersize, barcodetype', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -72,8 +75,11 @@ class Barcodeprints extends CActiveRecord
 			'labelwidth' => 'Lebar Label (mm)',
 			'labelheight' => 'Tinggi Label (mm)',
 			'barcodetype' => 'Jenis Barcode',
+			'startnumber' => 'Mulai Nomor',
+			'totalnum' => 'Jumlah',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
+			'prefixcode' => 'Awalan',
 		);
 	}
 
@@ -104,9 +110,12 @@ class Barcodeprints extends CActiveRecord
 		$criteria->compare('labelwidth',$this->labelwidth);
 		$criteria->compare('labelheight',$this->labelheight);
 		$criteria->compare('barcodetype',$this->barcodetype,true);
+		$criteria->compare('startnumber',$this->startnumber);
+		$criteria->compare('totalnum',$this->totalnum);
+		$criteria->compare('prefixcode',$this->totalnum);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);
-
+		
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));

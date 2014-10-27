@@ -64,7 +64,6 @@ class DefaultController extends Controller
                 
                // Uncomment the following line if AJAX validation is needed
                $this->performAjaxValidation($model);
-
                 if (isset($_POST)){
                    if(isset($_POST['yt0'])) {
                       //The user pressed the button;
@@ -102,10 +101,16 @@ class DefaultController extends Controller
                          Yii::app()->session['Barcodeprints']=$_POST['Barcodeprints'];
                          $this->redirect(array('detailbarcodeprints/create',
                             'id'=>$model->id));
-                      } else if ($_POST['command']=='getPO') {
+                      } else if ($_POST['command']=='setTotalNum') {
                          $model->attributes=$_POST['Barcodeprints'];
                          Yii::app()->session['Barcodeprints']=$_POST['Barcodeprints'];
-                         $this->loadPO($model->transid, $model->id);
+                      	 for($counter=1; $counter < $model->totalnum; $counter++) {
+                      	 	$test['id'] = $model->id;
+                      	 	$test['iddetail'] = idmaker::getcurrentid2();
+                      	 	$test['num'] = $model->prefixcode.str_pad($counter, 4, '0', STR_PAD_LEFT); 
+                      	 	$barcodes[] = $test;                    
+                      	 }    
+                      	 Yii::app()->session['Detailbarcodeprints'] = $barcodes;
                       }
                    }
                 }

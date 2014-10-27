@@ -6,7 +6,16 @@
 
 <div class="form">
 
+
 <?php
+	$yourscript = <<<EOS
+	$('#Barcodeprints_totalnum').change(function() {
+		$('#command').val('setTotalNum');	
+		$('#barcodeprints-form').submit();
+	});
+EOS;
+	Yii::app()->clientScript->registerScript("yourscript", $yourscript, CClientscript::POS_READY);
+
    if($command=='create') 
       $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'barcodeprints-form',
@@ -32,9 +41,9 @@
         echo $form->hiddenField($model, 'datetimelog');
         echo $form->hiddenField($model, 'regnum');
       ?>
-        
+       
 	<div class="row">
-		<?php echo $form->labelEx($model,'idatetime'); ?>
+		<?php  echo $form->labelEx($model,'idatetime'); ?>
             <?php
                $this->widget('zii.widgets.jui.CJuiDatePicker',array(
                   'name'=>'Barcodeprints[idatetime]',
@@ -87,8 +96,33 @@
         ?>
         <?php echo $form->error($model,'barcodetype');?> 
 	</div>
+	
+	<div class="row">
+		<?php echo $form->labelEx($model,'startnumber'); ?>
+        <?php 
+           echo $form->textField($model, 'startnumber'); 
+        ?>
+        <?php echo $form->error($model,'startnumber');?> 
+	</div>
+	
+	<div class="row">
+		<?php echo $form->labelEx($model,'totalnum'); ?>
+        <?php 
+           echo $form->textField($model, 'totalnum'); 
+        ?>
+        <?php echo $form->error($model,'totalnum');?> 
+	</div>
+	
+	<div class="row">
+		<?php echo $form->labelEx($model,'prefixcode'); ?>
+        <?php 
+           echo $form->textField($model, 'prefixcode'); 
+        ?>
+        <?php echo $form->error($model,'prefixcode');?> 
+	</div>
 	  
 <?php 
+	
     if (isset(Yii::app()->session['Detailbarcodeprints'])) {
        $rawdata=Yii::app()->session['Detailbarcodeprints'];
        $count=count($rawdata);
