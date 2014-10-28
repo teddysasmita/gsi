@@ -41,7 +41,7 @@ class Barcodeprints extends CActiveRecord
 			array('id, userlog', 'length', 'max'=>21),
 			array('idatetime, datetimelog', 'length', 'max'=>19),
 			array('regnum', 'length', 'max'=>12),
-			array('prefixcode', 'length', 'max'=>10),
+			array('branch', 'length', 'max'=>10),
 			array('papersize, barcodetype', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -79,7 +79,7 @@ class Barcodeprints extends CActiveRecord
 			'totalnum' => 'Jumlah',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
-			'prefixcode' => 'Awalan',
+			'branch' => 'Cabang',
 		);
 	}
 
@@ -112,7 +112,7 @@ class Barcodeprints extends CActiveRecord
 		$criteria->compare('barcodetype',$this->barcodetype,true);
 		$criteria->compare('startnumber',$this->startnumber);
 		$criteria->compare('totalnum',$this->totalnum);
-		$criteria->compare('prefixcode',$this->totalnum);
+		$criteria->compare('branch',$this->totalnum);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);
 		

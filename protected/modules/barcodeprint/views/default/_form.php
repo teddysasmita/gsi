@@ -98,11 +98,12 @@ EOS;
 	</div>
 	
 	<div class="row">
-		<?php echo $form->labelEx($model,'prefixcode'); ?>
+		<?php echo $form->labelEx($model,'branch'); ?>
         <?php 
-           echo $form->textField($model, 'prefixcode'); 
+           echo $form->dropDownList($model, 'branch', array('S'=>'Kertajaya', 
+           		'M'=>'Malang', 'E'=>'Emart')); 
         ?>
-        <?php echo $form->error($model,'prefixcode');?> 
+        <?php echo $form->error($model,'branch');?> 
 	</div>
 	
 	<div class="row">

@@ -104,10 +104,52 @@ class DefaultController extends Controller
                       } else if ($_POST['command']=='setTotalNum') {
                          $model->attributes=$_POST['Barcodeprints'];
                          Yii::app()->session['Barcodeprints']=$_POST['Barcodeprints'];
-                      	 for($counter=1; $counter < $model->totalnum; $counter++) {
+                         $month = date('n');
+                         switch ($month) {
+                         	case 1:
+                        		$month = 'A';
+                         	break;
+                         	case 2:
+                         		$month = 'B';
+                         	break;
+                         	case 3:
+                         		$month = 'C';
+                         	break;
+                         	case 4:
+                         		$month = 'D';
+                         	break;
+                         	case 5:
+                         		$month = 'E';
+                         	break;
+                         	case 6:
+                         		$month = 'F';
+                         	break;
+                         	case 7:
+                         		$month = 'G';
+                         	break;
+                         	case 8:
+                         		$month = 'H';
+                         	break;
+                         	case 9:
+                         		$month = 'I';
+                         	break;
+                         	case 10:
+                         		$month = 'J';
+                         	break;
+                         	case 11:
+                         		$month = 'K';
+							break;
+							case 12:
+								$month = 'L';
+							break;
+						}
+                      	 $prefixcode = date('y').$month.date('d').$model->branch;
+                      	 for($counter=0; $counter < $model->totalnum; $counter++) {
                       	 	$test['id'] = $model->id;
                       	 	$test['iddetail'] = idmaker::getcurrentid2();
-                      	 	$test['num'] = $model->prefixcode.str_pad($counter, 3, '0', STR_PAD_LEFT); 
+                      	 	$test['num'] = $prefixcode.str_pad($model->startnumber + $counter, 4, '0', STR_PAD_LEFT); 
+                      	 	$test['userlog'] = Yii::app()->user->id;
+                      	 	$test['datetimelog'] = idmaker::getDateTime();
                       	 	$barcodes[] = $test;                    
                       	 }    
                       	 Yii::app()->session['Detailbarcodeprints'] = $barcodes;
@@ -506,6 +548,7 @@ class DefaultController extends Controller
          $model->papersize = 'A4';
          $model->labelwidth = 30;
          $model->labelheight = 10;
+         $model->branch = 'S';
      }
 
      protected function afterPost(& $model)
