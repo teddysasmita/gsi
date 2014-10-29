@@ -143,7 +143,7 @@ class DefaultController extends Controller
 								$month = 'L';
 							break;
 						}
-                      	 $prefixcode = date('y').$month.date('d').$model->branch;
+                      	 $prefixcode = date('y').$month.date('d').'GSI'.$model->branch;
                       	 for($counter=0; $counter < $model->totalnum; $counter++) {
                       	 	$test['id'] = $model->id;
                       	 	$test['iddetail'] = idmaker::getcurrentid2();
