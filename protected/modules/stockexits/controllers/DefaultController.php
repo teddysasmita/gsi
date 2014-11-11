@@ -741,6 +741,7 @@ EOS;
 		Yii::app()->session->remove('Detailstockexits');
 		Yii::app()->session['Detailstockexits']=$details;
 		print_r($details);
+		die();
 	}
 	
 	private function loadLPB($nolpb, $id, $idwh)
