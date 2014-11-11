@@ -84,8 +84,6 @@ EOS;
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
 	<?php 
-	print_r(Yii::app()->session['Detailstockexits']);
-	die();
 	echo $form->errorSummary($model); ?>
         
         <?php 
