@@ -858,7 +858,7 @@ EOS;
 		}
 		Yii::app()->session->remove('Detailstockexits');
 		Yii::app()->session['Detailstockexits']=$details;
-		print_r($details);
+		print_r(Yii::app()->session['Detailstockexits']);
 		die();
 	}
       			
