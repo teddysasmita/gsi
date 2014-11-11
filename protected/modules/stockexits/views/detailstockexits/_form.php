@@ -83,7 +83,9 @@ EOS;
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
 
-	<?php echo $form->errorSummary($model); ?>
+	<?php 
+	print_r(Yii::app()->session['Detailstockexits']);
+	echo $form->errorSummary($model); ?>
         
         <?php 
          echo $form->hiddenField($model,'iddetail');
