@@ -273,6 +273,8 @@ class DetailstockexitsController extends Controller
         protected function loadSession($iddetail)
         {
             $details=Yii::app()->session['Detailstockexits'];
+            print_r($details);
+            die();
             foreach ($details as $row) {
                 if($row['iddetail']==$iddetail)
                     return $row;
