@@ -85,6 +85,7 @@ EOS;
 
 	<?php 
 	print_r(Yii::app()->session['Detailstockexits']);
+	die();
 	echo $form->errorSummary($model); ?>
         
         <?php 
