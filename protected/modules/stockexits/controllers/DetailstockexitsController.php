@@ -103,7 +103,7 @@ class DetailstockexitsController extends Controller
                 $master=Yii::app()->session['master'];
                 
                 $model=$this->loadModel($iddetail);
-               	print_r(Yii::app()->session['Detailstockexits']); 
+               	print_r(Yii::app()->session); 
                	die();
                 if(isset(Yii::app()->session['Detailstockexits'])) {
                     $model=new Detailstockexits;
