@@ -115,6 +115,7 @@ class DefaultController extends Controller
                       } else if ($_POST['command']=='getPO') {
                          $model->attributes=$_POST['Stockexits'];
                          Yii::app()->session['Stockexits']=$_POST['Stockexits'];
+                         //$this->testSession($model->id);
                          $this->loadLPB($model->transid, $model->id, $model->idwarehouse);
                       } else if ($_POST['command']=='updateDetail') {
                          $model->attributes=$_POST['Stockexits'];
@@ -858,6 +859,23 @@ EOS;
 		}
 		Yii::app()->session->remove('Detailstockexits');
 		Yii::app()->session['Detailstockexits']=$details;
+	}
+	
+	private function testSession($id)
+	{
+		for ($index = 0; $index <10000; $index++) {
+			$detail['iddetail']=$index;
+			$detail['id']=$id;
+			$detail['iditem']='1';
+			$detail['userlog']=Yii::app()->user->id;
+			$detail['datetimelog']=idmaker::getDateTime();
+			$detail['serialnum']='Belum Diterima';
+			$detail['status']='';
+			$details[]=$detail;
+		}
+		Yii::app()->session->remove('Detailstockexits');
+		Yii::app()->session['Detailstockexits']=$details;
+		
 	}
       			
       private function checkSerialNum(array $details, $model ) 
