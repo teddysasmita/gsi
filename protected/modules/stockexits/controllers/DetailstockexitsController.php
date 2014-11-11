@@ -103,6 +103,8 @@ class DetailstockexitsController extends Controller
                 $master=Yii::app()->session['master'];
                 
                 $model=$this->loadModel($iddetail);
+               	print_r(Yii::app()->session['Detailstockexits']); 
+               	die();
                 if(isset(Yii::app()->session['Detailstockexits'])) {
                     $model=new Detailstockexits;
                     $model->attributes=$this->loadSession($iddetail);
@@ -273,8 +275,6 @@ class DetailstockexitsController extends Controller
         protected function loadSession($iddetail)
         {
             $details=Yii::app()->session['Detailstockexits'];
-            print_r($details);
-            die();
             foreach ($details as $row) {
                 if($row['iddetail']==$iddetail)
                     return $row;
