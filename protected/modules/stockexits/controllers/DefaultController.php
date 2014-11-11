@@ -858,6 +858,8 @@ EOS;
 		}
 		Yii::app()->session->remove('Detailstockexits');
 		Yii::app()->session['Detailstockexits']=$details;
+		print_r(Yii::app()->session['Detailstockexits']);
+		die();
 	}
       			
       private function checkSerialNum(array $details, $model ) 
