@@ -521,6 +521,8 @@ class DefaultController extends Controller
          	Yii::import('application.modules.receiverepair.models.*');
 		
          	$details = Detailreceiverepairs::model()->findByAttributes(array('id'=>$model->id));
+         	print_r($details);
+         	die('boom');
          	foreach ($details as $detail) {
          		Action::setItemStatusinWarehouse($detail->idwarehouse, $detail->serialnum, '1');
          	}
