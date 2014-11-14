@@ -521,11 +521,12 @@ class DefaultController extends Controller
          	Yii::import('application.modules.receiverepair.models.*');
 		
          	$details = Detailreceiverepairs::model()->findByAttributes(array('id'=>$model->id));
-         	print_r($details);
-         	die('boom');
-         	foreach ($details as $detail) {
-         		Action::setItemStatusinWarehouse($detail->idwarehouse, $detail->serialnum, '1');
-         	}
+         	if (is_array($details))
+         		foreach ($details as $detail) {
+         			Action::setItemStatusinWarehouse($detail->idwarehouse, $detail->serialnum, '1');
+         		}
+         	else
+         		Action::setItemStatusinWarehouse($details->idwarehouse, $details->serialnum, '1');
          }
          /*$this->setStatusPO($model->idpurchaseorder,
             Yii::app()->session['Detailreceiverepairs']);
