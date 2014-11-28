@@ -44,7 +44,7 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 echo CHtml::label('Per Tanggal', 'idatetime');
 //echo $form->dateField($model,'idatetime',array('size'=>19,'maxlength'=>19)); 
 $this->widget('zii.widgets.jui.CJuiDatePicker',array(
-	'name'=>'Salesorders[idatetime]',
+	'name'=>'idatetime',
                   // additional javascript options for the date picker plugin
 	'options'=>array(
 		'showAnim'=>'fold',
