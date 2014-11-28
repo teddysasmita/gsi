@@ -214,21 +214,6 @@ EOS;
 			$startamount = 0;
 			
 			if (isset($_GET['go'])) {
-				$idinventorytaking = $_GET['idinventorytaking'];
-				
-				$itdatetime = Yii::app()->db->createCommand()
-					->select('idatetime')->from('inventorytakings')
-					->where('id = :p_id', array(':p_id'=>$idinventorytaking))
-					->queryScalar();
-
-				$startamount = Yii::app()->db->createCommand()
-					->select('a.iditem, sum(a.qty) as total')->from('detailinputinventorytakings a')
-					->join('inputinventorytakings b', 'b.id = a.id')
-					->where('b.idinventorytaking = :p_idinventorytaking',
-						array(':p_idinventorytaking'=>$idinventorytaking))
-					->group('a.iditem')
-					->queryScalar();
-				
 				$sql=<<<EOS
 	select b.iddetail, a.idwarehouse, a.regnum, a.transname, a.transid, a.idatetime, count(*) as total, b.iditem
 	from stockentries a
@@ -248,10 +233,28 @@ EOS;
 				$iditemparam = $_GET['iditem'];
 				$whcodeparam = $_GET['whcode'];
 				$idatetime = $_GET['idatetime'];
+				$idinventorytaking = $_GET['idinventorytaking'];
+				
 				if ($whcodeparam !== "")
 					$idwh = lookup::WarehouseIDFromCode($whcodeparam);
 				else
 					$idwh = '%';
+				
+				$itdatetime = Yii::app()->db->createCommand()
+					->select('idatetime')->from('inventorytakings')
+					->where('id = :p_id', array(':p_id'=>$idinventorytaking))
+					->queryScalar();
+				
+				$startamount = Yii::app()->db->createCommand()
+					->select('a.iditem, sum(a.qty) as total')->from('detailinputinventorytakings a')
+					->join('inputinventorytakings b', 'b.id = a.id')
+					->where('a.iditem = :p_iditem and b.idinventorytaking = :p_idinventorytaking',
+						array(':p_idinventorytaking'=>$idinventorytaking,
+							':p_iditem'=>$iditemparam
+						))
+						->group('a.iditem')
+						->queryScalar();
+				
 				$command = Yii::app()->db->createCommand($sql);
 				$command->bindParam(':p_b_iditem', $iditemparam, PDO::PARAM_STR);
 				$command->bindParam(':p_d_iditem', $iditemparam, PDO::PARAM_STR);
