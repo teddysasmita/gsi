@@ -223,7 +223,7 @@ EOS;
 
 				$startamount = Yii::app()->db->createCommand()
 					->select('sum(a.qty) as total')->from('detailinputinventorytakings a')
-					->join('inputinventorytakings a', 'a.id = b.id')
+					->join('inputinventorytakings b', 'b.id = a.id')
 					->where('a.idinventorytaking = :p_idinventorytaking',
 						array(':p_idinventorytaking'=>$idinventorytaking))
 					->queryAll();
