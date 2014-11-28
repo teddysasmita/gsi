@@ -246,13 +246,12 @@ EOS;
 					->queryScalar();
 				
 				$startamount = Yii::app()->db->createCommand()
-					->select('a.iditem, sum(a.qty) as total')->from('detailinputinventorytakings a')
+					->select('sum(a.qty) as total')->from('detailinputinventorytakings a')
 					->join('inputinventorytakings b', 'b.id = a.id')
 					->where('a.iditem = :p_iditem and b.idinventorytaking = :p_idinventorytaking',
 						array(':p_idinventorytaking'=>$idinventorytaking,
 							':p_iditem'=>$iditemparam
 						))
-						->group('a.iditem')
 						->queryScalar();
 				
 				$command = Yii::app()->db->createCommand($sql);
