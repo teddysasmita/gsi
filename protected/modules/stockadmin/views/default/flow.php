@@ -54,7 +54,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',array(
 	'htmlOptions'=>array(
 		'style'=>'height:20px;',
 	),
-	'value'=>idmaker::getDateTime(),
+	'value'=>$idatetime,
 ));
 ?> 
 
