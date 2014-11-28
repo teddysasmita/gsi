@@ -772,6 +772,8 @@ class DefaultController extends Controller
         private function loadInvoice($invnum, $id)
         {
         	$detailsdata = array();
+        	$detailsdata2 = array();
+        	 
         	
 			$ganti = substr($invnum, 0, 1) == 'G'; 
         	if ($ganti === true) {
