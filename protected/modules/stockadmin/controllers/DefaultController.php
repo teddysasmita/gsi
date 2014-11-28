@@ -169,7 +169,7 @@ class DefaultController extends Controller
 	select d.iddetail, c.idwarehouse, c.regnum, c.transname, c.transid, c.idatetime, - (count(*)) as total, d.iditem 
 	from stockexits c 
 	join detailstockexits d on d.id = c.id
-	where d.iditem = :p_d_iditem and c.idwarehouse like :p_c_idwh and d.serialnum <> 'Belum Diterima' abd
+	where d.iditem = :p_d_iditem and c.idwarehouse like :p_c_idwh and d.serialnum <> 'Belum Diterima' and
 		c.idatetime <= :p_idatetime
 	group by c.regnum
 	order by idatetime							
@@ -233,14 +233,14 @@ EOS;
 	from stockentries a
 	join detailstockentries b on b.id = a.id
 	where b.iditem = :p_b_iditem and a.idwarehouse like :p_a_idwh and b.serialnum <> 'Belum Diterima' and
-		and a.idatetime >= :p_startdatetime and a.idatetime <= :p_idatetime
+		a.idatetime >= :p_startdatetime and a.idatetime <= :p_idatetime
 	group by a.regnum
 	union
 	select d.iddetail, c.idwarehouse, c.regnum, c.transname, c.transid, c.idatetime, - (count(*)) as total, d.iditem
 	from stockexits c
 	join detailstockexits d on d.id = c.id
 	where d.iditem = :p_d_iditem and c.idwarehouse like :p_c_idwh and d.serialnum <> 'Belum Diterima' and
-		and c.idatetime >= :p_startdatetime and c.idatetime <= :p_idatetime
+		ac.idatetime >= :p_startdatetime and c.idatetime <= :p_idatetime
 	group by c.regnum
 	order by idatetime
 EOS;
