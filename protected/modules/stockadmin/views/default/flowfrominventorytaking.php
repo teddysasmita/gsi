@@ -67,7 +67,7 @@ $so = Yii::app()->db->createCommand()
 	->select('id, operationlabel')->from('inventorytakings')
 	->queryAll();
 $data = CHtml::listData($so, 'id', 'operationlabel');
-echo CHtml::dropDownList('idinventorytaking', false, $data, array('empty'=>'Harap Pilih'));
+echo CHtml::dropDownList('idinventorytaking', $idinventorytaking, $data, array('empty'=>'Harap Pilih'));
 ?> 
 </div>
 
