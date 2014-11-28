@@ -226,7 +226,7 @@ EOS;
 					->join('inputinventorytakings b', 'b.id = a.id')
 					->where('b.idinventorytaking = :p_idinventorytaking',
 						array(':p_idinventorytaking'=>$idinventorytaking))
-					->queryAll();
+					->queryScalar();
 				
 				$sql=<<<EOS
 	select b.iddetail, a.idwarehouse, a.regnum, a.transname, a.transid, a.idatetime, count(*) as total, b.iditem
