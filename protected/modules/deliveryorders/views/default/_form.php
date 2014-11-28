@@ -120,8 +120,8 @@ EOS;
                 'sourceUrl'=>Yii::app()->createUrl('LookUp/getReceiverinfobyname'),
               'value'=>$model->receivername
             ));*/
-			//echo $form->textField($model, 'receivername', array('size'=>50));
-			echo CHtml::label($model->receivername, FALSE);
+			echo $form->textField($model, 'receivername', array('size'=>40, 'maxlength'=>100));
+			//echo CHtml::label($model->receivername, FALSE);
          ?>
          <?php echo $form->error($model,'receivername'); ?>
 	</div>
@@ -129,8 +129,8 @@ EOS;
 	<div class="row">
          <?php echo $form->labelEx($model,'receiveraddress'); ?>
          <?php
-         	echo CHtml::label($model->receiveraddress, FALSE); 
-			//echo $form->textField($model, 'receiveraddress', array('size'=>50));
+         	//echo CHtml::label($model->receiveraddress, FALSE); 
+			echo $form->textField($model, 'receiveraddress', array('size'=>50, 'maxlength'=>200));
          ?>
          <?php echo $form->error($model,'receiveraddress'); ?>
 	</div>
@@ -138,8 +138,8 @@ EOS;
 	<div class="row">
          <?php echo $form->labelEx($model,'receiverphone'); ?>
          <?php 
-			//echo $form->textField($model, 'receiverphone');
-         echo CHtml::label($model->receiverphone, FALSE);
+			echo $form->textField($model, 'receiverphone', array('size'=>30, 'maxlength'=>50));
+         	//echo CHtml::label($model->receiverphone, FALSE);
          ?>
          <?php echo $form->error($model,'receiverphone'); ?>
 	</div>
