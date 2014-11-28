@@ -240,7 +240,7 @@ EOS;
 	from stockexits c
 	join detailstockexits d on d.id = c.id
 	where d.iditem = :p_d_iditem and c.idwarehouse like :p_c_idwh and d.serialnum <> 'Belum Diterima' and
-		ac.idatetime >= :p_startdatetime and c.idatetime <= :p_idatetime
+		a.idatetime >= :p_startdatetime and c.idatetime <= :p_idatetime
 	group by c.regnum
 	order by idatetime
 EOS;
