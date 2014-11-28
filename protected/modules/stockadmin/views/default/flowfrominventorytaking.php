@@ -4,7 +4,7 @@
 $this->breadcrumbs=array(
 		'Proses'=>array('/site/proses'),
 		'Daftar'=>array('default/index'),
-		'Kartu Stok'
+		'Kartu Stok Berdasar Hasil Opname'
 );
 ?>
 
@@ -57,6 +57,20 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',array(
 	'value'=>idmaker::getDateTime(),
 ));
 ?> 
+</div>
+
+<div class="row">
+<?php
+echo CHtml::label('Stok Opname', 'idinventorytaking');
+//echo $form->dateField($model,'idatetime',array('size'=>19,'maxlength'=>19)); 
+$so = Yii::app()->db->createCommand()
+	->select('id, operationlabel')->from('inventorytakings')
+	->queryAll();
+$data = CHtml::listData($so, 'id', 'operationlabel');
+echo CHtml::dropDownList('idinventorytaking', false, $data, array('empty'=>'Harap Pilih'));
+?> 
+</div>
+
 
 <div class="row">
 <?php 
@@ -64,7 +78,6 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',array(
 ?>
 </div>
 
-</div>
 <?php 
 	echo CHtml::endForm();
 ?>
@@ -73,10 +86,11 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',array(
 
 <h2><?php echo lookup::ItemNameFromItemID($iditem). " - $iditem" ?></h2>
 <h2><?php echo 'Per Tanggal: '. $idatetime; ?></h2>
-
-<?php 
+<h2><?php echo 'Stok Awal: '. number_format($startamount); ?></h2>
 	
-//if (isset($alldata)) {
+<?php 
+
+if (isset($alldata)) {
 	$mydp = new CArrayDataProvider($alldata, array(
 			'keyField'=>'iddetail',
 			'pagination'=>array(
@@ -118,13 +132,13 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',array(
 					),
 			),
 	));
-//}
+}
 
 ?>
 
 <h2>
 <?php 
-	$mytotal = 0;
+	$mytotal = $startamount;
 	foreach($alldata as $data) {
 		$mytotal += $data['total'];
 	};

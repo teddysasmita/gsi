@@ -19,6 +19,8 @@ $this->menu=array(
 		Yii::app()->createUrl('stockadmin/default/serial'))?></h3>
 <h3><?php echo CHtml::link('Kartu Stok berdasarkan Nama Barang dan Gudang', 
 		Yii::app()->createUrl('stockadmin/default/flow'))?></h3>
+<h3><?php echo CHtml::link('Kartu Stok berdasarkan Nama Barang, Gudang dari Hasil Opname', 
+		Yii::app()->createUrl('stockadmin/default/flowfrominventorytaking'))?></h3>
 <h3><?php echo CHtml::link('Daftar Stok Error', 
 		Yii::app()->createUrl('stockadmin/default/indexError'))?></h3>
 <h3><?php echo CHtml::link('Lacak Nomor Seri', 

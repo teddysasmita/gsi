@@ -155,22 +155,28 @@ class DefaultController extends Controller
 			$alldata = array();
 			$iditemparam = '';
 			$whcodeparam = '';
-				
+			$idatetime = idmaker::getDateTime();
+			
 			if (isset($_GET['go'])) {
 				$sql=<<<EOS
-	select b.iddetail, a.idwarehouse, a.regnum, a.transname, a.transid, a.idatetime, count(*) as total, b.iditem from stockentries a 
+	select b.iddetail, a.idwarehouse, a.regnum, a.transname, a.transid, a.idatetime, count(*) as total, b.iditem 
+	from stockentries a 
 	join detailstockentries b on b.id = a.id
-	where b.iditem = :p_b_iditem and a.idwarehouse like :p_a_idwh and b.serialnum <> 'Belum Diterima'
+	where b.iditem = :p_b_iditem and a.idwarehouse like :p_a_idwh and b.serialnum <> 'Belum Diterima' and 
+		a.idatetime <= :p_idatetime
 	group by a.regnum
 	union
-	select d.iddetail, c.idwarehouse, c.regnum, c.transname, c.transid, c.idatetime, - (count(*)) as total, d.iditem from stockexits c 
+	select d.iddetail, c.idwarehouse, c.regnum, c.transname, c.transid, c.idatetime, - (count(*)) as total, d.iditem 
+	from stockexits c 
 	join detailstockexits d on d.id = c.id
-	where d.iditem = :p_d_iditem and c.idwarehouse like :p_c_idwh and d.serialnum <> 'Belum Diterima'
+	where d.iditem = :p_d_iditem and c.idwarehouse like :p_c_idwh and d.serialnum <> 'Belum Diterima' abd
+		c.idatetime <= :p_idatetime
 	group by c.regnum
 	order by idatetime							
 EOS;
 				$iditemparam = $_GET['iditem'];
 				$whcodeparam = $_GET['whcode'];
+				$idatetime = $_GET['idatetime'];
 				if ($whcodeparam !== "")
 					$idwh = lookup::WarehouseIDFromCode($whcodeparam);
 				else
@@ -180,17 +186,95 @@ EOS;
 				$command->bindParam(':p_d_iditem', $iditemparam, PDO::PARAM_STR);
 				$command->bindParam(':p_a_idwh', $idwh, PDO::PARAM_STR);
 				$command->bindParam(':p_c_idwh', $idwh, PDO::PARAM_STR);
+				$command->bindParam(':p_idatetime', $idatetime, PDO::PARAM_STR);
+				
 				$alldata = $command->queryAll();
 				usort($alldata, 'cmp2');
 				foreach ($alldata as & $data) {
 					$data['serialnums'] = $this->getSerials($data['regnum'], $data['iditem'], $data['total']);
 				}
 			}
-			$this->render('flow', array('alldata'=>$alldata, 'iditem'=>$iditemparam, 'whcode'=>$whcodeparam));
+			$this->render('flow', array('alldata'=>$alldata, 'idatetime'=>$idatetime, 
+				'iditem'=>$iditemparam, 'whcode'=>$whcodeparam));
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		};
 	}
+	
+	public function actionFlowFromInventoryTaking()
+	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-List',
+				Yii::app()->user->id))  {
+			$this->trackActivity('v');
+			$alldata = array();
+			$iditemparam = '';
+			$whcodeparam = '';
+			$idatetime = idmaker::getDateTime();
+			$idinventorytaking = '';
+			$startamount = 0;
+			
+			if (isset($_GET['go'])) {
+				$idinventorytaking = $_GET['idinventorytaking'];
+				
+				$itdatetime = Yii::app()->db->createCommand()
+					->select('idatetime')->from('inventorytakings')
+					->where('id = :p_id', array(':p_id'=>$idinventorytaking))
+					->queryScalar();
+
+				$startamount = Yii::app()->db->createCommand()
+					->select('sum(a.qty) as total')->from('detailinputinventorytakings a')
+					->join('inputinventorytakings a', 'a.id = b.id')
+					->where('a.idinventorytaking = :p_idinventorytaking',
+						array(':p_idinventorytaking'=>$idinventorytaking))
+					->queryAll();
+				
+				$sql=<<<EOS
+	select b.iddetail, a.idwarehouse, a.regnum, a.transname, a.transid, a.idatetime, count(*) as total, b.iditem
+	from stockentries a
+	join detailstockentries b on b.id = a.id
+	where b.iditem = :p_b_iditem and a.idwarehouse like :p_a_idwh and b.serialnum <> 'Belum Diterima' and
+		and a.idatetime >= :p_startdatetime and a.idatetime <= :p_idatetime
+	group by a.regnum
+	union
+	select d.iddetail, c.idwarehouse, c.regnum, c.transname, c.transid, c.idatetime, - (count(*)) as total, d.iditem
+	from stockexits c
+	join detailstockexits d on d.id = c.id
+	where d.iditem = :p_d_iditem and c.idwarehouse like :p_c_idwh and d.serialnum <> 'Belum Diterima' and
+		and c.idatetime >= :p_startdatetime and c.idatetime <= :p_idatetime
+	group by c.regnum
+	order by idatetime
+EOS;
+				$iditemparam = $_GET['iditem'];
+				$whcodeparam = $_GET['whcode'];
+				$idatetime = $_GET['idatetime'];
+				if ($whcodeparam !== "")
+					$idwh = lookup::WarehouseIDFromCode($whcodeparam);
+				else
+					$idwh = '%';
+				$command = Yii::app()->db->createCommand($sql);
+				$command->bindParam(':p_b_iditem', $iditemparam, PDO::PARAM_STR);
+				$command->bindParam(':p_d_iditem', $iditemparam, PDO::PARAM_STR);
+				$command->bindParam(':p_a_idwh', $idwh, PDO::PARAM_STR);
+				$command->bindParam(':p_c_idwh', $idwh, PDO::PARAM_STR);
+				$command->bindParam(':p_idatetime', $idatetime, PDO::PARAM_STR);
+				$command->bindParam(':p_startdatetime', $itdatetime, PDO::PARAM_STR);
+					
+				$alldata = $command->queryAll();
+				usort($alldata, 'cmp2');
+				foreach ($alldata as & $data) {
+					$data['serialnums'] = $this->getSerials($data['regnum'], $data['iditem'], $data['total']);
+				}
+			}
+			$this->render('flowfrominventorytaking', array('alldata'=>$alldata, 'idatetime'=>$idatetime,
+					'iditem'=>$iditemparam, 'whcode'=>$whcodeparam, 'idinventorytaking'=>$idinventorytaking,
+					'startamount'=>$startamount
+			));
+					
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+	
 	
 	public function actionIndexError()
 	{
