@@ -54,7 +54,7 @@ Yii::app()->clientScript->registerScript('myscript', $namescript, CClientScript:
 		<?php echo $form->labelEx($model,'code'); ?>
 		<?php 
 			//echo $form->textField($model,'code',array('size'=>30,'maxlength'=>50)); 
-			echo CHTML::tag('span', array('id'=>'items_code','class'=>money), $model->code);
+			echo CHTML::tag('span', array('id'=>'items_code','class'=>'money'), $model->code);
 		?>
 		<?php echo $form->error($model,'code'); ?>
 	</div>
