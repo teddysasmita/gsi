@@ -67,24 +67,6 @@ Yii::app()->clientScript->registerScript('myscript', $namescript, CClientScript:
       ?>
 		<?php echo $form->error($model,'type'); ?>
 	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'brand'); ?>
-            <?php
-               //$brands=Yii::app()->db->createCommand()->selectDistinct('brand')->from('items')->queryColumn();
-
-               $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
-                  'name'=>'Items[brand]',
-                  'sourceUrl'=> Yii::app()->createUrl('LookUp/getBrand'),
-                  'htmlOptions'=>array(
-                     'style'=>'height:20px;',
-                  ),
-                  'value'=>$model->brand,
-               ));
-            ?>
-		<?php //echo $form->textField($model,'brand',array('size'=>50,'maxlength'=>50)); ?>
-		<?php echo $form->error($model,'brand'); ?>
-      </div>
 	
 	<div class="row">
 		<?php echo $form->labelEx($model,'objects'); ?>
@@ -104,6 +86,24 @@ Yii::app()->clientScript->registerScript('myscript', $namescript, CClientScript:
 		<?php echo $form->error($model,'objects'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'brand'); ?>
+            <?php
+               //$brands=Yii::app()->db->createCommand()->selectDistinct('brand')->from('items')->queryColumn();
+
+               $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
+                  'name'=>'Items[brand]',
+                  'sourceUrl'=> Yii::app()->createUrl('LookUp/getBrand'),
+                  'htmlOptions'=>array(
+                     'style'=>'height:20px;',
+                  ),
+                  'value'=>$model->brand,
+               ));
+            ?>
+		<?php //echo $form->textField($model,'brand',array('size'=>50,'maxlength'=>50)); ?>
+		<?php echo $form->error($model,'brand'); ?>
+    </div>
+      
 	<div class="row">
 		<?php echo $form->labelEx($model,'model'); ?>
             <?php
