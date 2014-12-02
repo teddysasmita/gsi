@@ -17,9 +17,9 @@ class LookUpController extends Controller {
 	public function actionGetModel($term)
 	{
 		if (!Yii::app()->user->isGuest) {
-			$data=Yii::app()->db->createCommand()->selectDistinct('model')->from('items')
-			->where('model like :p_model', array(':p_model'=>'%'.$term.'%'))
-			->order('model')
+			$data=Yii::app()->db->createCommand()->selectDistinct('modelname')->from('itemmodels')
+			->where('modelname like :p_model', array(':p_model'=>'%'.$term.'%'))
+			->order('modelname')
 			->queryColumn();
 			if(count($data)) {
 				foreach($data as $key=>$value) {
@@ -38,9 +38,9 @@ class LookUpController extends Controller {
 	public function actionGetBrand($term)
 	{
 		if (!Yii::app()->user->isGuest) {
-			$data=Yii::app()->db->createCommand()->selectDistinct('brand')->from('items')
-			->where('brand like :p_brand', array(':p_brand'=>'%'.$term.'%'))
-			->order('brand')
+			$data=Yii::app()->db->createCommand()->selectDistinct('brandname')->from('itembrands')
+			->where('brandname like :p_brand', array(':p_brand'=>'%'.$term.'%'))
+			->order('brandname')
 			->queryColumn();
 			if(count($data)) {
 				foreach($data as $key=>$value) {
@@ -58,9 +58,9 @@ class LookUpController extends Controller {
 	public function actionGetObjects($term)
 	{
 		if (!Yii::app()->user->isGuest) {
-			$data=Yii::app()->db->createCommand()->selectDistinct('objects')->from('items')
-				->where('objects like :p_objects', array(':p_objects'=>'%'.$term.'%'))
-				->order('objects')
+			$data=Yii::app()->db->createCommand()->selectDistinct('objectname')->from('itemobjects')
+				->where('objectname like :p_objects', array(':p_objects'=>'%'.$term.'%'))
+				->order('objectname')
 				->queryColumn();
 			if(count($data)) {
 				foreach($data as $key=>$value) {
