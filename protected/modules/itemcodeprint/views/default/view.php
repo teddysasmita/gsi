@@ -1,6 +1,6 @@
 <?php
-/* @var $this BarcodeprintsController */
-/* @var $model Barcodeprints */
+/* @var $this ItemcodeprintsController */
+/* @var $model Itemcodeprints */
 
 $this->breadcrumbs=array(
    'Proses'=>array('/site/proses'),
@@ -15,12 +15,12 @@ $this->menu=array(
 	array('label'=>'Pencarian Data', 'url'=>array('admin')),
 	array('label'=>'Sejarah', 'url'=>array('history', 'id'=>$model->id)),
 	array('label'=>'Data Detil yang dihapus', 
-         'url'=>array('/barcodeprint/detailbarcodeprints/deleted', 'id'=>$model->id)),
-	array('label'=>'Cetak', 'url'=>array('printbarcode', 'id'=>$model->id)),
+         'url'=>array('/itemcodeprint/detailitemcodeprints/deleted', 'id'=>$model->id)),
+	array('label'=>'Cetak', 'url'=>array('printitemcode', 'id'=>$model->id)),
 );
 ?>
 
-<h1>Cetak Barcode</h1>
+<h1>Cetak Kode Master Barang</h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
@@ -28,7 +28,7 @@ $this->menu=array(
 		//'id',
 		'regnum',
 		'idatetime',
-		'barcodetype',
+		'itemcodetype',
 		'labelheight',
 		'labelwidth',
 		'papersize',
@@ -41,9 +41,9 @@ $this->menu=array(
 )); ?>
 
 <?php 
-   $count=Yii::app()->db->createCommand("select count(*) from detailbarcodeprints where id='$model->id'")
+   $count=Yii::app()->db->createCommand("select count(*) from detailitemcodeprints where id='$model->id'")
       ->queryScalar();
-   $sql="select * from detailbarcodeprints where id='$model->id'";
+   $sql="select * from detailitemcodeprints where id='$model->id'";
 
    $dataProvider=new CSqlDataProvider($sql,array(
           'totalItemCount'=>$count,
@@ -52,9 +52,14 @@ $this->menu=array(
          'dataProvider'=>$dataProvider,
          'columns'=>array(
             array(
-               'header'=>'Nomor',
-               'name'=>'num',
+               'header'=>'Nama Barang',
+               'name'=>'iditem',
+            	'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])",
             ),
+         	array(
+				'header'=>'Nomor',
+         		'name'=>'num',
+         	),
             array(
                   'class'=>'CButtonColumn',
                   'buttons'=> array(
@@ -65,7 +70,7 @@ $this->menu=array(
                         'visible'=>'false'
                      )
                   ),
-                  'viewButtonUrl'=>"Action::decodeViewDetailStockEntryUrl(\$data)",
+                  'viewButtonUrl'=>"Action::decodeViewDetailItemcodePrintUrl(\$data)",
               )
          ),
    ));

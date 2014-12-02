@@ -39,11 +39,13 @@ class Itemcodeprintpdf extends TCPDF {
 		$iditem='';
 		$margin=$this->getMargins();
 		for($i=0; $i<count($this->detaildata); $i++) {
-			if (($this->GetX() + $this->labelwidth) <= ($this->getPageWidth()- $margin['right'])) 
-				$this->write1DBarcode(lookup::ItemCodeFromItemID($this->detaildata[$i]['num']), $this->barcodetype,
+			for($j=0; $j<$this->detaildata[$i]['num']; $j++) {
+				if (($this->GetX() + $this->labelwidth) <= ($this->getPageWidth()- $margin['right'])) 
+					$this->write1DBarcode(lookup::ItemCodeFromItemID($this->detaildata[$i]['iditem']), $this->barcodetype,
 					'', '', $this->labelwidth, $this->labelheight, 0.4, $this->style, 'T');
-			else {
-				$this->Ln((int)$this->labelheight);
+				else {
+					$this->Ln((int)$this->labelheight);
+				}
 			}
 		};	
 	}

@@ -11,7 +11,7 @@ $this->breadcrumbs=array(
 $this->menu=array(
 	//array('label'=>'Daftar', 'url'=>array('index')),
 	array('label'=>'Pengaturan', 'url'=>array('admin')),
-      array('label'=>'Tambah Detil', 'url'=>array('detailbarcodeprints/create', 
+      array('label'=>'Tambah Detil', 'url'=>array('detailitemcodeprints/create', 
          'id'=>$model->id),
           'linkOptions'=>array('id'=>'adddetail')), 
 );
@@ -20,7 +20,7 @@ $jq=<<<EOH
    $('#adddetail').click(function(event){
      var mainform;
      var hiddenvar;
-     mainform=$('#barcodeprints-form');
+     mainform=$('#itemcodeprints-form');
      $('#command').val('adddetail');
      mainform.submit();
      event.preventDefault();

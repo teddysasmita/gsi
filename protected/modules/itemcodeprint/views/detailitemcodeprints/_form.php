@@ -14,12 +14,7 @@
    ));
 
 $supplierScript=<<<EOS
-      $('#isAccepted').click(function() {
-   		if ($('#isAccepted').prop('checked')) {
-   			$('#Detailitemcodeprints_serialnum').val('Belum Diterima');
-   		}
-      });
-	
+   
 	$('#Detailitemcodeprints_itemname').focus(function(){
          $('#ItemDialog').dialog('open');
       });
@@ -57,12 +52,13 @@ EOS;
          echo $form->hiddenField($model,'id');
          echo $form->hiddenField($model,'userlog');
          echo $form->hiddenField($model,'datetimelog');
+         echo $form->hiddenField($model,'iditem');
         ?>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'iditem'); ?>
 		<?php 
-               echo CHtml::textField('Detailitemcodeprints_itemname', lookup::ItemNameFromItemID($model->iditem) , array('size'=>50));   
+               echo CHtml::textField('Detailitemcodeprints[itemname]', lookup::ItemNameFromItemID($model->iditem) , array('size'=>50));   
                $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
                   'id'=>'ItemDialog',
                   'options'=>array(

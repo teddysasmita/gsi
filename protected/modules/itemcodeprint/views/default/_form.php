@@ -1,6 +1,6 @@
    <?php
-/* @var $this BarcodeprintsController */
-/* @var $model Barcodeprints */
+/* @var $this ItemcodeprintsController */
+/* @var $model Itemcodeprints */
 /* @var $form CActiveForm */
 ?>
 
@@ -9,24 +9,24 @@
 
 <?php
 	$yourscript = <<<EOS
-	$('#Barcodeprints_totalnum').change(function() {
+	$('#Itemcodeprints_totalnum').change(function() {
 		$('#command').val('setTotalNum');	
-		$('#barcodeprints-form').submit();
+		$('#itemcodeprints-form').submit();
 	});
 EOS;
 	Yii::app()->clientScript->registerScript("yourscript", $yourscript, CClientscript::POS_READY);
 
    if($command=='create') 
       $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'barcodeprints-form',
+	'id'=>'itemcodeprints-form',
 	'enableAjaxValidation'=>true,
-      'action'=>Yii::app()->createUrl("/barcodeprint/default/create")
+      'action'=>Yii::app()->createUrl("/itemcodeprint/default/create")
       ));
    else if($command=='update')
       $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'barcodeprints-form',
+	'id'=>'itemcodeprints-form',
 	'enableAjaxValidation'=>true,
-      'action'=>Yii::app()->createUrl("/barcodeprint/default/update", array('id'=>$model->id))
+      'action'=>Yii::app()->createUrl("/itemcodeprint/default/update", array('id'=>$model->id))
       ));
   ?>
 
@@ -46,7 +46,7 @@ EOS;
 		<?php  echo $form->labelEx($model,'idatetime'); ?>
             <?php
                $this->widget('zii.widgets.jui.CJuiDatePicker',array(
-                  'name'=>'Barcodeprints[idatetime]',
+                  'name'=>'Itemcodeprints[idatetime]',
                      // additional javascript options for the date picker plugin
                   'options'=>array(
                      'showAnim'=>'fold',
@@ -96,41 +96,16 @@ EOS;
         ?>
         <?php echo $form->error($model,'barcodetype');?> 
 	</div>
-	
-	<div class="row">
-		<?php echo $form->labelEx($model,'branch'); ?>
-        <?php 
-           echo $form->dropDownList($model, 'branch', array('S'=>'Kertajaya', 
-           		'M'=>'Malang', 'E'=>'Emart')); 
-        ?>
-        <?php echo $form->error($model,'branch');?> 
-	</div>
-	
-	<div class="row">
-		<?php echo $form->labelEx($model,'startnumber'); ?>
-        <?php 
-           echo $form->textField($model, 'startnumber'); 
-        ?>
-        <?php echo $form->error($model,'startnumber');?> 
-	</div>
-	
-	<div class="row">
-		<?php echo $form->labelEx($model,'totalnum'); ?>
-        <?php 
-           echo $form->textField($model, 'totalnum'); 
-        ?>
-        <?php echo $form->error($model,'totalnum');?> 
-	</div>
 
 	  
 <?php 
 	
-    if (isset(Yii::app()->session['Detailbarcodeprints'])) {
-       $rawdata=Yii::app()->session['Detailbarcodeprints'];
+    if (isset(Yii::app()->session['Detailitemcodeprints'])) {
+       $rawdata=Yii::app()->session['Detailitemcodeprints'];
        $count=count($rawdata);
     } else {
-       $count=Yii::app()->db->createCommand("select count(*) from detailbarcodeprints where id='$model->id'")->queryScalar();
-       $sql="select * from detailbarcodeprints where id='$model->id'";
+       $count=Yii::app()->db->createCommand("select count(*) from detailitemcodeprints where id='$model->id'")->queryScalar();
+       $sql="select * from detailitemcodeprints where id='$model->id'";
        $rawdata=Yii::app()->db->createCommand($sql)->queryAll ();
     }
     $dataProvider=new CArrayDataProvider($rawdata, array(
@@ -139,21 +114,24 @@ EOS;
     $this->widget('zii.widgets.grid.CGridView', array(
             'dataProvider'=>$dataProvider,
             'columns'=>array(
-              array(
-                  'header'=>'Nomor',
+			array(
+				'header'=>'Nama Barang',
+				'name'=>'iditem',
+				'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])",
+			),
+            array(
+                  'header'=>'Jumlah',
                   'name'=>'num',
               ),
               array(
                   'class'=>'CButtonColumn',
                   'buttons'=> array(
-                      'delete'=>array(
-                       'visible'=>'false'
-                      ),
                      'view'=>array(
                         'visible'=>'false'
                      )
                   ),
-                  'updateButtonUrl'=>"Action::decodeUpdateDetailBarcodePrintUrl(\$data)",
+                  'updateButtonUrl'=>"Action::decodeUpdateDetailItemcodePrintUrl(\$data)",
+              		'deleteButtonUrl'=>"Action::decodeDeleteDetailItemcodePrintUrl(\$data)",
               )
           ),
     ));

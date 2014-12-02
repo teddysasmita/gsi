@@ -71,7 +71,8 @@ return array(
             'acquisitionnsn',
             'itemmastermods',
             'receiverepair',
-            'deliveryreplaces'
+            'deliveryreplaces',
+			'itemcodeprint'
         ),
 
         

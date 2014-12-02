@@ -83,6 +83,9 @@ class DefaultController extends Controller
                            $details=Yii::app()->session['Detailitemcodeprints'];
                            $respond=$respond&&$this->saveNewDetails($details);
                          } 
+                         if(!$respond) {
+                         	throw new CHttpException(404,'There is an error in detail posting'. ' '. $model->errors);
+                         }
 
                          if($respond) {
                             $this->afterPost($model);
@@ -496,7 +499,6 @@ class DefaultController extends Controller
          $model->papersize = 'A4';
          $model->labelwidth = 30;
          $model->labelheight = 10;
-         $model->branch = 'S';
      }
 
      protected function afterPost(& $model)
