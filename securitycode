@@ -21,6 +21,7 @@ Retur Pembelian (AC10)
 Penerimaan Barang (AC12)
 Pengembalian Barang ke Pemasok (AC50)
 Perubahan Master Barang (AC32)
+Cetak Barcode Master Barang (AC35)
 
 Bagian Penjualan
 Pesanan Pembeli (AC1)

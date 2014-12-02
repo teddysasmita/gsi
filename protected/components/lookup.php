@@ -90,6 +90,12 @@ class lookup extends CComponent {
       return Yii::app()->db->createCommand($sql)->queryScalar();
    }
    
+   public static function ItemCodeFromItemID($id)
+   {
+   	$sql="select code from items where id='$id'";
+   	return Yii::app()->db->createCommand($sql)->queryScalar();
+   }
+   
    public static function ItemIDFromItemName($id)
    {
    	$sql="select id from items where name='$name'";
