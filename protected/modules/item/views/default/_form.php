@@ -16,16 +16,19 @@ $namescript=<<<OK
         
      $('#Items_brand').change(function(event) {
          $('#Items_name').val(combine( ' ', $('#Items_brand').val(), $('#Items_objects').val(), $('#Items_model').val(), $('#Items_attribute').val() ));
-     });
+    	$('#items-form').submit(); 
+	});
      $('#Items_objects').change(function(event) {
         $('#Items_name').val(combine( ' ', $('#Items_brand').val(), $('#Items_objects').val(), $('#Items_model').val(), $('#Items_attribute').val() ));
-     });
+    	$('#items-form').submit(); 
+	});
      $('#Items_model').change(function(event) {
         $('#Items_name').val(combine( ' ', $('#Items_brand').val(), $('#Items_objects').val(), $('#Items_model').val(), $('#Items_attribute').val() ));       
-     });
+	});
      $('#Items_attribute').change(function(event) {
         $('#Items_name').val(combine( ' ', $('#Items_brand').val(), $('#Items_objects').val(), $('#Items_model').val(), $('#Items_attribute').val() ));       
-     }); 
+	}); 
+	
 OK;
 Yii::app()->clientScript->registerScript('myscript', $namescript, CClientScript::POS_READY);
 ?>
@@ -89,12 +92,24 @@ Yii::app()->clientScript->registerScript('myscript', $namescript, CClientScript:
 	<div class="row">
 		<?php echo $form->labelEx($model,'brand'); ?>
             <?php
-               //$brands=Yii::app()->db->createCommand()->selectDistinct('brand')->from('items')->queryColumn();
-
+				$objectcode = Yii::app()->db->createCommand()
+					->select('id')->from('itemobjects')
+					->where('objectname = :p_objectname', 
+						array(':p_objectname'=>$model->objects))
+					->queryScalar();
+				if ($objectcode) {
+               		$brands = Yii::app()->db->createCommand()
+               			->selectDistinct('brandname')->from('itembrands')
+               			->where('idobject = :p_idobject', array(':p_idobject'=>$objectcode))
+               			->queryColumn();
+				} else
+					$brands = array();
+			
                $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
                   'name'=>'Items[brand]',
-                  'sourceUrl'=> Yii::app()->createUrl('LookUp/getBrand'),
-                  'htmlOptions'=>array(
+                  //'sourceUrl'=> Yii::app()->createUrl('LookUp/getBrand'),
+                  	'source'=>$brands,
+               		'htmlOptions'=>array(
                      'style'=>'height:20px;',
                   ),
                   'value'=>$model->brand,
@@ -108,11 +123,34 @@ Yii::app()->clientScript->registerScript('myscript', $namescript, CClientScript:
 		<?php echo $form->labelEx($model,'model'); ?>
             <?php
                //$models=Yii::app()->db->createCommand()->selectDistinct('model')->from('items')->queryColumn();
-
+            	$objectcode = Yii::app()->db->createCommand()
+            		->select('id')->from('itemobjects')
+            		->where('objectname = :p_objectname',
+            			array(':p_objectname'=>$model->objects))
+            		->queryScalar();
+            	if ($objectcode) 
+            		$brandcode = Yii::app()->db->createCommand()
+            			->select('code')->from('itembrands')
+            			->where('idobject = :p_idobject and brandname = :p_brandname',
+            				array(':p_idobject'=>$objectcode, ':p_brandname'=>$model->brand))
+            			->queryScalar();
+            	else
+            		$brandcode = false;
+            	 	
+            	if ($objectcode && $brandcode) {
+            		$models = Yii::app()->db->createCommand()
+            			->select('modelname')->from('itemmodels')
+            		->where('idobject = :p_idobject and idbrand = :p_idbrand', 
+            				array(':p_idobject'=>$objectcode, ':p_idbrand'=>$brandcode))
+            		->queryColumn();
+            	} else
+            		$models = array();
+               
                $this->widget('zii.widgets.jui.CJuiAutoComplete', array(
                   'name'=>'Items[model]',
-                  'sourceUrl'=> Yii::app()->createUrl('LookUp/getModel'),
-                  'htmlOptions'=>array(
+                  //'sourceUrl'=> Yii::app()->createUrl('LookUp/getModel'),
+                  	'source'=>$models,
+               		'htmlOptions'=>array(
                      'style'=>'height:20px;',
                   ),
                   'value'=>$model->model,

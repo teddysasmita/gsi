@@ -45,33 +45,31 @@ class DefaultController extends Controller
 	 */
 	public function actionCreate()
 	{
-             if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
+        if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
                     Yii::app()->user->id))  {   
-                $this->state='c';
-                $this->trackActivity('c');    
+			$this->state='c';
+			$this->trackActivity('c');    
                     
-                $model=new Items;
-                $this->afterInsert($model);
+			$model=new Items;
+			$this->afterInsert($model);
                 
 		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
+			$this->performAjaxValidation($model);
 
-		if(isset($_POST['Items']))
-		{
-			$model->attributes=$_POST['Items'];
-                        $this->beforePost($model);
-			if($model->save()) {
-                            $this->afterPost($model);
-                            $this->redirect(array('view','id'=>$model->id));                 
-                        }    
-                }
-
-		$this->render('create',array(
-			'model'=>$model,
-		));
-             } else {
+			if(isset($_POST['Items'])) {
+				$model->attributes=$_POST['Items'];
+				if (isset($_POST['yt0'])) {
+					$this->beforePost($model);
+					if($model->save()) {
+						$this->afterPost($model);
+						$this->redirect(array('view','id'=>$model->id));                 
+					}    
+				}
+			}
+			$this->render('create', array( 'model'=>$model ));
+		} else {
                 throw new CHttpException(404,'You have no authorization for this operation.');
-             }
+		}
 	}
 
 	/**
@@ -444,4 +442,16 @@ EOS;
        			throw new CHttpException(404,'You have no authorization for this operation.');
        		};
        	}
+	
+	public function processItemInfo($model) 
+	{
+		$objectcode = Yii::app()->db->createCommand()
+			->select('id')->from('itembrands')
+			->where('objectname = :p_objectname', array(':p_objectname'=>$model->objects))
+			->queryScalar();
+		
+		if ($objectcode) {
+				
+		}
+	}
 }
