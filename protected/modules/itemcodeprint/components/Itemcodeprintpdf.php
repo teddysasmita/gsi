@@ -42,12 +42,10 @@ class Itemcodeprintpdf extends TCPDF {
 			for($j=0; $j<$this->detaildata[$i]['num']; $j++) {
 				$this->style['label'] = lookup::ItemModelFromItemID($this->detaildata[$i]['iditem']).'-'.
 						lookup::ItemCodeFromItemID($this->detaildata[$i]['iditem']);
-				if (($this->GetX() + $this->labelwidth) <= ($this->getPageWidth()- $margin['right'])) {
-					$this->write1DBarcode(lookup::ItemCodeFromItemID($this->detaildata[$i]['iditem']), $this->barcodetype,
-					'', '', $this->labelwidth, $this->labelheight, 0.4, $this->style, 'T');
-				} else {
+				if (($this->GetX() + $this->labelwidth) > ($this->getPageWidth()- $margin['right'])) 
 					$this->Ln((int)$this->labelheight);
-				}
+				$this->write1DBarcode(lookup::ItemCodeFromItemID($this->detaildata[$i]['iditem']), $this->barcodetype,
+					'', '', $this->labelwidth, $this->labelheight, 0.4, $this->style, 'T');
 			}
 		};	
 	}
