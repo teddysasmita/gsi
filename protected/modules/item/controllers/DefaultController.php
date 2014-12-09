@@ -60,10 +60,16 @@ class DefaultController extends Controller
 				$model->attributes=$_POST['Items'];
 				if (isset($_POST['yt0'])) {
 					$this->beforePost($model);
-					if($model->save()) {
-						$this->afterPost($model);
-						$this->redirect(array('view','id'=>$model->id));                 
-					}    
+					if (($_POST['command'] == 'changeObject') || 
+							($_POST['command'] == 'changeObject')) {
+								
+							
+					} else {
+						if($model->save()) {
+							$this->afterPost($model);
+							$this->redirect(array('view','id'=>$model->id));                 
+						}   
+					} 
 				}
 			}
 			$this->render('create', array( 'model'=>$model ));

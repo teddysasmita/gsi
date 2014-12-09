@@ -16,11 +16,13 @@ $namescript=<<<OK
         
      $('#Items_brand').change(function(event) {
          $('#Items_name').val(combine( ' ', $('#Items_brand').val(), $('#Items_objects').val(), $('#Items_model').val(), $('#Items_attribute').val() ));
-    	$('#items-form').submit(); 
+    	$('#command').val('changeBrand');
+		$('#items-form').submit(); 
 	});
      $('#Items_objects').change(function(event) {
         $('#Items_name').val(combine( ' ', $('#Items_brand').val(), $('#Items_objects').val(), $('#Items_model').val(), $('#Items_attribute').val() ));
-    	$('#items-form').submit(); 
+    	$('#command').val('changeObject');
+		$('#items-form').submit(); 
 	});
      $('#Items_model').change(function(event) {
         $('#Items_name').val(combine( ' ', $('#Items_brand').val(), $('#Items_objects').val(), $('#Items_model').val(), $('#Items_attribute').val() ));       
@@ -51,6 +53,7 @@ Yii::app()->clientScript->registerScript('myscript', $namescript, CClientScript:
              echo $form->hiddenField($model, 'id');
              echo $form->hiddenField($model, 'userlog');
              echo $form->hiddenField($model, 'datetimelog');
+             echo CHtml::hiddenField('command');
           ?>
 
 	<div class="row">
