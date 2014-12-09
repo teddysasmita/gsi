@@ -16,13 +16,9 @@ $namescript=<<<OK
         
      $('#Items_brand').change(function(event) {
          $('#Items_name').val(combine( ' ', $('#Items_brand').val(), $('#Items_objects').val(), $('#Items_model').val(), $('#Items_attribute').val() ));
-    	$('#command').val('changeBrand');
-		$('#items-form').submit(); 
 	});
      $('#Items_objects').change(function(event) {
         $('#Items_name').val(combine( ' ', $('#Items_brand').val(), $('#Items_objects').val(), $('#Items_model').val(), $('#Items_attribute').val() ));
-    	$('#command').val('changeObject');
-		$('#items-form').submit(); 
 	});
      $('#Items_model').change(function(event) {
         $('#Items_name').val(combine( ' ', $('#Items_brand').val(), $('#Items_objects').val(), $('#Items_model').val(), $('#Items_attribute').val() ));       

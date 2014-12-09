@@ -56,6 +56,7 @@ class DefaultController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 			$this->performAjaxValidation($model);
 
+			print_r($_POST);
 			if(isset($_POST['Items'])) {
 				$model->attributes=$_POST['Items'];
 				if (isset($_POST['yt0'])) {
