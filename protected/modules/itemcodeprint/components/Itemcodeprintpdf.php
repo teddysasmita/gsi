@@ -43,7 +43,7 @@ class Itemcodeprintpdf extends TCPDF {
 				unset($model);
 				$model = lookup::ItemModelFromItemID($this->detaildata[$i]['iditem']);
 				$used = count_chars($model, 3);
-				if ($used == ' ') {
+				if (strlen($used) == 1) {
 					$model = lookup::ItemObjectFromItemID($this->detaildata[$i]['iditem']);
 				}
 				unset($brand);
