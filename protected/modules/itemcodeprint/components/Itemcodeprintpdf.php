@@ -40,7 +40,14 @@ class Itemcodeprintpdf extends TCPDF {
 		$margin=$this->getMargins();
 		for($i=0; $i<count($this->detaildata); $i++) {
 			for($j=0; $j<$this->detaildata[$i]['num']; $j++) {
-				$this->style['label'] = lookup::ItemModelFromItemID($this->detaildata[$i]['iditem']).'-'.
+				unset($model);
+				$model = lookup::ItemModelFromItemID($this->detaildata[$i]['iditem']);
+				if (!strlen($model)) {
+					$model = lookup::ItemObjectFromItemID($this->detaildata[$i]['iditem']);
+				}
+				unset($brand);
+				$brand = lookup::ItemBrandFromItemID($this->detaildata[$i]['iditem']);
+				$this->style['label'] = $brand.'-'.$model.'-'.
 						lookup::ItemCodeFromItemID($this->detaildata[$i]['iditem']);
 				if (($this->GetX() + $this->labelwidth) > ($this->getPageWidth()- $margin['right'])) 
 					$this->Ln((int)$this->labelheight);

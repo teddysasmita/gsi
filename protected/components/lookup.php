@@ -98,7 +98,19 @@ class lookup extends CComponent {
    
    public static function ItemModelFromItemID($id)
    {
-   	$sql="select concat(brand, '-',model) as model from items where id='$id'";
+   	$sql="select model from items where id='$id'";
+   	return Yii::app()->db->createCommand($sql)->queryScalar();
+   }
+   
+   public static function ItemObjectFromItemID($id)
+   {
+   	$sql="select objects from items where id='$id'";
+   	return Yii::app()->db->createCommand($sql)->queryScalar();
+   }
+   
+   public static function ItemBrandFromItemID($id)
+   {
+   	$sql="select brand from items where id='$id'";
    	return Yii::app()->db->createCommand($sql)->queryScalar();
    }
    
