@@ -189,6 +189,27 @@ class LookUpController extends Controller {
 		};
    }
    
+   public function actionGetItem4($name)
+   {
+   	if (!Yii::app()->user->isGuest) {
+   		$data=Yii::app()->db->createCommand()->select('concat(name, \'->\',code)')->from('items')
+   		->where('name like :itemname', array(':itemname'=>'%'.$name.'%'))
+   		->order('name')
+   		->queryColumn();
+   		 
+   		if(count($data)) {
+   			foreach($data as $key=>$value) {
+   				$data[$key]=rawurlencode($value);
+   			}
+   		} else {
+   			$data[0]='NA';
+   		}
+   		echo json_encode($data);
+   	} else {
+   		throw new CHttpException(404,'You have no authorization for this operation.');
+   	};
+   }
+   
    public function actionGetItem2($term)
    {
    	if (!Yii::app()->user->isGuest) {
@@ -259,6 +280,22 @@ class LookUpController extends Controller {
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		};
+   }
+   
+   public function actionGetItemID2($namecode)
+   {
+   	if (!Yii::app()->user->isGuest) {
+   		//print_r($name);
+   		$namecode=rawurldecode($namecode);
+   		$temp=explode('->', $namecode);
+   		$data=Yii::app()->db->createCommand()->select('id')->from('items')
+   		->where("name = :p_name", array(':p_name'=>$temp[0]))
+   		->order('id')
+   		->queryScalar();
+   		echo $data;
+   	} else {
+   		throw new CHttpException(404,'You have no authorization for this operation.');
+   	};
    }
    
    public function actionGetWareHouseID($name)
