@@ -275,6 +275,7 @@ class DefaultController extends Controller
         {
             $idmaker=new idmaker();
             $model->id=$idmaker->getcurrentID2();  
+            $model->code = 'NA';
         }
         
         protected function afterPost(& $model)
