@@ -432,6 +432,80 @@ class lookup extends CComponent {
 		else
 			return false;
 	}
+	
+	public static function checkItemObject($object)
+	{
+		$data =  Yii::app()->db->createCommand()
+			->select('id')->from('itemobjects')
+			->where('objectname = :p_objectname', array(
+				':p_objectname'=>$object
+			))
+			->queryScalar();
+		if (!$data) {
+			Yii::app()->db->createCommand()
+				->insert('itemobjects', array('objectname'=>$object));
+			$data = Yii::app()->db->createCommand()
+				->select('id')->from('itemobjects')
+				->order('id desc')
+				->queryScalar();	
+		}
+		return $data;
+	}
+	
+	public static function checkItemBrand($idobject, $brand)
+	{
+		$data =  Yii::app()->db->createCommand()
+			->select('code')->from('itembrands')
+			->where('brandname = :p_brandname and idobject = :p_idobject', array(
+				':p_brandname'=>$brand, ':p_idobject'=>$idobject
+			))
+			->queryScalar();
+		if (!$data) {
+			$idbrand = Yii::app()->db->createCommand()
+				->select('code')->from('itembrands')
+				->where('idobject = :p_idobject', array(
+					':p_idobject'=>$idobject
+				))
+				->order('code desc')
+				->queryScalar();
+			$idbrand += 1;
+			
+			Yii::app()->db->createCommand()
+				->insert('itembrands', array(
+					'idobject'=>$idobject, 'code'=>$idbrand, 'brandname'=>$brand
+				));
+			$data = $idbrand;
+		}		
+		return $data;
+	}
+	
+	public static function checkItemModel($idobject, $idbrand, $model)
+	{
+		$data = Yii::app()->db->createCommand()
+			->select('code')->from('itemmodels')
+			->where('modelname = :p_modelname and idobject = :p_idobject and idbrand = :p_idbrand', array(
+				':p_modelname'=>$model, ':p_idobject'=>$idobject, ':p_idbrand'=>$idbrand
+			))
+			->queryScalar();
+		if (!$data) {
+			$idmodel = Yii::app()->db->createCommand()
+				->select('code')->from('itemmodels')
+				->where('idobject = :p_idobject and idbrand = :p_idbrand', array(
+					':p_idobject'=>$idobject, ':p_idbrand'=>$idbrand
+				))
+				->order('code desc')
+				->queryScalar();
+			$idmodel += 1;
+				
+			Yii::app()->db->createCommand()
+				->insert('itemmodels', array(
+					'idobject'=>$idobject,'idbrand'=>$idbrand, 'code'=>$idmodel, 'modelname'=>$model
+				));
+			$data = $idmodel;
+		}
+		return $data;
+	}
+	
    
 }
 

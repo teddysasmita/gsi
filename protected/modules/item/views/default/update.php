@@ -14,6 +14,10 @@ $this->menu=array(
 	array('label'=>'Create Items', 'url'=>array('create')),
 	array('label'=>'View Items', 'url'=>array('view', 'id'=>$model->id)),
 	array('label'=>'Manage Items', 'url'=>array('admin')),*/
+	array('label'=>'Buat Kode', 'url'=>array('update', 'id'=>$model->id, 'command'=>'setcode'),
+			'linkOptions'=>array('id'=>'setcode')
+	),
+		
 );
 ?>
 

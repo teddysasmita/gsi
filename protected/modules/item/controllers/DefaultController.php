@@ -106,8 +106,10 @@ class DefaultController extends Controller
 					}        
 				} else {
 					
-					
 				}
+			}
+			if(isset($_GET['command']) == 'setcode') {
+				$model->code = $this->processItemInfo($model);
 			}
 
 			$this->render('update',array(
@@ -452,14 +454,25 @@ EOS;
        	}
 	
 	public function processItemInfo($model) 
-	{
-		$objectcode = Yii::app()->db->createCommand()
-			->select('id')->from('itembrands')
-			->where('objectname = :p_objectname', array(':p_objectname'=>$model->objects))
-			->queryScalar();
-		
-		if ($objectcode) {
+	{	
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Updatecode',
+				Yii::app()->user->id))  {
+			$idobject = lookup::checkItemObject(strtoupper($model->objects));
+			if ($idobject) {
+				$idbrand = lookup::checkItemBrand($idobject, strtoupper($model->brand));
+				if ($idbrand) {
+					$idmodel = lookup::checkItemModel($idobject, $idbrand, strtoupper($model->model));
 				
+					$idobject = str_pad(strtoupper(base_convert($idobject, 10, 36)), 3, '0', STR_PAD_LEFT);
+					$idbrand = str_pad(strtoupper(base_convert($idbrand, 10, 36)), 2, '0', STR_PAD_LEFT);
+					$idmodel = str_pad(strtoupper(base_convert($idmodel, 10, 36)), 2, '0', STR_PAD_LEFT);
+					$code = $idobject.$idbrand.$idmodel;
+				
+					return $code;
+				}
+			}
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
 		}
 	}
 }

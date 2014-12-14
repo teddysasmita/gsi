@@ -19,7 +19,6 @@ $namescript=<<<OK
 	});
      $('#Items_objects').change(function(event) {
         $('#Items_name').val(combine( ' ', $('#Items_brand').val(), $('#Items_objects').val(), $('#Items_model').val(), $('#Items_attribute').val() ));
-		$('#items-form').submit();
 	});
      $('#Items_model').change(function(event) {
         $('#Items_name').val(combine( ' ', $('#Items_brand').val(), $('#Items_objects').val(), $('#Items_model').val(), $('#Items_attribute').val() ));       
@@ -51,6 +50,7 @@ Yii::app()->clientScript->registerScript('myscript', $namescript, CClientScript:
              echo $form->hiddenField($model, 'userlog');
              echo $form->hiddenField($model, 'datetimelog');
              echo CHtml::hiddenField('command');
+             echo $form->hiddenField($model, 'code');
           ?>
 
 	<div class="row">
