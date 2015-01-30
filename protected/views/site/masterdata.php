@@ -21,3 +21,5 @@ $this->pageTitle=Yii::app()->name;
 <h3><?php echo CHtml::link('Akun Transfer', Yii::app()->createUrl('salespos/salespostransfers'))?></h3>
 <h3><?php echo CHtml::link('Cicilan', Yii::app()->createUrl('salespos/salesposloans'))?></h3>
 <h3><?php echo CHtml::link('Service Center', Yii::app()->createUrl('servicecenter'))?></h3>
+<h3><?php echo CHtml::link('Biaya', Yii::app()->createUrl('expenses'))?></h3>
+<h3><?php echo CHtml::link('Akun Kas', Yii::app()->createUrl('cashboxes'))?></h3>

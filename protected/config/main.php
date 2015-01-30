@@ -72,7 +72,9 @@ return array(
             'itemmastermods',
             'receiverepair',
             'deliveryreplaces',
-			'itemcodeprint'
+			'itemcodeprint',
+			'cashouts',
+			'expenses'
         ),
 
         

@@ -47,3 +47,5 @@ $this->pageTitle=Yii::app()->name;
 
 <h2>Bagian Keuangan</h2>
 <h3><?php echo CHtml::link('Penentuan Harga Pokok Opname', Yii::app()->createUrl('inventorycosting'))?></h3>
+<h3><?php echo CHtml::link('Pencatatan Kas Keluar', Yii::app()->createUrl('cashouts'))?></h3>
+
