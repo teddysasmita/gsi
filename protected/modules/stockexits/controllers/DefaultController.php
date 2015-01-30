@@ -818,8 +818,9 @@ EOS;
 			->select('a.id, b.iditem, sum(b.qty) as qty')
 			->from('deliveryorders a')
 			->join('detaildeliveryorders b', 'b.id=a.id')
-			->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
-					array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh) )
+			->join('salespos c', 'c.regnum = a.invnum')
+			->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse and c.status = :p_status',
+					array(':p_regnum'=>$nolpb, ':p_idwarehouse'=> $idwh, ':p_status'=>'1') )
 					->group('b.iditem')
 					->queryAll();
 		} else 
