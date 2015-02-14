@@ -7,7 +7,7 @@ class DefaultController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $formid='AB13';
+	public $formid='AB14';
 	public $tracker;
 	public $state;
            
@@ -79,14 +79,14 @@ class DefaultController extends Controller
                 $this->state='c';
                 $this->trackActivity('c');
                 
-                $model=new Expenses;
+                $model=new Cashboxes;
                 $this->afterInsert($model);
                 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
                         
-		if(isset($_POST['Expenses'])) {
-                    $model->attributes=$_POST['Expenses'];
+		if(isset($_POST['Cashboxes'])) {
+                    $model->attributes=$_POST['Cashboxes'];
                     $this->beforePost($model);
                     if($model->save()) {
                         $this->afterPost($model);
@@ -122,12 +122,12 @@ class DefaultController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
 
-		if(isset($_POST['Expenses']))
+		if(isset($_POST['Cashboxes']))
 		{
-                    $model->attributes=$_POST['Expenses'];
+                    $model->attributes=$_POST['Cashboxes'];
                     
                     $this->beforePost($model);    
-                    $this->tracker->modify('expenses', $id);
+                    $this->tracker->modify('cashboxes', $id);
                     if($model->save()) {
                         $this->afterPost($model);                    
                         $this->redirect(array('view','id'=>$model->id));
@@ -154,7 +154,7 @@ class DefaultController extends Controller
                 $this->trackActivity('d');
                 $model=$this->loadModel($id);
                 $this->beforeDelete($model);
-                $this->tracker->delete('expenses', $id);
+                $this->tracker->delete('cashboxes', $id);
                 $model->delete();
                 $this->afterDelete();    
                     // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
@@ -175,7 +175,7 @@ class DefaultController extends Controller
                 Yii::app()->user->id)) {
                 $this->trackActivity('l');
                 
-                $dataProvider=new CActiveDataProvider('Expenses');
+                $dataProvider=new CActiveDataProvider('Cashboxes');
                 $this->render('index',array(
                     'dataProvider'=>$dataProvider,
                 ));
@@ -193,10 +193,10 @@ class DefaultController extends Controller
                 Yii::app()->user->id)) {
                 $this->trackActivity('s');
                 
-                $model=new Expenses('search');
+                $model=new Cashboxes('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Expenses']))
-			$model->attributes=$_GET['Expenses'];
+		if(isset($_GET['Cashboxes']))
+			$model->attributes=$_GET['Cashboxes'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -238,8 +238,8 @@ class DefaultController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
                 $this->trackActivity('r');
-                $this->tracker->restore('expenses', $idtrack);
-                $dataProvider=new CActiveDataProvider('Expenses');
+                $this->tracker->restore('cashboxes', $idtrack);
+                $dataProvider=new CActiveDataProvider('Cashboxes');
                 $this->render('index',array(
                     'dataProvider'=>$dataProvider,
                 ));
@@ -253,8 +253,8 @@ class DefaultController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
                 $this->trackActivity('n');
-                $this->tracker->restoreDeleted('expenses', $idtrack);
-                $dataProvider=new CActiveDataProvider('Expenses');
+                $this->tracker->restoreDeleted('cashboxes', $idtrack);
+                $dataProvider=new CActiveDataProvider('Cashboxes');
                 $this->render('index',array(
                     'dataProvider'=>$dataProvider,
                 ));
@@ -268,12 +268,12 @@ class DefaultController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Expenses the loaded model
+	 * @return Cashboxes the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Expenses::model()->findByPk($id);
+		$model=Cashboxes::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -281,11 +281,11 @@ class DefaultController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Expenses $model the model to be validated
+	 * @param Cashboxes $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='expenses-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='cashboxes-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
