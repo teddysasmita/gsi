@@ -74,7 +74,8 @@ return array(
             'deliveryreplaces',
 			'itemcodeprint',
 			'cashouts',
-			'expenses'
+			'expenses', 
+			'cashboxes'
         ),
 
         
