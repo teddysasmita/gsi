@@ -249,12 +249,13 @@ class DefaultController extends Controller
         		$sellprice->id = idmaker::getCurrentID2();
         		$sellprice->idatetime = $idatetime;
         		$sellprice->normalprice = $normalprice;
+        		$sellprice->minprice = $normalprice;
         		$sellprice->approvalby = $approvalby;
         		$sellprice->userlog = UserIdentity::retrieveId($username, $passwd);
         		$sellprice->datetimelog = idmaker::getDateTime();
         		
         		if ($sellprice->validate()) 
-        			$sellprice->save();
+        			$sellprice->insert();
         	}	
         }
 	/**
@@ -294,9 +295,25 @@ class DefaultController extends Controller
         
         protected function afterPost(& $model)
         {
-        	$idmaker=new idmaker();
-        	if ($this->state == 'create')
-        		$idmaker->saveRegNum($this->formid, $model->regnum);
+        	if ($this->state == 'create') {
+        		$idmaker::saveRegNum($this->formid, $model->regnum);
+        		$remoteBranches = idmaker::getRegNum('bcast');
+        		if ($remoteBranches !== 'NA') {
+        			$remoteBranches = explode(',', $remoteBranches);
+        			foreach($remoteBranches as $rb) {
+        				$this->redirect(
+        					array("http://$rb:9000/gsi/index.php", 
+        						'r'=>'sellingprice/default/remoteInsert', 
+        						'username'=>UserIdentity::getUserName(),
+        						'password'=>'master789',
+        						'idatetime'=>$model->idatetime,
+        						'iditem'=>$model->iditem,
+        						'normalprice'=>$model->normalprice,
+        						'approvalby'=>$model->approvalby
+        					));
+        			}
+        		}
+        	}
         }
         
         protected function beforePost(& $model)
