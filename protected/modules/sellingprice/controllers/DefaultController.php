@@ -242,7 +242,7 @@ class DefaultController extends Controller
             }
         }
         
-        public function actionRemoteInsert($username, $passwd, $idatetime, $iditem, $normalprice, $approvalby) 
+        public function actionRemoteInsert($username, $passwd, $idatetime, $iditem, $normalprice, $approvalby, $url) 
         {
         	if (UserIdentity::checkPassword($username, $passwd)) {
         		$sellprice = new Sellingprices();
@@ -259,6 +259,7 @@ class DefaultController extends Controller
         		if ($sellprice->validate()) 
         			$sellprice->insert();
         		idmaker::saveRegNum($this->formid, $sellprice->regnum);
+        		$this->redirect($url);
         	}	
         }
 	/**
@@ -304,6 +305,7 @@ class DefaultController extends Controller
         		$remoteBranches = idmaker::getInformation('bcast');
         		if ($remoteBranches !== 'NA') {
         			$remoteBranches = explode(',', $remoteBranches);
+        			$myUrl = $this->createAbsoluteUrl('view', array('id'=>$model->id));
         			foreach($remoteBranches as $rb) {
         				$this->redirect(
         					"http://$rb:9000/gsi/index.php?".
@@ -315,7 +317,8 @@ class DefaultController extends Controller
         							'idatetime'=>$model->idatetime,
         							'iditem'=>$model->iditem,
         							'normalprice'=>$model->normalprice,
-        							'approvalby'=>$model->approvalby
+        							'approvalby'=>$model->approvalby,
+        							'url'=>$myUrl
         						)
         					));
         			}
