@@ -300,7 +300,7 @@ class DefaultController extends Controller
         	if ($this->state == 'create') {
         		idmaker::saveRegNum($this->formid, $model->regnum);
         		
-        		$remoteBranches = idmaker::getRegNum('bcast');
+        		$remoteBranches = idmaker::getInformation('bcast');
         		if ($remoteBranches !== 'NA') {
         			$remoteBranches = explode(',', $remoteBranches);
         			foreach($remoteBranches as $rb) {

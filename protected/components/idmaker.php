@@ -119,6 +119,13 @@ class idmaker extends CComponent
       return $temp;      
    }
    
+   public static function getInformation($id)
+   {
+   		$sql="select val from information where id='$id'";
+   		$temp=Yii::app()->db->createCommand($sql)->queryScalar();
+   		return $temp;
+   }
+   
    public static function saveRegNum($formid, $regnum)
    {
       $sql="update information set val='$regnum' where id='$formid'";
