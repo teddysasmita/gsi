@@ -453,9 +453,11 @@ class DefaultController extends Controller
              $detailmodel=new Detailpurchasesstockentries;
              $detailmodel->attributes=$row;
              $respond=$detailmodel->insert();
+             $num = idmaker::getRegNum('AC11');
              $this->setSellingPrice($row['iddetail'], idmaker::getDateTime(), 
-             		idmaker::getRegNum('AC11'), $row['iditem'], $row['sellprice'], 
+             		$num, $row['iditem'], $row['sellprice'], 
              		'Bp Welly T', Yii::app()->user->id);	
+             idmaker::saveRegNum('AC11', $num);
              if (!$respond) {
                 break;
              }
