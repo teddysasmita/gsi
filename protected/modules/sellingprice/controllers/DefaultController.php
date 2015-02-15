@@ -305,7 +305,7 @@ class DefaultController extends Controller
         			$remoteBranches = explode(',', $remoteBranches);
         			foreach($remoteBranches as $rb) {
         				$this->redirect(
-        					"http://$rb:9000/gsi/index.php".
+        					"http://$rb:9000/gsi/index.php?".
         					http_build_query(
         						array(
         							'r'=>'sellingprice/default/remoteInsert',
