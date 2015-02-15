@@ -242,6 +242,21 @@ class DefaultController extends Controller
             }
         }
         
+        public function actionRemoteInsert($username, $passwd, $idatetime, $iditem, $normalprice, $approvalby) 
+        {
+        	if (UserIdentity::checkPassword($username, $passwd)) {
+        		$sellprice = new Sellingprices();
+        		$sellprice->id = idmaker::getCurrentID2();
+        		$sellprice->idatetime = $idatetime;
+        		$sellprice->normalprice = $normalprice;
+        		$sellprice->approvalby = $approvalby;
+        		$sellprice->userlog = UserIdentity::retrieveId($username, $passwd);
+        		$sellprice->datetimelog = idmaker::getDateTime();
+        		
+        		if ($sellprice->validate()) 
+        			$sellprice->save();
+        	}	
+        }
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.

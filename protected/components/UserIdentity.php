@@ -68,7 +68,7 @@ class UserIdentity extends CUserIdentity
       	return $name;	
       }
       
-      private function checkPassword($username, $userpass)
+      public static function checkPassword($username, $userpass)
       {
          $connection=Yii::app()->authdb;
          $command=$connection->createCommand();
@@ -78,7 +78,7 @@ class UserIdentity extends CUserIdentity
          return $command->execute() > 0;
       }
       
-      private function retrieveId($username, $userpass)
+      public static function retrieveId($username, $userpass)
       {
          $connection=Yii::app()->authdb;
          $command=$connection->createCommand();
