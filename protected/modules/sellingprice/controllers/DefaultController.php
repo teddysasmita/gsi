@@ -256,6 +256,8 @@ class DefaultController extends Controller
         		
         		if ($sellprice->validate()) 
         			$sellprice->insert();
+        		
+        		throw new CHttpException(007, print_r($sellprice));
         	}	
         }
 	/**
@@ -297,6 +299,7 @@ class DefaultController extends Controller
         {
         	if ($this->state == 'create') {
         		idmaker::saveRegNum($this->formid, $model->regnum);
+        		
         		$remoteBranches = idmaker::getRegNum('bcast');
         		if ($remoteBranches !== 'NA') {
         			$remoteBranches = explode(',', $remoteBranches);
