@@ -310,7 +310,7 @@ class DefaultController extends Controller
         						'iditem'=>$model->iditem,
         						'normalprice'=>$model->normalprice,
         						'approvalby'=>$model->approvalby
-        					));
+        					), false);
         			}
         		}
         	}
