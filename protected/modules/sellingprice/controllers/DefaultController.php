@@ -317,7 +317,7 @@ class DefaultController extends Controller
         							'normalprice'=>$model->normalprice,
         							'approvalby'=>$model->approvalby
         						)
-        					), false);
+        					));
         			}
         		}
         	}
