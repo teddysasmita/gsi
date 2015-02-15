@@ -253,7 +253,7 @@ class DefaultController extends Controller
                $dataProvider=new CActiveDataProvider('Purchasesstockentries',
                   array(
                      'criteria'=>array(
-                        'order'=>'id desc'
+                        'order'=>'idatetime desc, id desc'
                      )
                   )
                );
