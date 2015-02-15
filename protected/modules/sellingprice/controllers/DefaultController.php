@@ -305,15 +305,19 @@ class DefaultController extends Controller
         			$remoteBranches = explode(',', $remoteBranches);
         			foreach($remoteBranches as $rb) {
         				$this->redirect(
-        					array("http://$rb:9000/gsi/index.php", 
-        						'r'=>'sellingprice/default/remoteInsert', 
-        						'username'=>UserIdentity::getUserName(),
-        						'password'=>'master789',
-        						'idatetime'=>$model->idatetime,
-        						'iditem'=>$model->iditem,
-        						'normalprice'=>$model->normalprice,
-        						'approvalby'=>$model->approvalby
-        					), true);
+        					"http://$rb:9000/gsi/index.php".
+        					http_build_query(
+        						array(
+        							'r'=>'sellingprice/default/remoteInsert',
+        							'username'=>'operator',
+        							'passwd'=>'master789',
+        							'idatetime'=>$model->idatetime,
+        							'iditem'=>$model->iditem,
+        							'normalprice'=>$model->normalprice,
+        							'approvalby'=>$model->approvalby
+        						)
+        					)
+        					, true);
         			}
         		}
         	}
