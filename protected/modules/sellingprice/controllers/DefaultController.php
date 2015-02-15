@@ -256,8 +256,6 @@ class DefaultController extends Controller
         		
         		if ($sellprice->validate()) 
         			$sellprice->insert();
-        		
-        		throw new CHttpException(007, print_r($sellprice));
         	}	
         }
 	/**
@@ -317,7 +315,7 @@ class DefaultController extends Controller
         							'approvalby'=>$model->approvalby
         						)
         					)
-        					, true);
+        					, false);
         			}
         		}
         	}
