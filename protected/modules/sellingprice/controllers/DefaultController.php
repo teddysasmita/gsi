@@ -248,6 +248,7 @@ class DefaultController extends Controller
         		$sellprice = new Sellingprices();
         		$sellprice->id = idmaker::getCurrentID2();
         		$sellprice->idatetime = $idatetime;
+        		$sellprice->iditem = $iditem;
         		$sellprice->normalprice = $normalprice;
         		$sellprice->minprice = $normalprice;
         		$sellprice->approvalby = $approvalby;
@@ -256,6 +257,8 @@ class DefaultController extends Controller
         		
         		if ($sellprice->validate()) 
         			$sellprice->insert();
+        		
+        		throw new CHttpException(707, 'Update is inserted');
         	}	
         }
 	/**
@@ -315,7 +318,7 @@ class DefaultController extends Controller
         							'approvalby'=>$model->approvalby
         						)
         					)
-        					, false);
+        					, true);
         			}
         		}
         	}
