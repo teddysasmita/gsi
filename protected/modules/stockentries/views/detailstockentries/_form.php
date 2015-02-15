@@ -22,6 +22,7 @@ $supplierScript=<<<EOS
       });
 	$('#Detailstockentries_serialnum').change(function() {
    		var myserialnum = $('#Detailstockentries_serialnum').val();
+   		var iditem = $('#Detailstockentries_iditem').val();
    		if (myserialnum !== 'Belum Diterima') {
    			$('#isAccepted').prop('checked', false);
    			
@@ -49,8 +50,8 @@ $supplierScript=<<<EOS
 						}
 					});
 			} else {
-   				$.getJSON('index.php?r=LookUp/checkSerial', {'serialnum': escape(myserialnum), 
-   						'idwh' : $('#idwh').val()},
+   				$.getJSON('index.php?r=LookUp/checkSerial2', {'serialnum': escape(myserialnum), 
+   						'iditem': escape(iditem), 'idwh' : $('#idwh').val()},
    				function(data) {
    					if (data == false) {
    						$('#statusinfo').addClass('money');
@@ -58,10 +59,9 @@ $supplierScript=<<<EOS
    						$('#statusinfo').html('Item bisa diterima');
    						$('#Detailstockentries_status').val('1');
    					} else if (data.avail == '0') {
-   						$('#statusinfo').addClass('money');
-   						$('#statusinfo').removeClass('errorMessage');
-   						$('#statusinfo').html('Item bisa diterima');
-						$('#Detailstockentries_status').val(data.status);
+   						$('#statusinfo').addClass('errorMEssage');
+   						$('#statusinfo').removeClass('money');
+   						$('#statusinfo').html('Nomor seri telah terdaftar');
    					} else if (data.avail == '1') {
    						$('#statusinfo').addClass('errorMessage');
    						$('#statusinfo').removeClass('money');

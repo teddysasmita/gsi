@@ -689,6 +689,26 @@ EOS;
 	
 	}
 	
+	public function actionCheckSerial2($serialnum, $iditem, $idwh)
+	{
+		//$idwh=rawurldecode($idwh);
+		$serialnum=rawurldecode($serialnum);
+	
+		if (!Yii::app()->user->isGuest) {
+			$data=Yii::app()->db->createCommand()
+			->select('iditem, avail, status')
+			->from('wh'.$idwh.' a')
+			->where('a.serialnum = :p_serialnum and a.iditem <> :p_iditem',
+					array(':p_serialnum'=>$serialnum, ':p_iditem'=>$iditem))
+					/*->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum',
+					 array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))*/
+			->queryRow();
+			echo json_encode($data);
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	
+	}
 	public function actionGetExitedItemFromSerial($serialnum, $retrievalnum)
 	{
 		//$invnum = rawurldecode($invnum);
