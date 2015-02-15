@@ -296,7 +296,7 @@ class DefaultController extends Controller
         protected function afterPost(& $model)
         {
         	if ($this->state == 'create') {
-        		$idmaker::saveRegNum($this->formid, $model->regnum);
+        		idmaker::saveRegNum($this->formid, $model->regnum);
         		$remoteBranches = idmaker::getRegNum('bcast');
         		if ($remoteBranches !== 'NA') {
         			$remoteBranches = explode(',', $remoteBranches);
