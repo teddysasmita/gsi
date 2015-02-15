@@ -249,7 +249,7 @@ class DefaultController extends Controller
         		$sellprice->id = idmaker::getCurrentID2();
         		$sellprice->idatetime = $idatetime;
         		$sellprice->iditem = $iditem;
-        		$sellprice->regnum = idmaker::getRegNum($formid);
+        		$sellprice->regnum = idmaker::getRegNum($this->formid);
         		$sellprice->normalprice = $normalprice;
         		$sellprice->minprice = $normalprice;
         		$sellprice->approvalby = $approvalby;
@@ -258,7 +258,7 @@ class DefaultController extends Controller
         		
         		if ($sellprice->validate()) 
         			$sellprice->insert();
-        		idmaker::saveRegNum($formid, $sellprice->regnum);
+        		idmaker::saveRegNum($this->formid, $sellprice->regnum);
         	}	
         }
 	/**
@@ -317,7 +317,7 @@ class DefaultController extends Controller
         							'normalprice'=>$model->normalprice,
         							'approvalby'=>$model->approvalby
         						)
-        					));
+        					), false);
         			}
         		}
         	}
