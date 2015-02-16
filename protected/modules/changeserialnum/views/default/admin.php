@@ -1,6 +1,6 @@
 <?php
-/* @var $this AcquisitionsController */
-/* @var $model Acquisitions */
+/* @var $this ChangeserialnumController */
+/* @var $model Changeserialnum */
 
 $this->breadcrumbs=array(
       'Proses'=>array('/site/proses'),
@@ -19,7 +19,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#acquisitions-grid').yiiGridView('update', {
+	$('#changeserialnum-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -27,7 +27,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Akuisisi Barang dan Nomor Serial</h1>
+<h1>Perubahan Nomor Serial</h1>
 
 <p>
 You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
@@ -42,13 +42,15 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 </div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'acquisitions-grid',
+	'id'=>'changeserialnum-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
 		'regnum',
 		'idatetime',
+		'oldserialnum',
+		'newserialnum',
 		/*
 		'discount',
 		'status',

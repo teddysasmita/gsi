@@ -1,5 +1,5 @@
 <?php
-/* @var $this AcquisitionsController */
+/* @var $this ChangeserialnumController */
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
@@ -17,7 +17,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>Akuisisi Barang dan Nomor Seri</h1>
+<h1>Perubahan Nomor Seri</h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,

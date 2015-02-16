@@ -1,6 +1,6 @@
 <?php
-/* @var $this AcquisitionsController */
-/* @var $model Acquisitions */
+/* @var $this ChangeserialnumController */
+/* @var $model Changeserialnum */
 /* @var $form CActiveForm */
 ?>
 
@@ -26,16 +26,21 @@
 		<?php echo $form->textField($model,'idatetime',array('size'=>19,'maxlength'=>19)); ?>
 	</div>
 
-      <div class="row">
-		<?php echo $form->label($model,'idwarehouse'); ?>
-		<?php echo $form->textField($model,'idwarehouse',array('size'=>21,'maxlength'=>21)); ?>
-	</div>
-	
-	<div class="row">
+    <div class="row">
 		<?php echo $form->label($model,'iditem'); ?>
 		<?php echo $form->textField($model,'iditem',array('size'=>21,'maxlength'=>21)); ?>
 	</div>
-
+    
+    <div class="row">
+		<?php echo $form->label($model,'oldserialnum'); ?>
+		<?php echo $form->textField($model,'oldserialnum',array('size'=>25,'maxlength'=>50)); ?>
+	</div>
+	
+	<div class="row">
+		<?php echo $form->label($model,'newserialnum'); ?>
+		<?php echo $form->textField($model,'newserialnum',array('size'=>25,'maxlength'=>50)); ?>
+	</div>
+	
 	<div class="row">
 		<?php echo $form->label($model,'userlog'); ?>
 		<?php echo $form->textField($model,'userlog',array('size'=>21,'maxlength'=>21)); ?>

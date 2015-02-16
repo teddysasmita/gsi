@@ -1,6 +1,6 @@
 <?php
-/* @var $this AcquisitionsController */
-/* @var $data Acquisitions */
+/* @var $this ChangeserialnumController */
+/* @var $data Changeserialnum */
 ?>
 
 <div class="view">
@@ -13,11 +13,15 @@
 	<?php echo CHtml::encode($data->idatetime); ?>
 	<br />
 
-      <b><?php echo CHtml::encode($data->getAttributeLabel('idwarehouse')); ?>:</b>
-	<?php echo CHtml::encode(lookup::WarehouseNameFromWarehouseID($data->idwarehouse)); ?>
+    <b><?php echo CHtml::encode($data->getAttributeLabel('oldserialnum')); ?>:</b>
+	<?php echo CHtml::encode($data->oldserialnum); ?>
 	<br />
 
-      <b><?php echo CHtml::encode($data->getAttributeLabel('userlog')); ?>:</b>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('newserialnum')); ?>:</b>
+	<?php echo CHtml::encode($data->newserialnum); ?>
+	<br />
+	
+	<b><?php echo CHtml::encode($data->getAttributeLabel('userlog')); ?>:</b>
 	<?php echo CHtml::encode(lookup::UserNameFromUserID($data->userlog)); ?>
 	<br />
 

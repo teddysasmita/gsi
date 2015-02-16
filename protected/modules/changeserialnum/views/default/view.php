@@ -1,6 +1,6 @@
 <?php
-/* @var $this AcquisitionsController */
-/* @var $model Acquisitions */
+/* @var $this ChangeserialnumController */
+/* @var $model Changeserialnum */
 
 $this->breadcrumbs=array(
    'Proses'=>array('/site/proses'),
@@ -15,7 +15,7 @@ $this->menu=array(
 	array('label'=>'Pencarian Data', 'url'=>array('admin')),
 	array('label'=>'Sejarah', 'url'=>array('history', 'id'=>$model->id)),
 	array('label'=>'Data Detil yang dihapus', 
-         'url'=>array('/purchasesorder/detailacquisitions/deleted', 'id'=>$model->id)),
+         'url'=>array('/purchasesorder/detailchangeserialnum/deleted', 'id'=>$model->id)),
 	array('label'=>'Ringkasan', 'url'=>array('summary', 'id'=>$model->id)),
 	array('label'=>'Cetak', 'url'=>array('printsummary', 'id'=>$model->id)),
 );
@@ -33,10 +33,8 @@ $this->menu=array(
 			'name'=>'iditem',
 			'value'=>lookup::ItemNameFromItemID($model->iditem)
 		),
-		array(
-			'name'=>'idwarehouse',
-			'value'=>lookup::WarehouseNameFromWarehouseID($model->idwarehouse)
-		),
+		oldserialnum,
+		newserialnum,
 		array(
 			'name'=>'userlog',
 			'value'=>lookup::UserNameFromUserID($model->userlog),
@@ -45,38 +43,3 @@ $this->menu=array(
 	),
 )); ?>
 
-<?php 
-   $count=Yii::app()->db->createCommand("select count(*) from detailacquisitions where id='$model->id'")
-      ->queryScalar();
-   $sql="select * from detailacquisitions where id='$model->id'";
-
-   $dataProvider=new CSqlDataProvider($sql,array(
-          'totalItemCount'=>$count,
-          ));
-   $this->widget('zii.widgets.grid.CGridView', array(
-         'dataProvider'=>$dataProvider,
-         'columns'=>array(
-            array(
-              'header'=>'Nomor Seri',
-              'name'=>'serialnum',
-            ),
-			array(
-				'header'=>'Kondisi',
-				'name'=>'avail',
-				'value'=>"lookup::StockAvailName(\$data['avail'])"
-			),
-            /*array(
-                  'class'=>'CButtonColumn',
-                  'buttons'=> array(
-                      'delete'=>array(
-                       'visible'=>'false'
-                      ),
-                     'update'=>array(
-                        'visible'=>'false'
-                     )
-                  ),
-                  'viewButtonUrl'=>"Action::decodeViewDetailAcquisitionsUrl(\$data)",
-              )*/
-         ),
-   ));
- ?>

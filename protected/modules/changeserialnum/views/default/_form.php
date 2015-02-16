@@ -1,6 +1,6 @@
-   <?php
-/* @var $this AcquisitionsController */
-/* @var $model Acquisitions */
+   <?php	
+/* @var $this ChangeserialnumController */
+/* @var $model Changeserialnum */
 /* @var $form CActiveForm */
 ?>
 
@@ -8,14 +8,7 @@
 
 <?php
    $transScript=<<<EOS
-		$('.updateButton').click(
-		function(evt) {
-			$('#command').val('updateDetail');
-			$('#detailcommand').val(this.href);
-			$('#acquisitions-form').submit();
-		});  
-
-		$('#Acquisitions_itemname').focus(function(){
+		$('#Changeserialnum_itemname').focus(function(){
 			$('#ItemDialog').dialog('open');
       	});
       
@@ -33,32 +26,25 @@
                   	}
                	})
          	}
-      	);
 		$('#dialog-item-select').click(
 			function(){
 				$('#dialog-item-name').val(unescape($('#dialog-item-select').val()));
 			}
-		);
-   
-		$('#Acquisitions_qty').change(
-   		function(event) {
-			$('#command').val('setQty');
-			$('#acquisitions-form').submit();
-		});
+		);   
 EOS;
    Yii::app()->clientScript->registerScript("transScript", $transScript, CClientscript::POS_READY);
 
    if($command=='create') 
       $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'acquisitions-form',
+	'id'=>'changeserialnum-form',
 	'enableAjaxValidation'=>true,
-      'action'=>Yii::app()->createUrl("/acquisition/default/create")
+      'action'=>Yii::app()->createUrl("/changeserialnum/default/create")
       ));
    else if($command=='update')
       $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'acquisitions-form',
+	'id'=>'changeserialnum-form',
 	'enableAjaxValidation'=>true,
-      'action'=>Yii::app()->createUrl("/acquisition/default/update", array('id'=>$model->id))
+      'action'=>Yii::app()->createUrl("/changeserialnum/default/update", array('id'=>$model->id))
       ));
   ?>
 
@@ -68,7 +54,6 @@ EOS;
         
       <?php 
         echo CHtml::hiddenField('command', '', array('id'=>'command'));
-        echo CHtml::hiddenField('detailcommand', '', array('id'=>'detailcommand'));
         echo $form->hiddenField($model, 'id');
         echo $form->hiddenField($model, 'userlog');
         echo $form->hiddenField($model, 'datetimelog');
@@ -80,7 +65,7 @@ EOS;
 		<?php echo $form->labelEx($model,'idatetime'); ?>
             <?php
                $this->widget('zii.widgets.jui.CJuiDatePicker',array(
-                  'name'=>'Acquisitions[idatetime]',
+                  'name'=>'Changeserialnum[idatetime]',
                      // additional javascript options for the date picker plugin
                   'options'=>array(
                      'showAnim'=>'fold',
@@ -97,25 +82,9 @@ EOS;
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'idwarehouse'); ?>
-		<?php
-			$warehouses = lookup::WarehouseNameFromIpAddr($_SERVER['REMOTE_ADDR']);
-         	if (count($warehouses) > 1) {
-				$data = CHtml::listData($warehouses, 'id', 'code');
-         		echo CHtml::dropDownList('Acquisitions[idwarehouse]', '', $data, 
-					array('empty'=>'Harap Pilih'));
-         	} else {
-				echo CHtml::hiddenField('Acquisitions[idwarehouse]', $warehouses[0]['id']);
-				echo CHtml::label($warehouses[0]['code'],'false', array('class'=>'money')); 
-			}
-		?>
-		<?php echo $form->error($model,'idwarehouse'); ?>
-	</div>
-	
-	<div class="row">
 		<?php echo $form->labelEx($model,'iditem'); ?>
 		<?php 
-               echo CHtml::textField('Acquisitions_itemname', lookup::ItemNameFromItemID($model->iditem) , array('size'=>50));   
+               echo CHtml::textField('Changeserialnum_itemname', lookup::ItemNameFromItemID($model->iditem) , array('size'=>50));   
                $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
                   'id'=>'ItemDialog',
                   'options'=>array(
@@ -126,10 +95,10 @@ EOS;
                       'modal'=>true,
                       'buttons'=>array(
                           array('text'=>'Ok', 'click'=>'js:function(){
-                             $(\'#Acquisitions_itemname\').val($(\'#dialog-item-name\').val());
+                             $(\'#Changeserialnum_itemname\').val($(\'#dialog-item-name\').val());
                              $.get(\'index.php?r=LookUp/getItemID\',{ name: encodeURI($(\'#dialog-item-name\').val()) },
                                  function(data) {
-                                    $(\'#Acquisitions_iditem\').val(data);
+                                    $(\'#Changeserialnum_iditem\').val(data);
                                  })
                              $(this).dialog("close");
                            }'),
@@ -155,53 +124,22 @@ EOS;
 	</div>
 	
 	<div class="row">
-		<?php echo $form->labelEx($model,'qty'); ?>
-		<?php echo $form->textField($model,'qty'); ?>
-		<?php echo $form->error($model,'qty'); ?>
+		<?php echo $form->labelEx($model,'oldserialnum'); ?>
+		<?php echo $form->textField($model,'oldserialnum'); ?>
+		<?php echo $form->error($model,'oldserialnum'); ?>
 	</div>
 	
+	<div class="row">
+		<?php echo CHtml::label('Nomor Seri Lama', false); ?>
+		<?php echo CHtml::tag("span", array('id'=>'serialstatus'); ?>
+	</div>
 	
-<?php 
-    if (isset(Yii::app()->session['Detailacquisitions'])) {
-       $rawdata=Yii::app()->session['Detailacquisitions'];
-       $count=count($rawdata);
-    } else {
-       $count=Yii::app()->db->createCommand("select count(*) from detailacquisitions where id='$model->id'")->queryScalar();
-       $sql="select * from detailacquisitions where id='$model->id'";
-       $rawdata=Yii::app()->db->createCommand($sql)->queryAll ();
-    }
-    $dataProvider=new CArrayDataProvider($rawdata, array(
-          'totalItemCount'=>$count,
-		  'keyField'=>'iddetail',
-    ));
-    $this->widget('zii.widgets.grid.CGridView', array(
-            'dataProvider'=>$dataProvider,
-            'columns'=>array(
-              array(
-                  'header'=>'Nomor Seri',
-                  'name'=>'serialnum',
-              ),
-				array(
-					'header'=>'Status',
-					'name'=>'avail',
-					'value'=>"lookup::StockAvailName(\$data['avail'])",
-				),
-              array(
-                  'class'=>'CButtonColumn',
-                  'buttons'=> array(
-                      'delete'=>array(
-                       'visible'=>'false'
-                      ),
-                     'view'=>array(
-                        'visible'=>'false'
-                     )
-                  ),
-				'updateButtonOptions'=>array("class"=>'updateButton'),
-                  'updateButtonUrl'=>"Action::decodeUpdateDetailAcquisitionsUrl(\$data)",
-              )
-          ),
-    ));
-?>
+	<div class="row">
+		<?php echo $form->labelEx($model,'newserialnum'); ?>
+		<?php echo $form->textField($model,'newserialnum'); ?>
+		<?php echo $form->error($model,'newserialnum'); ?>
+	</div>
+	
 
    <div class="row buttons">
       <?php echo CHtml::submitButton(ucfirst($command)); ?>

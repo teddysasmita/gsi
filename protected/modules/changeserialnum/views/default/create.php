@@ -1,6 +1,6 @@
 <?php
-/* @var $this AcquisitionsController */
-/* @var $model Acquisitions */
+/* @var $this ChangeserialnumController */
+/* @var $model Changeserialnum */
 
 $this->breadcrumbs=array(
       'Proses'=>array('/site/proses'),
@@ -19,18 +19,11 @@ $this->menu=array(
 );
 
 $jq=<<<EOH
-   $('#adddetail').click(function(event){
-     var mainform;
-     var hiddenvar;
-     mainform=$('#acquisitions-form');
-     $('#command').val('adddetail');
-     mainform.submit();
-     event.preventDefault();
-   });
+   
 EOH;
 Yii::app()->clientScript->registerScript('myscript', $jq, CClientScript::POS_READY);
 ?>
 
-<h1>Akuisisi Barang dan Nomor Seri</h1>
+<h1>Perubahan Nomor Seri</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model, 'id'=>$model->id, 'command'=>'create')); ?>

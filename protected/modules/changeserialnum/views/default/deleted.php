@@ -1,6 +1,6 @@
 <?php
-/* @var $this AcquisitionsController */
-/* @var $model Acquisitions */
+/* @var $this ChangeserialnumController */
+/* @var $model Changeserialnum */
 
 $this->breadcrumbs=array(
       'Proses'=>array('/site/proses'),
@@ -15,7 +15,7 @@ $this->menu=array(
 
 ?>
 
-<h1>Akuisisi Barang dan Nomor Seri</h1>
+<h1>Perubahan Nomor Seri</h1>
 
 <p>
 You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
@@ -25,7 +25,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 <?php
     
     $data=Yii::app()->tracker->createCommand()->
-       select('a.*')->from('acquisitions a')->join('userjournal b', 'b.id=a.idtrack')
+       select('a.*')->from('changeserialnum a')->join('userjournal b', 'b.id=a.idtrack')
        ->where('b.action=:action', array(':action'=>'d'))->queryAll();
     $ap=new CArrayDataProvider($data);
 ?>
@@ -33,7 +33,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 
 <?php
  $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'acquisitions-grid',
+	'id'=>'changeserialnum-grid',
 	'dataProvider'=>$ap,
 	'columns'=>array(
 		'id',
@@ -59,7 +59,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
               'visible'=>'false',
             ),
          ),
-         'updateButtonUrl'=>"Action::decodeRestoreDeletedAcquisitionsUrl(\$data)",
+         'updateButtonUrl'=>"Action::decodeRestoreDeletedChangeserialnumUrl(\$data)",
 		),
 	),
 )); ?>

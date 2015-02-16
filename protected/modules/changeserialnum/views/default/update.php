@@ -1,6 +1,6 @@
 <?php
-/* @var $this AcquisitionsController */
-/* @var $model Acquisitions */
+/* @var $this ChangeserialnumController */
+/* @var $model Changeserialnum */
 
 $this->breadcrumbs=array(
       'Proses'=>array('/site/proses'),
@@ -10,16 +10,16 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	//array('label'=>'List Acquisitions', 'url'=>array('index')),
-	//array('label'=>'Create Acquisitions', 'url'=>array('create')),
-	//array('label'=>'View Acquisitions', 'url'=>array('view', 'id'=>$model->id)),
-	//array('label'=>'Manage Acquisitions', 'url'=>array('admin')),
-    array('label'=>'Tambah Detil', 'url'=>array('detailacquisitions/create', 
+	//array('label'=>'List Changeserialnum', 'url'=>array('index')),
+	//array('label'=>'Create Changeserialnum', 'url'=>array('create')),
+	//array('label'=>'View Changeserialnum', 'url'=>array('view', 'id'=>$model->id)),
+	//array('label'=>'Manage Changeserialnum', 'url'=>array('admin')),
+    array('label'=>'Tambah Detil', 'url'=>array('detailchangeserialnum/create', 
        'id'=>$model->id, 'command'=>'update', 'regnum'=>$model->regnum),
           'linkOptions'=>array('id'=>'adddetail')), 
 );
 ?>
 
-<h1>Akuisisi Barang dan Nomor Seri</h1>
+<h1>Perubahan Nomor Seri</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model, 'command'=>'update')); ?>
