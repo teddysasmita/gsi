@@ -26,6 +26,8 @@
                   	}
                	})
          	}
+		);
+		
 		$('#dialog-item-select').click(
 			function(){
 				$('#dialog-item-name').val(unescape($('#dialog-item-select').val()));
