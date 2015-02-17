@@ -748,7 +748,7 @@ EOS;
 		};
 	}
 	
-	public function actionCheckItemSerial2($serialnum, $iditem)
+	public function actionCheckItemSerial2($iditem, $serialnum)
 	{
 		//$idwh=rawurldecode($idwh);
 		$serialnum=rawurldecode($serialnum);
