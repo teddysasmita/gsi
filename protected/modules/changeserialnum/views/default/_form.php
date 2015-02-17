@@ -35,8 +35,8 @@
 		);   
    
 		$('#findItem').click( function() {
-			$.getJSON('index.php?r=LookUp/checkItemSerial2',{ iditem: $('#Checkserialnum_iditem').val(),
-				serialnum: $('#Checkserialnum_oldserialnum').val() },
+			$.getJSON('index.php?r=LookUp/checkItemSerial2',{ iditem: $('#Changeserialnum_iditem').val(),
+				serialnum: $('#Changeserialnum_oldserialnum').val() },
                	function(data) {
                   	if (data > 0) {
 						$('#status').val('good');
