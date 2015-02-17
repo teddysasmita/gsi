@@ -79,7 +79,7 @@ EOS;
         echo $form->hiddenField($model, 'datetimelog');
         echo $form->hiddenField($model, 'regnum');
         echo $form->hiddenField($model, 'iditem');
-        echo CHtml::hiddenField('status');
+        echo CHtml::hiddenField('status', '', array('id'=>'status'));
       ?>
         
 	<div class="row">
