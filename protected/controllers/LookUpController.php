@@ -762,7 +762,7 @@ EOS;
 					/*->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum',
 					 array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))*/
 				->queryScalar();
-			echo json_encode(100);
+			echo json_encode($data);
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		};
