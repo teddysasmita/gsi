@@ -31,6 +31,24 @@
 				$('#dialog-item-name').val(unescape($('#dialog-item-select').val()));
 			}
 		);   
+   
+		$('#findItem').click( function() {
+			$.getJSON('index.php?r=LookUp/checkItemSerial2',{ iditem: $('#Checkserialnum_iditem').val(),
+				serialnum: $('#Checkserialnum_oldserialnum').val() },
+               	function(data) {
+                  	if (data > 0) {
+						$('#status').val('good');
+						$('#serialstatus').val('Item dgn nomor seri tersebut terdaftar');
+						$('#serialstatus').addClass('money');
+					} else {
+						$('#status').val('bad');
+						$('#serialstatus').val('Item dgn nomor seri tersebut TIDAK terdaftar');
+						$('#serialstatus').addClass('errorMessage');
+					};
+               	})
+		
+		});
+   
 EOS;
    Yii::app()->clientScript->registerScript("transScript", $transScript, CClientscript::POS_READY);
 
@@ -59,6 +77,7 @@ EOS;
         echo $form->hiddenField($model, 'datetimelog');
         echo $form->hiddenField($model, 'regnum');
         echo $form->hiddenField($model, 'iditem');
+        echo CHtml::hiddenField('status');
       ?>
         
 	<div class="row">
@@ -125,13 +144,17 @@ EOS;
 	
 	<div class="row">
 		<?php echo $form->labelEx($model,'oldserialnum'); ?>
-		<?php echo $form->textField($model,'oldserialnum'); ?>
+		<?php echo $form->textField($model,'oldserialnum'); 
+			echo CHtml::button('Cari', array('id'=>'findItem'));
+		?>
 		<?php echo $form->error($model,'oldserialnum'); ?>
 	</div>
 	
+	
+	
 	<div class="row">
 		<?php echo CHtml::label('Nomor Seri Lama', false); ?>
-		<?php echo CHtml::tag("span", array('id'=>'serialstatus'); ?>
+		<?php echo CHtml::tag("span", array('id'=>'serialstatus')); ?>
 	</div>
 	
 	<div class="row">

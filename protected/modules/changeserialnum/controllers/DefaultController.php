@@ -96,7 +96,7 @@ class DefaultController extends Controller
                    	if($_POST['command']=='adddetail') {
                          $this->redirect(array('detailchangeserialnum/create',
                             'id'=>$model->id));
-					} else if ($_POST['command']=='setQty') {
+					} else if ($_POST['command']=='findItem') {
                          $this->loadQty($model);
 					}
 				}

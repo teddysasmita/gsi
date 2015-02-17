@@ -709,6 +709,7 @@ EOS;
 		};
 	
 	}
+	
 	public function actionGetExitedItemFromSerial($serialnum, $retrievalnum)
 	{
 		//$invnum = rawurldecode($invnum);
@@ -745,5 +746,26 @@ EOS;
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		};
+	}
+	
+	public function actionCheckItemSerial2($serialnum, $iditem)
+	{
+		//$idwh=rawurldecode($idwh);
+		$serialnum=rawurldecode($serialnum);
+	
+		if (!Yii::app()->user->isGuest) {
+			$data=Yii::app()->db->createCommand()
+				->select('count(*)')
+				->from('detailstockentries')
+				->where('a.serialnum = :p_serialnum and a.iditem <> :p_iditem',
+					array(':p_serialnum'=>$serialnum, ':p_iditem'=>$iditem))
+					/*->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum',
+					 array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))*/
+				->queryScalar();
+			echo json_encode($data);
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	
 	}
 }
