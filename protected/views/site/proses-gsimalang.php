@@ -45,6 +45,7 @@ $this->pageTitle=Yii::app()->name;
 <h3><?php echo CHtml::link('Barang Rusak', Yii::app()->createUrl('stockdamage'))?></h3>
 <h3><?php echo CHtml::link('Akuisisi Barang dan Nomor Seri', Yii::app()->createUrl('acquisition'))?></h3>
 <h3><?php echo CHtml::link('Akuisisi Barang TANPA Nomor Seri', Yii::app()->createUrl('acquisitionnsn'))?></h3>
+<h3><?php echo CHtml::link('Koreksi Nomor Seri Barang', Yii::app()->createUrl('changeserialnum'))?></h3>
 
 <h2>Bagian Keuangan</h2>
 <h3><?php echo CHtml::link('Penentuan Harga Pokok Opname', Yii::app()->createUrl('inventorycosting'))?></h3>

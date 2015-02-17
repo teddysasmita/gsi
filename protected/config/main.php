@@ -75,7 +75,8 @@ return array(
 			'itemcodeprint',
 			'cashouts',
 			'expenses', 
-			'cashboxes'
+			'cashboxes',
+			'changeserialnum'
         ),
 
         
