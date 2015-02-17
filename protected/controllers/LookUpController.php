@@ -757,7 +757,7 @@ EOS;
 			$data=Yii::app()->db->createCommand()
 				->select('count(*)')
 				->from('detailstockentries')
-				->where('a.serialnum = :p_serialnum and a.iditem <> :p_iditem',
+				->where('serialnum = :p_serialnum and iditem <> :p_iditem',
 					array(':p_serialnum'=>$serialnum, ':p_iditem'=>$iditem))
 					/*->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum',
 					 array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))*/
