@@ -38,7 +38,7 @@
 			$.getJSON('index.php?r=LookUp/checkItemSerial2',{ iditem: $('#Changeserialnum_iditem').val(),
 				serialnum: $('#Changeserialnum_oldserialnum').val() },
                	function(data) {
-                  	if (Number(data) > 0) {
+                  	if (data !== '0') {
 						$('#status').val('good');
 						$('#serialstatus').val('Item dgn nomor seri tersebut terdaftar');
 						$('#serialstatus').addClass('money');
