@@ -40,11 +40,11 @@
                	function(data) {
                   	if (data !== '0') {
 						$('#status').val('good');
-						$('#serialstatus').val('Item dgn nomor seri tersebut terdaftar');
+						$('#serialstatus').html('Item dgn nomor seri tersebut terdaftar');
 						$('#serialstatus').addClass('money');
 					} else {
 						$('#status').val('bad');
-						$('#serialstatus').val('Item dgn nomor seri tersebut TIDAK terdaftar');
+						$('#serialstatus').html('Item dgn nomor seri tersebut TIDAK terdaftar');
 						$('#serialstatus').addClass('errorMessage');
 					};
                	})
