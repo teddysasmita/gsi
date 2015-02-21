@@ -45,33 +45,32 @@ class DefaultController extends Controller
 	 */
 	public function actionCreate()
 	{
-             if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
-                    Yii::app()->user->id))  {   
-                $this->state='create';
-                $this->trackActivity('c');    
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
+			Yii::app()->user->id))  {   
+			$this->state='create';
+			$this->trackActivity('c');    
                     
-                $model=new Sellingprices;
-                $this->afterInsert($model);
+			$model=new Sellingprices;
+			$this->afterInsert($model);
                 
 		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
+			$this->performAjaxValidation($model);
 
-		if(isset($_POST['yt0']))
-		{
-			$model->attributes=$_POST['Sellingprices'];
-                        $this->beforePost($model);
-			if($model->save()) {
-                            $this->afterPost($model);
-                            $this->redirect(array('view','id'=>$model->id));                 
-                        }    
-        }
+			if(isset($_POST['yt0'])) {
+				$model->attributes=$_POST['Sellingprices'];
+				$this->beforePost($model);
+				if($model->save()) {
+					$this->afterPost($model);
+					$this->redirect(array('view','id'=>$model->id));                 
+				}    
+        	}
 
-		$this->render('create',array(
-			'model'=>$model,
-		));
-             } else {
-                throw new CHttpException(404,'You have no authorization for this operation.');
-             }
+			$this->render('create',array(
+				'model'=>$model,
+			));
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		}
 	}
 
 	/**

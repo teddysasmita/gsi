@@ -336,7 +336,7 @@ class DefaultController extends Controller
         					"http://$rb:9000/gsi/index.php?".
         					http_build_query(
         						array(
-        							'r'=>'items/default/remoteInsert',
+        							'r'=>'item/default/remoteInsert',
         							'username'=>'operator',
         							'passwd'=>'master789',
         							'id'=>$model->id,
@@ -364,7 +364,7 @@ class DefaultController extends Controller
         					"http://$rb:9000/gsi/index.php?".
         					http_build_query(
         						array(
-        							'r'=>'items/default/remoteUpdate',
+        							'r'=>'item/default/remoteUpdate',
         							'username'=>'operator',
         							'passwd'=>'master789',
         							'id'=>$model->id,
