@@ -245,6 +245,50 @@ class DefaultController extends Controller
             }
         }
         
+        public function actionRemoteInsert($id, $code, $type, $name, $brand, $objects, 
+        	$model, $attribute, $userlog, $datetimelog, $url)
+        {
+        	if (UserIdentity::checkPassword($username, $passwd)) {
+        		$item = new Items();
+        		$item->id = $id;
+        		$item->code = $code;
+        		$item->type = $type;
+        		$item->name = $name;
+        		$item->brand = $brand;
+        		$item->$objects = $objects;
+        		$item->model = $model;
+        		$item->attribute = $attribute;
+        		$item->userlog = $userlog;
+        		$item->datetimelog = $datetimelog;
+        
+        		if ($item->validate())
+        			$item->insert();
+        		$this->redirect($url);
+        	}
+        }
+        
+        public function actionRemoteUpdate($id, $code, $type, $name, $brand, $objects,
+        		$model, $attribute, $userlog, $datetimelog, $url)
+        {
+        	if (UserIdentity::checkPassword($username, $passwd)) {
+        		$item = Items::model()->findAllByPk($id);
+        		$item->id = $id;
+        		$item->code = $code;
+        		$item->type = $type;
+        		$item->name = $name;
+        		$item->brand = $brand;
+        		$item->$objects = $objects;
+        		$item->model = $model;
+        		$item->attribute = $attribute;
+        		$item->userlog = $userlog;
+        		$item->datetimelog = $datetimelog;
+        
+        		if ($item->validate())
+        			$item->save();
+        		$this->redirect($url);
+        	}
+        }
+        
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
@@ -282,7 +326,63 @@ class DefaultController extends Controller
         
         protected function afterPost(& $model)
         {
-            
+        	if ($this->state == 'create') {
+        		$remoteBranches = idmaker::getInformation('bcast');
+        		if ($remoteBranches !== 'NA') {
+        			$remoteBranches = explode(',', $remoteBranches);
+        			$myUrl = $this->createAbsoluteUrl('view', array('id'=>$model->id));
+        			foreach($remoteBranches as $rb) {
+        				$this->redirect(
+        					"http://$rb:9000/gsi/index.php?".
+        					http_build_query(
+        						array(
+        							'r'=>'items/default/remoteInsert',
+        							'username'=>'operator',
+        							'passwd'=>'master789',
+        							'id'=>$model->id,
+        							'code'=>$model->code,
+        							'type'=>$model->type,
+        							'name'=>$model->name,
+        							'brand'=>$model->brand,
+        							'objects'=>$model->objects,
+        							'model'=> $model->model,
+        							'attribute'=>$model->attribute,
+        							'userlog'=>$model->userlog,
+        							'datetimelog'=>$model->datetimelog,
+        							'url'=>$myUrl
+        						)
+        					));
+        			}
+        		}
+        	} else if ($this->state == 'update') {
+        		$remoteBranches = idmaker::getInformation('bcast');
+        		if ($remoteBranches !== 'NA') {
+        			$remoteBranches = explode(',', $remoteBranches);
+        			$myUrl = $this->createAbsoluteUrl('view', array('id'=>$model->id));
+        			foreach($remoteBranches as $rb) {
+        				$this->redirect(
+        					"http://$rb:9000/gsi/index.php?".
+        					http_build_query(
+        						array(
+        							'r'=>'items/default/remoteUpdate',
+        							'username'=>'operator',
+        							'passwd'=>'master789',
+        							'id'=>$model->id,
+        							'code'=>$model->code,
+        							'type'=>$model->type,
+        							'name'=>$model->name,
+        							'brand'=>$model->brand,
+        							'objects'=>$model->objects,
+        							'model'=> $model->model,
+        							'attribute'=>$model->attribute,
+        							'userlog'=>$model->userlog,
+        							'datetimelog'=>$model->datetimelog,
+        							'url'=>$myUrl
+        						)
+        					));
+        			}
+        		}
+        	} 
         }
         
         protected function beforePost(& $model)

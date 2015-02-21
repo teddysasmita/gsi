@@ -155,7 +155,6 @@ EOS;
 	
 	
 	<div class="row">
-		<?php echo CHtml::label('Nomor Seri Lama', false); ?>
 		<?php echo CHtml::tag("span", array('id'=>'serialstatus')); ?>
 	</div>
 	
