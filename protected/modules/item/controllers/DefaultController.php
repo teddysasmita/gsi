@@ -249,7 +249,7 @@ class DefaultController extends Controller
         	$model, $attribute, $userlog, $datetimelog, $url)
         {
         	if (UserIdentity::checkPassword($username, $passwd)) {
-        		$item = new Items();
+        		$item = new Items;
         		$item->id = $id;
         		$item->code = $code;
         		$item->type = $type;
@@ -263,7 +263,7 @@ class DefaultController extends Controller
         
         		if ($item->validate())
         			$item->insert();
-        		$this->redirect($url);
+        		//$this->redirect($url);
         	}
         }
         
