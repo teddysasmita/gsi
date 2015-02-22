@@ -255,7 +255,7 @@ class DefaultController extends Controller
         		$item->type = $type;
         		$item->name = $name;
         		$item->brand = $brand;
-        		$item->$objects = $objects;
+        		$item->objects = $objects;
         		$item->model = $model;
         		$item->attribute = $attribute;
         		$item->userlog = $userlog;
@@ -277,7 +277,7 @@ class DefaultController extends Controller
         		$item->type = $type;
         		$item->name = $name;
         		$item->brand = $brand;
-        		$item->$objects = $objects;
+        		$item->objects = $objects;
         		$item->model = $model;
         		$item->attribute = $attribute;
         		$item->userlog = $userlog;
