@@ -245,7 +245,7 @@ class DefaultController extends Controller
             }
         }
         
-        public function actionRemoteInsert($id, $code, $type, $name, $brand, $objects, 
+        public function actionRemoteInsert($username, $passwd, $id, $code, $type, $name, $brand, $objects, 
         	$model, $attribute, $userlog, $datetimelog, $url)
         {
         	if (UserIdentity::checkPassword($username, $passwd)) {
@@ -267,7 +267,7 @@ class DefaultController extends Controller
         	}
         }
         
-        public function actionRemoteUpdate($id, $code, $type, $name, $brand, $objects,
+        public function actionRemoteUpdate($username, $passwd, $id, $code, $type, $name, $brand, $objects,
         		$model, $attribute, $userlog, $datetimelog, $url)
         {
         	if (UserIdentity::checkPassword($username, $passwd)) {
