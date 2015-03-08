@@ -271,7 +271,7 @@ class DefaultController extends Controller
         		$model, $attribute, $userlog, $datetimelog, $url)
         {
         	if (UserIdentity::checkPassword($username, $passwd)) {
-        		$item = Items::model()->findAllByPk($id);
+        		$item = Items::model()->findByPk($id);
         		$item->id = $id;
         		$item->code = $code;
         		$item->type = $type;
