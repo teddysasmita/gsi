@@ -331,6 +331,7 @@ class DefaultController extends Controller
         		if ($remoteBranches !== 'NA') {
         			$remoteBranches = explode(',', $remoteBranches);
         			$myUrl = $this->createAbsoluteUrl('view', array('id'=>$model->id));
+        			if (count($remoteBranches))
         			foreach($remoteBranches as $rb) {
         				$this->redirect(
         					"http://$rb:9000/gsi/index.php?".
@@ -359,6 +360,7 @@ class DefaultController extends Controller
         		if ($remoteBranches !== 'NA') {
         			$remoteBranches = explode(',', $remoteBranches);
         			$myUrl = $this->createAbsoluteUrl('view', array('id'=>$model->id));
+        			if (count($remoteBranches))
         			foreach($remoteBranches as $rb) {
         				$this->redirect(
         					"http://$rb:9000/gsi/index.php?".
