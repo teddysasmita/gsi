@@ -399,6 +399,9 @@ class DefaultController extends Controller
                 move_uploaded_file($tmpfile, $newfile);
                 $model->picture=$_FILES['Items']['name']['picture'];
             }
+            
+            if ($this->state == 'create')
+            	$model->regnum=$idmaker->getRegNum($this->formid);
             /*print_r($_FILES);
             die();*/
         }

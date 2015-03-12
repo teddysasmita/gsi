@@ -537,6 +537,8 @@ class DefaultController extends Controller
          $this->setStatusPO($model->idpurchaseorder,
             Yii::app()->session['Detailpurchasesstockentries']);
          */
+     	if ($this->state == 'create')
+     		idmaker::saveRegNum($this->formid, $model->regnum);
      }
 
      protected function beforePost(& $model)
@@ -546,6 +548,9 @@ class DefaultController extends Controller
          $model->userlog=Yii::app()->user->id;
          $model->datetimelog=$idmaker->getDateTime();
          //$model->regnum=$idmaker->getRegNum($this->formid);
+         
+         if ($this->state == 'create')
+         	$model->regnum=str_pad($idmaker->getRegNum($this->formid), 8, '0', STR_PAD_LEFT);
      }
 
      protected function    beforeDelete(& $model)
