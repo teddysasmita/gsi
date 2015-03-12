@@ -86,7 +86,7 @@ class DefaultController extends Controller
                       $this->beforePost($model);
                       $respond=true;
                       if ($respond) {
-                         $respond=$model->save();
+                         $respond=$model->insert();
                          if(!$respond) {
                          	$error = implode(',',$model->errors);
                              throw new CHttpException(404,'There is an error in master posting '.$error);
