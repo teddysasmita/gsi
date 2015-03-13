@@ -32,8 +32,8 @@ class Cashouts extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, idatetime, regnum, idacctcredit, idexpense, amount, periodcount, userlog, datetimelog', 'required'),
-			array('amount, periodcount', 'numerical'),
+			array('id, idatetime, regnum, idacctcredit, idexpense, amount, userlog, datetimelog', 'required'),
+			array('amount', 'numerical'),
 			array('id, idexpense, idacctcredit, userlog', 'length', 'max'=>21),
 			array('idatetime, datetimelog', 'length', 'max'=>19),
 			array('remark','safe'),
@@ -66,7 +66,6 @@ class Cashouts extends CActiveRecord
 			'idexpense' => 'Jenis Biaya',		
 			'idacctcredit' => 'Kredit Kas',
 			'amount' => 'Jumlah',
-			'periodcount' => 'Distribusi',
 			'remark'=> 'Keterangan',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
@@ -97,7 +96,6 @@ class Cashouts extends CActiveRecord
 		$criteria->compare('idexpense',$this->idexpense,true);
 		$criteria->compare('idacctcredit',$this->idacctcredit, true);
 		$criteria->compare('amount',$this->amount, true);
-		$criteria->compare('periodcount',$this->periodcount, true);
 		$criteria->compare('remark',$this->remark);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);
