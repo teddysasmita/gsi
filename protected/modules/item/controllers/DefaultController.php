@@ -267,6 +267,7 @@ class DefaultController extends Controller
         	}
         }
         
+      
         public function actionRemoteUpdate($username, $passwd, $id, $code, $type, $name, $brand, $objects,
         		$model, $attribute, $userlog, $datetimelog, $url)
         {
