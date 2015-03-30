@@ -11,6 +11,7 @@ $this->breadcrumbs=array(
 <h1><?php echo "Masukkan Kriteria" ?></h1>
 
 <div class="form">
+
 <?php 
 	echo CHtml::beginForm("index.php?r=stockentries/default/serial", 'get');	
 ?>
@@ -25,9 +26,10 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 		'value'=>$itemname,
 ));
 ?>
+</div>
 
 <div class="row">
-<?php
+
 echo CHtml::label('Gudang', 'whcode');
 $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 		'name'=>'whcode',
@@ -36,13 +38,12 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 		'value'=>$whcode
 ));
 ?>
+</div>
 
 <div class="row">
 <?php 
 	echo CHtml::submitButton('Kerjakan',array('name'=>'go'));
 ?>
-</div>
-
 </div>
 <?php 
 	echo CHtml::endForm();

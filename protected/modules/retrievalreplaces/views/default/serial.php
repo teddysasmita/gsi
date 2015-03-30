@@ -25,6 +25,7 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 		'value'=>$itemname,
 ));
 ?>
+</div>
 
 <div class="row">
 <?php
@@ -36,6 +37,7 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 		'value'=>$whcode
 ));
 ?>
+</div>
 
 <div class="row">
 <?php 
@@ -43,7 +45,6 @@ $this->widget("zii.widgets.jui.CJuiAutoComplete", array(
 ?>
 </div>
 
-</div>
 <?php 
 	echo CHtml::endForm();
 ?>

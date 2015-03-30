@@ -57,6 +57,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',array(
 	'value'=>$idatetime,
 ));
 ?> 
+</div>
 
 <div class="row">
 <?php 
@@ -64,7 +65,6 @@ $this->widget('zii.widgets.jui.CJuiDatePicker',array(
 ?>
 </div>
 
-</div>
 <?php 
 	echo CHtml::endForm();
 ?>
