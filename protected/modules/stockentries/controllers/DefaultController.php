@@ -85,7 +85,7 @@ class DefaultController extends Controller
 	                    if (!$respond)
 	                      	throw new CHttpException(5001,'Nomor Seri yg anda daftarkan ada yg sdh terdaftar: '. $respond);
 	                      
-						$respond=$model->save();
+						$respond=$model->insert();
 						if(!$respond) {
 							if (count($model->error) > 0 )
 								$error = implode(',', $model->error);
