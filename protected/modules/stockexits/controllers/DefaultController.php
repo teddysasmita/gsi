@@ -86,7 +86,7 @@ class DefaultController extends Controller
                       $respond = $this->checkSerialNum(Yii::app()->session['Detailstockexits'], $model);
                       if ($respond !== true)
                       	throw new CHttpException(404,'Nomor Seri ada yang salah '.$respond);
-                      $respond=$model->save();
+                       $respond=$model->insert();
                       if(!$respond) {
 						throw new CHttpException(404,'There is an error in master posting: '. print_r($model->getErrors()));
                       }
