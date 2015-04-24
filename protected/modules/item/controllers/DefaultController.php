@@ -263,6 +263,7 @@ class DefaultController extends Controller
         
         		if ($item->validate())
         			$item->insert();
+        		$status = 0;
         		$this->redirect($url, $status);
         	}
         }
