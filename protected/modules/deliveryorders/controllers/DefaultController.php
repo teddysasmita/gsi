@@ -811,8 +811,8 @@ class DefaultController extends Controller
         	if ($ganti === true) {
         		$details=Yii::app()->db->createCommand()
         		->select('b.*')->from('salesreplace a')->join('detailsalesreplace b', 'b.id = a.id')
-        		->where('a.invnum = :p_invnum and b.deleted = :p_deleted',
-        				array(':p_invnum'=>$tempnum, ':p_deleted'=>'1'))->queryAll();
+        		->where('a.invnum = :p_invnum and b.deleted <> :p_deleted',
+        				array(':p_invnum'=>$tempnum, ':p_deleted'=>'2'))->queryAll();
         	} else {
         		$details=Yii::app()->db->createCommand()
         			->select('b.*')->from('salespos a')->join('detailsalespos b', 'b.id = a.id')
