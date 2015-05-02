@@ -780,11 +780,8 @@ class DefaultController extends Controller
         		$tempnum = substr($invnum, 1);
         		$tempnum = str_pad($tempnum, 12, '0', STR_PAD_LEFT);
         		$master=Yii::app()->db->createCommand()
-        		->select()->from('salesreplace2')->where('regnum = :p_regnum',
-        				array(':p_regnum'=>$tempnum))->queryRow();
-        		echo $tempnum;
-        		print_r($master);
-        		die;
+        			->select()->from('salesreplace2')->where('invnum = :p_invnum',
+        				array(':p_invnum'=>$tempnum))->queryRow();
         	} else {
         		$master=Yii::app()->db->createCommand()
         			->select()->from('salespos')->where('regnum = :p_regnum', 
@@ -814,8 +811,8 @@ class DefaultController extends Controller
         	if ($ganti === true) {
         		$details=Yii::app()->db->createCommand()
         		->select('b.*')->from('salesreplace a')->join('detailsalesreplace b', 'b.id = a.id')
-        		->where('a.regnum = :p_regnum and b.deleted = :p_deleted',
-        				array(':p_regnum'=>$tempnum, ':p_deleted'=>'1'))->queryAll();
+        		->where('a.invnum = :p_invnum and b.deleted = :p_deleted',
+        				array(':p_invnum'=>$tempnum, ':p_deleted'=>'1'))->queryAll();
         	} else {
         		$details=Yii::app()->db->createCommand()
         			->select('b.*')->from('salespos a')->join('detailsalespos b', 'b.id = a.id')
