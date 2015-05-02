@@ -782,6 +782,8 @@ class DefaultController extends Controller
         		$master=Yii::app()->db->createCommand()
         		->select()->from('salesreplace2')->where('regnum = :p_regnum',
         				array(':p_regnum'=>$tempnum))->queryRow();
+        		print_r($master);
+        		die;
         	} else {
         		$master=Yii::app()->db->createCommand()
         			->select()->from('salespos')->where('regnum = :p_regnum', 
@@ -820,8 +822,7 @@ class DefaultController extends Controller
 					array(':p_regnum'=>$invnum))->queryAll();
         	}
         	$detailsdone=Yii::app()->db->createCommand()
-        		->select('b.iditem, sum(b.qty) as sentqty')->from('deliveryorders a')
-        		->join('detaildeliveryorders b', 'b.id = a.id')
+        		->select('b.iditem, sum(b.qty) as sentqty')->from('deliveryorders a')->join('detaildeliveryorders b', 'b.id = a.id')
         		->where('a.invnum = :p_regnum',
         			array(':p_regnum'=>$invnum))
         		->group('b.iditem')->queryAll();
