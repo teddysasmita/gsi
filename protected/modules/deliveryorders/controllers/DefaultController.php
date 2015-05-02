@@ -811,7 +811,7 @@ class DefaultController extends Controller
         	if ($ganti === true) {
         		$details=Yii::app()->db->createCommand()
         		->select('b.*')->from('salesreplace a')->join('detailsalesreplace b', 'b.id = a.id')
-        		->where('a.regnum = :p_regnum and deleted = :p_deleted',
+        		->where('a.regnum = :p_regnum and b.deleted = :p_deleted',
         				array(':p_regnum'=>$tempnum, ':p_deleted'=>'1'))->queryAll();
         	} else {
         		$details=Yii::app()->db->createCommand()
@@ -820,7 +820,8 @@ class DefaultController extends Controller
 					array(':p_regnum'=>$invnum))->queryAll();
         	}
         	$detailsdone=Yii::app()->db->createCommand()
-        		->select('b.iditem, sum(b.qty) as sentqty')->from('deliveryorders a')->join('detaildeliveryorders b', 'b.id = a.id')
+        		->select('b.iditem, sum(b.qty) as sentqty')->from('deliveryorders a')
+        		->join('detaildeliveryorders b', 'b.id = a.id')
         		->where('a.invnum = :p_regnum',
         			array(':p_regnum'=>$invnum))
         		->group('b.iditem')->queryAll();
