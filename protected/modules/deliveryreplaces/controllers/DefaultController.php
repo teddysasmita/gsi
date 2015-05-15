@@ -139,10 +139,6 @@ class DefaultController extends Controller
 
              if(!isset(Yii::app()->session['Detaildeliveryreplaces'])) 
                Yii::app()->session['Detaildeliveryreplaces']=$this->loadDetails($id);
-             
-             if(!isset(Yii::app()->session['Detaildeliveryreplaces2'])) 
-               Yii::app()->session['Detaildeliveryreplaces2']=$this->loadDetails2($id);
-             
             
 
              if(isset($_POST)) {
@@ -175,13 +171,6 @@ class DefaultController extends Controller
                          }
                      };
                      
-                     if(isset(Yii::app()->session['DeleteDetaildeliveryreplaces2'])) {
-                         $deletedetails=Yii::app()->session['DeleteDetaildeliveryreplaces2'];
-                         $respond=$respond&&$this->deleteDetails2($deletedetails);
-                         if(!$respond) {
-                           throw new CHttpException(404,'There is an error in detail2 deletion');
-                         }
-                     };
 
                      if($respond) {
                          Yii::app()->session->remove('Deliveryreplaces');
