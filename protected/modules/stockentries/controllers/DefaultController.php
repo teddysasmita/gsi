@@ -962,6 +962,14 @@ EOS;
 			->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
 					array(':p_regnum'=>$nolpb, ':p_idwarehouse'=>$idwh) )
 					->queryAll();
+		} else if ($prefix == 'RD' ) {
+			$dataLPB=Yii::app()->db->createCommand()
+			->select('a.id, b.iditem, sum(b.qty) as qty')
+			->from('deliveryreplaces a')
+			->join('detailreceiverep b', 'b.id=a.id')
+			->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
+					array(':p_regnum'=>$nolpb, ':p_idwarehouse'=>$idwh) )
+			->queryAll();
 		} else {
 			$dataLPB=Yii::app()->db->createCommand()
 			->select('a.id, b.iditem, sum(b.qty) as qty')
@@ -970,7 +978,7 @@ EOS;
 			->where('a.regnum = :p_regnum', array(':p_regnum'=>$nolpb) )
 			->group('b.iditem')
 			->queryAll();
-		}
+		} 
 		 
 		Yii::app()->session->remove('Detailstockentries');
 		if ($dataLPB !== FALSE) {
