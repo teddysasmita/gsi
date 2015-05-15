@@ -966,7 +966,7 @@ EOS;
 			$dataLPB=Yii::app()->db->createCommand()
 			->select('a.id, b.iditem, sum(b.qty) as qty')
 			->from('deliveryreplaces a')
-			->join('detailreceiverep b', 'b.id=a.id')
+			->join('detaildeliveryreplaces b', 'b.id=a.id')
 			->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
 					array(':p_regnum'=>$nolpb, ':p_idwarehouse'=>$idwh) )
 			->queryAll();
