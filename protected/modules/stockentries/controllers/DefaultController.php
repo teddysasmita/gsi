@@ -964,7 +964,7 @@ EOS;
 					->queryAll();
 		} else if ($prefix == 'RD' ) {
 			$dataLPB=Yii::app()->db->createCommand()
-			->select('a.id, b.iditem, sum(b.qty) as qty')
+			->select('a.id, b.iditem, (1) as qty')
 			->from('deliveryreplaces a')
 			->join('detaildeliveryreplaces b', 'b.id=a.id')
 			->where('a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse',
