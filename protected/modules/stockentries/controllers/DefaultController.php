@@ -967,7 +967,7 @@ EOS;
 			->select('a.id, b.iditem, (1) as qty')
 			->from('deliveryreplaces a')
 			->join('detaildeliveryreplaces b', 'b.id=a.id')
-			->where('a.regnum = :p_regnum and a.idwarehouse = :p_idwarehouse',
+			->where('a.regnum = :p_regnum and b.idwhsource = :p_idwarehouse',
 					array(':p_regnum'=>$nolpb, ':p_idwarehouse'=>$idwh) )
 			->queryAll();
 		} else {
