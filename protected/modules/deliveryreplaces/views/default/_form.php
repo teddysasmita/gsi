@@ -155,7 +155,7 @@ EOS;
 			array(
 				'header'=>'Gudang',
 				'name'=>'idwarehouse',
-				'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwarehouse'])"
+				'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwhsource'])"
 			),
 			array(
 				'class'=>'CCheckBoxColumn',
