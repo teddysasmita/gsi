@@ -33,8 +33,8 @@ $this->menu=array(
 			'name'=>'iditem',
 			'value'=>lookup::ItemNameFromItemID($model->iditem)
 		),
-		oldserialnum,
-		newserialnum,
+		'oldserialnum',
+		'newserialnum',
 		array(
 			'name'=>'userlog',
 			'value'=>lookup::UserNameFromUserID($model->userlog),
