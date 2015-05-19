@@ -477,52 +477,9 @@ class DefaultController extends Controller
          if ($this->state == 'create') {
          	$idmaker->saveRegNum($this->formid, substr($model->regnum, 2));
          
-        	Yii::import('application.modules.stockentries.models.*');
-         	$details = $this->loadDetails($model->id);
-         	
-         	$stockentries = new Stockentries();
-         	$tempid = $model->id;
-         	$tempid = substr($tempid, 0, 20).'C';
-         	$stockentries->id = $tempid;
-         	$stockentries->userlog = $model->userlog;
-         	$stockentries->datetimelog = idmaker::getDateTime();
-         	$stockentries->transid = $model->regnum;
-         	$stockentries->transname = 'AC27';
-         	$stockentries->transinfo = 'Akuisisi Barang dan Nomor Seri - ' + $model->regnum + ' - ' +
-         		$model->idatetime;
-         	$stockentries->idwarehouse = $model->idwarehouse;
-         	$stockentries->donum = $model->regnum;
-         	$stockentries->idatetime = $model->idatetime;
-         	$stockentries->regnum = idmaker::getRegNum('AC3') + 1;
-         	idmaker::saveRegNum('AC3', $stockentries->regnum);
-         	if ($stockentries->validate())
-         		$stockentries->save();
-         	else
-         		throw new CHttpException(101,'Error in Stock Entry.');
-	         foreach($details as $detail) {
-	         	$detailstockentries = new Detailstockentries();
-	         	$detailstockentries->id = $stockentries->id;
-	         	$detailstockentries->iddetail = idmaker::getCurrentID2();
-	         	$detailstockentries->iditem = $model->iditem;
-	         	$detailstockentries->serialnum = $detail['serialnum'];
-	         	$detailstockentries->userlog = $model->userlog;
-	         	$detailstockentries->datetimelog = idmaker::getDateTime();
-	         	if ($detailstockentries->validate()) {
-	         		$detailstockentries->save();
-	         		$status = '1';
-	         		$exist = Action::checkItemToWarehouse($model->idwarehouse, $model->iditem,
-	         				$detail['serialnum'], '%') > 0;
-	         		if (!$exist)
-	         			Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'],
-	         					$model->iditem, $detail['serialnum']);
-	         		else {
-	         			Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
-	         			Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
-	         		}
-	         	} else
-	         		throw new CHttpException(101,'Error in Detail Stock Entry.');
-	         };
-	         
+        	$details = $this->loadDetails($model->id);
+         	$this->processItems($model, $details);
+         		         
 	         /*if ($model->transname == 'AC16') {
 	         	$data = Yii::app()->db->createCommand()
 	         		->select()->from('requestdisplays')
@@ -530,70 +487,7 @@ class DefaultController extends Controller
 	         		->queryRow();
 	         	$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
 	         }*/
-         } else if ($this->state == 'update') {
-         	$tempid = $model->id;
-         	$tempid = substr($tempid, 0, 20).'C';
-         	Yii::import('application.modules.stockentries.models.*');
-         	$stockentries = Stockentries::model()->findByPk($tempid);
-         	if (! is_null($stockentries))
-         		$stockentries->delete();
-         	$detailstockentries = Detailstockentries::model()->findAllByAttributes(array('id'=>$tempid));
-         	if (count($detailstockentries) > 0)
-         		foreach($detailstockentries as $dse) {
-         			$dse->delete();
-         		};
-         	
-         	$stockentries = new Stockentries();
-         	$stockentries->id = $tempid;
-         	$stockentries->userlog = $model->userlog;
-         	$stockentries->datetimelog = idmaker::getDateTime();
-         	$stockentries->transid = $model->regnum;
-         	$stockentries->transname = 'AC27';
-         	$stockentries->transinfo = 'Akuisisi Barang dan Nomor Seri - ' + $model->regnum + ' - ' +
-         		$model->idatetime;
-         	$stockentries->idwarehouse = $model->idwarehouse;
-         	$stockentries->donum = $model->regnum;
-         	$stockentries->idatetime = $model->idatetime;
-         	$stockentries->regnum = idmaker::getRegNum('AC3') + 1;
-         	idmaker::saveRegNum('AC3', $stockentries->regnum);
-         	if ($stockentries->validate())
-         		$stockentries->save();
-         	else
-         		throw new CHttpException(101,'Error in Stock Entry.');
-         	$details = $this->loadDetails($model->id);
-         	
-	         foreach($details as $detail) {
-	         	$detailstockentries = new Detailstockentries();
-	         	$detailstockentries->id = $stockentries->id;
-	         	$detailstockentries->iddetail = idmaker::getCurrentID2();
-	         	$detailstockentries->iditem = $model->iditem;
-	         	$detailstockentries->serialnum = $detail['serialnum'];
-	         	$detailstockentries->userlog = $model->userlog;
-	         	$detailstockentries->datetimelog = idmaker::getDateTime();
-	         	if ($detailstockentries->validate()) {
-	         		$detailstockentries->save();
-	         		$status = '1';
-	         		$exist = Action::checkItemToWarehouse($model->idwarehouse, $model->iditem,
-	         				$detail['serialnum'], '%') > 0;
-	         		if (!$exist)
-	         			Action::addItemToWarehouse($model->idwarehouse, $detail['iddetail'],
-	         					$model->iditem, $detail['serialnum']);
-	         		else {
-	         			Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '1');
-	         			Action::setItemStatusinWarehouse($model->idwarehouse, $detail['serialnum'], $status);
-	         		}
-	         	} else
-	         		throw new CHttpException(101,'Error in Detail Stock Entry.');
-	         };
-	         
-	         /*if ($model->transname == 'AC16') {
-	         	$data = Yii::app()->db->createCommand()
-	         		->select()->from('requestdisplays')
-	         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-	         		->queryRow();
-	         	$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
-	         }*/
-         }
+         } 
      }
 
      protected function beforePost(& $model)
@@ -604,46 +498,11 @@ class DefaultController extends Controller
          $model->userlog=Yii::app()->user->id;
          $model->datetimelog=$idmaker->getDateTime();
          if ($this->state == 'create')
-         	$model->regnum='DA'.$idmaker->getRegNum($this->formid);
-         
-         if ($this->state == 'update') {
-         	
-         	$details = $this->loadDetails($model->id);
-         	foreach($details as $detail) {
-         		if ($detail['serialnum'] != 'Belum Diterima')
-         			Action::deleteItemFromWarehouse($model->idwarehouse, $detail['serialnum']);
-         	};
-         	/*if ($model->transname == 'AC16') {
-         		$data = Yii::app()->db->createCommand()
-         		->select()->from('requestdisplays')
-         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-         		->queryRow();
-         		$this->removeEntryDisplay($data['regnum'], $model->idwarehouse);
-         	}*/
-         	/*if ($model->transname == 'AC16') {
-         		$data = Yii::app()->db->createCommand()
-         		->select()->from('requestdisplays')
-         		->where('regnum = :p_regnum', array(':p_regnum'=>$model->transid))
-         		->queryRow();
-         		$this->autoEntryDisplay($data['regnum'], $model->idwarehouse);
-         	}*/
-         }
+         	$model->regnum='SK'.$idmaker->getRegNum($this->formid);
      }
 
      protected function beforeDelete(& $model)
-     {
-     	$tempid = $model->id;
-     	$tempid = substr($tempid, 0, 20).'C';
-     	Yii::import('application.modules.stockentries.models.*');
-     	$stockentries = Stockentries::model()->findByPk($tempid);
-     	if (! is_null($stockentries))
-     		$stockentries->delete();
-     	$detailstockentries = Detailstockentries::model()->findAllByAttributes(array('id'=>$tempid));
-     	if (count($detailstockentries) > 0)
-     	foreach($detailstockentries as $dse) {
-     		$dse->delete();
-     	};
-     	
+     {	
      	$details = $this->loadDetails($model->id);
      	foreach($details as $detail) {
      		Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], $detail['avail']);
@@ -785,5 +644,22 @@ class DefaultController extends Controller
      	
      	return $details;
      }
+     
+     private function processItems($model, $details)
+     {
+     	foreach($details as $d) {
+     		Yii::app()->db->createCommand()
+     			->update($d['tablename'], array('serialnum'=>$model->newserialnum),
+     				array('iddetail'=>$d['iddetailtable']));	 	
+    	}
+     }
 	
+     private function unprocessItems($model, $details)
+     {
+     	foreach($details as $d) {
+     		Yii::app()->db->createCommand()
+     		->update($d['tablename'], array('serialnum'=>$model->oldserialnum),
+     				array('iddetail'=>$d['iddetailtable']));
+     	}
+     }
 }
