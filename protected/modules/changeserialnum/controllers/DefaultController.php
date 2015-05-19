@@ -648,7 +648,7 @@ class DefaultController extends Controller
      	foreach($details as $d) {
      		Yii::app()->db->createCommand()
      			->update($d['tablename'], array('serialnum'=>$model->newserialnum),
-     				array('iddetail'=>$d['iddetailtable']));	 	
+     				'iddetail = :p_iddetail', array(':p_iddetail'=>$d['iddetailtable']));	 	
     	}
      }
 	
@@ -657,7 +657,7 @@ class DefaultController extends Controller
      	foreach($details as $d) {
      		Yii::app()->db->createCommand()
      		->update($d['tablename'], array('serialnum'=>$model->oldserialnum),
-     				array('iddetail'=>$d['iddetailtable']));
+     			'iddetail = :p_iddetail', array(':p_iddetail'=>$d['iddetailtable']));
      	}
      }
 }
