@@ -81,8 +81,14 @@ class DefaultController extends Controller
 					if(!$respond) 
 						throw new CHttpException(404,'There is an error in master posting: '. print_r($model->errors));
 
+					if(isset(Yii::app()->session['Detailchangeserialnum']) ) {
+						$details=Yii::app()->session['Detailchangeserialnum'];
+						$respond=$respond&&$this->saveNewDetails($details);
+					}
 					$this->afterPost($model);
 					Yii::app()->session->remove('Changeserialnum');
+					Yii::app()->session->remove('Detailchangeserialnum');
+						
 					$this->redirect(array('view','id'=>$model->id));
                          
 				} else if (isset($_POST['command'])){
@@ -140,9 +146,17 @@ class DefaultController extends Controller
 					$respond=$model->save();
 					if( !$respond) 
 						throw new CHttpException(404,'There is an error in master posting ');
+					
+					if(isset(Yii::app()->session['Detailchangeserialnum']) ) {
+						$details=Yii::app()->session['Detailchangeserialnum'];
+						$respond=$this->saveDetails($details, $model->idwarehouse);
+						if (!$respond)
+							throw new CHttpException(5002,'There is an error in detail posting');
+					}
 					$this->afterPost($model);
 
 					Yii::app()->session->remove('Changeserialnum');
+					Yii::app()->session->remove('Detailchangeserialnum');
 					$this->redirect(array('view','id'=>$model->id));
                  }
              }
@@ -389,7 +403,7 @@ class DefaultController extends Controller
       }
       
 
-     protected function saveNewDetails(array $details, $idwh)
+     protected function saveNewDetails(array $details)
      {                  
          foreach ($details as $row) {
              $detailmodel=new Detailchangeserialnum;
