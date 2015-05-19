@@ -84,6 +84,9 @@ class DefaultController extends Controller
 					if(isset(Yii::app()->session['Detailchangeserialnum']) ) {
 						$details=Yii::app()->session['Detailchangeserialnum'];
 						$respond=$respond&&$this->saveNewDetails($details);
+						if(!$respond)
+							throw new CHttpException(404,'There is an error in detail posting: '. print_r($model->errors));
+						
 					}
 					$this->afterPost($model);
 					Yii::app()->session->remove('Changeserialnum');
