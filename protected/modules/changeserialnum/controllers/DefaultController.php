@@ -724,7 +724,7 @@ class DefaultController extends Controller
      	
      	foreach($warehouses as $wh) {
      		$data = Yii::app()->db->createCommand()
-     			->select("iddetail, `wh$wh` as tablename")
+     			->select("iddetail, (wh$wh as tablename)")
      			->from('wh'.$wh)
      			->where('iditem = :p_iditem and serialnum = :p_serialnum',
 	     			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
