@@ -504,9 +504,7 @@ class DefaultController extends Controller
      protected function beforeDelete(& $model)
      {	
      	$details = $this->loadDetails($model->id);
-     	foreach($details as $detail) {
-     		Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], $detail['avail']);
-     	};
+     	$this->unprocessItems($model, $details);
      	
      	/*if ($model->transname == 'AC16') {
      		$data = Yii::app()->db->createCommand()
