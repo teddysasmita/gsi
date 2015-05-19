@@ -77,8 +77,6 @@ class DefaultController extends Controller
                       
                       
 					$this->beforePost($model);
-					$respond=$this->checkWarehouse($model->idwarehouse);
-					$respond=$respond && $this->checkSerialNum(Yii::app()->session['Detailchangeserialnum'], $model);
 					if (!$respond)
 						throw new CHttpException(707,'Maaf, ada nomor serial yang sudah terdaftar dalam gudang ini.');
 					$respond=$model->save();
