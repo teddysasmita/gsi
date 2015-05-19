@@ -641,6 +641,8 @@ class DefaultController extends Controller
      
      private function processItems($model, $details)
      {
+     	print_r($details);
+     	die;
      	foreach($details as $d) {
      		Yii::app()->db->createCommand()
      			->update($d['tablename'], array('serialnum'=>$model->newserialnum),
