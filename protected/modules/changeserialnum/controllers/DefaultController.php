@@ -97,7 +97,7 @@ class DefaultController extends Controller
 				} else if (isset($_POST['command'])){
                       // save the current master data before going to the detail page
                    	$model->attributes=$_POST['Changeserialnum'];
-                   	Yii::app()->session['Changeserialnum']=$_POST['Changeserialnum'];
+                   	Yii::app()->session['Changeserialnum']=$model->attributes;
                    	if($_POST['command'] == 'setitemserial') {
                          $model->attributes = $_POST['Changeserialnum'];
                          $details = $this->searchItem($model);
@@ -659,18 +659,28 @@ class DefaultController extends Controller
      private function processItems($model, $details)
      {
      	foreach($details as $d) {
-     		Yii::app()->db->createCommand()
+     		if ($d['tablename'] == 'retrievalreplaces') {
+     			Yii::app()->db->createCommand()
      			->update($d['tablename'], array('serialnum'=>$model->newserialnum),
-     				'iddetail = :p_iddetail', array(':p_iddetail'=>$d['iddetailtable']));	 	
+     					'id = :p_id', array(':p_id'=>$d['iddetailtable']));
+     		} else
+     			Yii::app()->db->createCommand()
+     				->update($d['tablename'], array('serialnum'=>$model->newserialnum),
+     					'iddetail = :p_iddetail', array(':p_iddetail'=>$d['iddetailtable']));	 	
     	}
      }
 	
      private function unprocessItems($model, $details)
      {
      	foreach($details as $d) {
-     		Yii::app()->db->createCommand()
-     		->update($d['tablename'], array('serialnum'=>$model->oldserialnum),
-     			'iddetail = :p_iddetail', array(':p_iddetail'=>$d['iddetailtable']));
+     		if ($d['tablename'] == 'retrievalreplaces') {
+     			Yii::app()->db->createCommand()
+     			->update($d['tablename'], array('serialnum'=>$model->newserialnum),
+     					'id = :p_id', array(':p_id'=>$d['iddetailtable']));
+     		} else
+     			Yii::app()->db->createCommand()
+     			->update($d['tablename'], array('serialnum'=>$model->oldserialnum),
+     				'iddetail = :p_iddetail', array(':p_iddetail'=>$d['iddetailtable']));
      	}
      }
 }
