@@ -77,8 +77,6 @@ class DefaultController extends Controller
                       
                       
 					$this->beforePost($model);
-					if (!$respond)
-						throw new CHttpException(707,'Maaf, ada nomor serial yang sudah terdaftar dalam gudang ini.');
 					$respond=$model->save();
 					if(!$respond) 
 						throw new CHttpException(404,'There is an error in master posting: '. print_r($model->errors));
