@@ -12,7 +12,7 @@ class DefaultController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $formid='AC37';
+	public $formid='AC36';
 	public $tracker;
 	public $state;
 
@@ -71,7 +71,7 @@ class DefaultController extends Controller
             $this->performAjaxValidation($model);
 				
 			if (isset($_POST)){
-				if(isset($_POST['yt0'])) {
+				if(isset($_POST['yt1'])) {
                       //The user pressed the button;
 					$model->attributes=$_POST['Changeserialnum'];
                       
@@ -93,12 +93,11 @@ class DefaultController extends Controller
                       // save the current master data before going to the detail page
                    	$model->attributes=$_POST['Changeserialnum'];
                    	Yii::app()->session['Changeserialnum']=$_POST['Changeserialnum'];
-                   	if($_POST['command']=='adddetail') {
-                         $this->redirect(array('detailchangeserialnum/create',
-                            'id'=>$model->id));
-					} else if ($_POST['command']=='findItem') {
-                         $this->loadQty($model);
-					}
+                   	if($_POST['command'] == 'setitemserial') {
+                         $model->attributes = $_POST['Changeserialnum'];
+                         $details = $this->searchItem($model);
+                         Yii::app()->session['Detailchangeserialnum'] = $details;
+					} 
 				}
 			}
 
@@ -692,246 +691,99 @@ class DefaultController extends Controller
          $this->tracker->logActivity($this->formid, $action);
      }
      
-     
-      private function checkSerialNum(array $details, $model ) 
-      {
-         $respond=true;
-         
-         foreach($details as $detail) {
-            if ($detail['serialnum'] !== 'Belum Diterima') {
-               /*$count=Yii::app()->db->createCommand()
-                  ->select('count(*)')
-                  ->from('detailchangeserialnum')
-                  ->where("serialnum = :p_serialnum", array(':serialnum'=>$detail['serialnum']))
-                  ->queryScalar();*/
-				$count=Yii::app()->db->createCommand()
-					->select('count(*)')->from('wh'.$model->idwarehouse)
-					->where("serialnum = :p_serialnum and avail = :p_avail",
-      					array(':p_serialnum'=>$detail['serialnum'], ':p_avail'=>'1'))
-      				->queryScalar();
-               $respond=$count == 0;
-               if(!$respond)
-                  break;
-            };
-         }   
-         return $respond;
-      }
-      
-      private function setStatusPO($idpo, array $details)
-      {
-         $complete=true;
-         $partial=false;
-         foreach($details as $detail) {
-            if($detail['serialnum'] !== 'Belum Diterima')
-               $partial=true;
-            if($detail['serialnum']=='Belum Diterima') 
-               $complete=false;
-         }
-         if(!$complete && !$partial)
-            $status='0';
-         if(!$complete && $partial)
-            $status='1';
-         if($complete && $partial)
-            $status='2';
-         Action::setStatusPO ($idpo, $status);
-      }
-      
-      private function checkWarehouse($idwarehouse)
-      {
-         $respond=$idwarehouse<>'NA';
-         if (!$respond)
-           throw new CHttpException(404,'Gudang belum terdaftar.'); 
-         else
-            return $respond; 
-      }
-      
-      public function actionSummary($id)
-      {
-      	$this->trackActivity('v');
-      	$this->render('summary',array(
-      			'model'=>$this->loadModel($id),
-      	));
-      
-      }
-      
-      public function actionPrintsummary($id)
-      {
-      	$this->trackActivity('v');
-      	Yii::import("application.vendors.tcpdf.*");
-      	require_once('tcpdf.php');
-      	$this->render('printsummary',array(
-      			'model'=>$this->loadModel($id),
-      	));
-      	
-      }
-      
-      public function actionChangeserialnumreport()
-      {
-      	if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
-      			Yii::app()->user->id))  {
-      		$this->trackActivity('v');
-      
-      		$this->render('report1');
-      	} else {
-      		throw new CHttpException(404,'You have no authorization for this operation.');
-      	};
-      }
-      
-      public function actionGetexcel($startdate, $enddate, $brand, $objects)
-      {
-		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
-      			Yii::app()->user->id))  {
-      		$this->trackActivity('v');
-      			
-      		$xl = new PHPExcel();
-      		$xl->getProperties()->setCreator("Program GSI Malang")
-      		->setLastModifiedBy("Program GSI Malang")
-      		->setTitle("Laporan Penjualan")
-      		->setSubject("Laporan Penjualan")
-      		->setDescription("Laporan Penjualan Bulanan")
-      		->setKeywords("Laporan Penjualan")
-      		->setCategory("Laporan");
-      		$enddate=$enddate.' 23:59:59';
-      		$selectfields = <<<EOS
-			a.idatetime, a.regnum, a.transid, a.transinfo, a.userlog,
-			b.iditem, b.serialnum, c.code
-EOS;
-      		$selectwhere = <<<EOS
-			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime
-EOS;
-      		unset($selectparam);
-      		$selectparam['p_startidatetime'] = $startdate;
-      		$selectparam['p_endidatetime'] = $enddate;
-      
-      		if (isset($brand) && ($brand <> '')) {
-      			$selectwhere .= ' and d.brand = :p_brand';
-				$selectparam[':p_brand'] = $brand;
-      		}
-      		if (isset($objects) && ($objects <> '')) {
-      			$selectwhere .= ' and d.objects = :p_objects';
-				$selectparam[':p_objects'] = $objects;
-      		}
-      		$data=Yii::app()->db->createCommand()
-      			->select($selectfields)
-      			->from('changeserialnum a')
-      			->join('detailchangeserialnum b', 'b.id = a.id')
-      			->join('warehouses c', 'c.id = a.idwarehouse')
-				->join('items d', 'd.id = b.iditem')
-      			->where($selectwhere, $selectparam)
-      				->order('a.idatetime, a.regnum')
-      				->queryAll();
-			$headersfield = array( 'idatetime', 'regnum', 'transid', 'transinfo', 'iditem', 'serialnum', 'code', 'userlog', 'suppliername');
-			$headersname = array('Tanggal', 'Nomor Urut', 'Jenis Transaksi', 'Info Transaksi', 'Nama Barang', 'Nomor Serial', 
-				'Gudang', 'Operator', 'Supplier');
-      		for( $i=0;$i<count($headersname); $i++ ) {
-      			$xl->setActiveSheetIndex(0)
-      				->setCellValueByColumnAndRow($i,1, $headersname[$i]);
-      		} 
-      							
-      		for( $i=0; $i<count($data); $i++){
-      			for( $j=0; $j<count($headersfield); $j++ ) {
-      				if ($j<count($headersfield)-1)
-      					$cellvalue = $data[$i][$headersfield[$j]];
-					if ($headersfield[$j] == 'iditem')
-      					$cellvalue = lookup::ItemNameFromItemID($data[$i]['iditem']);
-					else if ($headersfield[$j] == 'userlog')
-      					$cellvalue = lookup::UserNameFromUserID($data[$i]['userlog']);
-      				else if ($headersfield[$j] == 'suppliername')
-						$cellvalue = lookup::GetSupplierNameFromSerialnum($data[$i]['serialnum']);
-					$xl->setActiveSheetindex(0)
-      					->setCellValueByColumnAndRow($j,$i+2, $cellvalue);
-      			}
-			}
-      							
-      		$xl->getActiveSheet()->setTitle('Laporan Pengeluaran Barang');
-      		$xl->setActiveSheetIndex(0);
-			header('Content-Type: application/pdf');
-			header('Content-Disposition: attachment;filename="stockexit-report-'.idmaker::getDateTime().'.xls"');
-			header('Cache-Control: max-age=0');
-			$xlWriter = PHPExcel_IOFactory::createWriter($xl, 'Excel5');
-			$xlWriter->save('php://output');
-      	} else {
-      		throw new CHttpException(404,'You have no authorization for this operation.');
-      	};
-	}  
-	
-	private function autoEntryDisplay($itnum, $idwhsource)
-	{
-		$datamaster = Yii::app()->db->createCommand()
-			->select('a.*')->from("requestdisplays a")
-			->where("a.regnum = :p_regnum",
-				array(':p_regnum'=>$itnum))
-			->queryRow();
-		
-		$datadetails = Yii::app()->db->createCommand()
-			->select('c.iditem, c.serialnum')
-			->from("requestdisplays a")
-			->join("changeserialnum b", "b.transid = a.regnum")
-			->join("detailchangeserialnum c", "c.id = b.id")	
-			->where("a.regnum = :p_regnum and b.idwarehouse = :p_idwarehouse",
-				array(':p_regnum'=>$itnum, ':p_idwarehouse'=>$idwhsource))
-			->queryAll();
-		
-		Yii::import('application.modules.stockentries.models.*');
-		$entrymodel = new Stockentries();
-		$entrymodel->id = idmaker::getCurrentID2();
-		$entrymodel->regnum = idmaker::getRegNum('AC16');
-		$entrymodel->idatetime = idmaker::getDateTime();
-		$entrymodel->userlog = Yii::app()->user->id;
-		$entrymodel->datetimelog = $entrymodel->idatetime;
-		$entrymodel->transid = $itnum;
-		$entrymodel->transinfo = 'Permintaan Barang Display - '.$datamaster['regnum']. ' - '.	
-			$entrymodel->idatetime;
-		$entrymodel->transname = 'AC16';
-		$entrymodel->donum = $itnum;
-		$entrymodel->idwarehouse = '14103215447754000';
-		$entrymodel->validate();
-		$respond = $entrymodel->save();
-		if ($respond) {
-			idmaker::saveRegNum('AC16', $entrymodel->regnum);
-		
-			foreach($datadetails as $detail) {
-				$detailentrymodel = new Detailstockentries();
-				$detailentrymodel->id = $entrymodel->id;
-				$detailentrymodel->iddetail = idmaker::getCurrentID2();
-				$detailentrymodel->userlog = Yii::app()->user->id;
-				$detailentrymodel->datetimelog = $entrymodel->idatetime;
-				$detailentrymodel->iditem = $detail['iditem'];
-				$detailentrymodel->serialnum = $detail['serialnum'];
-				
-				$detailentrymodel->save();
-				Action::entryItemToWarehouse('14103215447754000', $detailentrymodel->iddetail, 
-					$detailentrymodel->iditem, $detailentrymodel->serialnum);			
-			}
-		}
-	}
-	
-	private function removeEntryDisplay($itnum, $warehouse)
-	{
-		$stockEntry = Yii::app()->db->createCommand()
-			->select()->from('stockentries')->where('transid = :p_transid', 
-				array(':p_transid'=>$itnum))
-			->queryRow();
-		
-		Yii::app()->db->createCommand()->delete('detailstockentries', 'id = :p_id',
-			array(':p_id'=>$stockEntry['id']));
-		
-		Yii::app()->db->createCommand()->delete('stockentries', 'id = :p_id',
-			array(':p_id'=>$stockEntry['id']));
-	}
-	
-	private function loadQty($model)
-	{
-		for($i=0; $i<$model->qty; $i++) {
-			$detail['id'] = $model->id;
-			$detail['iddetail'] = idmaker::getCurrentID2();
-			$detail['serialnum'] = 'Masukkan Nomor Seri';
-			$detail['userlog'] = $model->userlog;
-			$detail['datetimelog'] = $model->datetimelog;	
-			$detail['avail'] = '1';
-			$details[] = $detail;
-		}
-		Yii::app()->session['Detailchangeserialnum'] = $details;
-	}
+     private function searchItem($model)
+     {
+     	$stockentries = Yii::app()->db->createCommand()
+     		->select('iddetail, (\'detailstockentries\') as tablename')	
+     		->from('detailstockentries')
+     		->where('iditem = :p_iditem and serialnum = :p_serialnum',
+     			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
+     		->queryAll();
+     	$stockexits = Yii::app()->db->createCommand()
+     		->select('iddetail, (\'detailstockexits\') as tablename')
+     		->from('detailstockexits')
+     		->where('iditem = :p_iditem and serialnum = :p_serialnum',
+     			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
+     		->queryAll();
+     	$deliveryreplaces = Yii::app()->db->createCommand()
+     		->select('iddetail, (\'detaildeliveryreplaces\') as tablename')
+     		->from('detaildeliveryreplaces')
+     		->where('iditem = :p_iditem and serialnum = :p_serialnum',
+     			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
+     		->queryAll();
+     	$retrievalreplaces = Yii::app()->db->createCommand()
+	     	->select('id, (\'retrievalreplaces\') as tablename')
+	     	->from('retrievalreplaces')
+	     	->where('iditem = :p_iditem and serialnum = :p_serialnum',
+	     			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
+	     	->queryAll();
+     	
+     	$warehousesdata = array();
+     	$warehouses = Yii::app()->db->createCommand()
+     		->select('id')->from('warehouses')->queryColumn();
+     	
+     	foreach($warehouses as $wh) {
+     		$data = Yii::app()->db->createCommand()
+     			->select("iddetail, (\'$wh\') as tablename")
+     			->from('wh'.$wh)
+     			->where('iditem = :p_iditem and serialnum = :p_serialnum',
+	     			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
+	     		->queryAll();
+     		$warehousesdata = array_merge($warehousesdata, $data);
+     	}
+     	$details = array();
+     	if (count($stockentries)) {
+     		foreach($stockentries as $detaildata) {
+     			unset($temp);
+     			$temp['id']	= $model->id;
+     			$temp['iddetail'] = idmaker::getCurrentID2();
+     			$temp['tablename'] = $detaildata['tablename'];
+     			$temp['iddetailtable'] = $detaildata['iddetail'];
+     			$details[] = $temp;
+     		}
+     	}
+     	if (count($stockexits)) {
+     		foreach($stockexits as $detaildata) {
+     			unset($temp);
+     			$temp['id']	= $model->id;
+     			$temp['iddetail'] = idmaker::getCurrentID2();
+     			$temp['tablename'] = $detaildata['tablename'];
+     			$temp['iddetailtable'] = $detaildata['iddetail'];
+     			$details[] = $temp;
+     		}
+     	}
+     	if (count($deliveryreplaces)) {
+     		foreach($deliveryreplaces as $detaildata) {
+     			unset($temp);
+     			$temp['id']	= $model->id;
+     			$temp['iddetail'] = idmaker::getCurrentID2();
+     			$temp['tablename'] = $detaildata['tablename'];
+     			$temp['iddetailtable'] = $detaildata['iddetail'];
+     			$details[] = $temp;
+     		}
+     	}
+     	if (count($retrievalreplaces)) {
+     		foreach($retrievalreplaces as $detaildata) {
+     			unset($temp);
+     			$temp['id']	= $model->id;
+     			$temp['iddetail'] = idmaker::getCurrentID2();
+     			$temp['tablename'] = $detaildata['tablename'];
+     			$temp['iddetailtable'] = $detaildata['iddetail'];
+     			$details[] = $temp;
+     		}
+     	}
+     	if (count($warehousesdata)) {
+     		foreach($warehousesdata as $detaildata) {
+     			unset($temp);
+     			$temp['id']	= $model->id;
+     			$temp['iddetail'] = idmaker::getCurrentID2();
+     			$temp['tablename'] = $detaildata['tablename'];
+     			$temp['iddetailtable'] = $detaildata['iddetail'];
+     			$details[] = $temp;
+     		}
+     	}
+     	
+     	return $details;
+     }
 	
 }

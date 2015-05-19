@@ -8,7 +8,7 @@
 
 <?php
    $transScript=<<<EOS
-		$('#Changeserialnum_itemname').focus(function(){
+		$('#Changeserialnum_itemname').click(function(){
 			$('#ItemDialog').dialog('open');
       	});
       
@@ -35,20 +35,8 @@
 		);   
    
 		$('#findItem').click( function() {
-			$.getJSON('index.php?r=LookUp/checkItemSerial2',{ iditem: $('#Changeserialnum_iditem').val(),
-				serialnum: $('#Changeserialnum_oldserialnum').val() },
-               	function(data) {
-                  	if (data !== '0') {
-						$('#status').val('good');
-						$('#serialstatus').html('Item dgn nomor seri tersebut terdaftar');
-						$('#serialstatus').addClass('money');
-					} else {
-						$('#status').val('bad');
-						$('#serialstatus').html('Item dgn nomor seri tersebut TIDAK terdaftar');
-						$('#serialstatus').addClass('errorMessage');
-					};
-               	})
-		
+			$('#command').val('setitemserial');
+			$('#changeserialnum-form').submit();
 		});
    
 EOS;
@@ -152,11 +140,33 @@ EOS;
 		<?php echo $form->error($model,'oldserialnum'); ?>
 	</div>
 	
-	
-	
-	<div class="row">
-		<?php echo CHtml::tag("span", array('id'=>'serialstatus')); ?>
-	</div>
+	<?php 
+	    if (isset(Yii::app()->session['Detailchangeserialnum'])) {
+	       $rawdata=Yii::app()->session['Detailchangeserialnum'];
+	       $count=count($rawdata);
+	    } else {
+	       $count=Yii::app()->db->createCommand("select count(*) from detailchangeserialnum where id='$model->id'")->queryScalar();
+	       $sql="select * from detailchangeserialnum where id='$model->id'";
+	       $rawdata=Yii::app()->db->createCommand($sql)->queryAll ();
+	    }
+	    $dataProvider=new CArrayDataProvider($rawdata, array(
+	          'totalItemCount'=>$count,
+			  'keyField'=>'iddetail',
+	    ));
+	    $this->widget('zii.widgets.grid.CGridView', array(
+	            'dataProvider'=>$dataProvider,
+	            'columns'=>array(
+	               array(
+	                   'header'=>'Nama Tabel',
+	                   'name'=>'tablename',
+	               ),
+	              array(
+	                  'header'=>'Nomor ID',
+	                  'name'=>'iddetailtable',
+	              ),
+	          ),
+	    ));
+	?>
 	
 	<div class="row">
 		<?php echo $form->labelEx($model,'newserialnum'); ?>
