@@ -563,6 +563,12 @@ class DefaultController extends Controller
      
      private function searchItem($model)
      {
+     	$varnames = array('stockentries', 'stockexits', 'deliveryreplaces',
+     		'retrievalreplaces', 'detailacquisitions', 'detailitemmastermods',
+     		'detailreceiverepairs', 'detailreturstocks', 'detailsendrepairs',
+     		'detailsendrepairs2', 'detailstockdamage', 'displayentries',
+     		'displayexits' 
+     	);
      	$stockentries = Yii::app()->db->createCommand()
      		->select('iddetail, (\'detailstockentries\') as tablename')	
      		->from('detailstockentries')
@@ -575,7 +581,7 @@ class DefaultController extends Controller
      		->where('iditem = :p_iditem and serialnum = :p_serialnum',
      			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
      		->queryAll();
-     	$deliveryreplaces = Yii::app()->db->createCommand()
+     	$detaildeliveryreplaces = Yii::app()->db->createCommand()
      		->select('iddetail, (\'detaildeliveryreplaces\') as tablename')
      		->from('detaildeliveryreplaces')
      		->where('iditem = :p_iditem and serialnum = :p_serialnum',
@@ -587,6 +593,61 @@ class DefaultController extends Controller
 	     	->where('iditem = :p_iditem and serialnum = :p_serialnum',
 	     			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
 	     	->queryAll();
+     	$detailacquisitions = Yii::app()->db->createCommand()
+     		->select('id, (\'detailacquisitions\') as tablename')
+     		->from('detailacquisitions')
+     		->where('iditem = :p_iditem and serialnum = :p_serialnum',
+     			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
+     		->queryAll();
+     	$detailitemmastermods = Yii::app()->db->createCommand()
+	     	->select('id, (\'detailitemmastermods\') as tablename')
+	     	->from('detailitemmastermods')
+	     	->where('iditem = :p_iditem and serialnum = :p_serialnum',
+	     		array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
+	     	->queryAll();
+     	$detailreceiverepairs = Yii::app()->db->createCommand()
+     		->select('id, (\'detailreceiverepairs\') as tablename')
+     		->from('detailreceiverepairs')
+     		->where('iditem = :p_iditem and serialnum = :p_serialnum',
+     			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
+     		->queryAll();
+     	$detailreturstocks = Yii::app()->db->createCommand()
+     		->select('id, (\'detailreturstocks\') as tablename')
+     		->from('detailreturstocks')
+     		->where('iditem = :p_iditem and serialnum = :p_serialnum',
+     			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
+     		->queryAll();
+     	$detailsendrepairs = Yii::app()->db->createCommand()
+     		->select('id, (\'detailsendrepairs\') as tablename')
+     		->from('detailsendrepairs')
+     		->where('iditem = :p_iditem and serialnum = :p_serialnum',
+     			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
+     		->queryAll();
+     	$detailsendrepairs2 = Yii::app()->db->createCommand()
+     		->select('id, (\'detailsendrepairs2\') as tablename')
+     		->from('detailsendrepairs2')
+     		->where('iditem = :p_iditem and serialnum = :p_serialnum',
+     			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
+     		->queryAll();
+     	$detailstockdamage = Yii::app()->db->createCommand()
+     		->select('id, (\'detailstockdamage\') as tablename')
+     		->from('detailstockdamage')
+     		->where('iditem = :p_iditem and serialnum = :p_serialnum',
+     			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
+     		->queryAll();
+     	$displayentries = Yii::app()->db->createCommand()
+     		->select('id, (\'displayentries\') as tablename')
+     		->from('displayentries')
+     		->where('iditem = :p_iditem and serialnum = :p_serialnum',
+     			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
+     		->queryAll();
+     	$displayexits = Yii::app()->db->createCommand()
+     		->select('id, (\'displayexits\') as tablename')
+     		->from('displayexits')
+     		->where('iditem = :p_iditem and serialnum = :p_serialnum',
+     			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
+     		->queryAll();
+     	
      	
      	$warehousesdata = array();
      	$warehouses = Yii::app()->db->createCommand()
@@ -602,6 +663,21 @@ class DefaultController extends Controller
      		$warehousesdata = array_merge($warehousesdata, $data);
      	}
      	$details = array();
+     	
+     	$allvars = get_defined_vars();
+     	foreach($varnames as $vn) {
+     		if (is_array($allvars[$vn]) && count($allvars[$vn])) {
+     			foreach( $allvars[$vn] as $detaildata) {	
+     				unset($temp);
+     				$temp['id']	= $model->id;
+     				$temp['iddetail'] = idmaker::getCurrentID2();
+     				$temp['tablename'] = $detaildata['tablename'];
+     				$temp['iddetailtable'] = $detaildata['iddetail'];
+     				$details[] = $temp;
+     			}	
+     		}
+     	}
+     	/**
      	if (count($stockentries)) {
      		foreach($stockentries as $detaildata) {
      			unset($temp);
@@ -642,6 +718,7 @@ class DefaultController extends Controller
      			$details[] = $temp;
      		}
      	}
+     	**/
      	if (count($warehousesdata)) {
      		foreach($warehousesdata as $detaildata) {
      			unset($temp);
@@ -659,9 +736,11 @@ class DefaultController extends Controller
      private function processItems($model, $details)
      {
      	foreach($details as $d) {
-     		if ($d['tablename'] == 'retrievalreplaces') {
+     		if (($d['tablename'] == 'retrievalreplaces') ||
+     			($d['tablename'] == 'displayentries') ||
+     			($d['tablename'] == 'displayexits')	) {
      			Yii::app()->db->createCommand()
-     			->update($d['tablename'], array('serialnum'=>$model->newserialnum),
+     				->update($d['tablename'], array('serialnum'=>$model->newserialnum),
      					'id = :p_id', array(':p_id'=>$d['iddetailtable']));
      		} else
      			Yii::app()->db->createCommand()
@@ -673,7 +752,9 @@ class DefaultController extends Controller
      private function unprocessItems($model, $details)
      {
      	foreach($details as $d) {
-     		if ($d['tablename'] == 'retrievalreplaces') {
+     		if (($d['tablename'] == 'retrievalreplaces') ||
+     			($d['tablename'] == 'displayentries') ||
+     			($d['tablename'] == 'displayexits')	) {
      			Yii::app()->db->createCommand()
      			->update($d['tablename'], array('serialnum'=>$model->newserialnum),
      					'id = :p_id', array(':p_id'=>$d['iddetailtable']));
