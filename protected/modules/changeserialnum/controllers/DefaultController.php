@@ -594,9 +594,9 @@ class DefaultController extends Controller
 	     			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
 	     	->queryAll();
      	$detailacquisitions = Yii::app()->db->createCommand()
-     		->select('id, (\'detailacquisitions\') as tablename')
-     		->from('detailacquisitions')
-     		->where('iditem = :p_iditem and serialnum = :p_serialnum',
+     		->select('b.iddetail, (\'detailacquisitions\') as tablename')
+     		->from('detailacquisitions b')->join('acquisitions a', 'a.id = b.id')
+     		->where('a.iditem = :p_iditem and b.serialnum = :p_serialnum',
      			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
      		->queryAll();
      	$detailitemmastermods = Yii::app()->db->createCommand()
