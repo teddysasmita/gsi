@@ -612,8 +612,8 @@ class DefaultController extends Controller
      			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
      		->queryAll();
      	$detailreturstocks = Yii::app()->db->createCommand()
-     		->select('id, (\'detailreturstocks\') as tablename')
-     		->from('detailreturstocks')
+     		->select('id, (\'detailreturstocks2\') as tablename')
+     		->from('detailreturstocks2')
      		->where('iditem = :p_iditem and serialnum = :p_serialnum',
      			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
      		->queryAll();
