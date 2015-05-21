@@ -606,37 +606,37 @@ class DefaultController extends Controller
 	     		array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
 	     	->queryAll();**/
      	$detailreceiverepairs = Yii::app()->db->createCommand()
-     		->select('id, (\'detailreceiverepairs\') as tablename')
+     		->select('iddetail, (\'detailreceiverepairs\') as tablename')
      		->from('detailreceiverepairs')
      		->where('iditem = :p_iditem and serialnum = :p_serialnum',
      			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
      		->queryAll();
      	$detailreturstocks = Yii::app()->db->createCommand()
-     		->select('id, (\'detailreturstocks2\') as tablename')
+     		->select('iddetail, (\'detailreturstocks2\') as tablename')
      		->from('detailreturstocks2')
      		->where('iditem = :p_iditem and serialnum = :p_serialnum',
      			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
      		->queryAll();
      	$detailsendrepairs = Yii::app()->db->createCommand()
-     		->select('id, (\'detailsendrepairs\') as tablename')
+     		->select('iddetail, (\'detailsendrepairs\') as tablename')
      		->from('detailsendrepairs')
      		->where('iditem = :p_iditem and serialnum = :p_serialnum',
      			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
      		->queryAll();
      	$detailsendrepairs2 = Yii::app()->db->createCommand()
-     		->select('id, (\'detailsendrepairs2\') as tablename')
+     		->select('iddetail, (\'detailsendrepairs2\') as tablename')
      		->from('detailsendrepairs2')
      		->where('iditem = :p_iditem and serialnum = :p_serialnum',
      			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
      		->queryAll();
      	$detailstockdamage = Yii::app()->db->createCommand()
-     		->select('id, (\'detailstockdamage\') as tablename')
+     		->select('iddetail, (\'detailstockdamage\') as tablename')
      		->from('detailstockdamage')
      		->where('iditem = :p_iditem and serialnum = :p_serialnum',
      			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
      		->queryAll();
      	$displayentries = Yii::app()->db->createCommand()
-     		->select('id, (\'displayentries\') as tablename')
+     		->select('iddetail, (\'displayentries\') as tablename')
      		->from('displayentries')
      		->where('iditem = :p_iditem and serialnum = :p_serialnum',
      			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
