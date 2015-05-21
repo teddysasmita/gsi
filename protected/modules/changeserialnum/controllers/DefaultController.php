@@ -563,7 +563,7 @@ class DefaultController extends Controller
      
      private function searchItem($model)
      {
-     	$varnames = array('stockentries', 'stockexits', 'deliveryreplaces',
+     	$varnames = array('stockentries', 'stockexits', 'detaildeliveryreplaces',
      		'retrievalreplaces', 'detailacquisitions', 'detailitemmastermods',
      		'detailreceiverepairs', 'detailreturstocks', 'detailsendrepairs',
      		'detailsendrepairs2', 'detailstockdamage', 'displayentries',
@@ -666,7 +666,7 @@ class DefaultController extends Controller
      	
      	$allvars = get_defined_vars();
      	foreach($varnames as $vn) {
-     		if (is_array($allvars[$vn]) && count($allvars[$vn])) {
+     		if (array_key_exists($vn, $allvars) && is_array($allvars[$vn]) && count($allvars[$vn])) {
      			foreach( $allvars[$vn] as $detaildata) {	
      				unset($temp);
      				$temp['id']	= $model->id;
