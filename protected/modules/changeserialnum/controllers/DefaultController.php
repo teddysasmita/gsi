@@ -641,12 +641,12 @@ class DefaultController extends Controller
      		->where('iditem = :p_iditem and serialnum = :p_serialnum',
      			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
      		->queryAll();
-     	$displayexits = Yii::app()->db->createCommand()
+     	/**$displayexits = Yii::app()->db->createCommand()
      		->select('id, (\'displayexits\') as tablename')
      		->from('displayexits')
      		->where('iditem = :p_iditem and serialnum = :p_serialnum',
      			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
-     		->queryAll();
+     		->queryAll();**/
      	
      	
      	$warehousesdata = array();
