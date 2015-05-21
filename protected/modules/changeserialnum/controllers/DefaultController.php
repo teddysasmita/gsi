@@ -599,12 +599,12 @@ class DefaultController extends Controller
      		->where('a.iditem = :p_iditem and b.serialnum = :p_serialnum',
      			array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
      		->queryAll();
-     	$detailitemmastermods = Yii::app()->db->createCommand()
+     	/**$detailitemmastermods = Yii::app()->db->createCommand()
 	     	->select('id, (\'detailitemmastermods\') as tablename')
 	     	->from('detailitemmastermods')
 	     	->where('iditem = :p_iditem and serialnum = :p_serialnum',
 	     		array(':p_iditem'=>$model->iditem, ':p_serialnum'=>$model->oldserialnum))
-	     	->queryAll();
+	     	->queryAll();**/
      	$detailreceiverepairs = Yii::app()->db->createCommand()
      		->select('id, (\'detailreceiverepairs\') as tablename')
      		->from('detailreceiverepairs')
