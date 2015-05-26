@@ -133,7 +133,7 @@ class LookUpController extends Controller {
 	public function actionGetSalesID($name)
 	{
 		if (!Yii::app()->user->isGuest) {
-			//print_r($name);
+			print_r($name);
 			$name=rawurldecode($name);
 			list($firstname, $lastname) = explode(' ', $name);
 			$data=Yii::app()->db->createCommand()->selectDistinct('id')->from('salespersons')
