@@ -63,6 +63,14 @@ class DefaultController extends Controller
 	 */
 	public function actionCreate()
 	{
+		$displays = Yii::app()->db->createCommand()
+			->select('ipaddr')->from('warehouses')
+			->where('code = :p_code', array(':p_code'=>'GD'))
+			->queryScalar();
+		$displays1 = explode(';', $displays);
+		if (! in_array($_SERVER['REMOTE_ADDR'], $displays1))
+			throw new CHttpException ( 808, 'ANDA MELAKUKAN KESALAHAN. PROGRAM INI HANYA BOLEH DIGUNAKAN DI GD' );
+		
 		if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
                     Yii::app()->user->id))  {   
 			$this->state = 'create';
