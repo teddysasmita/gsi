@@ -137,9 +137,9 @@ class LookUpController extends Controller {
 			//list($firstname, $lastname) = explode(' ', $name);
 			//print_r($firstname); echo "boom";
 			//print_r($lastname);
-			$data=Yii::app()->db->createCommand()->selectDistinct('id')->from('salespersons')
-			->where("concat(firstname, ' ', lastname) == :p_name", 
-				array(':p_name'=> $name))
+			$data=Yii::app()->db->createCommand()->select('id')->from('salespersons')
+			->where("concat(`firstname`, ' ', `lastname`) == :p_name", 
+				array(':p_name'=>$name))
 			->order('id')
 			->queryScalar();
 			echo $data;
