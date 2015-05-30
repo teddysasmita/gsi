@@ -208,7 +208,7 @@ function execute($model, $detailmodel, $invnum) {
 	// ---------------------------------------------------------
 	
 	//Close and output PDF document
-	$pdf->Output('SJM'.idmaker::getDateTime().'.pdf', 'D');
+	$pdf->Output('PGB'.idmaker::getDateTime().'.pdf', 'D');
 }
 //============================================================+
 // END OF FILE                                                
