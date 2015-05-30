@@ -612,7 +612,7 @@ class DefaultController extends Controller
         	return $deliverydatas;
         }
 	
-		public function actionPrintsj($id)
+		public function actionPrintrd($id)
         {
         	if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
         			Yii::app()->user->id)) {
@@ -620,18 +620,18 @@ class DefaultController extends Controller
         	
         		$model=$this->loadModel($id);
         		$detailmodel=$this->loadDetails($id);
-        		$receivable=Yii::app()->db->createCommand()
-        			->select('receiveable')->from('salespos')
-        			->where('regnum = :p_regnum',array(':p_regnum'=>$model->invnum))
-        			->queryScalar();
-        			
+        		
+        		$invnum = Yii::app()->db->createCommand()
+        			->select('invnum')->from('deliveryorders')
+        			->where('regnum = :p_regnum', array(':p_regnum'=>$model->deliverynum))
+        			->queryScalar();	
         		Yii::import('application.vendors.tcpdf.*');
         		require_once ('tcpdf.php');
         		Yii::import('application.modules.deliveryreplaces.components.*');
-        		require_once('printsj.php');
+        		require_once('printrd.php');
         		ob_clean();
         		
-        		execute($model, $detailmodel, $receivable);
+        		execute($model, $detailmodel, $invnum);
         	} else {
         		throw new CHttpException(404,'You have no authorization for this operation.');
         	}

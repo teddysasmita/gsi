@@ -10,7 +10,7 @@ class MYPDF extends TCPDF {
 
 	private $data;
 	private $detaildata;
-	private $receivable;
+	private $invnum;
 	private $headernames;
 	private $headerwidths;
 	
@@ -18,13 +18,14 @@ class MYPDF extends TCPDF {
 	public $pagesize;
 	
 	// Load table data from file
-	public function LoadData($data, array $detaildata, $receivable) {
+	public function LoadData($data, array $detaildata, $invnum) {
 		// Read file lines
 		$this->data = $data;
 		$this->detaildata = $detaildata;
-		$this->receivable = $receivable;
-		$this->headernames = array('No', 'Nama Barang', 'Jmlh', 'Gudang', 'Keterangan');
-		$this->headerwidths = array(10, 120, 15, 20, 30);
+		$this->invnum = $invnum;
+		
+		$this->headernames = array('No', 'Nama Barang', 'Nomor Seri', 'Keterangan');
+		$this->headerwidths = array(10, 110, 35, 40);
 	}
 
 	// Colored table
@@ -53,16 +54,13 @@ class MYPDF extends TCPDF {
 				$this->Cell($this->headerwidths[0], 6, $counter, 'LR', 0, 'C', $fill);
 				$this->Cell($this->headerwidths[1], 6, lookup::ItemNameFromItemID($row['iditem']), 
 						'LR', 0, 'L', $fill);
-				$this->Cell($this->headerwidths[2], 6, $row['qty'], 'LR', 0, 'R', $fill);
-				$this->Cell($this->headerwidths[3], 6, lookup::WarehouseNameFromWarehouseID($row['idwarehouse']), 
-						'LR', 0, 'R', $fill);
-				$this->Cell($this->headerwidths[4], 6, '', 'LR', 1, 'R', $fill);
+				$this->Cell($this->headerwidths[2], 6, $row['serialnum'], 'LR', 0, 'R', $fill);
+				$this->Cell($this->headerwidths[3], 6, '', 'LR', 1, 'R', $fill);
 			} else {
 				$this->Cell($this->headerwidths[0], 6, ' ', 'LR', 0, 'C', $fill);
 				$this->Cell($this->headerwidths[1], 6, ' ', 'LR', 0, 'L', $fill);
 				$this->Cell($this->headerwidths[2], 6, ' ', 'LR', 0, 'R', $fill);
-				$this->Cell($this->headerwidths[3], 6, ' ', 'LR', 0, 'R', $fill);
-				$this->Cell($this->headerwidths[4], 6, ' ', 'LR', 1, 'R', $fill);
+				$this->Cell($this->headerwidths[3], 6, ' ', 'LR', 1, 'R', $fill);
 				//$this->ln();
 			}
 			if (($i > 0) && ($i % 7 == 0))
@@ -108,7 +106,7 @@ class MYPDF extends TCPDF {
 	
 		$this->setFontSize(20);
 		$this->setXY(91, 10);
-		$this->Cell(105, 10, 'Surat Jalan', 'LTR', 1, 'C');
+		$this->Cell(105, 10, 'Penukaran Pengiriman Barang', 'LTR', 1, 'C');
 		$this->SetFontSize(10);
 		$this->SetFont('Courier', 'B');
 		$this->setXY(91, 20);
@@ -119,12 +117,7 @@ class MYPDF extends TCPDF {
 		
 		$this->setXY(91, 26);
 		$this->Cell(20, 5, 'No Faktur', 'LT', 0, 'C');
-		$this->Cell(45, 5, $this->data->invnum, 'LTR', 0, 'C');
-		$this->Cell(15, 5, 'Status', 'LTR', 0, 'C');
-		if ($this->receivable > 0)
-			$this->Cell(25, 5, 'Piutang', 'LTR', 1, 'C');
-		else
-			$this->Cell(25, 5, 'Lunas', 'LTR', 1, 'C');
+		$this->Cell(85, 5, $this->data->invnum, 'LTR', 0, 'C');
 		//$this->setXY(100, 27);
 		
 		
@@ -158,7 +151,7 @@ class MYPDF extends TCPDF {
 	} 	
 }
 
-function execute($model, $detailmodel, $receivable) {
+function execute($model, $detailmodel, $invnum) {
 
 	// create new PDF document
 	
@@ -203,7 +196,7 @@ function execute($model, $detailmodel, $receivable) {
 	$pdf->SetFont('helvetica', '', 12);
 	
 	// add a page
-	$pdf->LoadData($model, $detailmodel, $receivable);
+	$pdf->LoadData($model, $detailmodel, $invnum);
 	
 	$pdf->AddPage($pdf->pageorientation, $pdf->pagesize);
 	//$pdf->AddPage();
