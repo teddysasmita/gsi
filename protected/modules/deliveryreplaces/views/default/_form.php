@@ -156,8 +156,7 @@ EOS;
 				'header'=>'Gudang',
 				'name'=>'idwarehouse',
 				'value'=>"lookup::WarehouseNameFromWarehouseID(\$data['idwhsource'])"
-			),
-			/**
+			),			
 			array(
 				'class'=>'CCheckBoxColumn',
 				'header'=>'Tukar',
@@ -166,7 +165,6 @@ EOS;
 				'value'=>"\$data['iddetail']",
 				'checked'=>"lookup::RepairCheck(\$data)",
 			),
-			**/
 		),
     ));
 ?>
