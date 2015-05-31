@@ -504,6 +504,14 @@ class DefaultController extends Controller
 		return $details;
      }
      
+     protected function loadDetails2($id)
+     {
+     	$sql="select * from detailsendrepairs2 where id='$id'";
+     	$details=Yii::app()->db->createCommand($sql)->queryAll();
+     
+     	return $details;
+     }
+     
 
      protected function afterInsert(& $model)
      {
@@ -598,7 +606,7 @@ class DefaultController extends Controller
       }
       
 	
-	public function actionPrintlpb($id)
+	public function actionPrintsr($id)
 	{
 		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
 				Yii::app()->user->id)) {
@@ -606,14 +614,14 @@ class DefaultController extends Controller
 			 
 			$model=$this->loadModel($id);
 			$detailmodel=$this->loadDetails($id);
-			$detailmodel2=$this->loadDetails2($id);
+			//$detailmodel2=$this->loadDetails2($id);
 			Yii::import('application.vendors.tcpdf.*');
 			require_once ('tcpdf.php');
 			Yii::import('application.modules.sendrepair.components.*');
 			require_once('printretur.php');
 			ob_clean();
 	
-			execute($model, $detailmodel, $detailmodel2);
+			execute($model, $detailmodel);
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		}
