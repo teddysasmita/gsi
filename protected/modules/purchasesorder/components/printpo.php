@@ -280,7 +280,7 @@ function execute($model, $detailmodel, $detailmodel2) {
 	// ---------------------------------------------------------
 	
 	//Close and output PDF document
-	$pdf->Output('RETURLPB-'.$model->regnum.'.pdf', 'D');
+	$pdf->Output('PO-'.$model->regnum.'.pdf', 'D');
 }
 //============================================================+
 // END OF FILE                                                
