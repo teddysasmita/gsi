@@ -25,7 +25,7 @@ class MYPDF extends TCPDF {
 		$this->data = $data;
 		$this->detaildata = $detaildata;
 		$this->headernames = array('No', 'Nama Barang', 'Jmlh','Harga@', 'Disc', 'Biaya', 'Total');
-		$this->headerwidths = array(10, 70, 10, 30, 15, 20, 35);
+		$this->headerwidths = array(10, 75, 10, 30, 15, 20, 35);
 	}
 	
 	public function LoadData2(array $detaildata2) {
