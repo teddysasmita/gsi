@@ -78,7 +78,7 @@ class MYPDF extends TCPDF {
 			// 0, 0, true, 0, false, true, 0, 'T', false);
 			$this->Cell($this->headerwidths[2], $ih, $row['qty'], 'LR', 0, 'R', $fill);
 			$this->Cell($this->headerwidths[3], $ih, number_format($row['price']), 'LR', 0, 'R', $fill);
-			$this->Cell($this->headerwidths[4], $ih, number_format($row['disc']), 'LR', 0, 'R', $fill);
+			$this->Cell($this->headerwidths[4], $ih, number_format($row['discount']), 'LR', 0, 'R', $fill);
 			$this->Cell($this->headerwidths[5], $ih, number_format($row['cost1']+$row['cost2']), 'LR', 0, 'R', $fill);
 			$temp = ($row['price']-$row['cost1']-$row['cost2'])*$row['qty'];
 			$total += $temp;
