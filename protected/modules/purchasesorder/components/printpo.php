@@ -271,8 +271,8 @@ function execute($model, $detailmodel, $detailmodel2) {
 	$pdf->ColoredTable();
 	
 	//$pdf->AddPage($pdf->pageorientation, $pdf->pagesize);
-	
-	$pdf->ColoredTable2();
+	if (count($detailmodel2))
+		$pdf->ColoredTable2();
 	
 	//$pdf->master();
 	// print colored table
