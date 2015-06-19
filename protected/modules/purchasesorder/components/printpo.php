@@ -197,7 +197,7 @@ class MYPDF extends TCPDF {
 		$this->Cell(24, 5, $this->data->regnum, 'LTR', 1, 'C');
 		
 		$this->SetFont('Courier', 'B');
-		$this->Cell(19, 5, 'Pengirim', 'LTR', 0,'C');
+		$this->Cell(19, 5, 'Pemasok', 'LTR', 0,'C');
 		$this->Cell(176, 5, lookup::SupplierNameFromSupplierID($this->data->idsupplier), 'LTR', 1);
 		//$this->Cell(195, 15, $this->data->remark, 'LTRB', 1);
 		
