@@ -270,7 +270,7 @@ function execute($model, $detailmodel, $detailmodel2) {
 	
 	$pdf->ColoredTable();
 	
-	$pdf->AddPage($pdf->pageorientation, $pdf->pagesize);
+	//$pdf->AddPage($pdf->pageorientation, $pdf->pagesize);
 	
 	$pdf->ColoredTable2();
 	
