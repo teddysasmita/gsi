@@ -18,7 +18,7 @@ $this->menu=array(
        'url'=>array('/purchasesorder/detailpurchasesorders/deleted', 'id'=>$model->id)),
 	array('label'=>'Data Detil Voucher yang dihapus', 
 		'url'=>array('/purchasesorder/detailpurchasesorders2/deleted', 'id'=>$model->id)),
-	array('label'=>'Data Detil Voucher yang dihapus',
+	array('label'=>'Cetak',
 		'url'=>array('printpo', 'id'=>$model->id)),
 );
 ?>
