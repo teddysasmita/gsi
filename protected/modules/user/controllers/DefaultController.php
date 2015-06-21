@@ -123,6 +123,9 @@ class DefaultController extends Controller
 	public function actionDelete($id)
 	{
 		$this->loadModel($id)->delete();
+		
+		Yii::app()->authdb->createCommand()
+			->delete('AuthAssignment', "userid = :p_userid", array(':p_userid'=>$id));
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
