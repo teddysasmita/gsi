@@ -175,6 +175,10 @@ class RbacController extends Controller {
 
     public function actionDeleteoperation($name) {
         $this->loadModel($name)->delete();
+        
+        Yii::app()->authdb->createCommand()
+        	->delete('AuthItemChild', "parent = :p_parent or child = :p_child",
+        		array(':p_parent'=>$name, ':p_child'=>$name));
 
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax']))
@@ -183,7 +187,11 @@ class RbacController extends Controller {
 
     public function actionDeleterole($name) {
         $this->loadModel($name)->delete();
-
+		
+        Yii::app()->authdb->createCommand()
+        	->delete('AuthItemChild', "parent = :p_parent or child = :p_child",
+        		array(':p_parent'=>$name, ':p_child'=>$name));
+        
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax']))
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
@@ -192,6 +200,9 @@ class RbacController extends Controller {
     public function actionDeletetask($name) {
         $this->loadModel($name)->delete();
 
+        Yii::app()->authdb->createCommand()
+        	->delete('AuthItemChild', "parent = :p_parent or child = :p_child",
+        		array(':p_parent'=>$name, ':p_child'=>$name));
         // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax']))
             $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('index'));
