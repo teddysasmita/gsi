@@ -31,16 +31,30 @@ class Barcodeprintpdf extends TCPDF {
 		$this->SetTextColor(0);
 		$this->SetDrawColor(0, 0, 0);
 		$this->SetLineWidth(0.3);
-		$this->SetFont('', 'B');
-		$this->SetFontSize(10);
+		$this->SetFontSize(7);
 		// Data
 		$fill = 0;
 		$counter=0;
 		$iditem='';
 		$margin=$this->getMargins();
+		$this->style['vpadding'] = 3;
+		$this->style['hpadding'] = 2;
 		for($i=0; $i<count($this->detaildata); $i++) {
+			unset($brand);
+			unset($price);
+			$price = 'Rp '.number_format(lookup::ItemPriceFromItemCode($this->detaildata[$i]['num']));
+			$brand = lookup::ItemNameFromItemCode($this->detaildata[$i]['num']);
+			//$this->style['label'] = $this->detaildata[$i]['num'].' - '.$price;
+			
 			if (($this->GetX() + $this->labelwidth) >= ($this->getPageWidth()- $margin['right'])) 
 				$this->Ln((int)$this->labelheight);
+			$this->checkPageBreak($this->labelheight);
+			$tempx = $this->GetX();
+			$tempy = $this->GetY();
+			$this->Cell($this->labelwidth, 3, $brand, 0, 0, 'C');
+			$this->setXY($tempx, $tempy + $this->labelheight-4);
+			$this->Cell($this->labelwidth, 3, $price, 0, 0, 'C');
+			$this->setXY($tempx, $tempy);
 			$this->write1DBarcode($this->detaildata[$i]['num'], $this->barcodetype,
 					'', '', $this->labelwidth, $this->labelheight, 0.4, $this->style, 'T');
 		};	
@@ -55,7 +69,7 @@ class Barcodeprintpdf extends TCPDF {
 		$this->SetKeywords('Cetak Barcode');
 		
 		// set default header data
-		$this->setHeaderData(false, 0, 'Gunung Sari Intan',
+		$this->setHeaderData(false, 0, 'KOSAYU',
 				'Cetak Barcode', 'Testing');
 		
 		// set header and footer fonts

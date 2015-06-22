@@ -6,16 +6,17 @@
 
 <div class="form">
 
-
 <?php
-	$yourscript = <<<EOS
-	$('#Barcodeprints_totalnum').change(function() {
-		$('#command').val('setTotalNum');	
-		$('#barcodeprints-form').submit();
+
+
+$supplierScript=<<<EOS
+      $('#prepare').click(function() {
+		$('#command').val('batchcode');
+    	$('#barcodeprints-form').submit();  
 	});
 EOS;
-	Yii::app()->clientScript->registerScript("yourscript", $yourscript, CClientscript::POS_READY);
-
+Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);
+	
    if($command=='create') 
       $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'barcodeprints-form',
@@ -41,9 +42,9 @@ EOS;
         echo $form->hiddenField($model, 'datetimelog');
         echo $form->hiddenField($model, 'regnum');
       ?>
-       
+        
 	<div class="row">
-		<?php  echo $form->labelEx($model,'idatetime'); ?>
+		<?php echo $form->labelEx($model,'idatetime'); ?>
             <?php
                $this->widget('zii.widgets.jui.CJuiDatePicker',array(
                   'name'=>'Barcodeprints[idatetime]',
@@ -96,35 +97,26 @@ EOS;
         ?>
         <?php echo $form->error($model,'barcodetype');?> 
 	</div>
-	
-	<div class="row">
-		<?php echo $form->labelEx($model,'branch'); ?>
-        <?php 
-           echo $form->dropDownList($model, 'branch', array('S'=>'Kertajaya', 
-           		'M'=>'Malang', 'E'=>'Emart')); 
-        ?>
-        <?php echo $form->error($model,'branch');?> 
-	</div>
-	
-	<div class="row">
-		<?php echo $form->labelEx($model,'startnumber'); ?>
-        <?php 
-           echo $form->textField($model, 'startnumber'); 
-        ?>
-        <?php echo $form->error($model,'startnumber');?> 
-	</div>
-	
-	<div class="row">
-		<?php echo $form->labelEx($model,'totalnum'); ?>
-        <?php 
-           echo $form->textField($model, 'totalnum'); 
-        ?>
-        <?php echo $form->error($model,'totalnum');?> 
-	</div>
-
 	  
-<?php 
+	<div class="row">
+		<?php echo CHtml::label('Nomor Batch Code', null) ?>
+        <?php 
+           echo CHtml::textField('batchcode'); 
+        ?>
+	</div>
 	
+	<div class="row">
+		<?php echo CHtml::label('Jumlah Repetisi', null) ?>
+        <?php 
+           echo CHtml::textField('batchrep'); 
+        ?>
+	</div>
+	
+	<div class="row">
+		<?php echo CHtml::button('Siapkan', array('id'=>'prepare')) ?>
+	</div>
+	
+<?php 
     if (isset(Yii::app()->session['Detailbarcodeprints'])) {
        $rawdata=Yii::app()->session['Detailbarcodeprints'];
        $count=count($rawdata);

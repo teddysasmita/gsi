@@ -7,7 +7,7 @@ class DefaultController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $formid='AB7';
+	public $formid='AC29';
 	public $tracker;
 	public $state;
 
@@ -64,8 +64,9 @@ class DefaultController extends Controller
                 
                // Uncomment the following line if AJAX validation is needed
                $this->performAjaxValidation($model);
+
                 if (isset($_POST)){
-                   if(isset($_POST['yt0'])) {
+                	if(isset($_POST['yt1'])) {
                       //The user pressed the button;
                       $model->attributes=$_POST['Barcodeprints'];
                       
@@ -101,60 +102,24 @@ class DefaultController extends Controller
                          Yii::app()->session['Barcodeprints']=$_POST['Barcodeprints'];
                          $this->redirect(array('detailbarcodeprints/create',
                             'id'=>$model->id));
-                      } else if ($_POST['command']=='setTotalNum') {
+                      } else if ($_POST['command']=='getPO') {
                          $model->attributes=$_POST['Barcodeprints'];
                          Yii::app()->session['Barcodeprints']=$_POST['Barcodeprints'];
-                         $month = date('n');
-                         switch ($month) {
-                         	case 1:
-                        		$month = 'A';
-                         	break;
-                         	case 2:
-                         		$month = 'B';
-                         	break;
-                         	case 3:
-                         		$month = 'C';
-                         	break;
-                         	case 4:
-                         		$month = 'D';
-                         	break;
-                         	case 5:
-                         		$month = 'E';
-                         	break;
-                         	case 6:
-                         		$month = 'F';
-                         	break;
-                         	case 7:
-                         		$month = 'G';
-                         	break;
-                         	case 8:
-                         		$month = 'H';
-                         	break;
-                         	case 9:
-                         		$month = 'I';
-                         	break;
-                         	case 10:
-                         		$month = 'J';
-                         	break;
-                         	case 11:
-                         		$month = 'K';
-							break;
-							case 12:
-								$month = 'L';
-							break;
-						}
-                      	 $prefixcode = date('y').$month.date('d').'GSI'.$model->branch;
-                      	 for($counter=0; $counter < $model->totalnum; $counter++) {
-                      	 	$test['id'] = $model->id;
-                      	 	$test['iddetail'] = idmaker::getcurrentid2();
-                      	 	$test['num'] = $prefixcode.str_pad($model->startnumber + $counter, 4, '0', STR_PAD_LEFT); 
-                      	 	$test['userlog'] = Yii::app()->user->id;
-                      	 	$test['datetimelog'] = idmaker::getDateTime();
-                      	 	$barcodes[] = $test;                    
-                      	 }    
+                         $this->loadPO($model->transid, $model->id);
+                      } else if ($_POST['command'] == 'batchcode') {
+                      	 $model->attributes = $_POST['Barcodeprints'];
+                      	 Yii::app()->session['Barcodeprints']=$model->attributes;
+                      	 $newbarcodes = $this->prepareBarcode($_POST['batchcode'], $_POST['batchrep'],
+                      	 	$model->id);
+                      	
+                      	 if (isset(Yii::app()->session['Detailbarcodeprints'])) {
+						 	$barcodes = Yii::app()->session['Detailbarcodeprints'];
+						 	$barcodes = array_merge($barcodes, $newbarcodes);
+                      	 } else 
+                      	 	$barcodes = $newbarcodes;
                       	 Yii::app()->session['Detailbarcodeprints'] = $barcodes;
-                      }
-                   }
+                   	  }
+                   } 
                 }
 
                 $this->render('create',array(
@@ -196,7 +161,7 @@ class DefaultController extends Controller
              $this->performAjaxValidation($model);
 
              if(isset($_POST)) {
-                 if(isset($_POST['yt0'])) {
+                 if(isset($_POST['yt1'])) {
                      $model->attributes=$_POST['Barcodeprints'];
                      $this->beforePost($model);
                      $this->tracker->modify('barcodeprints', $id);
@@ -546,15 +511,19 @@ class DefaultController extends Controller
          $model->datetimelog=$idmaker->getDateTime();
          $model->barcodetype = 'C128';
          $model->papersize = 'A4';
-         $model->labelwidth = 30;
-         $model->labelheight = 10;
-         $model->branch = 'S';
+         $model->labelwidth = 33;
+         $model->labelheight = 15;
      }
 
      protected function afterPost(& $model)
      {
          $idmaker=new idmaker();
          $idmaker->saveRegNum($this->formid, $model->regnum);
+         
+         $details = $this->loadDetails($model->id);
+         foreach($details as $d) {
+         	Action::addLabelPrintJob($d['iddetail'], $d['num']);
+         }
      }
 
      protected function beforePost(& $model)
@@ -640,9 +609,21 @@ class DefaultController extends Controller
 			$mypdf->output('Cetak Barcode'.'-'.date('Ymd').'.pdf', 'I');
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
+		}	
+	}
+	
+	private function prepareBarcode($code, $rep, $id) 
+	{
+		for ($i = 0; $i < $rep; $i++) {
+			$temp['iddetail'] = idmaker::getCurrentID2();
+			$temp['id'] = $id;
+			$temp['num'] = $code;
+			$temp['userlog'] = Yii::app()->user->id;
+			$temp['datetimelog'] = idmaker::getDateTime();
+
+			$newdata[] = $temp;				
 		}
 		
-		
-		
+		return $newdata;
 	}
 }
