@@ -127,6 +127,18 @@ class lookup extends CComponent {
    	return Yii::app()->db->createCommand($sql)->queryScalar();
    }
    
+   public static function ExpenseNameFromID($id)
+   {
+   	$sql="select name from expenses where id='$id'";
+   	return Yii::app()->db->createCommand($sql)->queryScalar();
+   }
+   
+   public static function CashboxNameFromID($id)
+   {
+   	$sql="select name from cashboxes where id='$id'";
+   	return Yii::app()->db->createCommand($sql)->queryScalar();
+   }
+   
    public static function InventoryTakingLabelFromID($id)
    {
    	$sql="select operationlabel from inventorytakings where id='$id'";
