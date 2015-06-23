@@ -81,7 +81,9 @@ class DetaildeliveryordersController extends Controller
                     }    
                 } else {
                 	$error = 'Jumlah barang tidak cukup di gudang tersebut';
-                }*/  
+                }*/ 
+				$temp[]=$_POST['Detaildeliveryorders'];
+				
 				if ($model->validate()) {
 					Yii::app()->session['Detaildeliveryorders']=$temp;
 					if ($master=='create')
@@ -149,6 +151,13 @@ class DetaildeliveryordersController extends Controller
                     } else {
                     	$error = 'Jumlah barang tidak cukup di gudang tersebut';
                     }*/
+                    
+                    foreach ($temp as $tk=>$tv) {
+                    	if($tv['iddetail']==$_POST['Detaildeliveryorders']['iddetail']) {
+                    		$temp[$tk]=$_POST['Detaildeliveryorders'];
+                    		break;
+                    	}
+                    }
                     
                     if($model->validate()) {
                     	Yii::app()->session['Detaildeliveryorders']=$temp;
