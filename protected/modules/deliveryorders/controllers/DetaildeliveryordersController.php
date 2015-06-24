@@ -68,7 +68,7 @@ class DetaildeliveryordersController extends Controller
 				$temp=Yii::app()->session['Detaildeliveryorders'];
 				$model->attributes=$_POST['Detaildeliveryorders'];
                     //posting into session
-                /*
+                
                  if (Action::checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
 					$temp[]=$_POST['Detaildeliveryorders'];
                     
@@ -81,16 +81,7 @@ class DetaildeliveryordersController extends Controller
                     }    
                 } else {
                 	$error = 'Jumlah barang tidak cukup di gudang tersebut';
-                }*/ 
-				$temp[]=$_POST['Detaildeliveryorders'];
-				
-				if ($model->validate()) {
-					Yii::app()->session['Detaildeliveryorders']=$temp;
-					if ($master=='create')
-						$this->redirect(array('default/createdetail'));
-					else if($master=='update')
-						$this->redirect(array('default/updatedetail'));
-				}          
+                }          
 			}
 			
 			$this->render('create',array(
@@ -132,7 +123,7 @@ class DetaildeliveryordersController extends Controller
 				{
                     $temp=Yii::app()->session['Detaildeliveryorders'];
                     $model->attributes=$_POST['Detaildeliveryorders'];
-                    /*if(Action::checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
+                    if(Action::checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
                     	foreach ($temp as $tk=>$tv) {
                         	if($tv['iddetail']==$_POST['Detaildeliveryorders']['iddetail']) {
                             	$temp[$tk]=$_POST['Detaildeliveryorders'];
@@ -150,22 +141,6 @@ class DetaildeliveryordersController extends Controller
 		    			}
                     } else {
                     	$error = 'Jumlah barang tidak cukup di gudang tersebut';
-                    }*/
-                    
-                    foreach ($temp as $tk=>$tv) {
-                    	if($tv['iddetail']==$_POST['Detaildeliveryorders']['iddetail']) {
-                    		$temp[$tk]=$_POST['Detaildeliveryorders'];
-                    		break;
-                    	}
-                    }
-                    
-                    if($model->validate()) {
-                    	Yii::app()->session['Detaildeliveryorders']=$temp;
-                    		
-                    	if ($master=='create')
-                    		$this->redirect(array('default/createdetail'));
-                    	else if($master=='update')
-                    		$this->redirect(array('default/updatedetail'));
                     }
                 }
                
