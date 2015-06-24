@@ -118,8 +118,7 @@ class DetailorderretrievalsController extends Controller
                 // Uncomment the following line if AJAX validation is needed
                 $this->performAjaxValidation($model);
                 
-                if(isset($_POST['yt0']))
-				{
+                if(isset($_POST['yt0'])) {
                     $temp=Yii::app()->session['Detailorderretrievals'];
                     $model->attributes=$_POST['Detailorderretrievals'];
                     
@@ -150,9 +149,6 @@ class DetailorderretrievalsController extends Controller
                     }*/
                 }
                
-                $temp=Yii::app()->session['Detailorderretrievals'];
-                $model->attributes=$_POST['Detailorderretrievals'];
-                
                 $this->render('update',array(
                         'model'=>$model,'master'=>$master, 'error'=>$error
                 ));
