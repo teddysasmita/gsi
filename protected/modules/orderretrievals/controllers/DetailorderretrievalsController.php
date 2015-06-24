@@ -67,7 +67,7 @@ class DetailorderretrievalsController extends Controller
                 if(isset($_POST['yt0'])) {
                     $temp=Yii::app()->session['Detailorderretrievals'];
                     $model->attributes=$_POST['Detailorderretrievals'];
-                    if (Action::checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
+                    //if (Action::checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
                     //posting into session
 	                    $temp[]=$_POST['Detailorderretrievals'];
 	                    
@@ -78,9 +78,10 @@ class DetailorderretrievalsController extends Controller
 	                        else if($master=='update')
 	                            $this->redirect(array('default/updatedetail'));
 	                    } 
-                    } else {
+                    /*} else {
                     	$error = 'Jumlah barang tidak cukup di gudang tersebut';
-                    }   
+                    }*/
+                       
                 }                
 
                 $this->render('create',array(
@@ -122,13 +123,18 @@ class DetailorderretrievalsController extends Controller
                     $temp=Yii::app()->session['Detailorderretrievals'];
                     $model->attributes=$_POST['Detailorderretrievals'];
                     
-                    if(Action::checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
+                    /*if(Action::checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
 	                    foreach ($temp as $tk=>$tv) {
-	                        if($tv['iddetail']==$_POST['Detailorderretrievals']['iddetail']) {
-	                            $temp[$tk]=$_POST['Detailorderretrievals'];
-	                            break;
-	                        }
-	                    }
+						if($tv['iddetail']==$_POST['Detailorderretrievals']['iddetail']) {
+							$temp[$tk]=$_POST['Detailorderretrievals'];
+							break;
+						}
+					}*/
+						foreach ($temp as $tk=>$tv) {
+						if($tv['iddetail']==$_POST['Detailorderretrievals']['iddetail']) {
+							$temp[$tk]=$_POST['Detailorderretrievals'];
+							break;
+						}
 	                    //posting into session
 			    		if($model->validate()) {
 	                    	Yii::app()->session['Detailorderretrievals']=$temp;
@@ -138,11 +144,14 @@ class DetailorderretrievalsController extends Controller
 	                    	else if($master=='update')
 	                        	$this->redirect(array('default/updatedetail'));
 			    		}	
-                    } else {
+                    /*} else {
                     	$error = 'Jumlah barang tidak cukup di gudang tersebut';
-                    }
+                    }*/
                 }
                
+                $temp=Yii::app()->session['Detailorderretrievals'];
+                $model->attributes=$_POST['Detailorderretrievals'];
+                
                 $this->render('update',array(
                         'model'=>$model,'master'=>$master, 'error'=>$error
                 ));
