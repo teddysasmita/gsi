@@ -131,9 +131,10 @@ class DetailorderretrievalsController extends Controller
 						}
 					}*/
 						foreach ($temp as $tk=>$tv) {
-						if($tv['iddetail']==$_POST['Detailorderretrievals']['iddetail']) {
-							$temp[$tk]=$_POST['Detailorderretrievals'];
-							break;
+							if($tv['iddetail']==$_POST['Detailorderretrievals']['iddetail']) {
+								$temp[$tk]=$_POST['Detailorderretrievals'];
+								break;
+							}
 						}
 	                    //posting into session
 			    		if($model->validate()) {
