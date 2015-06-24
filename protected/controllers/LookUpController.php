@@ -820,4 +820,23 @@ EOS;
 		};
 	}
 	
+	public function actionGetCashboxName($id)
+	{
+		$name=rawurldecode($id);
+	
+		if (!Yii::app()->user->isGuest) {
+			$data=Yii::app()->db->createCommand()
+			->select("concat(accountnum, ' -> ', name)")
+			->from('cashboxes')
+			->where('id = :p_id',
+					array(':p_id'=>$id))
+					->queryScalar();
+			echo json_encode($data);
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	
+	}
+	
+	
 }
