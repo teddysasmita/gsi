@@ -534,7 +534,7 @@ class DefaultController extends Controller
         $details = $this->loadDetails($model->id);
 		foreach($details as $detail) {
 	         Action::setItemAvailinWarehouse($model->idwarehouse, $detail['serialnum'], '0');
-	         if ($model->transname = 'AC25')
+	         if ($model->transname == 'AC25')
 	         	Action::sendRepairOut($model->transid, $detail['serialnum']);
 		};
      }
