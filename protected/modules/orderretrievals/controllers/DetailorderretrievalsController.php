@@ -122,7 +122,7 @@ class DetailorderretrievalsController extends Controller
                     $temp=Yii::app()->session['Detailorderretrievals'];
                     $model->attributes=$_POST['Detailorderretrievals'];
                     
-                    if(Action::checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
+                    //if(Action::checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
 	                    foreach ($temp as $tk=>$tv) {
 							if($tv['iddetail']==$_POST['Detailorderretrievals']['iddetail']) {
 								$temp[$tk]=$_POST['Detailorderretrievals'];
@@ -138,9 +138,9 @@ class DetailorderretrievalsController extends Controller
 	                    	else if($master=='update')
 	                        	$this->redirect(array('default/updatedetail'));
 			    		}	
-                    } else {
+                    /*} else {
                     	$error = 'Jumlah barang tidak cukup di gudang tersebut';
-                    }
+                    }*/
                 }
                
                 $this->render('update',array(
