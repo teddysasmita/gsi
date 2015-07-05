@@ -69,8 +69,8 @@ class DetaildeliveryordersController extends Controller
 				$model->attributes=$_POST['Detaildeliveryorders'];
                     //posting into session
                 
-                 if (Action::checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
-					$temp[]=$_POST['Detaildeliveryorders'];
+                 /*if (Action::checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
+					$temp[]=$_POST['Detaildeliveryorders'];*/
                     
 					if ($model->validate()) {
                         Yii::app()->session['Detaildeliveryorders']=$temp;
@@ -79,9 +79,9 @@ class DetaildeliveryordersController extends Controller
                         else if($master=='update')
                             $this->redirect(array('default/updatedetail'));
                     }    
-                } else {
+                /*} else {
                 	$error = 'Jumlah barang tidak cukup di gudang tersebut';
-                }          
+                } */         
 			}
 			
 			$this->render('create',array(

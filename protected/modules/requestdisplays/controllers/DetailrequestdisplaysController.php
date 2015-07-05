@@ -68,7 +68,7 @@ class DetailrequestdisplaysController extends Controller
 				$model->attributes=$_POST['Detailrequestdisplays'];
                     //posting into session
 				
-				if(Action::checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
+				//if(Action::checkItemQty($model->iditem, $model->idwarehouse) >= $model->qty) {
 					$temp[]=$_POST['Detailrequestdisplays'];
                     
                     if ($model->validate()) {
@@ -78,9 +78,9 @@ class DetailrequestdisplaysController extends Controller
                         else if($master=='update')
                             $this->redirect(array('default/updatedetail'));
                     }    
-                } else {
+                /*} else {
                 	$error = 'Jumlah barang tidak cukup di gudang tersebut';
-                }
+                }*/
                 
 			}
 			$this->render('create',array(
