@@ -63,7 +63,7 @@ $supplierScript=<<<EOS
    			}
    	});
    		
-   	 $('#Detailstockdamage_itemname').focus(function(){
+   	 $('#Detailstockdamage_itemname').click(function(){
          $('#ItemDialog').dialog('open');
       });
 		

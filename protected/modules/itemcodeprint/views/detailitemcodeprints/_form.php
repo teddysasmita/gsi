@@ -15,7 +15,7 @@
 
 $supplierScript=<<<EOS
    
-	$('#Detailitemcodeprints_itemname').focus(function(){
+	$('#Detailitemcodeprints_itemname').click(function(){
          $('#ItemDialog').dialog('open');
       });
       $('#dialog-item-name').change(

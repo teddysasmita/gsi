@@ -9,7 +9,7 @@
 <?php
  
     $itemScript=<<<EOS
-      $('#Detailsalesreplace_itemname').focus(function(){
+      $('#Detailsalesreplace_itemname').click(function(){
 		if ($('#Detailsalesreplace_itemname').prop('readOnly') != true) 
          	$('#ItemDialog').dialog('open');
       });
@@ -34,7 +34,7 @@
          }
       );
 		
-	$('#Detailsalesreplace_itemnewname').focus(function(){
+	$('#Detailsalesreplace_itemnewname').click(function(){
 		if ($('#Detailsalesreplace_itemnewname').prop('readOnly') != true)
 			$('#ItemnewDialog').dialog('open');
       });

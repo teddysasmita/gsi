@@ -9,7 +9,7 @@
 <?php
  
     $itemScript=<<<EOS
-      $('#Detaildeliveryorders_itemname').focus(function(){
+      $('#Detaildeliveryorders_itemname').click(function(){
          $('#ItemDialog').dialog('open');
       });
       $('#dialog-item-name').change(

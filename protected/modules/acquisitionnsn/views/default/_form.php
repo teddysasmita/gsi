@@ -15,7 +15,7 @@
 			$('#acquisitionsnsn-form').submit();
 		});  
 
-		$('#Acquisitionsnsn_itemname').focus(function(){
+		$('#Acquisitionsnsn_itemname').click(function(){
 			$('#ItemDialog').dialog('open');
       	});
       

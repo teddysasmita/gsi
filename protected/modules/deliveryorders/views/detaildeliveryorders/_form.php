@@ -23,7 +23,7 @@ $itemScript=<<<EOS
 		return found;
 	};
 	
-      $('#Detaildeliveryorders_itemname').focus(function(){
+      $('#Detaildeliveryorders_itemname').click(function(){
          $('#ItemDialog').dialog('open');
       });
 		

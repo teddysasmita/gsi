@@ -15,7 +15,7 @@
 			$('#acquisitions-form').submit();
 		});  
 
-		$('#Acquisitions_itemname').focus(function(){
+		$('#Acquisitions_itemname').clicks(function(){
 			$('#ItemDialog').dialog('open');
       	});
       
