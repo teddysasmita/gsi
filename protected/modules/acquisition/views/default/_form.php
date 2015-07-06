@@ -104,7 +104,7 @@ EOS;
 				$data = CHtml::listData($warehouses, 'id', 'code');
          		echo CHtml::dropDownList('Acquisitions[idwarehouse]', '', $data, 
 					array('empty'=>'Harap Pilih'));
-         	} else if (count($warehouse) > 0) {
+         	} else if (count($warehouses) > 0) {
 				echo CHtml::hiddenField('Acquisitions[idwarehouse]', $warehouses[0]['id']);
 				echo CHtml::label($warehouses[0]['code'],'false', array('class'=>'money')); 
 			} else {
