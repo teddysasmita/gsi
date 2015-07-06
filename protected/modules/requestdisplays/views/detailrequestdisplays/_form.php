@@ -23,7 +23,7 @@ $itemScript=<<<EOS
 		return found;
 	};
 	
-      $('#Detailrequestdisplays_itemname').focus(function(){
+      $('#Detailrequestdisplays_itemname').click(function(){
          $('#ItemDialog').dialog('open');
       });
       $('#dialog-item-name').change(
