@@ -104,10 +104,14 @@ EOS;
 				$data = CHtml::listData($warehouses, 'id', 'code');
          		echo CHtml::dropDownList('Acquisitions[idwarehouse]', '', $data, 
 					array('empty'=>'Harap Pilih'));
-         	} else {
+         	} else if (count($warehouse) > 0) {
 				echo CHtml::hiddenField('Acquisitions[idwarehouse]', $warehouses[0]['id']);
 				echo CHtml::label($warehouses[0]['code'],'false', array('class'=>'money')); 
+			} else {
+				echo CHtml::hiddenField('Acquisitions[idwarehouse]', '');
+				echo CHtml::label($_SERVER['REMOTE_ADDR'].' tdk terdaftar sebagai gudang.','false', array('class'=>'error'));
 			}
+				
 		?>
 		<?php echo $form->error($model,'idwarehouse'); ?>
 	</div>
