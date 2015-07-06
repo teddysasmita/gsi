@@ -83,14 +83,14 @@ class DefaultController extends Controller
 						throw new CHttpException(707,'Maaf, ada nomor serial yang sudah terdaftar dalam gudang ini.');
 					$respond=$model->save();
 					if(!$respond) 
-						throw new CHttpException(404,'There is an error in master posting: '. print_r($model->errors));
+						throw new CHttpException(404,'There is an error in master posting: ');
 
 					if(isset(Yii::app()->session['Detailacquisitions']) ) {
 						$details=Yii::app()->session['Detailacquisitions'];
 						$respond=$respond&&$this->saveNewDetails($details, $model->idwarehouse);
 					} 
 					if(!$respond)
-						throw new CHttpException(404,'There is an error in detail posting: '. print_r($model->errors));
+						throw new CHttpException(404,'There is an error in detail posting: ');
 						
 					$this->afterPost($model);
 					Yii::app()->session->remove('Acquisitions');
