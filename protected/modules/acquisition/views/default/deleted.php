@@ -59,7 +59,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
               'visible'=>'false',
             ),
          ),
-         'updateButtonUrl'=>"Action::decodeRestoreDeletedAcquisitionsUrl(\$data)",
+         'updateButtonUrl'=>"Action::decodeRestoreDeletedAcquisitionsrl(\$data)",
 		),
 	),
 )); ?>

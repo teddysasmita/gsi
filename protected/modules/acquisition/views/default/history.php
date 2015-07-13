@@ -46,7 +46,7 @@ $this->menu=array(
                           'visible'=>'false',
                         ),
                     ),
-                   'updateButtonUrl'=>"Action::decodeRestoreHistoryAcquisitionsUrl(\$data)",
+                   'updateButtonUrl'=>"Action::decodeRestoreHistoryAcquisitionUrl(\$data)",
 		),
 	),
 )); ?>
