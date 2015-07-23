@@ -1,6 +1,6 @@
 <?php
-/* @var $this BarcodeprintsController */
-/* @var $model Barcodeprints */
+/* @var $this PricetagprintsController */
+/* @var $model Pricetagprints */
 /* @var $form CActiveForm */
 ?>
 

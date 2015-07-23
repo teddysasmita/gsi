@@ -1,6 +1,6 @@
 <?php
-/* @var $this BarcodeprintsController */
-/* @var $model Barcodeprints */
+/* @var $this PricetagprintsController */
+/* @var $model Pricetagprints */
 
 $this->breadcrumbs=array(
    'Proses'=>array('/site/proses'),
@@ -15,35 +15,68 @@ $this->menu=array(
 	array('label'=>'Pencarian Data', 'url'=>array('admin')),
 	array('label'=>'Sejarah', 'url'=>array('history', 'id'=>$model->id)),
 	array('label'=>'Data Detil yang dihapus', 
-         'url'=>array('/barcodeprint/detailbarcodeprints/deleted', 'id'=>$model->id)),
-	array('label'=>'Cetak', 'url'=>array('printbarcode', 'id'=>$model->id)),
+         'url'=>array('/pricetagprint/detailpricetagprints/deleted', 'id'=>$model->id)),
+	array('label'=>'Cetak', 'url'=>array('printpricetag', 'id'=>$model->id)),
 );
 ?>
 
-<h1>Cetak Barcode</h1>
+<h1>Buat Label Harga</h1>
 
-<?php $this->widget('zii.widgets.CDetailView', array(
+<?php 
+	$tmppath = Yii::app()->assetManager->basePath.'/pricetagprint'.$model->id;
+	$tmpfile = fopen($tmppath, 'w');
+	fwrite($tmpfile, $model->bkjpg);
+	fclose($tmpfile);
+	$this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
 		//'id',
 		'regnum',
 		'idatetime',
-		'barcodetype',
-		'labelheight',
-		'labelwidth',
 		'papersize',
+		'paperwidth',
+		'paperheight',
+		'labelwidth',
+		'labelheight',
+		'itemnamex',
+		'itemnamey',
+		'itemnamew',
+		'itemnameh',
+		'itemnameft',
+		'itemnamefz',
+		'itemnamec',
+		'pricex',
+		'pricey',
+		'pricew',
+		'priceh',
+		'priceft',
+		'pricefz',
+		'pricec',
+		'extrax',
+		'extray',
+		'extraw',
+		'extrah',
+		'extraft',
+		'extrafz',
+		'extrac',
+		array(
+			'name'=>'bkjpg',
+			'value'=>Yii::app()->assetManager->baseUrl.'/pricetagprint'.$model->id,
+			'type'=>'image'		
+		),
 		array(
 			'label'=>'Userlog',
 			'value'=>lookup::UserNameFromUserID($model->userlog),
 		),
 		'datetimelog',
 	),
-)); ?>
+)); 
+	?>
 
 <?php 
-   $count=Yii::app()->db->createCommand("select count(*) from detailbarcodeprints where id='$model->id'")
+   $count=Yii::app()->db->createCommand("select count(*) from detailpricetagprints where id='$model->id'")
       ->queryScalar();
-   $sql="select * from detailbarcodeprints where id='$model->id'";
+   $sql="select * from detailpricetagprints where id='$model->id'";
 
    $dataProvider=new CSqlDataProvider($sql,array(
           'totalItemCount'=>$count,
@@ -52,9 +85,14 @@ $this->menu=array(
          'dataProvider'=>$dataProvider,
          'columns'=>array(
             array(
-               'header'=>'Nomor',
-               'name'=>'num',
+               'header'=>'Nama Barang',
+               'name'=>'iditem',
+            	'value'=>"lookup::ItemNameFromItemID(\$data['iditem'])",
             ),
+         	array(
+         		'name'=>'qty',
+         		'type'=>'number',		
+   			),
             array(
                   'class'=>'CButtonColumn',
                   'buttons'=> array(
@@ -65,7 +103,7 @@ $this->menu=array(
                         'visible'=>'false'
                      )
                   ),
-                  'viewButtonUrl'=>"Action::decodeViewDetailStockEntryUrl(\$data)",
+                  'viewButtonUrl'=>"Action::decodeViewDetailPricetagPrintUrl(\$data)",
               )
          ),
    ));

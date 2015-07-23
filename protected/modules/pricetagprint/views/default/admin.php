@@ -1,6 +1,6 @@
 <?php
-/* @var $this BarcodeprintsController */
-/* @var $model Barcodeprints */
+/* @var $this PricetagprintsController */
+/* @var $model Pricetagprints */
 
 $this->breadcrumbs=array(
       'Proses'=>array('/site/proses'),
@@ -19,7 +19,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#stockentries-grid').yiiGridView('update', {
+	$('#pricetagprint-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -27,7 +27,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Cetak Barcode</h1>
+<h1>Buat Label Harga</h1>
 
 <p>
 You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
@@ -42,7 +42,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 </div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'stockentries-grid',
+	'id'=>'pricetagprint-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(

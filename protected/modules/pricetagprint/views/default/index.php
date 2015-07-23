@@ -1,5 +1,5 @@
 <?php
-/* @var $this BarcodeprintsController */
+/* @var $this PricetagprintsController */
 /* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs=array(
@@ -14,7 +14,7 @@ $this->menu=array(
 );
 ?>
 
-<h1>Cetak Barcode</h1>
+<h1>Buat Label Harga</h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,

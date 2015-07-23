@@ -1,6 +1,6 @@
 <?php
-/* @var $this BarcodeprintsController */
-/* @var $model Barcodeprints */
+/* @var $this PricetagprintsController */
+/* @var $model Pricetagprints */
 
 $this->breadcrumbs=array(
       'Proses'=>array('/site/proses'),
@@ -15,15 +15,15 @@ $this->menu=array(
 
 ?>
 
-<h1>Cetak Barcode</h1>
+<h1>Buat Label Harga</h1>
 
 <?php    $data=Yii::app()->tracker->createCommand()->
-       select()->from('barcodeprints')->where('id=:id',array(':id'=>$model->id))->queryAll();
+       select()->from('pricetagprints')->where('id=:id',array(':id'=>$model->id))->queryAll();
     $ap=new CArrayDataProvider($data);
  ?> 
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'barcodeprints-grid',
+	'id'=>'pricetagprints-grid',
 	'dataProvider'=>$ap,
 	'columns'=>array(
 		'id',
@@ -46,7 +46,7 @@ $this->menu=array(
                           'visible'=>'false',
                         ),
                     ),
-                   'updateButtonUrl'=>"Action::decodeRestoreHistoryCustomerUrl(\$data)",
+                   'updateButtonUrl'=>"Action::decodeRestoreHistoryPricetagPrintUrl(\$data)",
 		),
 	),
 )); ?>

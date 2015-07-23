@@ -7,7 +7,7 @@ class DefaultController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
-	public $formid='AC29';
+	public $formid='AC39';
 	public $tracker;
 	public $state;
 
@@ -50,45 +50,48 @@ class DefaultController extends Controller
                 $this->state='c';
                 $this->trackActivity('c');    
                     
-                $model=new Barcodeprints;
+                $model=new Pricetagprints;
                 $this->afterInsert($model);
                 
                 Yii::app()->session['master']='create';
                 //as the operator enter for the first time, we load the default value to the session
-                if (!isset(Yii::app()->session['Barcodeprints'])) {
-                   Yii::app()->session['Barcodeprints']=$model->attributes;
+                if (!isset(Yii::app()->session['Pricetagprints'])) {
+                   Yii::app()->session['Pricetagprints']=$model->attributes;
                 } else {
                 // use the session to fill the model
-                    $model->attributes=Yii::app()->session['Barcodeprints'];
+                    $model->attributes=Yii::app()->session['Pricetagprints'];
                 }
                 
                // Uncomment the following line if AJAX validation is needed
                $this->performAjaxValidation($model);
 
                 if (isset($_POST)){
-                	if(isset($_POST['yt1'])) {
+                	if(isset($_POST['yt0'])) {
                       //The user pressed the button;
-                      $model->attributes=$_POST['Barcodeprints'];
-                      
-                      
+                      $model->attributes=$_POST['Pricetagprints'];
+                       
                       $this->beforePost($model);
                       $respond=true;
-                      // && $this->checkSerialNum(Yii::app()->session['Detailbarcodeprints']);
+                      // && $this->checkSerialNum(Yii::app()->session['Detailpricetagprints']);
                       if ($respond) {
-                         $respond=$model->save();
+                		$data = $this->getImage();
+                		if ($data !== FALSE) {
+                			$model->bkjpg = $data;	
+                		}
+                      	$respond=$model->save();
                          if(!$respond) {
                              throw new CHttpException(404,'There is an error in master posting'. ' '. $model->errors);
                          }
 
-                         if(isset(Yii::app()->session['Detailbarcodeprints']) ) {
-                           $details=Yii::app()->session['Detailbarcodeprints'];
+                         if(isset(Yii::app()->session['Detailpricetagprints']) ) {
+                           $details=Yii::app()->session['Detailpricetagprints'];
                            $respond=$respond&&$this->saveNewDetails($details);
                          } 
 
                          if($respond) {
                             $this->afterPost($model);
-                            Yii::app()->session->remove('Barcodeprints');
-                            Yii::app()->session->remove('Detailbarcodeprints');
+                            Yii::app()->session->remove('Pricetagprints');
+                            Yii::app()->session->remove('Detailpricetagprints');
                             $this->redirect(array('view','id'=>$model->id));
                          } 
                          
@@ -98,27 +101,11 @@ class DefaultController extends Controller
                    } else if (isset($_POST['command'])){
                       // save the current master data before going to the detail page
                       if($_POST['command']=='adddetail') {
-                         $model->attributes=$_POST['Barcodeprints'];
-                         Yii::app()->session['Barcodeprints']=$_POST['Barcodeprints'];
-                         $this->redirect(array('detailbarcodeprints/create',
+                         $model->attributes=$_POST['Pricetagprints'];
+                         Yii::app()->session['Pricetagprints']=$_POST['Pricetagprints'];
+                         $this->redirect(array('detailpricetagprints/create',
                             'id'=>$model->id));
-                      } else if ($_POST['command']=='getPO') {
-                         $model->attributes=$_POST['Barcodeprints'];
-                         Yii::app()->session['Barcodeprints']=$_POST['Barcodeprints'];
-                         $this->loadPO($model->transid, $model->id);
-                      } else if ($_POST['command'] == 'batchcode') {
-                      	 $model->attributes = $_POST['Barcodeprints'];
-                      	 Yii::app()->session['Barcodeprints']=$model->attributes;
-                      	 $newbarcodes = $this->prepareBarcode($_POST['batchcode'], $_POST['batchrep'],
-                      	 	$model->id);
-                      	
-                      	 if (isset(Yii::app()->session['Detailbarcodeprints'])) {
-						 	$barcodes = Yii::app()->session['Detailbarcodeprints'];
-						 	$barcodes = array_merge($barcodes, $newbarcodes);
-                      	 } else 
-                      	 	$barcodes = $newbarcodes;
-                      	 Yii::app()->session['Detailbarcodeprints'] = $barcodes;
-                   	  }
+                      } 
                    } 
                 }
 
@@ -149,22 +136,26 @@ class DefaultController extends Controller
              
              Yii::app()->session['master']='update';
 
-             if(!isset(Yii::app()->session['Barcodeprints']))
-                Yii::app()->session['Barcodeprints']=$model->attributes;
+             if(!isset(Yii::app()->session['Pricetagprints']))
+                Yii::app()->session['Pricetagprints']=$model->attributes;
              else
-                $model->attributes=Yii::app()->session['Barcodeprints'];
+                $model->attributes=Yii::app()->session['Pricetagprints'];
 
-             if(!isset(Yii::app()->session['Detailbarcodeprints'])) 
-               Yii::app()->session['Detailbarcodeprints']=$this->loadDetails($id);
+             if(!isset(Yii::app()->session['Detailpricetagprints'])) 
+               Yii::app()->session['Detailpricetagprints']=$this->loadDetails($id);
              
              // Uncomment the following line if AJAX validation is needed
              $this->performAjaxValidation($model);
 
              if(isset($_POST)) {
-                 if(isset($_POST['yt1'])) {
-                     $model->attributes=$_POST['Barcodeprints'];
+                 if(isset($_POST['yt0'])) {
+                     $model->attributes=$_POST['Pricetagprints'];
+                     $data = $this->getImage();
+                     if ($data !== FALSE) {
+                     	$model->bkjpg = $data;
+                     }
                      $this->beforePost($model);
-                     $this->tracker->modify('barcodeprints', $id);
+                     $this->tracker->modify('pricetagprints', $id);
                      $respond=$model->save();
                      if($respond) {
                        $this->afterPost($model);
@@ -172,16 +163,16 @@ class DefaultController extends Controller
                      	throw new CHttpException(404,'There is an error in master posting ');
                      }
 
-                     if(isset(Yii::app()->session['Detailbarcodeprints'])) {
-                         $details=Yii::app()->session['Detailbarcodeprints'];
+                     if(isset(Yii::app()->session['Detailpricetagprints'])) {
+                         $details=Yii::app()->session['Detailpricetagprints'];
                          $respond=$respond&&$this->saveDetails($details);
                          if(!$respond) {
                            throw new CHttpException(404,'There is an error in detail posting');
                          }
                      };
                      
-                     if(isset(Yii::app()->session['DeleteDetailbarcodeprints'])) {
-                         $deletedetails=Yii::app()->session['DeleteDetailbarcodeprints'];
+                     if(isset(Yii::app()->session['DeleteDetailpricetagprints'])) {
+                         $deletedetails=Yii::app()->session['DeleteDetailpricetagprints'];
                          $respond=$respond&&$this->deleteDetails($deletedetails);
                          if(!$respond) {
                            throw new CHttpException(404,'There is an error in detail deletion');
@@ -189,9 +180,9 @@ class DefaultController extends Controller
                      };
                     
                      if($respond) {
-                         Yii::app()->session->remove('Barcodeprints');
-                         Yii::app()->session->remove('Detailbarcodeprints');
-                         Yii::app()->session->remove('DeleteDetailbarcodeprints');
+                         Yii::app()->session->remove('Pricetagprints');
+                         Yii::app()->session->remove('Detailpricetagprints');
+                         Yii::app()->session->remove('DeleteDetailpricetagprints');
                          $this->redirect(array('view','id'=>$model->id));
                      }
                  }
@@ -218,12 +209,12 @@ class DefaultController extends Controller
             $model=$this->loadModel($id);
             $this->trackActivity('d');
             $this->beforeDelete($model);
-            $this->tracker->delete('barcodeprints', $id);
+            $this->tracker->delete('pricetagprints', $id);
 
-            $detailmodels=Detailbarcodeprints::model()->findAll('id=:id',array(':id'=>$id));
+            $detailmodels=Detailpricetagprints::model()->findAll('id=:id',array(':id'=>$id));
             foreach($detailmodels as $dm) {
                $this->tracker->init();
-               $this->tracker->delete('detailbarcodeprints', array('iddetail'=>$dm->iddetail));
+               $this->tracker->delete('detailpricetagprints', array('iddetail'=>$dm->iddetail));
                $dm->delete();
             }
 
@@ -243,14 +234,18 @@ class DefaultController extends Controller
 	 */
 	public function actionIndex()
 	{
-            if(Yii::app()->authManager->checkAccess($this->formid.'-List', 
-                Yii::app()->user->id)) {
-               $this->trackActivity('l');
-
-               Yii::app()->session->remove('Barcodeprints');
-               Yii::app()->session->remove('Detailbarcodeprints');
-               Yii::app()->session->remove('DeleteDetailbarcodeprints');
-               $dataProvider=new CActiveDataProvider('Barcodeprints',
+		if(Yii::app()->authManager->checkAccess($this->formid.'-List', 
+			Yii::app()->user->id)) {
+			$this->trackActivity('l');
+			
+			$filenames = glob(Yii::app()->assetManager->basePath.'/pricetagprint*');
+			foreach($filenames as $f)
+				unlink($f);
+               
+               Yii::app()->session->remove('Pricetagprints');
+               Yii::app()->session->remove('Detailpricetagprints');
+               Yii::app()->session->remove('DeleteDetailpricetagprints');
+               $dataProvider=new CActiveDataProvider('Pricetagprints',
                   array(
                      'criteria'=>array(
                         'order'=>'id desc'
@@ -274,10 +269,10 @@ class DefaultController extends Controller
                 Yii::app()->user->id)) {
                 $this->trackActivity('s');
                
-                $model=new Barcodeprints('search');
+                $model=new Pricetagprints('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Barcodeprints']))
-			$model->attributes=$_GET['Barcodeprints'];
+		if(isset($_GET['Pricetagprints']))
+			$model->attributes=$_GET['Pricetagprints'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -319,9 +314,9 @@ class DefaultController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
                 $this->trackActivity('r');
-                $this->tracker->restore('barcodeprints', $idtrack);
+                $this->tracker->restore('pricetagprints', $idtrack);
                 
-                $dataProvider=new CActiveDataProvider('Barcodeprints');
+                $dataProvider=new CActiveDataProvider('Pricetagprints');
                 $this->render('index',array(
                     'dataProvider'=>$dataProvider,
                 ));
@@ -335,9 +330,9 @@ class DefaultController extends Controller
             if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                Yii::app()->user->id)) {
                 $this->trackActivity('n');
-                $this->tracker->restoreDeleted('barcodeprints', $idtrack);
+                $this->tracker->restoreDeleted('pricetagprints', $idtrack);
                 
-                $dataProvider=new CActiveDataProvider('Barcodeprints');
+                $dataProvider=new CActiveDataProvider('Pricetagprints');
                 $this->render('index',array(
                     'dataProvider'=>$dataProvider,
                 ));
@@ -350,12 +345,12 @@ class DefaultController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Barcodeprints the loaded model
+	 * @return Pricetagprints the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Barcodeprints::model()->findByPk($id);
+		$model=Pricetagprints::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -363,11 +358,11 @@ class DefaultController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Barcodeprints $model the model to be validated
+	 * @param Pricetagprints $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='barcodeprints-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='pricetagprints-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
@@ -379,10 +374,10 @@ class DefaultController extends Controller
       //this action continues the process from the detail page
          if(Yii::app()->authManager->checkAccess($this->formid.'-Append', 
                  Yii::app()->user->id))  {
-             $model=new Barcodeprints;
-             $model->attributes=Yii::app()->session['Barcodeprints'];
+             $model=new Pricetagprints;
+             $model->attributes=Yii::app()->session['Pricetagprints'];
 
-             $details=Yii::app()->session['Detailbarcodeprints'];
+             $details=Yii::app()->session['Detailpricetagprints'];
              $this->afterInsertDetail($model, $details);
 
              $this->render('create',array(
@@ -398,10 +393,10 @@ class DefaultController extends Controller
          if(Yii::app()->authManager->checkAccess($this->formid.'-Update', 
                  Yii::app()->user->id))  {
 
-             $model=new Barcodeprints;
-             $model->attributes=Yii::app()->session['Barcodeprints'];
+             $model=new Pricetagprints;
+             $model->attributes=Yii::app()->session['Pricetagprints'];
 
-             $details=Yii::app()->session['Detailbarcodeprints'];
+             $details=Yii::app()->session['Detailpricetagprints'];
              $this->afterUpdateDetail($model, $details);
 
              $this->render('update',array(
@@ -418,10 +413,10 @@ class DefaultController extends Controller
                  Yii::app()->user->id))  {
 
 
-             $model=new Barcodeprints;
-             $model->attributes=Yii::app()->session['Barcodeprints'];
+             $model=new Pricetagprints;
+             $model->attributes=Yii::app()->session['Pricetagprints'];
 
-             $details=Yii::app()->session['Detailbarcodeprints'];
+             $details=Yii::app()->session['Detailpricetagprints'];
              $this->afterDeleteDetail($model, $details);
 
              $this->render('update',array(
@@ -436,7 +431,7 @@ class DefaultController extends Controller
      protected function saveNewDetails(array $details)
      {                  
          foreach ($details as $row) {
-             $detailmodel=new Detailbarcodeprints;
+             $detailmodel=new Detailpricetagprints;
              $detailmodel->attributes=$row;
              $respond=$detailmodel->insert();
              if (!$respond) {
@@ -453,13 +448,13 @@ class DefaultController extends Controller
 
          $respond=true;
          foreach ($details as $row) {
-             $detailmodel=Detailbarcodeprints::model()->findByPk($row['iddetail']);
+             $detailmodel=Detailpricetagprints::model()->findByPk($row['iddetail']);
              if($detailmodel==NULL) {
-                 $detailmodel=new Detailbarcodeprints;
+                 $detailmodel=new Detailpricetagprints;
              } else {
                  if(count(array_diff($detailmodel->attributes,$row))) {
                      $this->tracker->init();
-                     $this->tracker->modify('detailbarcodeprints', array('iddetail'=>$detailmodel->iddetail));
+                     $this->tracker->modify('detailpricetagprints', array('iddetail'=>$detailmodel->iddetail));
                  }    
              }
              $detailmodel->attributes=$row;
@@ -477,11 +472,11 @@ class DefaultController extends Controller
      {
          $respond=true;
          foreach ($details as $row) {
-             $detailmodel=Detailbarcodeprints::model()->findByPk($row['iddetail']);
+             $detailmodel=Detailpricetagprints::model()->findByPk($row['iddetail']);
              if($detailmodel) {
                  $this->tracker->init();
                  $this->trackActivity('d', $this->__DETAILFORMID);
-                 $this->tracker->delete('detailbarcodeprints', $detailmodel->id);
+                 $this->tracker->delete('detailpricetagprints', $detailmodel->id);
                  $respond=$detailmodel->delete();
                  if (!$respond) {
                    break;
@@ -494,7 +489,7 @@ class DefaultController extends Controller
 
      protected function loadDetails($id)
      {
-      $sql="select * from detailbarcodeprints where id='$id'";
+      $sql="select * from detailpricetagprints where id='$id'";
       $details=Yii::app()->db->createCommand($sql)->queryAll();
 
       return $details;
@@ -509,30 +504,28 @@ class DefaultController extends Controller
          $model->regnum=$idmaker->getRegNum($this->formid);
          $model->userlog=Yii::app()->user->id;
          $model->datetimelog=$idmaker->getDateTime();
-         $model->barcodetype = 'C128';
          $model->papersize = 'A4';
-         $model->labelwidth = 33;
-         $model->labelheight = 15;
+         $model->paperwidth = 33;
+         $model->paperheight = 15;
      }
 
      protected function afterPost(& $model)
      {
-         $idmaker=new idmaker();
-         $idmaker->saveRegNum($this->formid, $model->regnum);
-         
-         $details = $this->loadDetails($model->id);
-         foreach($details as $d) {
-         	Action::addLabelPrintJob($d['iddetail'], $d['num']);
-         }
+        if ($this->state == 'c') { 
+     		$idmaker=new idmaker();
+         	$idmaker->saveRegNum($this->formid, $model->regnum);
+        }
      }
 
      protected function beforePost(& $model)
      {
          $idmaker=new idmaker();
 
-         $model->userlog=Yii::app()->user->id;
-         $model->datetimelog=$idmaker->getDateTime();
-         $model->regnum=$idmaker->getRegNum($this->formid);
+         if ($this->state == 'c') {
+         	$model->userlog=Yii::app()->user->id;
+         	$model->datetimelog=$idmaker->getDateTime();
+         	$model->regnum=$idmaker->getRegNum($this->formid);
+         }
      }
 
      protected function beforeDelete(& $model)
@@ -581,7 +574,7 @@ class DefaultController extends Controller
             if ($detail['serialnum'] !== 'Belum Diterima') {
                $count=Yii::app()->db->createCommand()
                   ->select('count(*)')
-                  ->from('detailbarcodeprints')
+                  ->from('detailpricetagprints')
                   ->where("serialnum = :serialnum", array(':serialnum'=>$detail['serialnum']))
                   ->queryScalar();
                $respond=$count==0;
@@ -592,7 +585,7 @@ class DefaultController extends Controller
          return $respond;
       }
      
-	public function actionPrintBarcode($id) 
+	public function actionPrintPricetag($id) 
 	{
 		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
 				Yii::app()->user->id))  {
@@ -601,29 +594,26 @@ class DefaultController extends Controller
 			
 			Yii::import('application.vendors.tcpdf.*');
 			require_once ('tcpdf.php');
-			$mypdf=new Barcodeprintpdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+			$mypdf=new Pricetagprintpdf(PDF_PAGE_ORIENTATION, PDF_UNIT, array($master->paperwidth*10, $master->paperheight*10), true, 'UTF-8', false);
 			$mypdf->init();
-			$mypdf->LoadData($master->barcodetype, $master->labelwidth, $master->labelheight,  
+			$mypdf->LoadData($master->attributes,  
 					$detail);
 			$mypdf->display();
-			$mypdf->output('Cetak Barcode'.'-'.date('Ymd').'.pdf', 'I');
+			$mypdf->output('Cetak Pricetag'.'-'.date('Ymd').'.pdf', 'D');
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');
 		}	
 	}
 	
-	private function prepareBarcode($code, $rep, $id) 
+	private function getImage()
 	{
-		for ($i = 0; $i < $rep; $i++) {
-			$temp['iddetail'] = idmaker::getCurrentID2();
-			$temp['id'] = $id;
-			$temp['num'] = $code;
-			$temp['userlog'] = Yii::app()->user->id;
-			$temp['datetimelog'] = idmaker::getDateTime();
-
-			$newdata[] = $temp;				
-		}
-		
-		return $newdata;
+		if ($_FILES['Pricetagprints']['error']['bkjpg'] == 0) {
+			if (file_exists( $_FILES['Pricetagprints']['tmp_name']['bkjpg'])) {
+				$imagefile = fopen($_FILES['Pricetagprints']['tmp_name']['bkjpg'], 'r');
+				$imagedata = fread($imagefile, $_FILES['Pricetagprints']['size']['bkjpg']);
+				return $imagedata;
+			}
+		} else
+			return false;
 	}
 }
