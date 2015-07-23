@@ -76,7 +76,8 @@ return array(
 			'cashouts',
 			'expenses', 
 			'cashboxes',
-			'changeserialnum'
+			'changeserialnum',
+			'pricetagprint'
         ),
 
         
