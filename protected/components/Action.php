@@ -84,32 +84,6 @@ class Action extends CComponent {
    	return Yii::app()->createUrl('acquisition/detailacquisitionsnsn/view', array('iddetail'=>$data['iddetail']));
    }
    
-   
-   public static function decodeRestoreDeletedAcquisitionUrl($data)
-   {
-   	//return print_r($data);
-   	return Yii::app()->createUrl('acquisition/default/restoreDeleted', array('idtrack'=>$data['idtrack']));
-   }
-    
-   public static function decodeRestoreHistoryAcquisitionUrl($data)
-   {
-   	//return print_r($data);
-   	return Yii::app()->createUrl('acquisition/default/restore', array('idtrack'=>$data['idtrack']));
-   }
-
-   public static function decodeRestoreDeletedDetailAcquisitionUrl($data)
-   {
-   	//return print_r($data);
-   	return Yii::app()->createUrl('detailacquisition/default/restoreDeleted', array('idtrack'=>$data['idtrack']));
-   }
-   
-   public static function decodeRestoreHistoryDetailAcquisitionUrl($data)
-   {
-   	//return print_r($data);
-   	return Yii::app()->createUrl('detailacquisition/default/restore', array('idtrack'=>$data['idtrack']));
-   }
-    
-   
    public static function decodePrintStockCard2($data)
    {
    		return $data['iditem'].'-'.$data['idwarehouse'];
@@ -330,6 +304,36 @@ class Action extends CComponent {
    {
       //return print_r($data);
       return Yii::app()->createUrl('/barcodeprint/detailbarcodeprints/view', array('iddetail'=>$data['iddetail']));
+   }
+   
+   public static function decodeDeleteDetailPricetagPrintUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('/pricetagprint/detailpricetagprints/delete', array('iddetail'=>$data['iddetail']));
+   }
+    
+   public static function decodeUpdateDetailPricetagPrintUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('/pricetagprint/detailpricetagprints/update', array('iddetail'=>$data['iddetail']))  ;
+   }
+    
+   public static function decodeViewDetailPricetagPrintUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('/pricetagprint/detailpricetagprints/view', array('iddetail'=>$data['iddetail']));
+   }
+   
+   public static function decodeRestoreHistoryPricetagPrintUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('pricetagprint/default/restore', array('idtrack'=>$data['idtrack']));
+   }
+   
+   public static function decodeRestoreDeletedPricetagPrintUrl($data)
+   {
+   	//return print_r($data);
+   	return Yii::app()->createUrl('pricetagprint/default/restoreDeleted', array('idtrack'=>$data['idtrack']));
    }
    
    public static function decodeDeleteDetailItemcodePrintUrl($data)
