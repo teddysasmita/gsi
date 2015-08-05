@@ -29,21 +29,14 @@ $supplierScript=<<<EOS
    			$.getJSON('index.php?r=LookUp/checkSerial', { serialnum: $('#Detailacquisitions_serialnum').val(), 
    				idwh:$('#idwh').val() },
    				function(data) {
-   				if (data == false) {
+   				if (data) {
    					$('#avail').removeClass('money');
    					$('#avail').addClass('error');
-   					$('#avail').html('Tidak ditemukan');
+   					$('#avail').html('Nomor seri sdh pernah terdaftar');
    				} else {
-   					$('#Detailacquisitions_avail').val(data.avail);
-   					if (data.avail = '1') {
-   						$('#avail').removeClass('error');
-   						$('#avail').addClass('money');
-   						$('#avail').html('Tersedia');
-   					} else if (data.avail = '2') {
-   						$('#avail').removeClass('error');
-   						$('#avail').addClass('money');
-   						$('#avail').html('Rusak');
-   					}
+   					$('#avail').removeClass('error');
+   					$('#avail').addClass('money');
+   					$('#avail').html('Nomor seri bisa diakuisisi');
    				}
    			});
 		};
@@ -53,18 +46,15 @@ $supplierScript=<<<EOS
    		function(evt) {
    			var myserialnum = $('#Detailacquisitions_serialnum').val();
    			if (myserialnum !== 'Belum Diterima') {
-	   			$.getJSON('index.php?r=LookUp/checkItemSerial', { iditem: $('#Detailacquisitions_iditem').val(), 
-	   			serialnum: $('#Detailacquisitions_serialnum').val(), idwh:$('#idwh').val() }, 
-	   			function(data) {
-	   				if (data=='0') {
-	            		$('#Detailacquisitions_serialnum_em_').html('Data tidak ditemukan');
-						$('#Detailacquisitions_serialnum_em_').prop('style', 'display:block');
-					} else {
-						$('#Detailacquisitions_serialnum_em_').html('');
-						$('#Detailacquisitions_serialnum_em_').prop('style', 'display:none');
-	   					$('#detailacquisitions-form').submit();
-	   				};
-	   			});
+	   			$.getJSON('index.php?r=LookUp/checkSerial', { serialnum: $('#Detailacquisitions_serialnum').val(), 
+   				idwh: $('#idwh').val() },
+   				function(data) {
+	   				if (data) {
+	   					$('#avail').removeClass('money');
+	   					$('#avail').addClass('error');
+	   					$('#avail').html('Nomor seri sdh pernah terdaftar');
+	   				}
+   				});
    			} else {
    				$('#Detailacquisitions_serialnum_em_').html('');
 				$('#Detailacquisitions_serialnum_em_').prop('style', 'display:none');
@@ -99,6 +89,7 @@ EOS;
 		echo $form->labelEx($model, 'avail');
 		echo $form->dropDownList($model, 'avail', array('Semua'=>'Semua', '1'=>'Tersedia', '2'=>'Rusak'),
 			array('empty'=>'Harap Pilih'));
+		echo CHtml::tag('span', array('id'=>'avail', 'class'=>'money'), '');
 		?>
 	</div>
 	
