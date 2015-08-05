@@ -53,7 +53,9 @@ $supplierScript=<<<EOS
 	   					$('#avail').removeClass('money');
 	   					$('#avail').addClass('error');
 	   					$('#avail').html('Nomor seri sdh pernah terdaftar');
-	   				}
+	   				} else {
+   						$('#detailacquisitions-form').submit();
+					}
    				});
    			} else {
    				$('#Detailacquisitions_serialnum_em_').html('');
