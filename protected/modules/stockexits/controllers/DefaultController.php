@@ -74,11 +74,15 @@ class DefaultController extends Controller
                $this->performAjaxValidation($model);
 				
                 if (isset($_POST)){
-                   if(isset($_POST['yt0'])) {
+                   if(isset($_POST['yt1'])) {
                       //The user pressed the button;
                       $model->attributes=$_POST['Stockexits'];
+                      $model->faceid = str_replace('data:image/jpeg;base64','', $model->faceid);
+                      $model->faceid = str_replace(' ', '+', $model->faceid);
+                      $model->faceid = base64_decode($model->faceid);
                       
-                      
+                      //print_r($_POST['Stockexits']);
+                      //die();
                       $this->beforePost($model);
                       $respond=$this->checkWarehouse($model->idwarehouse);
                       if (!$respond)

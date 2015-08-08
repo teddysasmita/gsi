@@ -33,21 +33,67 @@
 			$('#command').val('updateDetail');
 			$('#detailcommand').val(this.href);
 			$('#stockexits-form').submit();
-		});   
+		}); 
+		
+		var localstream = null;
+		
+		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || 
+					navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+	 
+		if (navigator.getUserMedia) {       
+	    	navigator.getUserMedia({video:true}, handleVideo, captureError);
+		}
+		
+		$('#captureButton').click(
+			function(evt) {
+				captureImage(localstream);
+		});
+		
+				
+		function captureImage(stream) {
+			var myvideo = document.querySelector("#myvideo");
+			var mycanvas = document.querySelector("#mycanvas");
+			var myctx = mycanvas.getContext("2d");
+
+			myctx.drawImage(myvideo, 0, 0, 320, 240);
+			myimage = document.querySelector("#faceid");
+			myimage.src = mycanvas.toDataURL('image/jpeg', 0.8);
+			
+			$("#Stockexits_faceid").val(myimage.src);
+		}
+		
+		function handleVideo(stream) {
+			var myvideo = document.querySelector("#myvideo");
+			var mycanvas = document.querySelector("#mycanvas");
+			
+			myvideo.src = window.URL.createObjectURL(stream);
+			localstream = stream;
+		}
+		
+		function captureError() {
+
+		}	
+		
 EOS;
    Yii::app()->clientScript->registerScript("transScript", $transScript, CClientscript::POS_READY);
 
    if($command=='create') 
       $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'stockexits-form',
-	'enableAjaxValidation'=>true,
-      'action'=>Yii::app()->createUrl("/stockexits/default/create")
-      ));
+		'id'=>'stockexits-form',
+		'enableAjaxValidation'=>true,
+		'action'=>Yii::app()->createUrl("/stockexits/default/create"),
+      	'htmlOptions'=>array(
+			'enctype'=>'multipart/form-data',
+		)	
+   ));
    else if($command=='update')
       $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'stockexits-form',
-	'enableAjaxValidation'=>true,
-      'action'=>Yii::app()->createUrl("/stockexits/default/update", array('id'=>$model->id))
+		'id'=>'stockexits-form',
+		'enableAjaxValidation'=>true,
+		'action'=>Yii::app()->createUrl("/stockexits/default/update", array('id'=>$model->id)),
+      	'htmlOptions'=>array(
+      		'enctype'=>'multipart/form-data',
+      	)
       ));
   ?>
 
@@ -65,6 +111,8 @@ EOS;
         echo $form->hiddenField($model, 'regnum');
         echo $form->hiddenField($model, 'transinfo');
         echo $form->hiddenField($model, 'donum');
+        echo $form->hiddenField($model, 'faceid');
+        //echo $form->fileField($model, 'faceid', array('id'=>'Stockexits_faceid', 'style'=>'display:none'));
       ?>
         
 	<div class="row">
@@ -95,9 +143,11 @@ EOS;
 				$data = CHtml::listData($warehouses, 'id', 'code');
          		echo $form->dropDownList($model, 'idwarehouse', $data, 
 					array('empty'=>'Harap Pilih'));
-         	} else {
+         	} else if (count($warehouses) == 1) {
 				echo CHtml::hiddenField('Stockexits[idwarehouse]', $warehouses[0]['id']);
 				echo CHtml::label($warehouses[0]['code'],'false', array('class'=>'money')); 
+			} else {
+				echo CHtml::tag('span', array('class'=>'error'), 'Tidak Terdaftar');
 			}
          ?>
 	</div>
@@ -135,7 +185,16 @@ EOS;
         ?>
         <?php echo $form->error($model,'remark');?> 
 	</div>
-      
+    
+    <canvas width="320px" height="240px" id="mycanvas" style="display:none"></canvas>
+    <video width="320px" height="240px" id="myvideo" style="display:inline" autoplay></video>    
+    <div class="row">
+		<?php echo $form->labelEx($model,'faceid'); ?>
+        
+        <image id="faceid" width="320px" height="240px" src="">
+        <?php echo CHtml::button('Capture', array('id'=>'captureButton')); ?>
+        <?php echo $form->error($model,'faceid');?> 
+	</div>
 <?php 
     if (isset(Yii::app()->session['Detailstockexits'])) {
        $rawdata=Yii::app()->session['Detailstockexits'];
