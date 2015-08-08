@@ -33,6 +33,45 @@
 			$('#detailcommand').val(this.href);
 			$('#stockentries-form').submit();
 		});   
+   
+		var localstream = null;
+		
+		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || 
+					navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+	 
+		if (navigator.getUserMedia) {       
+	    	navigator.getUserMedia({video:true}, handleVideo, captureError);
+		}
+		
+		$('#captureButton').click(
+			function(evt) {
+				captureImage(localstream);
+		});
+		
+				
+		function captureImage(stream) {
+			var myvideo = document.querySelector("#myvideo");
+			var mycanvas = document.querySelector("#mycanvas");
+			var myctx = mycanvas.getContext("2d");
+
+			myctx.drawImage(myvideo, 0, 0, 320, 240);
+			myimage = document.querySelector("#faceid");
+			myimage.src = mycanvas.toDataURL('image/jpeg', 0.8);
+			
+			$("#Stockentries_faceid").val(myimage.src);
+		}
+		
+		function handleVideo(stream) {
+			var myvideo = document.querySelector("#myvideo");
+			var mycanvas = document.querySelector("#mycanvas");
+			
+			myvideo.src = window.URL.createObjectURL(stream);
+			localstream = stream;
+		}
+		
+		function captureError() {
+
+		}	
 EOS;
    Yii::app()->clientScript->registerScript("transScript", $transScript, CClientscript::POS_READY);
 
@@ -63,6 +102,7 @@ EOS;
         echo $form->hiddenField($model, 'datetimelog');
         echo $form->hiddenField($model, 'regnum');
         echo $form->hiddenField($model, 'transinfo');
+        echo $form->hiddenField($model, 'faceid');
       ?>
         
 	<div class="row">
@@ -135,6 +175,15 @@ EOS;
 		<?php echo $form->error($model,'transinfo'); ?>
 	</div>
 	  
+	<canvas width="320px" height="240px" id="mycanvas" style="display:none"></canvas>
+    <video width="320px" height="240px" id="myvideo" style="display:inline" autoplay></video>    
+    <div class="row">
+		<?php echo $form->labelEx($model,'faceid'); ?>
+        
+        <image id="faceid" width="320px" height="240px" src="">
+        <?php echo CHtml::button('Capture', array('id'=>'captureButton')); ?>
+        <?php echo $form->error($model,'faceid');?> 
+	</div>
 	
 <?php 
     if (isset(Yii::app()->session['Detailstockentries'])) {

@@ -76,6 +76,9 @@ class DefaultController extends Controller
 					
 					if(isset($_POST['yt0'])) {
 						$model->attributes=$_POST['Stockentries'];
+						$model->faceid = str_replace('data:image/jpeg;base64','', $model->faceid);
+						$model->faceid = str_replace(' ', '+', $model->faceid);
+						$model->faceid = base64_decode($model->faceid);
                       //The user pressed the button;
 						$this->beforePost($model);
 						$respond=$this->checkWarehouse($model->idwarehouse);
