@@ -40,6 +40,11 @@ $this->menu=array(
 			'value'=>lookup::WarehouseNameFromWarehouseID($model->idwarehouse)
 		),
 		array(
+				'name'=>'faceid',
+				'type'=>'image',
+				'value'=>Yii::app()->assetManager->baseUrl.'/pricetagprint'.$model->id,
+		),
+		array(
 			'label'=>'Userlog',
 			'value'=>lookup::UserNameFromUserID($model->userlog),
 		),
