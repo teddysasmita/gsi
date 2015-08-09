@@ -35,7 +35,7 @@ class Stockexits extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, regnum, idatetime, transid, transname, idwarehouse, faceid, donum, transinfo, userlog, datetimelog', 'required'),
+			array('id, regnum, idatetime, transid, transname, idwarehouse, donum, transinfo, userlog, datetimelog', 'required'),
 			array('id, idwarehouse, userlog', 'length', 'max'=>21),
 			array('transname', 'length', 'max'=>64),
 			array('transinfo', 'length', 'max'=>100),
