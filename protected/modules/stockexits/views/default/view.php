@@ -36,6 +36,11 @@ $this->menu=array(
 		),
       	'transinfo',
 		array(
+				'name'=>'faceid',
+				'type'=>'image',
+				'value'=>Yii::app()->assetManager->baseUrl.'/pricetagprint'.$model->id,
+		),
+		array(
 			'label'=>'Nama Gudang',
 			'value'=>lookup::WarehouseNameFromWarehouseID($model->idwarehouse)
 		),
