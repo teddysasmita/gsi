@@ -74,7 +74,7 @@ class DefaultController extends Controller
 				
 				if (isset($_POST)){
 					
-					if(isset($_POST['yt0'])) {
+					if(isset($_POST['yt1'])) {
 						$model->attributes=$_POST['Stockentries'];
 						$model->faceid = str_replace('data:image/jpeg;base64','', $model->faceid);
 						$model->faceid = str_replace(' ', '+', $model->faceid);
