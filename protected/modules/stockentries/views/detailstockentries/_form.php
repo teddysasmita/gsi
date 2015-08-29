@@ -26,50 +26,56 @@ $supplierScript=<<<EOS
    		if (myserialnum !== 'Belum Diterima') {
    			$('#isAccepted').prop('checked', false);
    			
-   		
-			if( $('#transname').val() == 'AC18') {
+   			if( $('#transname').val() == 'AC18') {
 				$.getJSON('index.php?r=LookUp/checkSerial', 
 					{'serialnum': escape(myserialnum), 
    					'idwh' : $('#idwhsource').val()},
    					function(data) {
-   						if (data !== false) {
-   							var message;
-   							$('#Detailstockentries_status').val(data.status);	
-   							if (data.status == '1')
-								message = 'Bagus'
-   							else if (data.status == '0')
-								message = 'Rusak';
+   						var message;
+   						if (data == 2) {
+   							$('#Detailstockentries_status').val("1");	
+ 							$('#statusinfo').addClass('money');
+   							$('#statusinfo').removeClass('errorMessage');
+   							$('#statusinfo').html('Bagus');
+						} else if (data == 3) {
+   							$('#Detailstockentries_status').val("0");	
    							$('#statusinfo').addClass('money');
    							$('#statusinfo').removeClass('errorMessage');
-   							$('#statusinfo').html(message);
-   						} else {
-   							$('#Detailstockentries_status').val('');
-   							$('#statusinfo').addClass('errorMessage');
+   							$('#statusinfo').html('Rusak');
+   						} else if ((data == 4) || (data == 5)) {
+   							$('#Detailstockentries_status').val("0");	
    							$('#statusinfo').removeClass('money');
-   							$('#statusinfo').html('Barang tidak ditemukan');
-						}
+   							$('#statusinfo').addClass('errorMessage');
+   							$('#statusinfo').html('Barang belum dikeluarkan dari Gudang Asal');
+   						} else if (data == 1) {
+   							$('#Detailstockentries_status').val("");	
+   							$('#statusinfo').removeClass('money');
+   							$('#statusinfo').addClass('errorMessage');
+   							$('#statusinfo').html('Barang tidak ada di Gudang Asal');
+   						}
 					});
 			} else {
    				$.getJSON('index.php?r=LookUp/checkSerial2', {'serialnum': escape(myserialnum), 
-   						'iditem': escape(iditem), 'idwh' : $('#idwh').val()},
+   						'iditem': escape(iditem)},
    				function(data) {
-   					if (data == false) {
+   					if ((data == 1) || (data == 2)) {
    						$('#statusinfo').addClass('money');
    						$('#statusinfo').removeClass('errorMessage');
    						$('#statusinfo').html('Item bisa diterima');
    						$('#Detailstockentries_status').val('1');
-   					} else if (data.avail == '0') {
+   					} else if (data == 3) {
    						$('#statusinfo').addClass('errorMEssage');
    						$('#statusinfo').removeClass('money');
-   						$('#statusinfo').html('Nomor seri telah terdaftar');
-   					} else if (data.avail == '1') {
+   						$('#statusinfo').html('Barang dgn nomor seri tsb masih di gudang');
+   					} else if ((data == 4) || (data == 5)) {
    						$('#statusinfo').addClass('errorMessage');
    						$('#statusinfo').removeClass('money');
-   						$('#statusinfo').html('Nomor seri telah terdaftar');
+   						$('#statusinfo').html('Barang berbeda telah terdaftar dgn nomor seri tsb');
    					} 
 				});
 			}
 		}
+		
 	});
 EOS;
    Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);

@@ -21,34 +21,36 @@ $supplierScript=<<<EOS
    			$('#Detailstockexits_serialnum').val('Belum Diterima');
    		}
       });
-   		
-	$('#Detailstockexits_serialnum').change(function() {
+   	
+   	$('#Detailstockexits_serialnum').change(function() {
    		var myserialnum = $('#Detailstockexits_serialnum').val();
    		if (myserialnum !== 'Belum Diterima') {
    			$('#isAccepted').prop('checked', false);
    			$.getJSON('index.php?r=LookUp/checkSerial', 
    				{ serialnum: escape($('#Detailstockexits_serialnum').val()), 
-   				idwh:$('#idwh').val() },
+   				idwh: escape($('#idwh').val())  },
    				function(data) {
-   				if ((data === false) || (data.avail == '0')) {
+   				if ((data == 1)) {
    					$('#status').removeClass('money');
    					$('#status').addClass('error');
-   					$('#status').html('Tidak ditemukan');
+   					$('#status').html('Nomor seri belum terdaftar');
    					$('#Detailstockexits_status').val('');
-   				} else {
-   					$('#Detailstockexits_status').val(data.status);
-   					if (data.status == '1') {
-   						$('#status').removeClass('error');
-   						$('#status').addClass('money');
-   						$('#status').html('Bagus');
-   						$('#Detailstockexits_status').val('1');
-   					} else if (data.status == '0') {
-   						$('#status').removeClass('error');
-   						$('#status').addClass('money');
-   						$('#status').html('Rusak');
-   						$('#Detailstockexits_status').val('0');
-   					}
-   				}
+   				} if ((data == 2) || (data == 3)) {
+   					$('#status').removeClass('money');
+   					$('#status').addClass('error');
+   					$('#status').html('Barang sudah keluar');
+   					$('#Detailstockexits_status').val('');
+   				} else if (data == 4) {
+   					$('#Detailstockexits_status').val("1");
+   					$('#status').removeClass('error');
+   					$('#status').addClass('money');
+   					$('#status').html('Bagus');
+   				} else if (data == 5) {
+   					$('#Detailstockexits_status').val("0");
+   					$('#status').removeClass('error');
+   					$('#status').addClass('money');
+   					$('#status').html('Rusak');
+   				}				
    			});
 		};
 	});
@@ -57,24 +59,36 @@ $supplierScript=<<<EOS
    		function(evt) {
    			var myserialnum = $('#Detailstockexits_serialnum').val();
    			if (myserialnum !== 'Belum Diterima') {
-	   			$.getJSON('index.php?r=LookUp/checkItemSerial', { iditem: $('#Detailstockexits_iditem').val(), 
-	   			serialnum: $('#Detailstockexits_serialnum').val(), idwh:$('#idwh').val() }, 
-	   			function(data) {
-	   				if (data=='0') {
-	            		$('#Detailstockexits_serialnum_em_').html('Data tidak ditemukan');
-						$('#Detailstockexits_serialnum_em_').prop('style', 'display:block');
-					} else {
-						$('#Detailstockexits_serialnum_em_').html('');
-						$('#Detailstockexits_serialnum_em_').prop('style', 'display:none');
-	   					$('#detailstockexits-form').submit();
-	   				};
-	   			});
-   			} else {
-   				$('#Detailstockexits_serialnum_em_').html('');
-				$('#Detailstockexits_serialnum_em_').prop('style', 'display:none');
-   				$('#detailstockexits-form').submit();
-   			}
-   	});
+	   			$.getJSON('index.php?r=LookUp/checkSerial', 
+   				{ serialnum: escape($('#Detailstockexits_serialnum').val()), 
+   				idwh: escape($('#idwh').val())},
+   				function(data) {
+   				if ((data == 1)) {
+   					$('#status').removeClass('money');
+   					$('#status').addClass('error');
+   					$('#status').html('Nomor seri belum terdaftar');
+   					$('#Detailstockexits_status').val('');
+   				} if ((data == 2) || (data == 3)) {
+   					$('#status').removeClass('money');
+   					$('#status').addClass('error');
+   					$('#status').html('Barang sudah keluar');
+   					$('#Detailstockexits_status').val('');
+   				} else if (data == 4) {
+   					$('#Detailstockexits_status').val("1");
+   					$('#status').removeClass('error');
+   					$('#status').addClass('money');
+   					$('#status').html('Bagus');
+   					$('#detailstockexits-form').submit();
+				} else if (data == 5) {
+   					$('#Detailstockexits_status').val("0");
+   					$('#status').removeClass('error');
+   					$('#status').addClass('money');
+   					$('#status').html('Rusak');
+   					$('#detailstockexits-form').submit();
+   				}				
+   			});
+   		}	
+	});
    		
 EOS;
    Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);

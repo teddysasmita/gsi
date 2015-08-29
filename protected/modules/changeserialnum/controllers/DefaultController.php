@@ -662,9 +662,9 @@ class DefaultController extends Controller
 	     		->queryAll();
      		$warehousesdata = array_merge($warehousesdata, $data);
      	}
+     	$allvars = get_defined_vars();
      	$details = array();
      	
-     	$allvars = get_defined_vars();
      	foreach($varnames as $vn) {
      		if (array_key_exists($vn, $allvars) && is_array($allvars[$vn]) && count($allvars[$vn])) {
      			foreach( $allvars[$vn] as $detaildata) {	
