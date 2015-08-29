@@ -653,7 +653,7 @@ EOS;
 			if ($data == FALSE) {
 			}*/
 			$data=Yii::app()->db->createCommand()
-			->select('count(*) as total')
+			->select()
 			->from('wh'.$idwh.' a')
 			->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum and a.avail = :p_avail',
 					array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum, ':p_avail'=>$avail))
