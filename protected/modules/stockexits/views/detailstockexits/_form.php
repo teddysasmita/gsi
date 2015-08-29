@@ -22,35 +22,31 @@ $supplierScript=<<<EOS
    		}
       });
    	
-   	$('#Detailstockexits_serialnum').change(function() {
+   		$('#Detailstockexits_serialnum').change(function() {
    		var myserialnum = $('#Detailstockexits_serialnum').val();
    		if (myserialnum !== 'Belum Diterima') {
    			$('#isAccepted').prop('checked', false);
-   			$.getJSON('index.php?r=LookUp/checkSerial', 
-   				{ serialnum: escape($('#Detailstockexits_serialnum').val()), 
+   			$.getJSON('index.php?r=LookUp/checkItemSerial', 
+   				{ iditem: escape($('#Detailstockexits_iditem').val()), 
+   				serialnum: escape($('#Detailstockexits_serialnum').val()), 
    				idwh: escape($('#idwh').val())  },
    				function(data) {
-   				if ((data == 1)) {
+   				if ((data == false)) {
    					$('#status').removeClass('money');
    					$('#status').addClass('error');
-   					$('#status').html('Nomor seri belum terdaftar');
+   					$('#status').html('Barang dan Nomor seri tidak ditemukan');
    					$('#Detailstockexits_status').val('');
-   				} if ((data == 2) || (data == 3)) {
+   				} else if (data.status == '0'){
    					$('#status').removeClass('money');
    					$('#status').addClass('error');
-   					$('#status').html('Barang sudah keluar');
-   					$('#Detailstockexits_status').val('');
-   				} else if (data == 4) {
+   					$('#status').html('Barang rusak');
+   					$('#Detailstockexits_status').val('0');
+   				} else if (data.status == '1') {
    					$('#Detailstockexits_status').val("1");
    					$('#status').removeClass('error');
    					$('#status').addClass('money');
    					$('#status').html('Bagus');
-   				} else if (data == 5) {
-   					$('#Detailstockexits_status').val("0");
-   					$('#status').removeClass('error');
-   					$('#status').addClass('money');
-   					$('#status').html('Rusak');
-   				}				
+   				}			
    			});
 		};
 	});
@@ -59,36 +55,30 @@ $supplierScript=<<<EOS
    		function(evt) {
    			var myserialnum = $('#Detailstockexits_serialnum').val();
    			if (myserialnum !== 'Belum Diterima') {
-	   			$.getJSON('index.php?r=LookUp/checkSerial', 
-   				{ serialnum: escape($('#Detailstockexits_serialnum').val()), 
-   				idwh: escape($('#idwh').val())},
+	   			$.getJSON('index.php?r=LookUp/checkItemSerial', 
+   				{ iditem: escape($('#Detailstockexits_iditem').val()), 
+   				serialnum: escape($('#Detailstockexits_serialnum').val()), 
+   				idwh: escape($('#idwh').val())  },
    				function(data) {
-   				if ((data == 1)) {
+   				if ((data == false)) {
    					$('#status').removeClass('money');
    					$('#status').addClass('error');
-   					$('#status').html('Nomor seri belum terdaftar');
+   					$('#status').html('Barang dan Nomor seri tidak ditemukan');
    					$('#Detailstockexits_status').val('');
-   				} if ((data == 2) || (data == 3)) {
+   				} else if (data.status == '0'){
    					$('#status').removeClass('money');
    					$('#status').addClass('error');
-   					$('#status').html('Barang sudah keluar');
-   					$('#Detailstockexits_status').val('');
-   				} else if (data == 4) {
+   					$('#status').html('Barang rusak');
+   					$('#Detailstockexits_status').val('0');
+   				} else if (data.status == '1') {
    					$('#Detailstockexits_status').val("1");
    					$('#status').removeClass('error');
    					$('#status').addClass('money');
    					$('#status').html('Bagus');
-   					$('#detailstockexits-form').submit();
-				} else if (data == 5) {
-   					$('#Detailstockexits_status').val("0");
-   					$('#status').removeClass('error');
-   					$('#status').addClass('money');
-   					$('#status').html('Rusak');
-   					$('#detailstockexits-form').submit();
-   				}				
+   				}			
    			});
-   		}	
-	});
+   		}
+   	});
    		
 EOS;
    Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CClientscript::POS_READY);
