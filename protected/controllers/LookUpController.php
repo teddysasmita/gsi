@@ -643,25 +643,22 @@ EOS;
 		//$serialnum=rawurldecode($serialnum);
 		
 		if (!Yii::app()->user->isGuest) {
-			$data=Yii::app()->db->createCommand()
+			/*$data=Yii::app()->db->createCommand()
 				->select('count(*) as total')
 				->from('stockentries a')
 				->join('detailstockentries b', 'b.id = a.id')
 				->where('b.iditem = :p_iditem and b.serialnum = :p_serialnum and a.idwarehouse = :p_idwh',
 					array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum, ':p_idwh'=>$idwh))
-				/*->where('b.iditem = :p_iditem and b.serialnum = :p_serialnum',
-					array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))*/
 				->queryScalar();
 			if ($data == FALSE) {
-				$data=Yii::app()->db->createCommand()
-					->select('count(*) as total')
-					->from('wh'.$idwh.' a')
-					->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum and a.avail = :p_avail',
-						array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum, ':p_avail'=>$avail))
-					/*->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum',
-				 		array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum))*/
-						->queryScalar();
-			} 
+			}*/
+			$data=Yii::app()->db->createCommand()
+			->select('count(*) as total')
+			->from('wh'.$idwh.' a')
+			->where('a.iditem = :p_iditem and a.serialnum = :p_serialnum and a.avail = :p_avail',
+					array(':p_iditem'=>$iditem, ':p_serialnum'=>$serialnum, ':p_avail'=>$avail))
+			->queryRow();
+				
 			echo json_encode($data);
 		} else {
 			throw new CHttpException(404,'You have no authorization for this operation.');

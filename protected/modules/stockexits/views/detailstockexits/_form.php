@@ -75,6 +75,7 @@ $supplierScript=<<<EOS
    					$('#status').removeClass('error');
    					$('#status').addClass('money');
    					$('#status').html('Bagus');
+   					$('#detailstockexits-form').submit();
    				}			
    			});
    		}
