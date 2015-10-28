@@ -34,6 +34,15 @@
  * @property string $extraft
  * @property double $extrafz
  * @property string $extrac
+ * @property string $withcode
+ * @property double $codex
+ * @property double $codey
+ * @property double $codew
+ * @property double $codeh
+ * @property string $codeft
+ * @property double $codefz
+ * @property string $codec
+ * 
  * @property string $bkjpg
  * @property string $userlog
  * @property string $datetimelog
@@ -56,19 +65,31 @@ class Pricetagprints extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id, idatetime, regnum, papersize, labelwidth, labelheight, itemnamex, itemnamey, itemnamefz, itemnameft, itemnamew, itemnameh, itemnamec, pricex, pricey, pricew, priceh, priceft, pricefz, pricec, withextra, extrax, extray, extraw, extrah, extraft, extrafz, extrac,userlog, datetimelog', 'required'),
-			array('paperwidth, paperheight, labelwidth, labelheight, itemnamex, itemnamey, itemnamefz, itemnamew, itemnameh, pricex, pricey, pricew, priceh, pricefz, extrax, extray, extraw, extrah, extrafz', 'numerical'),
+			array('id, idatetime, regnum, papersize, labelwidth, labelheight, 
+				itemnamex, itemnamey, itemnamefz, itemnameft, itemnamew, itemnameh, itemnamec, 
+				pricex, pricey, pricew, priceh, priceft, pricefz, pricec, 
+				withextra, extrax, extray, extraw, extrah, extraft, extrafz, extrac,
+				withextra, extrax, extray, extraw, extrah, extraft, extrafz, extrac,
+				userlog, datetimelog', 'required'),
+			array('paperwidth, paperheight, labelwidth, labelheight, itemnamex, itemnamey, itemnamefz, 
+				itemnamew, itemnameh, pricex, pricey, pricew, priceh, pricefz, 
+				extrax, extray, extraw, extrah, extrafz, codex, codey, codew, codeh, codefz', 'numerical'),
 			array('id, userlog', 'length', 'max'=>21),
 			array('idatetime, datetimelog', 'length', 'max'=>19),
 			array('regnum', 'length', 'max'=>12),
 			array('papersize', 'length', 'max'=>20),
-			array('itemnameft, priceft', 'length', 'max'=>50),
-			array('itemnamec, pricec, extrac', 'length', 'max'=>8),
-			array('withextra', 'length', 'max'=>1),
+			array('itemnameft, priceft, extraft, codeft', 'length', 'max'=>50),
+			array('itemnamec, pricec, extrac, codec', 'length', 'max'=>8),
+			array('withextra, withcode', 'length', 'max'=>1),
 			array('bkjpg', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, idatetime, regnum, papersize, paperwidth, paperheight, labelwidth, labelheight, itemnamex, itemnamey, itemnamefz, itemnameft, itemnamew, itemnameh, itemnamec, pricex, pricey, pricew, priceh, priceft, pricefz, pricec, extrax, extray, extraw, extrah, extraft, extrafz, extrac, bkjpg, userlog, datetimelog', 'safe', 'on'=>'search'),
+			array('id, idatetime, regnum, papersize, paperwidth, paperheight, labelwidth, labelheight, 
+				itemnamex, itemnamey, itemnamefz, itemnameft, itemnamew, itemnameh, itemnamec, 
+				pricex, pricey, pricew, priceh, priceft, pricefz, pricec, 
+				extrax, extray, extraw, extrah, extraft, extrafz, extrac, bkjpg, 
+				codex, codey, codew, codeh, codeft, codefz, codec, 
+				userlog, datetimelog', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -119,6 +140,14 @@ class Pricetagprints extends CActiveRecord
 			'extraft' => 'Jenis Huruf Info',
 			'extrafz' => 'Ukuran Huruf Info',
 			'extrac' => 'Warna Info (rgb)',
+			'withcode'=> 'Dengan Kode',
+			'codex' => 'Posisi x Kode (mm)',
+			'codey' => 'Posisi y Kode (mm)',
+			'codew' => 'Lebar Ruang Kode (mm)',
+			'codeh' => 'Tinggi Ruang Kode (mm)',
+			'codeft' => 'Jenis Huruf Kode',
+			'codefz' => 'Ukuran Huruf Kode',
+			'codec' => 'Warna Kode (rgb)',			
 			'bkjpg' => 'Bkjpg',
 			'userlog' => 'Userlog',
 			'datetimelog' => 'Datetimelog',
@@ -172,7 +201,15 @@ class Pricetagprints extends CActiveRecord
 		$criteria->compare('extrah',$this->extrah);
 		$criteria->compare('extraft',$this->extraft,true);
 		$criteria->compare('extrafz',$this->extrafz);
-		$criteria->compare('extrac',$this->extrac);
+		$criteria->compare('codec',$this->codec);
+		$criteria->compare('withcode',$this->withcode);
+		$criteria->compare('codex',$this->codex);
+		$criteria->compare('codey',$this->codey);
+		$criteria->compare('codew',$this->codew);
+		$criteria->compare('codeh',$this->codeh);
+		$criteria->compare('codeft',$this->codeft,true);
+		$criteria->compare('codefz',$this->codefz);
+		$criteria->compare('codec',$this->codec);
 		$criteria->compare('bkjpg',$this->bkjpg,true);
 		$criteria->compare('userlog',$this->userlog,true);
 		$criteria->compare('datetimelog',$this->datetimelog,true);

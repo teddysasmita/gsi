@@ -342,7 +342,87 @@ Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CCli
         ?>
         <?php echo $form->error($model,'extrac');?> 
 	</div>
+
+	<div class="row">
+		<?php echo $form->LabelEx($model,'withcode'); ?>
+        <?php 
+           echo $form->dropDownList($model, 'withcode', 
+           		array('1'=>'Ya', '0'=>'Tidak'
+           )); 
+        ?>
+        <?php echo $form->error($model,'withcode');?> 
+	</div>
 	
+	<div class="row">
+		<?php echo $form->LabelEx($model,'codex'); ?>
+        <?php 
+           echo $form->textField($model, 'codex'); 
+        ?>
+        <?php echo $form->error($model,'codex');?> 
+	</div>
+	
+	<div class="row">
+		<?php echo $form->LabelEx($model,'codey'); ?>
+        <?php 
+           echo $form->textField($model, 'codey'); 
+        ?>
+        <?php echo $form->error($model,'codey');?> 
+	</div>
+	
+	 <div class="row">
+		<?php echo $form->LabelEx($model,'codew'); ?>
+        <?php 
+           echo $form->textField($model, 'codew'); 
+        ?>
+        <?php echo $form->error($model,'codew');?> 
+	</div>
+	
+	<div class="row">
+		<?php echo $form->LabelEx($model,'codeh'); ?>
+        <?php 
+           echo $form->textField($model, 'codeh'); 
+        ?>
+        <?php echo $form->error($model,'codeh');?> 
+	</div>
+	
+	<div class="row">
+		<?php echo $form->LabelEx($model,'codefz'); ?>
+        <?php 
+           echo $form->textField($model, 'codefz'); 
+        ?>
+        <?php echo $form->error($model,'codefz');?> 
+	</div>
+	
+	<div class="row">
+		<?php echo $form->LabelEx($model,'codeft'); ?>
+        <?php 
+           echo $form->dropDownList($model, 'codeft', 
+           		array(
+           			'courier'=>'Courier', 
+           			'courierB'=>'Courier Bold', 
+           			'courierI'=>'Courier Italic', 
+           			'courierBI'=>'Courier Bold Italic', 
+           			'helvetica'=>'Helvetica', 
+           			'helveticaB'=>'Helvetica Bold', 
+           			'helveticaI'=>'Helvetica Italic', 
+           			'helveticaBI'=>'Helvetica Bold Italic',	 
+           			'times'=>'Times',
+           			'timesB'=>'Times Bold',
+           			'timesI'=>'Times Italic',
+           			'timesBI'=>'Times Bold Italic',
+           )); 
+        ?>
+        <?php echo $form->error($model,'codeft');?> 
+	</div>
+	
+	<div class="row">
+		<?php echo $form->LabelEx($model,'codec'); ?>
+        <?php 
+           echo $form->textField($model, 'codec'); 
+        ?>
+        <?php echo $form->error($model,'codec');?> 
+	</div>
+		
 <?php 
     if (isset(Yii::app()->session['Detailpricetagprints'])) {
        $rawdata=Yii::app()->session['Detailpricetagprints'];
@@ -363,6 +443,11 @@ Yii::app()->clientScript->registerScript("supplierScript", $supplierScript, CCli
                   'name'=>'iditem',
               		'value' => "lookup::ItemNameFromItemID(\$data['iditem'])",
               ),
+            	array(
+            		'header'=>'Kode',
+            		'name'=>'iditem',
+            		'value' => "lookup::ItemCodeFromItemID(\$data['iditem'])",
+            	),
             	array(
             		'name'=>'qty',
             		'type'=>'number',

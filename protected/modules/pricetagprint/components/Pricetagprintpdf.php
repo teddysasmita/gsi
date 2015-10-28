@@ -85,6 +85,21 @@ class Pricetagprintpdf extends TCPDF {
 	 				);
  				};
  				// - End ------------------
+ 				
+ 				//Kode - Begin ----------------
+ 				if ($this->masterdata['withcode'] == '1') {
+ 					$this->setXY($curx + $this->masterdata['codex'],
+ 							$cury + $this->masterdata['codey']);
+ 					$this->SetFontSize($this->masterdata['codefz']);
+ 					$this->SetFont($this->masterdata['codeft']);
+ 					$tempc = str_split($this->masterdata['codec'], 2);
+ 					$this->SetTextColor(hexdec($tempc[0]),hexdec($tempc[1]), hexdec($tempc[2]));
+ 					$this->MultiCell(
+ 							$this->masterdata['codew'], $this->masterdata['codeh'],
+ 							"Kode: ".lookup::ItemCodeFromItemID($d['iditem']), 'LRTB', 'L'
+ 					);
+ 				};
+ 				// - End ------------------
  				 		
  				$curx += $this->masterdata['labelwidth'] * 10;
 				if ($curx + ($this->masterdata['labelwidth'] * 10) > 215 ) {
