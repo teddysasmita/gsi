@@ -69,7 +69,10 @@ $supplierScript=<<<EOS
    					$('#status').removeClass('money');
    					$('#status').addClass('error');
    					$('#status').html('Barang rusak');
-   					$('#Detailstockexits_status').val('0');
+   					if ( $('#transname').val() == 'AC25') 
+   						$('#Detailstockexits_status').val('1');
+   					else
+   						$('#Detailstockexits_status').val('0');
    				} else if (data.status == '1') {
    					$('#Detailstockexits_status').val("1");
    					$('#status').removeClass('error');
@@ -99,6 +102,7 @@ EOS;
          echo $form->hiddenField($model,'iditem');
          echo $form->hiddenField($model,'status');
          echo CHtml::hiddenField('idwh',$idwh);
+         echo CHtml::hiddenField('transname',$transname);
         ?>
 
 	<div class="row">

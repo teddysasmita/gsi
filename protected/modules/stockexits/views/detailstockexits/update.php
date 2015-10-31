@@ -28,4 +28,4 @@ $this->menu=array(
 <h1>Pengeluaran Barang</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model, 'idwh'=>$idwh, 'mode'=>'Update', 
-		'error' => $error)); ?>
+		'error' => $error, 'transname'=>$transname)); ?>

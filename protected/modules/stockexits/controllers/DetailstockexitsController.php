@@ -143,7 +143,8 @@ class DetailstockexitsController extends Controller
                 }
                
                 $this->render('update',array(
-                        'model'=>$model,'master'=>$master, 'idwh'=>$idwh, 'error'=>$error
+                        'model'=>$model,'master'=>$master, 'idwh'=>$idwh, 'error'=>$error,
+                		'transname'=>$transname
                 ));
             }  else {
                 throw new CHttpException(404,'You have no authorization for this operation.');
