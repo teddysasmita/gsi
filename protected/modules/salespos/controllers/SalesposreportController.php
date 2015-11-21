@@ -33,6 +33,18 @@ class SalesposreportController extends Controller
          };
 	}
 	
+	public function actionCreate2()
+	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
+				Yii::app()->user->id))  {
+					$this->trackActivity('v');
+	
+					$this->render('create2');
+				} else {
+					throw new CHttpException(404,'You have no authorization for this operation.');
+				};
+	}
+	
 	public function actionGetexcel($startdate, $enddate, $brand, $objects)
 	{
 		$datacancels = array();
@@ -313,6 +325,92 @@ EOS;
          };
 	}
 	
+	public function actionGetexcel2($startdate, $enddate)
+	{
+		$data = array();
+	
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
+				Yii::app()->user->id))  {
+					$this->trackActivity('v');
+	
+					$xl = new PHPExcel();
+					$xl->getProperties()->setCreator("Program GSI Kertajaya")
+					->setLastModifiedBy("Program GSI Kertajaya")
+					->setTitle("Laporan Piutang")
+					->setSubject("Laporan Piutang")
+					->setDescription("Laporan Piutang")
+					->setKeywords("Laporan Piutang")
+					->setCategory("Laporan");
+					$enddate=$enddate.' 23:59:59';
+					$selectfields = <<<EOS
+			a.*
+EOS;
+					$selectwhere = <<<EOS
+			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime
+			and a.status = '1' and a.receiveable > 0
+EOS;
+	
+					unset($selectparam);
+					$selectparam['p_startidatetime'] = $startdate;
+					$selectparam['p_endidatetime'] = $enddate;
+	
+					// Get ALL Sales data
+					$data=Yii::app()->db->createCommand()
+					->select($selectfields)
+					->from('salespos a')
+					->where($selectwhere, $selectparam)
+					->order('a.idatetime, a.regnum')
+					->queryAll();
+						
+					$datareceipts = Yii::app()->db->createCommand()
+					->select('invnum, sum(total) as totalreceipt')
+					->from('receivablespos')
+					->where('idatetime >= :startdate',
+							array(':startdate'=>$startdate))
+							->order('invnum')
+							->group('invnum')
+							->queryAll();
+								
+							$found = false;
+							foreach($data as & $d) {
+								$d['totalreceipt'] = 0;
+								foreach($datareceipts as $dr) {
+									if ($dr['invnum'] == $d['regnum']) {
+										$d['totalreceipt'] = $dr['totalreceipt'];
+										break;
+									}
+								}
+							}
+	
+							$headersfield = array(
+									'regnum', 'idatetime', 'total', 'discount', 'receiveable', 'payer_name', 'totalreceipt'
+							);
+							$headersname = array(
+									'No Nota', 'Tanggal', 'Total', 'Potongan', 'Piutang', 'Nama Pelanggan', 'Telah Terima' );
+							for( $i=0;$i<count($headersname); $i++ ) {
+								$xl->setActiveSheetIndex(0)
+								->setCellValueByColumnAndRow($i,1, $headersname[$i]);
+							}
+	
+							for( $i=0; $i<count($data); $i++){
+								for( $j=0; $j<count($headersfield); $j++ ) {
+									$cellvalue = $data[$i][$headersfield[$j]];
+									$xl->setActiveSheetindex(0)
+									->setCellValueByColumnAndRow($j,$i+2, $cellvalue);
+								}
+							}
+	
+							$xl->getActiveSheet()->setTitle('Laporan Piutang');
+							$xl->setActiveSheetIndex(0);
+							header('Content-Type: application/pdf');
+							header('Content-Disposition: attachment;filename="receiveable-report-'.idmaker::getDateTime().'.xlsx"');
+							header('Cache-Control: max-age=0');
+							$xlWriter = PHPExcel_IOFactory::createWriter($xl, 'Excel2007');
+							$xlWriter->save('php://output');
+				} else {
+					throw new CHttpException(404,'You have no authorization for this operation.');
+				};
+	}
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
