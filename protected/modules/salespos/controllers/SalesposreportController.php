@@ -325,95 +325,201 @@ EOS;
          };
 	}
 	
+	public function actionGetexcel2a($startdate, $enddate)
+	{
+		$data = array();
+	
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
+				Yii::app()->user->id))  {
+			$this->trackActivity('v');
+
+			$xl = new PHPExcel();
+			$xl->getProperties()->setCreator("Program GSI Kertajaya")
+			->setLastModifiedBy("Program GSI Kertajaya")
+			->setTitle("Laporan Piutang")
+			->setSubject("Laporan Piutang")
+			->setDescription("Laporan Piutang")
+			->setKeywords("Laporan Piutang")
+			->setCategory("Laporan");
+			$enddate=$enddate.' 23:59:59';
+			$selectfields = <<<EOS
+			a.*, sum(b.discount) as totaldetaildisc
+EOS;
+			$selectwhere = <<<EOS
+			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime
+			and a.status = '1' and a.receiveable > 0
+EOS;
+	
+			unset($selectparam);
+			$selectparam['p_startidatetime'] = $startdate;
+			$selectparam['p_endidatetime'] = $enddate;
+
+			// Get ALL Sales data
+			$data=Yii::app()->db->createCommand()
+			->select($selectfields)
+			->from('salespos a')
+			->join('detailsalespos b', 'b.id = a.id')
+			->where($selectwhere, $selectparam)
+			->group('a.regnum')
+			->order('a.idatetime, a.regnum')
+			->queryAll();
+				
+			$datareceipts = Yii::app()->db->createCommand()
+			->select('invnum, sum(total) as totalreceipt')
+			->from('receivablespos')
+			->where('idatetime >= :startdate',
+					array(':startdate'=>$startdate))
+			->order('invnum')
+			->group('invnum')
+			->queryAll();
+				
+			$found = false;
+			foreach($data as & $d) {
+				$d['totalreceipt'] = 0;
+				foreach($datareceipts as $dr) {
+					if ($dr['invnum'] == $d['regnum']) {
+						$d['totalreceipt'] = $dr['totalreceipt'];
+						break;
+					}
+				}
+				$d['discount'] += $d['totaldetaildisc'];
+			}
+
+			$headersfield = array(
+					'regnum', 'idatetime', 'total', 'discount', 'receiveable', 'payer_name', 'totalreceipt'
+			);
+			$headersname = array(
+					'No Nota', 'Tanggal', 'Total', 'Potongan', 'Piutang', 'Nama Pelanggan', 'Telah Terima' );
+			for( $i=0;$i<count($headersname); $i++ ) {
+				$xl->setActiveSheetIndex(0)
+				->setCellValueByColumnAndRow($i,1, $headersname[$i]);
+			}
+
+			for( $i=0; $i<count($data); $i++){
+				for( $j=0; $j<count($headersfield); $j++ ) {
+					$cellvalue = $data[$i][$headersfield[$j]];
+					$xl->setActiveSheetindex(0)
+					->setCellValueByColumnAndRow($j,$i+2, $cellvalue);
+				}
+			}
+
+			$xl->getActiveSheet()->setTitle('Laporan Piutang');
+			$xl->setActiveSheetIndex(0);
+			header('Content-Type: application/pdf');
+			header('Content-Disposition: attachment;filename="receiveable-report-'.idmaker::getDateTime().'.xlsx"');
+			header('Cache-Control: max-age=0');
+			$xlWriter = PHPExcel_IOFactory::createWriter($xl, 'Excel2007');
+			$xlWriter->save('php://output');
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+	
 	public function actionGetexcel2($startdate, $enddate)
 	{
 		$data = array();
 	
 		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
 				Yii::app()->user->id))  {
-					$this->trackActivity('v');
-	
-					$xl = new PHPExcel();
-					$xl->getProperties()->setCreator("Program GSI Kertajaya")
-					->setLastModifiedBy("Program GSI Kertajaya")
-					->setTitle("Laporan Piutang")
-					->setSubject("Laporan Piutang")
-					->setDescription("Laporan Piutang")
-					->setKeywords("Laporan Piutang")
-					->setCategory("Laporan");
-					$enddate=$enddate.' 23:59:59';
-					$selectfields = <<<EOS
+			$this->trackActivity('v');
+
+			$xl = new PHPExcel();
+			$xl->getProperties()->setCreator("Program GSI Kertajaya")
+			->setLastModifiedBy("Program GSI Kertajaya")
+			->setTitle("Laporan Piutang")
+			->setSubject("Laporan Piutang")
+			->setDescription("Laporan Piutang")
+			->setKeywords("Laporan Piutang")
+			->setCategory("Laporan");
+			$enddate=$enddate.' 23:59:59';
+			$selectfields = <<<EOS
 			a.*, sum(b.discount) as totaldetaildisc
 EOS;
-					$selectwhere = <<<EOS
+			$selectwhere = <<<EOS
 			a.idatetime >= :p_startidatetime and a.idatetime <= :p_endidatetime
 			and a.status = '1' and a.receiveable > 0
 EOS;
 	
-					unset($selectparam);
-					$selectparam['p_startidatetime'] = $startdate;
-					$selectparam['p_endidatetime'] = $enddate;
-	
-					// Get ALL Sales data
-					$data=Yii::app()->db->createCommand()
-					->select($selectfields)
-					->from('salespos a')
-					->join('detailsalespos b', 'b.id = a.id')
-					->where($selectwhere, $selectparam)
-					->group('a.regnum')
-					->order('a.idatetime, a.regnum')
-					->queryAll();
-						
-					$datareceipts = Yii::app()->db->createCommand()
-					->select('invnum, sum(total) as totalreceipt')
-					->from('receivablespos')
-					->where('idatetime >= :startdate',
-							array(':startdate'=>$startdate))
-							->order('invnum')
-							->group('invnum')
-							->queryAll();
-								
-							$found = false;
-							foreach($data as & $d) {
-								$d['totalreceipt'] = 0;
-								foreach($datareceipts as $dr) {
-									if ($dr['invnum'] == $d['regnum']) {
-										$d['totalreceipt'] = $dr['totalreceipt'];
-										break;
-									}
-								}
-								$d['discount'] += $d['totaldetaildisc'];
-							}
-	
-							$headersfield = array(
-									'regnum', 'idatetime', 'total', 'discount', 'receiveable', 'payer_name', 'totalreceipt'
-							);
-							$headersname = array(
-									'No Nota', 'Tanggal', 'Total', 'Potongan', 'Piutang', 'Nama Pelanggan', 'Telah Terima' );
-							for( $i=0;$i<count($headersname); $i++ ) {
-								$xl->setActiveSheetIndex(0)
-								->setCellValueByColumnAndRow($i,1, $headersname[$i]);
-							}
-	
-							for( $i=0; $i<count($data); $i++){
-								for( $j=0; $j<count($headersfield); $j++ ) {
-									$cellvalue = $data[$i][$headersfield[$j]];
-									$xl->setActiveSheetindex(0)
-									->setCellValueByColumnAndRow($j,$i+2, $cellvalue);
-								}
-							}
-	
-							$xl->getActiveSheet()->setTitle('Laporan Piutang');
-							$xl->setActiveSheetIndex(0);
-							header('Content-Type: application/pdf');
-							header('Content-Disposition: attachment;filename="receiveable-report-'.idmaker::getDateTime().'.xlsx"');
-							header('Cache-Control: max-age=0');
-							$xlWriter = PHPExcel_IOFactory::createWriter($xl, 'Excel2007');
-							$xlWriter->save('php://output');
-				} else {
-					throw new CHttpException(404,'You have no authorization for this operation.');
-				};
+			unset($selectparam);
+			$selectparam['p_startidatetime'] = $startdate;
+			$selectparam['p_endidatetime'] = $enddate;
+
+			// Get ALL Sales data
+			$data=Yii::app()->db->createCommand()
+			->select($selectfields)
+			->from('salespos a')
+			->join('detailsalespos b', 'b.id = a.id')
+			->where($selectwhere, $selectparam)
+			->group('a.regnum')
+			->order('a.idatetime, a.regnum')
+			->queryAll();
+
+			$datareceipts = Yii::app()->db->createCommand()
+			->select('invnum, sum(total) as totalreceipt')
+			->from('receivablespos')
+			->where('idatetime >= :startdate',
+					array(':startdate'=>$startdate))
+			->order('invnum')
+			->group('invnum')
+			->queryAll();
+				
+			$detailreceiptsql = Yii::app()->db->createCommand()
+			->select("concat_ws(' - ', a.idatetime, b.amount, b.method) as receiptinfo")
+			->from('receivablespos a')
+			->join('posreceipts b', 'b.idpos = a.id')
+			->where('a.idatetime >= :p_startdate and a.invnum = :p_invnum')
+			->order('a.idatetime');
+
+			$found = false;
+			foreach($data as & $d) {
+				$d['totalreceipt'] = 0;
+				$d['receiptinfo'] = '';
+				foreach($datareceipts as $dr) {
+					if ($dr['invnum'] == $d['regnum']) {
+						$d['totalreceipt'] = $dr['totalreceipt'];
+						$detailreceiptsql->bindValue(':p_startdate', $startdate, PDO::PARAM_STR);
+						$detailreceiptsql->bindValue(':p_invnum', $dr['invnum'], PDO::PARAM_STR);
+						$receiptdatas = $detailreceiptsql->queryColumn();
+						if ($receiptdatas == FALSE)
+							$d['receiptinfo'] = '';
+							else
+								$d['receiptinfo'] = implode(', ', $receiptdatas);
+								break;
+					}
+				}
+				$d['discount'] += $d['totaldetaildisc'];
+			}
+
+			$headersfield = array(
+					'regnum', 'idatetime', 'total', 'discount', 'receiveable', 'payer_name', 'totalreceipt', 'receiptinfo'
+			);
+			$headersname = array(
+					'No Nota', 'Tanggal', 'Total', 'Potongan', 'Piutang', 'Nama Pelanggan', 'Telah Terima', 'Info' );
+			for( $i=0;$i<count($headersname); $i++ ) {
+				$xl->setActiveSheetIndex(0)
+				->setCellValueByColumnAndRow($i,1, $headersname[$i]);
+			}
+
+			for( $i=0; $i<count($data); $i++){
+				for( $j=0; $j<count($headersfield); $j++ ) {
+					$cellvalue = $data[$i][$headersfield[$j]];
+					$xl->setActiveSheetindex(0)
+					->setCellValueByColumnAndRow($j,$i+2, $cellvalue);
+				}
+			}
+
+			$xl->getActiveSheet()->setTitle('Laporan Piutang');
+			$xl->setActiveSheetIndex(0);
+			header('Content-Type: application/pdf');
+			header('Content-Disposition: attachment;filename="receiveable-report-'.idmaker::getDateTime().'.xlsx"');
+			header('Cache-Control: max-age=0');
+			$xlWriter = PHPExcel_IOFactory::createWriter($xl, 'Excel2007');
+			$xlWriter->save('php://output');
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
 	}
+	
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
