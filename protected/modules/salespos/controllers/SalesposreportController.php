@@ -335,12 +335,12 @@ EOS;
 
 			$xl = new PHPExcel();
 			$xl->getProperties()->setCreator("Program GSI Kertajaya")
-			->setLastModifiedBy("Program GSI Kertajaya")
-			->setTitle("Laporan Piutang")
-			->setSubject("Laporan Piutang")
-			->setDescription("Laporan Piutang")
-			->setKeywords("Laporan Piutang")
-			->setCategory("Laporan");
+				->setLastModifiedBy("Program GSI Kertajaya")
+				->setTitle("Laporan Piutang")
+				->setSubject("Laporan Piutang")
+				->setDescription("Laporan Piutang")
+				->setKeywords("Laporan Piutang")
+				->setCategory("Laporan");
 			$enddate=$enddate.' 23:59:59';
 			$selectfields = <<<EOS
 			a.*, sum(b.discount) as totaldetaildisc
@@ -463,10 +463,25 @@ EOS;
 			->group('invnum')
 			->queryAll();
 				
+			$selectsql1 = <<<EOS
+	if(not(b.method is null), CASE b.method
+WHEN 'T'
+THEN concat_ws( ' - ', a.idatetime, b.amount, 'Transfer' )
+WHEN 'KK'
+THEN concat_ws( ' - ', a.idatetime, b.amount, 'Kartu Kredit', c.name, b.card_number, b.card_holdername, b.card_number )
+WHEN 'KD'
+THEN concat_ws( ' - ', a.idatetime, b.amount, 'Kartu Debit', c.name, b.card_number, b.card_holdername, b.card_number )
+WHEN 'BG'
+THEN concat_ws( ' - ', a.idatetime, b.amount, 'Cheque/BG', b.bg_bankname, b.bg_duedate, b.bg_writer )
+WHEN 'KC'
+THEN concat_ws( ' - ', a.idatetime, b.amount, 'Cicilan' )
+END, concat_ws( ' - ', a.idatetime, a.cash - a.cashreturn, 'Tunai' ))
+as receiptinfo
+EOS;
 			$detailreceiptsql = Yii::app()->db->createCommand()
-			->select("concat_ws(' - ', a.idatetime, b.amount, b.method) as receiptinfo")
+			->select($selectsql1)
 			->from('receivablespos a')
-			->join('posreceipts b', 'b.idpos = a.id')
+			->leftjoin('posreceipts b', 'b.idpos = a.id')
 			->where('a.idatetime >= :p_startdate and a.invnum = :p_invnum')
 			->order('a.idatetime');
 
