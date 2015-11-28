@@ -482,6 +482,7 @@ EOS;
 			->select($selectsql1)
 			->from('receivablespos a')
 			->leftjoin('posreceipts b', 'b.idpos = a.id')
+			->leftjoin('salesposbanks c', 'c.id = b.card_id')
 			->where('a.idatetime >= :p_startdate and a.invnum = :p_invnum')
 			->order('a.idatetime');
 
