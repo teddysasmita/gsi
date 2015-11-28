@@ -455,7 +455,7 @@ EOS;
 			->queryAll();
 
 			$datareceipts = Yii::app()->db->createCommand()
-			->select('invnum, sum(total) as totalreceipt')
+			->select('invnum, sum(total-receiveable) as totalreceipt')
 			->from('receivablespos')
 			->where('idatetime >= :startdate',
 					array(':startdate'=>$startdate))
