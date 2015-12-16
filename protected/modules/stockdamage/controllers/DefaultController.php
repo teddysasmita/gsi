@@ -980,4 +980,25 @@ EOS;
 		throw new CHttpException(404,'You have no authorization for this operation.');
 	};
 	}
+	
+	public function actionPrintDamage($id)
+	{
+		if(Yii::app()->authManager->checkAccess($this->formid.'-Append',
+				Yii::app()->user->id)) {
+					$this->trackActivity('p');
+	
+					$model=$this->loadModel($id);
+					$detailmodel=$this->loadDetails($id);
+	
+					Yii::import('application.vendors.tcpdf.*');
+					require_once ('tcpdf.php');
+					Yii::import('application.modules.stockdamage.components.*');
+					require_once('printdamage.php');
+					ob_clean();
+	
+					execute($model, $detailmodel);
+				} else {
+					throw new CHttpException(404,'You have no authorization for this operation.');
+				}
+	}
 }
