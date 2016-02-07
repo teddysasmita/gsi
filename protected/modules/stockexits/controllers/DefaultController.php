@@ -86,13 +86,17 @@ class DefaultController extends Controller
                       $this->beforePost($model);
                       $respond=$this->checkWarehouse($model->idwarehouse);
                       if (!$respond)
-                      	throw new CHttpException(404,'Lokasi Tidak Terdaftar');
+                      	throw new CHttpException(5001,'Lokasi Tidak Terdaftar');
                       $respond = $this->checkSerialNum(Yii::app()->session['Detailstockexits'], $model);
                       if ($respond !== true)
-                      	throw new CHttpException(404,'Nomor Seri ada yang salah '.$respond);
-                       $respond=$model->insert();
+                      	throw new CHttpException(5002,'Nomor Seri ada yang salah '.$respond);
+                      $respond = $this->checkDuplicateSerialnum(Yii::app()->session['Detailstockentries']);
+                      if (!$respond)
+                      	throw new CHttpException(5003,'Nomor Seri yg anda daftarkan ada yg terulang: '. $respond);	
+                      	
+                      $respond=$model->insert();
                       if(!$respond) {
-						throw new CHttpException(404,'There is an error in master posting: '. print_r($model->getErrors()));
+						throw new CHttpException(5000,'There is an error in master posting: '. print_r($model->getErrors()));
                       }
 
                       if(isset(Yii::app()->session['Detailstockexits']) ) {
@@ -1140,12 +1144,33 @@ EOS;
 					->order('b.name')
 					->queryAll();
 					$alldata = array_merge($alldata, $data);
+				}
+				usort($alldata, 'cmp');
 			}
-			usort($alldata, 'cmp');
+			$this->render('serial', array('alldata'=>$alldata, 'whcode'=>$whcodeparam, 'itemname'=>$itemnameparam));
+		} else {
+			throw new CHttpException(404,'You have no authorization for this operation.');
+		};
+	}
+	
+	private function checkDuplicateSerialnum(array $details)
+	{
+		$cdetails = $details;
+		foreach($details as $d) {
+			$count = 0;
+			foreach($cdetails as $c) {
+				if ($c['serialnum'] == $d['serialnum'])
+					$count++;
+					if ($count > 1)
+						break;
+			}
+			if ($count > 1)
+				break;
 		}
-		$this->render('serial', array('alldata'=>$alldata, 'whcode'=>$whcodeparam, 'itemname'=>$itemnameparam));
-	} else {
-		throw new CHttpException(404,'You have no authorization for this operation.');
-	};
+	
+		if ($count > 1)
+			return false;
+		else
+			return true;
 	}
 }

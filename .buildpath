@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <buildpath>
 	<buildpathentry kind="con" path="org.eclipse.dltk.USER_LIBRARY/YIi"/>
-	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
-	<buildpathentry kind="con" path="org.eclipse.dltk.USER_LIBRARY/Yii Framework"/>
+	<buildpathentry kind="con" path="org.eclipse.dltk.USER_LIBRARY/Yii"/>
 	<buildpathentry kind="src" path=""/>
+	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
 </buildpath>
