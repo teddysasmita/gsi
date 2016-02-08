@@ -1156,9 +1156,10 @@ EOS;
 		};
 	}
 	
-private function checkDuplicateSerialnum(array $details)
+	private function checkDuplicateSerialnum(array $details)
 	{
 		$cdetails = $details;
+		$count = 0;
 		foreach($details as $d) {
 			if ($d['serialnum'] !== 'Belum Diterima') {
 				$count = 0;
