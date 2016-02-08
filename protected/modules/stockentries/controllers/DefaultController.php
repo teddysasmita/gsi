@@ -1156,24 +1156,28 @@ EOS;
 		};
 	}
 	
-	private function checkDuplicateSerialnum(array $details)
+private function checkDuplicateSerialnum(array $details)
 	{
 		$cdetails = $details;
 		foreach($details as $d) {
-			$count = 0;
-			foreach($cdetails as $c) {
-				if ($c['serialnum'] == $d['serialnum'])
-					$count++;
-					if ($count > 1)
-						break;
+			if ($d['serialnum'] !== 'Belum Diterima') {
+				$count = 0;
+				foreach($cdetails as $c) {
+					if ($c['serialnum'] !== 'Belum Diterima') {
+						if ($c['serialnum'] == $d['serialnum']) 
+							$count++;
+						if ($count > 1)
+							break;
+					}
+				}
+				if ($count > 1)
+					break;
 			}
-			if ($count > 1)
-				break;
 		}
 	
 		if ($count > 1)
 			return false;
-			else
-				return true;
+		else
+			return true;
 	}
 }
